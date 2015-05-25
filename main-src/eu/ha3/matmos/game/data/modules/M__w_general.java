@@ -25,25 +25,18 @@ public class M__w_general extends ModuleProcessor implements Module
 		World w = Minecraft.getMinecraft().theWorld;
 		EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
 		WorldInfo info = w.getWorldInfo();
-
+		
 		setValue("time_modulo24k", (int) (info.getWorldTime() % 24000L));
 		setValue("rain", w.isRaining());
 		//setValue("thunder", info.isThundering());
-        // dag edit getWeightedThunderStrength(..) - > getThunderStrength(..)
-		setValue("thunder", w.getThunderStrength(0f) > 0.9f);
-        setValue("dimension", player.dimension);
-        // dag edit .skylightSubtracted -> getSkylightSubtracted()
-		setValue("light_subtracted", w.getSkylightSubtracted());
+		setValue("thunder", w.getWeightedThunderStrength(0f) > 0.9f);
+		setValue("dimension", player.dimension);
+		setValue("light_subtracted", w.skylightSubtracted);
 		setValue("remote", w.isRemote);
 		setValue("moon_phase", w.getMoonPhase());
-        setValue("can_rain_on", w.canSeeSky(player.getPosition()));
-
-        // dag edit + ..canSpawnLightningBolt()
-        // If snowy biome is False. If biome disables rain is False
-        setValue("biome_can_rain", w.getBiomeGenForCoords(player.getPosition()).canSpawnLightningBolt());
 		
 		setValue("rain_force1k", Math.round(w.getRainStrength(0f) * 1000));
-		setValue("thunder_force1k", Math.round(w.getThunderStrength(0f) * 1000));
-		
+		setValue("thunder_force1k", Math.round(w.getWeightedThunderStrength(0f) * 1000));
+        setValue("biome_can_rain", w.getBiomeGenForCoords((int) player.posX, (int) player.posZ).canSpawnLightningBolt());
 	}
 }

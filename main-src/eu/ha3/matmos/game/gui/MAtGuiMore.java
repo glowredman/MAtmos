@@ -10,8 +10,6 @@ import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
 import eu.ha3.mc.quick.chat.ChatColorsSimple;
 
-import java.io.IOException;
-
 /* x-placeholder */
 
 public class MAtGuiMore extends GuiScreen
@@ -185,11 +183,10 @@ public class MAtGuiMore extends GuiScreen
 		aboutToClose();
 		
 	}
-
-    // dag edit + throws IOException
+	
 	@Override
-	protected void mouseClicked(int par1, int par2, int par3) throws IOException
-    {
+	protected void mouseClicked(int par1, int par2, int par3)
+	{
 		if (this.buttonId >= 0)
 		{
 		}

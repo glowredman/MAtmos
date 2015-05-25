@@ -47,9 +47,9 @@ public class MAtMod extends HaddonImpl
 	private static final boolean _COMPILE_IS_UNSTABLE = true;
 	
 	// Identity
-	protected final String NAME = "MAtmos-UnofficialBeta";
+	protected final String NAME = "MAtmos";
 	protected final int VERSION = 29;
-	protected final String FOR = "1.8";
+	protected final String FOR = "1.7.10";
 	protected final String ADDRESS = "http://matmos.ha3.eu";
 	protected final Date DATE = new Date(1394610076);
 	protected final Identity identity = new HaddonIdentity(this.NAME, this.VERSION, this.FOR, this.ADDRESS);
@@ -57,8 +57,7 @@ public class MAtMod extends HaddonImpl
 	// NotifiableHaddon and UpdateNotifier
 	private final ConfigProperty config = new ConfigProperty();
 	private final Chatter chatter = new Chatter(this, this.NAME);
-	private final UpdateNotifier updateNotifier = new UpdateNotifier(
-		this, "http://q.mc.ha3.eu/query/matmos-main-version-vn.json?ver=%d");
+	private final UpdateNotifier updateNotifier = new UpdateNotifier(this, "http://q.mc.ha3.eu/query/matmos-main-version-vn.json?ver=%d");
 	
 	// State
 	private boolean isInitialized;
@@ -81,7 +80,7 @@ public class MAtMod extends HaddonImpl
 	private StopWatchStatistic timeStat = new StopWatchStatistic();
 	
 	// Debug queue
-	private Object queueLock = new Object();
+	private final Object queueLock = new Object();
 	private List<Runnable> queue = new ArrayList<Runnable>();
 	
 	public MAtMod()
@@ -94,9 +93,7 @@ public class MAtMod extends HaddonImpl
 	{
 		util().registerPrivateGetter("getSoundManager", SoundHandler.class, 5, "field_147694_f", "f");
 		util().registerPrivateGetter("getSoundSystem", SoundManager.class, 4, "field_148620_e", "e");
-
-        // dag edit - update to 1.8 obf stuff
-		util().registerPrivateGetter("isInWeb", Entity.class, -1, "isInWeb", "field_70134_J", "H");
+		util().registerPrivateGetter("isInWeb", Entity.class, -1, "isInWeb", "field_70134_J", "J");
 		
 		((OperatorCaster) op()).setTickEnabled(true);
 		
@@ -317,21 +314,21 @@ public class MAtMod extends HaddonImpl
 			this.hasFirstTickPassed = true;
 			
 			this.updateNotifier.attempt();
-			
-			if (MAtMod._COMPILE_IS_UNSTABLE)
-			{
-				getChatter().printChatShort("http://matmos.ha3.eu/");
-				getChatter().printChat(
-					ChatColorsSimple.COLOR_RED
-						+ "You are using an " + ChatColorsSimple.COLOR_YELLOW + "Unofficial Beta" + ChatColorsSimple.COLOR_RED
-						+ " version of MAtmos.");
-				getChatter().printChatShort(
-					"By using this version, you understand that this mod isn't intended for"
-						+ " actual game sessions, MAtmos may not work, might crash, the sound"
-						+ " ambience is incomplete, etc.");
-				getChatter().printChatShort(
-					"Use at your own risk. " + "Please check regularly for updates and resource pack updates.");
-			}
+
+            if (MAtMod._COMPILE_IS_UNSTABLE)
+            {
+                getChatter().printChatShort("http://matmos.ha3.eu/");
+                getChatter().printChat(
+                        ChatColorsSimple.COLOR_RED
+                                + "You are using an " + ChatColorsSimple.COLOR_YELLOW + "Unofficial Beta" + ChatColorsSimple.COLOR_RED
+                                + " version of MAtmos.");
+                getChatter().printChatShort(
+                        "By using this version, you understand that this mod isn't intended for"
+                                + " actual game sessions, MAtmos may not work, might crash, the sound"
+                                + " ambience is incomplete, etc.");
+                getChatter().printChatShort(
+                        "Use at your own risk. " + "Please check regularly for updates and resource pack updates.");
+            }
 			
 			if (isDebugMode())
 			{

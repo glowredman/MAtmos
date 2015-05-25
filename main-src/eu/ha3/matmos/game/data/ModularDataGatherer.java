@@ -75,7 +75,7 @@ public class ModularDataGatherer implements Collector, Processor
 	 * ProcessorModel. Cycle: Every n ticks. Cycle = 1: Every ticks.
 	 * 
 	 * @param module
-	 * @param cycle
+	 * @param interval
 	 */
 	private void addModule(Module module, int cycle)
 	{
@@ -128,14 +128,13 @@ public class ModularDataGatherer implements Collector, Processor
 		
 		//this.frequent.add(new MAtProcessorEntityDetector(
 		//	this.mod, this.data, "DetectMinDist", "Detect", "_Deltas", ENTITYIDS_MAX, 2, 5, 10, 20, 50));
-        // 16 * 8 * 16
+		
 		this.largeScanner =
 			new ScannerModule(
-				this.data, "_POM__scan_large", "scan_large", true, 8, 20 /*256*/, 64, 32, 64, 1024/*64 * 64 * 2*/);
+				this.data, "_POM__scan_large", "scan_large", true, 8, 20 /*256*/, 64, 32, 64, 16 * 8 * 16/*64 * 64 * 2*/);
 		addModule(this.largeScanner);
-        // 16 * 4 * 16
 		addModule(new ScannerModule(
-			this.data, "_POM__scan_small", "scan_small", true, -1, 2 /*64*/, 16, 8, 16, 512));
+			this.data, "_POM__scan_small", "scan_small", true, -1, 2 /*64*/, 16, 8, 16, 16 * 4 * 16));
 		// Each ticks, check half of the small scan
 		
 		MAtLog.info("Modules initialized: " + Arrays.toString(new TreeSet<String>(this.modules.keySet()).toArray()));
@@ -168,7 +167,9 @@ public class ModularDataGatherer implements Collector, Processor
 				MAtLog.warning("WARNING: Module " + requiredModule + " took " + stat.getMilliseconds() + "ms!!!");
 			}
 		}
+		
 		this.ticksPassed = this.ticksPassed + 1;
+		
 	}
 	
 	@Override

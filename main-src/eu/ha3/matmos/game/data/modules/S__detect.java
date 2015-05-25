@@ -1,18 +1,23 @@
 package eu.ha3.matmos.game.data.modules;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import eu.ha3.matmos.engine.core.interfaces.Data;
 import eu.ha3.matmos.game.data.abstractions.Collector;
 import eu.ha3.matmos.game.data.abstractions.Processor;
 import eu.ha3.matmos.game.data.abstractions.module.ModuleProcessor;
 import eu.ha3.matmos.game.data.abstractions.module.PassOnceModule;
 import eu.ha3.matmos.game.system.IDontKnowHowToCode;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
-
-import java.util.*;
 
 /* x-placeholder */
 
@@ -73,9 +78,8 @@ public class S__detect implements Processor, PassOnceModule
 			this.submodules.add(radiModulePrefix + radiNum);
 			this.entityCount[i] = new HashMap<Integer, Integer>();
 		}
-
-        // dag edit AxisAlignedBB.getBoundingBox(..) -> AxisAlignedBB.fromBounds(..)
-        this.bbox = AxisAlignedBB.fromBounds(0, 0, 0, 0, 0, 0);
+		
+		this.bbox = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
 		
 		this.max = max;
 	}
@@ -124,10 +128,9 @@ public class S__detect implements Processor, PassOnceModule
 		double x = mc.thePlayer.posX;
 		double y = mc.thePlayer.posY;
 		double z = mc.thePlayer.posZ;
-
-        // dag edit bbox.setBounds(..) -> bbox = AxisAlignedBB.fromBounds(..) ?
-        this.bbox = AxisAlignedBB.fromBounds(x - this.maxel, y - this.maxel, z - this.maxel, x + this.maxel, y
-            + this.maxel, z + this.maxel);
+		
+		this.bbox.setBounds(x - this.maxel, y - this.maxel, z - this.maxel, x + this.maxel, y + this.maxel, z
+			+ this.maxel);
 		
 		@SuppressWarnings("unchecked")
 		List<Entity> entityList = mc.theWorld.getEntitiesWithinAABB(Entity.class, this.bbox);

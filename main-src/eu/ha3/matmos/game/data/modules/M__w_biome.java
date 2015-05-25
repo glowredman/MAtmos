@@ -1,14 +1,13 @@
 package eu.ha3.matmos.game.data.modules;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.Chunk;
 import eu.ha3.matmos.engine.core.interfaces.Data;
 import eu.ha3.matmos.game.data.abstractions.module.Module;
 import eu.ha3.matmos.game.data.abstractions.module.ModuleProcessor;
 import eu.ha3.matmos.game.system.MAtMod;
-import eu.ha3.matmos.game.system.MAtmosUtility;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.BlockPos;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.chunk.Chunk;
 
 /*
 --filenotes-placeholder
@@ -31,24 +30,22 @@ public class M__w_biome extends ModuleProcessor implements Module
 		if (biomej <= -1)
 		{
 			setValue("id", calculateBiome().biomeID);
-			setValue("_name_debugonly", calculateBiome().biomeName);
+			setValue("biome_name", calculateBiome().biomeName);
 		}
 		else
 		{
 			setValue("id", biomej);
-			setValue("_name_debugonly", "");
+			setValue("biome_name", "");
 		}
 	}
 	
 	private BiomeGenBase calculateBiome()
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-
-        // dag edit - use BlockPos
-        BlockPos playerPos = MAtmosUtility.getPlayerPosition();
-
-		Chunk chunk = mc.theWorld.getChunkFromBlockCoords(playerPos);
-        // dag edit getBiomeGenForWorldCoords(..) -> getBiome(..)
-		return chunk.getBiome(playerPos, mc.theWorld.getWorldChunkManager());
+		int x = MathHelper.floor_double(mc.thePlayer.posX);
+		int z = MathHelper.floor_double(mc.thePlayer.posZ);
+		
+		Chunk chunk = mc.theWorld.getChunkFromBlockCoords(x, z);
+		return chunk.getBiomeGenForWorldCoords(x & 15, z & 15, mc.theWorld.getWorldChunkManager());
 	}
 }

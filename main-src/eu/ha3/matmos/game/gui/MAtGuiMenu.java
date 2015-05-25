@@ -1,6 +1,5 @@
 package eu.ha3.matmos.game.gui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -361,11 +360,10 @@ public class MAtGuiMenu extends GuiScreen
 	{
 		aboutToClose();
 	}
-
-    // dag edit + throws IOException
+	
 	@Override
-	protected void mouseClicked(int par1, int par2, int par3) throws IOException
-    {
+	protected void mouseClicked(int par1, int par2, int par3)
+	{
 		if (this.buttonId >= 0)
 		{
 		}
