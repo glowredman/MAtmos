@@ -1,11 +1,15 @@
 package eu.ha3.matmos.engine.core.implem;
 
-import java.util.List;
-import java.util.Random;
-
 import eu.ha3.matmos.engine.core.implem.abstractions.Component;
 import eu.ha3.matmos.engine.core.interfaces.EventInterface;
 import eu.ha3.matmos.engine.core.interfaces.SoundRelay;
+import eu.ha3.matmos.log.MAtLog;
+import net.minecraft.client.resources.IResourcePack;
+import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /* x-placeholder */
 
@@ -38,14 +42,22 @@ public class Event extends Component implements EventInterface
 		this.pitchMax = pitchMax;
 		this.distance = distance;
 	}
-	
+
 	@Override
-	public void cacheSounds()
+	public void cacheSounds(IResourcePack resourcePack)
 	{
-		for (String path : this.paths)
-		{
-			this.relay.cacheSound(path);
-		}
+        List<String> toRemove = new ArrayList<String>();
+        for (String path : this.paths)
+        {
+            if (resourcePack.resourceExists(new ResourceLocation("minecraft", "sounds/" + path)))
+                this.relay.cacheSound(path);
+            else
+            {
+                MAtLog.warning("File: " + path + " appears to be missing from: " + resourcePack.getPackName() + " [This sound will not be cached or played in-game]");
+                toRemove.add(path);
+            }
+        }
+        paths.removeAll(toRemove);
 	}
 	
 	@Override
