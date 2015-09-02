@@ -1,11 +1,10 @@
 package eu.ha3.matmos.game.system;
 
 import eu.ha3.matmos.engine.core.interfaces.SoundRelay;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-
 import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 
 /*
 --filenotes-placeholder
@@ -56,32 +55,28 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay
 	{
 		return SoundHelperRelay.streamingToken++;
 	}
-	
+
 	@Override
 	public boolean setupStreamingToken(
 		int token, String path, float volume, float pitch, boolean isLooping, boolean usesPause)
 	{
-		//registerStreaming(tokenToString(token), path, volume, pitch, isLooping, usesPause);
-		return true;
-	}
-	
-	public String tokenToString(int token)
-	{
-		return token + "_";
+		registerStreaming("" + token, path, volume, pitch, isLooping, usesPause);
+
+		return true; 
 	}
 	
 	@Override
 	public void startStreaming(int token, float fadeDuration)
 	{
-		//playStreaming(tokenToString(token), (int) (fadeDuration * 1000));
+		playStreaming("" + token, fadeDuration);
 	}
 	
 	@Override
 	public void stopStreaming(int token, float fadeDuration)
 	{
-		//stopStreaming(tokenToString(token), (int) (fadeDuration * 1000));
+		stopStreaming("" + token, fadeDuration);
 	}
-	
+
 	@Override
 	public void eraseStreamingToken(int token)
 	{
