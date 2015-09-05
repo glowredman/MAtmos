@@ -12,6 +12,8 @@ import eu.ha3.matmos.jsonformat.serializable.expansion.SerialRoot;
 import eu.ha3.matmos.pluggable.PluggableIntoMinecraft;
 import eu.ha3.matmos.tools.Jason;
 import eu.ha3.matmos.tools.JasonExpansions_Engine1Deserializer2000;
+
+import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -19,7 +21,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Scanner;
-import javax.swing.UIManager;
 
 /*
 --filenotes-placeholder

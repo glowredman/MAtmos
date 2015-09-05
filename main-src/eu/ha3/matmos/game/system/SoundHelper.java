@@ -1,10 +1,12 @@
 package eu.ha3.matmos.game.system;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /*
 --filenotes-placeholder
@@ -24,6 +26,11 @@ public class SoundHelper implements SoundCapabilities
 		this.accessor = accessor;
 		this.streaming = new LinkedHashMap<String, NoAttenuationMovingSound>();
 	}
+
+    public SoundManager getSoundManager()
+    {
+        return this.accessor.getSoundManager();
+    }
 	
 	@Override
 	public void playMono(String event, double xx, double yy, double zz, float volume, float pitch)
@@ -48,8 +55,7 @@ public class SoundHelper implements SoundCapabilities
 	
 	private void playUnattenuatedSound(double xx, double yy, double zz, String loc, float a, float b)
 	{
-		NoAttenuationSound nas =
-			new NoAttenuationSound(new ResourceLocation(loc), a, b, (float) xx, (float) yy, (float) zz);
+		NoAttenuationSound nas = new NoAttenuationSound(new ResourceLocation(loc), a, b, (float) xx, (float) yy, (float) zz);
 		
 		Minecraft.getMinecraft().getSoundHandler().playSound(nas);
 	}
@@ -84,6 +90,7 @@ public class SoundHelper implements SoundCapabilities
 
 		NoAttenuationMovingSound copy = this.streaming.get(customName).copy();
 		this.streaming.put(customName, copy);
+        copy.play(fadeIn);
 		Minecraft.getMinecraft().getSoundHandler().playSound(copy);
 	}
 	
@@ -99,7 +106,7 @@ public class SoundHelper implements SoundCapabilities
 			return;
 		}
 
-		this.streaming.get(customName).dispose();
+        this.streaming.get(customName).stop(fadeOut);
 	}
 	
 	@Override
@@ -118,10 +125,10 @@ public class SoundHelper implements SoundCapabilities
 	public void applyVolume(float volumeMod)
 	{
 		this.volumeModulator = volumeMod;
-		for (StreamingSound sound : this.streaming.values())
-		{
-			sound.applyVolume(volumeMod);
-		}
+        for (StreamingSound sound : this.streaming.values())
+        {
+            sound.applyVolume(volumeMod);
+        }
 	}
 	
 	@Override

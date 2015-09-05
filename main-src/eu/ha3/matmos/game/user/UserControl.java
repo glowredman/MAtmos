@@ -9,7 +9,6 @@ import eu.ha3.mc.convenience.Ha3KeyHolding;
 import eu.ha3.mc.convenience.Ha3KeyManager_2;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
-import eu.ha3.mc.presencefootsteps.log.PFLog;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
@@ -68,7 +67,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 			int keyCode = keyBindingMain.getKeyCode();
 			if (keyCode != mod.getConfig().getInteger("key.code"))
 			{
-				PFLog.log("Key binding changed. Saving...");
+				//PFLog.log("Key binding changed. Saving...");
 				mod.getConfig().setProperty("key.code", keyCode);
 				mod.saveConfig();
 			}

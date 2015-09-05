@@ -49,33 +49,38 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
 		this.yPosF = (float) e.posY;
 		this.zPosF = (float) e.posZ;
 
-		/*this.volume = helper.calculateFadeFactor() * desiredVolume;
+		this.volume = helper.calculateFadeFactor() * desiredVolume;
+
 		if (volume < 0.01f && usesPause)
 		{
 			pitch = 0f;
 		}
 		if (volume > 0.01f && usesPause)
-		{
-			pitch = desiredPitch;
-		}*/
+        {
+            pitch = desiredPitch;
+        }
+        if (helper.isDoneFadingOut() && this.repeat && !this.isDonePlaying())
+        {
+            dispose();
+        }
 	}
 
 	@Override
 	public void play(float fadeIn)
 	{
-		//this.helper.fadeIn((long) (fadeIn * 1000));
+		this.helper.fadeIn((long) (fadeIn * 1000));
 	}
 
 	@Override
 	public void stop(float fadeOut)
 	{
-		//this.helper.fadeOut((long) (fadeOut * 1000));
+		this.helper.fadeOut((long) (fadeOut * 1000));
 	}
 
 	@Override
 	public void applyVolume(float volumeMod)
 	{
-		System.out.println("NOT IMPLEMENTED: Apply Volume");
+        this.volume = volumeMod;
 	}
 
 	@Override
