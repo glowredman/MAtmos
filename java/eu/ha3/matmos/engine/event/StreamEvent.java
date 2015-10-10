@@ -1,7 +1,7 @@
 package eu.ha3.matmos.engine.event;
 
 import eu.ha3.matmos.MAtmos;
-import eu.ha3.matmos.engine.StreamingSound;
+import eu.ha3.matmos.game.StreamingSound;
 import eu.ha3.matmos.serialize.StreamEventSerialize;
 
 /**

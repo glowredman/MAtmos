@@ -15,14 +15,14 @@ public class WeatherGatherer implements DataGatherer
     private Data<Boolean> raining = new Data<Boolean>();
     private Data<Boolean> rainCanReach = new Data<Boolean>();
     private Data<Boolean> snowing = new Data<Boolean>();
-    private Data<Boolean> canRain = new Data<Boolean>();
-    private Data<Boolean> canSnow = new Data<Boolean>();
+    private Data<Boolean> canRainHere = new Data<Boolean>();
+    private Data<Boolean> canSnowHere = new Data<Boolean>();
 
     @Override
     public DataGatherer register(DataManager manager)
     {
-        manager.registerBool("weather.canRain", canRain);
-        manager.registerBool("weather.canSnow", canSnow);
+        manager.registerBool("weather.canRainHere", canRainHere);
+        manager.registerBool("weather.canSnowHere", canSnowHere);
         manager.registerNum("weather.rainStrength", rainStrength);
         manager.registerBool("weather.rainCanReach", rainCanReach);
         manager.registerBool("weather.raining", raining);
@@ -33,12 +33,12 @@ public class WeatherGatherer implements DataGatherer
     @Override
     public void update()
     {
-        canRain.value = MCGame.currentBiome.canSpawnLightningBolt();
-        canSnow.value = canSnow();
+        canRainHere.value = MCGame.currentBiome.canSpawnLightningBolt();
+        canSnowHere.value = canSnow();
         rainCanReach.value = MCGame.currentWorld.canBlockSeeSky(MCGame.playerPosition);
         rainStrength.value = NumberUtil.round2dp(MCGame.currentWorld.getRainStrength(1L));
         raining.value = MCGame.currentWorld.isRaining();
-        snowing.value = raining.value && canSnow.value;
+        snowing.value = raining.value && canSnowHere.value;
     }
 
     private boolean canSnow()
