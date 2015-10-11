@@ -2,7 +2,6 @@ package eu.ha3.matmos.gui;
 
 import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.engine.Data;
-import eu.ha3.matmos.engine.DataManager;
 import eu.ha3.matmos.engine.condition.Checkable;
 import eu.ha3.matmos.engine.condition.ConditionSet;
 import eu.ha3.matmos.game.MCGame;
@@ -69,7 +68,7 @@ public class GuiData
         long current = System.currentTimeMillis();
         if (current - lastUpdate > 1000)
         {
-            tickPercentage = ((float) DataManager.processTime) / 50F;
+            tickPercentage = ((float) MAtmos.processTime) / 50F;
             lastUpdate = current;
         }
         MCGame.drawString("process time: " + tickPercentage + "% tick", 1, 1, 0xFFFFFF);
@@ -104,9 +103,10 @@ public class GuiData
         for (Map.Entry<String, ConditionSet> e : mAtmos.dataManager.conditions.entrySet())
         {
             final boolean active = e.getValue().active();
-            int color = active ? GREEN : WHITE;
-            if (checkAndDraw("conditions", e.getKey(), xPos, yPos, color))
+            if (toDisplay.contains("%active%"))
             {
+                int color = active ? GREEN : WHITE;
+                MCGame.drawString(e.getKey(), xPos, yPos, color);
                 newLine();
                 for (Checkable c : e.getValue().getConditions())
                 {

@@ -1,6 +1,7 @@
 package eu.ha3.matmos.serialize.dump;
 
 import com.google.gson.GsonBuilder;
+import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.engine.DataManager;
 
 import java.io.File;
@@ -35,10 +36,10 @@ public class Dump
         try
         {
             if (!parentDir.exists() && parentDir.mkdirs())
-                System.out.println("Creating dir: " + parentDir);
+                MAtmos.log("Creating dir: " + parentDir);
             File outFile = new File(parentDir, "MAtmos-Dump.json");
             if (outFile.exists() && outFile.createNewFile())
-                System.out.println("Creating file: " + outFile);
+                MAtmos.log("Creating file: " + outFile);
             String json = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create().toJson(this);
             FileWriter writer = new FileWriter(outFile);
             writer.write(json);

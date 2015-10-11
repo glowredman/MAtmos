@@ -18,9 +18,9 @@ public class StreamEvent extends EventProcessor
 
     private StreamingSound sound;
 
-    protected StreamEvent(StreamEventSerialize e, MAtmos mAtmos)
+    protected StreamEvent(String expansion, StreamEventSerialize e, MAtmos mAtmos)
     {
-        super(e, mAtmos);
+        super(expansion, e, mAtmos);
         fadeInTicks = e.fadeIn;
         fadeOutTicks = e.fadeOut;
         repeatable = e.repeatable;
@@ -48,7 +48,7 @@ public class StreamEvent extends EventProcessor
             Optional<ResourceLocation> location = getRandomStream();
             if (location.isPresent())
             {
-                sound = new StreamingSound(location.get(), fadeInTicks, fadeOutTicks, minVol, maxVol, maxPitch).play();
+                sound = new StreamingSound(location.get(), volume,fadeInTicks, fadeOutTicks, minVol, maxVol, maxPitch).play();
             }
         }
         else if (!sound.isPlaying() && repeatable)
@@ -56,7 +56,7 @@ public class StreamEvent extends EventProcessor
             Optional<ResourceLocation> location = getRandomStream();
             if (location.isPresent())
             {
-                sound = new StreamingSound(location.get(), fadeInTicks, fadeOutTicks, minVol, maxVol, maxPitch).play();
+                sound = new StreamingSound(location.get(), volume, fadeInTicks, fadeOutTicks, minVol, maxVol, maxPitch).play();
             }
         }
     }

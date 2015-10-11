@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.engine.PackManager;
 import eu.ha3.matmos.engine.SoundSet;
+import eu.ha3.matmos.engine.VolumeModifier;
 import eu.ha3.matmos.engine.condition.ConditionSet;
 import eu.ha3.matmos.serialize.EventSerialize;
 import eu.ha3.matmos.serialize.StreamEventSerialize;
@@ -25,14 +26,16 @@ public abstract class EventProcessor
     private final List<ConditionSet> blockers = new ArrayList<ConditionSet>();
     private final List<String> sounds = new ArrayList<String>();
     private final DelayTimer delay;
+    protected final VolumeModifier volume;
     protected final float minVol;
     protected final float maxVol;
     protected final float minPitch;
     protected final float maxPitch;
     protected final int distance;
 
-    protected EventProcessor(EventSerialize e, MAtmos mAtmos)
+    protected EventProcessor(String expansionName, EventSerialize e, MAtmos mAtmos)
     {
+        volume = mAtmos.expansionManager.getVolume(expansionName);
         for (String s : e.triggers)
         {
             Optional<ConditionSet> optional = mAtmos.dataManager.getConditionSet(s);
@@ -137,15 +140,15 @@ public abstract class EventProcessor
 
     public abstract void trigger();
 
-    public static Optional<EventProcessor> of(EventSerialize e, MAtmos mAtmos)
+    public static Optional<EventProcessor> of(String expansion, EventSerialize e, MAtmos mAtmos)
     {
         if (e.valid(mAtmos))
         {
             EventProcessor ep;
             if (e instanceof StreamEventSerialize)
-                ep = new StreamEvent((StreamEventSerialize) e, mAtmos);
+                ep = new StreamEvent(expansion, (StreamEventSerialize) e, mAtmos);
             else
-                ep = new SoundEvent(e, mAtmos);
+                ep = new SoundEvent(expansion, e, mAtmos);
             return Optional.of(ep);
         }
         return Optional.absent();

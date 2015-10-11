@@ -92,22 +92,19 @@ public class PlayerGatherer implements DataGatherer
         velocityVertical.value = NumberUtil.round1dp(e.motionY + (MCGame.player.capabilities.isFlying ? 0 : 0.08));
         fallDistance.value = NumberUtil.round1dp(MCGame.noFall() ? 0F : e.fallDistance);
 
-        calcGameMode();
+        gameMode.value = calcGameMode();
     }
 
-    private void calcGameMode()
+    private String calcGameMode()
     {
         if (MCGame.player.capabilities.isCreativeMode)
         {
-            gameMode.value = "creative";
+            return "creative";
         }
         if (MCGame.player.isSpectator())
         {
-            gameMode.value = "spectator";
+            return "spectator";
         }
-        else
-        {
-            gameMode.value = "survival";
-        }
+        return "survival";
     }
 }

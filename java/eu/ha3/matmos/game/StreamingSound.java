@@ -1,5 +1,6 @@
 package eu.ha3.matmos.game;
 
+import eu.ha3.matmos.engine.VolumeModifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.util.ResourceLocation;
@@ -10,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class StreamingSound extends MovingSound
 {
+    private final VolumeModifier expansionVolume;
     private final float volMin;
     private final float pitchMax;
     private final int fadeInTicks;
@@ -20,9 +22,10 @@ public class StreamingSound extends MovingSound
     private int fadeInTicker = 0;
     private int fadeOutTicker = 0;
 
-    public StreamingSound(ResourceLocation location, int fadeIn, int fadeOut, float volumeMin, float volumeMax, float pitch)
+    public StreamingSound(ResourceLocation location, VolumeModifier expVol, int fadeIn, int fadeOut, float volumeMin, float volumeMax, float pitch)
     {
         super(location);
+        expansionVolume = expVol;
         volMin = volumeMin;
         pitchMax = pitch;
         fadeInTicks = fadeIn;
@@ -60,6 +63,7 @@ public class StreamingSound extends MovingSound
             super.donePlaying = true;
             Minecraft.getMinecraft().getSoundHandler().stopSound(this);
         }
+        super.volume *= expansionVolume.getVolumeModifier();
     }
 
     public boolean isPlaying()

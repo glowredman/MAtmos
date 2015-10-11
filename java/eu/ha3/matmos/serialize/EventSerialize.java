@@ -12,9 +12,6 @@ import java.util.ArrayList;
 public class EventSerialize
 {
     public final String name;
-    public ArrayList<String> triggers = new ArrayList<String>();
-    public ArrayList<String> blockers = new ArrayList<String>();
-    public ArrayList<String> sounds = new ArrayList<String>();
     public float volumeMax = 1F;
     public float volumeMin = 1F;
     public float pitchMax = 1F;
@@ -23,6 +20,9 @@ public class EventSerialize
     public int delayMax = 0;
     public int delayMin = 0;
     public int delayAfter = 0;
+    public ArrayList<String> triggers = new ArrayList<String>();
+    public ArrayList<String> blockers = new ArrayList<String>();
+    public ArrayList<String> sounds = new ArrayList<String>();
 
     public EventSerialize(String eventName)
     {

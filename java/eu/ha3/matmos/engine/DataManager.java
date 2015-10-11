@@ -2,7 +2,6 @@ package eu.ha3.matmos.engine;
 
 import com.google.common.base.Optional;
 import eu.ha3.matmos.engine.condition.ConditionSet;
-import eu.ha3.matmos.engine.event.EventProcessor;
 import eu.ha3.matmos.game.gatherer.DataGatherer;
 import eu.ha3.matmos.game.scanner.Scanner;
 
@@ -14,7 +13,6 @@ import java.util.*;
 
 public class DataManager
 {
-    public static long processTime = 0L;
     private boolean flipFlop = false;
 
     public final Map<String, Scanner> scanners = new HashMap<String, Scanner>();
@@ -26,9 +24,6 @@ public class DataManager
     public final Map<String, SoundSet> soundSets = new HashMap<String, SoundSet>();
 
     private final List<DataGatherer> dataGatherers = new ArrayList<DataGatherer>();
-    private final List<EventProcessor> eventProcessors = new ArrayList<EventProcessor>();
-
-    public final Map<String, Boolean> active = new HashMap<String, Boolean>();
 
     public void process()
     {
@@ -40,18 +35,10 @@ public class DataManager
         }
         scanners.get("scan.entity").scan();
         scanners.get(flipFlop ? "scan.small" : "scan.large").scan();
-        for (EventProcessor eventProcessor : eventProcessors)
-        {
-            eventProcessor.process();
-            // TODO only collect 'active' data if GUIData needs it
-            active.putAll(eventProcessor.getActive());
-        }
-        processTime = System.currentTimeMillis() - start;
     }
 
     public void wipe()
     {
-        processTime = 0L;
         flipFlop = false;
         scanners.clear();
         numData.clear();
@@ -60,8 +47,6 @@ public class DataManager
         conditions.clear();
         soundSets.clear();
         dataGatherers.clear();
-        eventProcessors.clear();
-        active.clear();
     }
 
     private <T> Optional<T> get(String name, Map<String, T> map)
@@ -82,11 +67,6 @@ public class DataManager
     public void addDataGatherer(DataGatherer gatherer)
     {
         dataGatherers.add(gatherer);
-    }
-
-    public void addEventProcessor(EventProcessor eventProcessor)
-    {
-        eventProcessors.add(eventProcessor);
     }
 
     public void registerScanner(Scanner scanner)

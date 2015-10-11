@@ -15,9 +15,9 @@ import net.minecraft.util.ResourceLocation;
 
 public class SoundEvent extends EventProcessor
 {
-    public SoundEvent(EventSerialize e, MAtmos mAtmos)
+    public SoundEvent(String expansion, EventSerialize e, MAtmos mAtmos)
     {
-        super(e, mAtmos);
+        super(expansion, e, mAtmos);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class SoundEvent extends EventProcessor
         Optional<ResourceLocation> location = getRandomSound();
         if (location.isPresent())
         {
-            float volume = NumberUtil.nextFloat(minVol, maxVol);
+            float volume = NumberUtil.nextFloat(minVol, maxVol) * super.volume.getVolumeModifier();
             float pitch = NumberUtil.nextFloat(minPitch, maxPitch);
             float x = (float) MCGame.playerXpos + randomDistance();
             float y = (float) MCGame.playerYpos + randomDistance();

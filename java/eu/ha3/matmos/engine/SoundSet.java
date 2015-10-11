@@ -9,8 +9,8 @@ import java.util.List;
 
 public class SoundSet
 {
-    private final List<String> sounds = new ArrayList<String>();
     private String name;
+    private final List<String> sounds = new ArrayList<String>();
 
     public SoundSet(){}
 

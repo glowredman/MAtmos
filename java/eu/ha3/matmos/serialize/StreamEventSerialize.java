@@ -8,9 +8,9 @@ import eu.ha3.matmos.MAtmos;
 
 public class StreamEventSerialize extends EventSerialize
 {
+    public boolean repeatable = true;
     public int fadeIn = 0;
     public int fadeOut = 0;
-    public boolean repeatable = true;
 
     public StreamEventSerialize(String name)
     {

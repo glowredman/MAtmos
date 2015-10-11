@@ -1,7 +1,7 @@
 package eu.ha3.matmos.util;
 
-import io.netty.util.internal.ThreadLocalRandom;
 import eu.ha3.matmos.MAtmos;
+import io.netty.util.internal.ThreadLocalRandom;
 
 /**
  * @author dags_ <dags@dags.me>

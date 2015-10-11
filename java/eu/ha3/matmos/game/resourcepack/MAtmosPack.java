@@ -1,10 +1,8 @@
 package eu.ha3.matmos.game.resourcepack;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.common.base.Optional;
 import eu.ha3.matmos.MAtmos;
-import eu.ha3.matmos.serialize.EventAdapter;
-import eu.ha3.matmos.serialize.EventSerialize;
+import eu.ha3.matmos.serialize.Expansion;
 
 import java.io.*;
 import java.util.*;
@@ -17,7 +15,6 @@ import java.util.zip.ZipFile;
 
 public class MAtmosPack
 {
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(EventSerialize.class, new EventAdapter<EventSerialize>()).create();
     private static final String separator = new StringBuilder().append("\\").append(File.separatorChar).toString();
     private static final String folderSounds = File.separator + "assets" + File.separator + "matmos" + File.separator + "sounds" + File.separator;
     private static final String folderData = File.separator + "assets" + File.separator + "matmos" + File.separator + "data" + File.separator;
@@ -27,7 +24,7 @@ public class MAtmosPack
     private final File packFile;
     private final Set<String> sounds = new HashSet<String>();
     private final Set<String> streams = new HashSet<String>();
-    private final List<EventSerialize> data = new ArrayList<EventSerialize>();
+    private final List<Expansion> data = new ArrayList<Expansion>();
 
     public MAtmosPack(File in)
     {
@@ -45,20 +42,26 @@ public class MAtmosPack
         return streams;
     }
 
-    public List<EventSerialize> getData()
+    public List<Expansion> getData()
     {
         return data;
     }
 
     private void addData(Reader reader) throws IOException
     {
-        if (data.size() == 0)
+        Optional<Expansion> optional = Expansion.fromJson(reader);
+        if (optional.isPresent())
         {
-            MAtmos.log("Loading processor data for SoundPack: " + packFile.getName());
+            if (data.size() == 0)
+            {
+                MAtmos.log("Loading processor data for SoundPack: " + packFile.getName());
+            }
+            data.add(optional.get());
         }
-        EventSerialize e = gson.fromJson(reader, EventSerialize.class);
-        reader.close();
-        data.add(e);
+        else
+        {
+            MAtmos.log("Unable to process the thing");
+        }
     }
 
     private void addSound(String sound)

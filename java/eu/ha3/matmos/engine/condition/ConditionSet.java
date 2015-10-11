@@ -1,5 +1,6 @@
 package eu.ha3.matmos.engine.condition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,10 +12,21 @@ public class ConditionSet
     private final List<Checkable> conditions;
     private final String name;
 
+    public ConditionSet(String setName)
+    {
+        conditions = new ArrayList<Checkable>();
+        name = setName;
+    }
+
     public ConditionSet(String n, List<Checkable> checkables)
     {
         conditions = checkables;
         name = n;
+    }
+
+    public void addCondition(Checkable checkable)
+    {
+        conditions.add(checkable);
     }
 
     public List<Checkable> getConditions()
@@ -35,9 +47,13 @@ public class ConditionSet
         return name;
     }
 
-    public void printDebug()
+    public List<String> serialize()
     {
+        List<String> lines = new ArrayList<String>();
         for (Checkable c : conditions)
-            System.out.println(c.serialize());
+        {
+            lines.add(c.serialize());
+        }
+        return lines;
     }
 }
