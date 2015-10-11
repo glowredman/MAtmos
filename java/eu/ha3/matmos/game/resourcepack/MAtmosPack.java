@@ -18,15 +18,13 @@ import java.util.zip.ZipFile;
 public class MAtmosPack
 {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(EventSerialize.class, new EventAdapter<EventSerialize>()).create();
-
     private static final String separator = new StringBuilder().append("\\").append(File.separatorChar).toString();
     private static final String folderSounds = File.separator + "assets" + File.separator + "matmos" + File.separator + "sounds" + File.separator;
-    private static final String zipSounds = "assets/matmos/sounds/";
     private static final String folderData = File.separator + "assets" + File.separator + "matmos" + File.separator + "data" + File.separator;
+    private static final String zipSounds = "assets/matmos/sounds/";
     private static final String zipData = "assets/matmos/data/";
 
     private final File packFile;
-    private final String relativePath;
     private final Set<String> sounds = new HashSet<String>();
     private final Set<String> streams = new HashSet<String>();
     private final List<EventSerialize> data = new ArrayList<EventSerialize>();
@@ -34,7 +32,6 @@ public class MAtmosPack
     public MAtmosPack(File in)
     {
         packFile = in;
-        relativePath = packFile.getPath();
         read();
     }
 
@@ -146,14 +143,14 @@ public class MAtmosPack
         }
         else
         {
-            if (file.getPath().startsWith(relativePath + folderData) && file.getName().endsWith(".json"))
+            if (file.getPath().startsWith(packFile.getPath() + folderData) && file.getName().endsWith(".json"))
             {
                 addData(new FileReader(file));
             }
-            else if (file.getPath().startsWith(relativePath + folderSounds) && file.getName().endsWith(".ogg"))
+            else if (file.getPath().startsWith(packFile.getPath() + folderSounds) && file.getName().endsWith(".ogg"))
             {
                 String path = file.getPath();
-                path = path.substring((relativePath + folderSounds).length(), path.length() - 4).replaceAll(separator, ".");
+                path = path.substring((packFile.getPath() + folderSounds).length(), path.length() - 4).replaceAll(separator, ".");
                 addSound(path);
             }
         }
