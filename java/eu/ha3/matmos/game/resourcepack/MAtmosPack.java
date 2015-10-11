@@ -2,7 +2,7 @@ package eu.ha3.matmos.game.resourcepack;
 
 import com.google.common.base.Optional;
 import eu.ha3.matmos.MAtmos;
-import eu.ha3.matmos.serialize.Expansion;
+import eu.ha3.matmos.engine.serialize.Expansion;
 
 import java.io.*;
 import java.util.*;

@@ -1,4 +1,4 @@
-package eu.ha3.matmos.serialize;
+package eu.ha3.matmos.engine.serialize;
 
 import com.google.common.base.Optional;
 import com.google.gson.Gson;
@@ -6,9 +6,9 @@ import com.google.gson.GsonBuilder;
 import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.engine.SoundSet;
 import eu.ha3.matmos.engine.condition.ConditionSet;
-import eu.ha3.matmos.engine.event.EventProcessor;
-import eu.ha3.matmos.serialize.jsonadapters.ConditionAdapter;
-import eu.ha3.matmos.serialize.jsonadapters.EventAdapter;
+import eu.ha3.matmos.engine.processor.AbstractProcessor;
+import eu.ha3.matmos.engine.serialize.jsonadapters.ConditionAdapter;
+import eu.ha3.matmos.engine.serialize.jsonadapters.EventAdapter;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -71,7 +71,7 @@ public class Expansion
         }
         for (EventSerialize eventSerialize : processors)
         {
-            Optional<EventProcessor> optional = EventProcessor.of(name, eventSerialize, mAtmos);
+            Optional<AbstractProcessor> optional = AbstractProcessor.of(name, eventSerialize, mAtmos);
             if (optional.isPresent())
             {
                 mAtmos.expansionManager.addEventProcessor(optional.get());

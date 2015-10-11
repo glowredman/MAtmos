@@ -1,9 +1,9 @@
-package eu.ha3.matmos.engine.event;
+package eu.ha3.matmos.engine.processor;
 
 import com.google.common.base.Optional;
 import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.game.MCGame;
-import eu.ha3.matmos.serialize.EventSerialize;
+import eu.ha3.matmos.engine.serialize.EventSerialize;
 import eu.ha3.matmos.util.NumberUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -13,9 +13,9 @@ import net.minecraft.util.ResourceLocation;
  * @author dags_ <dags@dags.me>
  */
 
-public class SoundEvent extends EventProcessor
+public class SoundProcessor extends AbstractProcessor
 {
-    public SoundEvent(String expansion, EventSerialize e, MAtmos mAtmos)
+    public SoundProcessor(String expansion, EventSerialize e, MAtmos mAtmos)
     {
         super(expansion, e, mAtmos);
     }

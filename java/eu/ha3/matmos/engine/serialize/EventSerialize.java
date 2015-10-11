@@ -1,4 +1,4 @@
-package eu.ha3.matmos.serialize;
+package eu.ha3.matmos.engine.serialize;
 
 import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.util.NumberUtil;

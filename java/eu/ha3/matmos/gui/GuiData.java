@@ -6,8 +6,10 @@ import eu.ha3.matmos.engine.condition.Checkable;
 import eu.ha3.matmos.engine.condition.ConditionSet;
 import eu.ha3.matmos.game.MCGame;
 import eu.ha3.matmos.game.scanner.Scanner;
+import eu.ha3.matmos.util.Timer;
 
 import java.util.*;
+
 
 /**
  * @author dags_ <dags@dags.me>
@@ -60,18 +62,18 @@ public class GuiData
         }
     }
 
-    long lastUpdate = 0L;
-    float tickPercentage = 0L;
+    private String timeValue = "";
+    private Timer timer = new Timer();
 
     public void drawTimer()
     {
-        long current = System.currentTimeMillis();
-        if (current - lastUpdate > 1000)
+        timer.punchOut();
+        if (timer.getPeriodMs() > 150F)
         {
-            tickPercentage = ((float) MAtmos.processTime) / 50F;
-            lastUpdate = current;
+            timer.punchIn();
+            timeValue = MAtmos.timer.getTimeMs() + ", " + MAtmos.timer.getTickPercent() + " ticks";
         }
-        MCGame.drawString("process time: " + tickPercentage + "% tick", 1, 1, 0xFFFFFF);
+        MCGame.drawString("processing time: " + timeValue, 1, 1, 0xFFFFFF);
     }
 
     public void draw()
@@ -81,7 +83,7 @@ public class GuiData
         lineCount = 0;
         drawTimer();
         newLine();
-        for  (Map.Entry<String, Data<?>> e : data.entrySet())
+        for (Map.Entry<String, Data<?>> e : data.entrySet())
         {
             if (checkAndDraw(e.getKey(), e.getKey(), e.getValue().value, xPos, yPos))
             {

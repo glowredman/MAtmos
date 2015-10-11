@@ -1,13 +1,12 @@
-package eu.ha3.matmos.engine.event;
+package eu.ha3.matmos.engine.processor;
 
 import com.google.common.base.Optional;
 import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.engine.PackManager;
 import eu.ha3.matmos.engine.SoundSet;
-import eu.ha3.matmos.engine.VolumeModifier;
 import eu.ha3.matmos.engine.condition.ConditionSet;
-import eu.ha3.matmos.serialize.EventSerialize;
-import eu.ha3.matmos.serialize.StreamEventSerialize;
+import eu.ha3.matmos.engine.serialize.EventSerialize;
+import eu.ha3.matmos.engine.serialize.StreamEventSerialize;
 import eu.ha3.matmos.util.NumberUtil;
 import net.minecraft.util.ResourceLocation;
 
@@ -20,7 +19,7 @@ import java.util.Map;
  * @author dags_ <dags@dags.me>
  */
 
-public abstract class EventProcessor
+public abstract class AbstractProcessor
 {
     private final List<ConditionSet> triggers = new ArrayList<ConditionSet>();
     private final List<ConditionSet> blockers = new ArrayList<ConditionSet>();
@@ -33,7 +32,7 @@ public abstract class EventProcessor
     protected final float maxPitch;
     protected final int distance;
 
-    protected EventProcessor(String expansionName, EventSerialize e, MAtmos mAtmos)
+    protected AbstractProcessor(String expansionName, EventSerialize e, MAtmos mAtmos)
     {
         volume = mAtmos.expansionManager.getVolume(expansionName);
         for (String s : e.triggers)
@@ -140,15 +139,15 @@ public abstract class EventProcessor
 
     public abstract void trigger();
 
-    public static Optional<EventProcessor> of(String expansion, EventSerialize e, MAtmos mAtmos)
+    public static Optional<AbstractProcessor> of(String expansion, EventSerialize e, MAtmos mAtmos)
     {
         if (e.valid(mAtmos))
         {
-            EventProcessor ep;
+            AbstractProcessor ep;
             if (e instanceof StreamEventSerialize)
-                ep = new StreamEvent(expansion, (StreamEventSerialize) e, mAtmos);
+                ep = new StreamProcessor(expansion, (StreamEventSerialize) e, mAtmos);
             else
-                ep = new SoundEvent(expansion, e, mAtmos);
+                ep = new SoundProcessor(expansion, e, mAtmos);
             return Optional.of(ep);
         }
         return Optional.absent();

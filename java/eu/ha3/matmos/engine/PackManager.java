@@ -5,7 +5,7 @@ import com.mumfrey.liteloader.client.overlays.ISoundHandler;
 import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.game.resourcepack.MAtSoundList;
 import eu.ha3.matmos.game.resourcepack.MAtmosPack;
-import eu.ha3.matmos.serialize.Expansion;
+import eu.ha3.matmos.engine.serialize.Expansion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;

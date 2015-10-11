@@ -1,10 +1,11 @@
-package eu.ha3.matmos;
+package eu.ha3.matmos.util;
 
+import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.engine.SoundSet;
 import eu.ha3.matmos.engine.condition.ConditionParser;
 import eu.ha3.matmos.engine.condition.ConditionSet;
-import eu.ha3.matmos.serialize.Expansion;
-import eu.ha3.matmos.serialize.StreamEventSerialize;
+import eu.ha3.matmos.engine.serialize.Expansion;
+import eu.ha3.matmos.engine.serialize.StreamEventSerialize;
 
 import java.util.ArrayList;
 import java.util.List;

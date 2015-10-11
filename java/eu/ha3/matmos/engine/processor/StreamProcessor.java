@@ -1,16 +1,16 @@
-package eu.ha3.matmos.engine.event;
+package eu.ha3.matmos.engine.processor;
 
 import com.google.common.base.Optional;
 import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.game.StreamingSound;
-import eu.ha3.matmos.serialize.StreamEventSerialize;
+import eu.ha3.matmos.engine.serialize.StreamEventSerialize;
 import net.minecraft.util.ResourceLocation;
 
 /**
  * @author dags_ <dags@dags.me>
  */
 
-public class StreamEvent extends EventProcessor
+public class StreamProcessor extends AbstractProcessor
 {
     private final int fadeInTicks;
     private final int fadeOutTicks;
@@ -18,7 +18,7 @@ public class StreamEvent extends EventProcessor
 
     private StreamingSound sound;
 
-    protected StreamEvent(String expansion, StreamEventSerialize e, MAtmos mAtmos)
+    protected StreamProcessor(String expansion, StreamEventSerialize e, MAtmos mAtmos)
     {
         super(expansion, e, mAtmos);
         fadeInTicks = e.fadeIn;

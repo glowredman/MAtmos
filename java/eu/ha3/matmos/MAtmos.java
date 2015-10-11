@@ -12,6 +12,9 @@ import eu.ha3.matmos.game.gatherer.WorldGatherer;
 import eu.ha3.matmos.game.scanner.EntityScanner;
 import eu.ha3.matmos.game.scanner.VolumeScanner;
 import eu.ha3.matmos.gui.GuiData;
+import eu.ha3.matmos.util.Debug;
+import eu.ha3.matmos.util.Dump;
+import eu.ha3.matmos.util.Timer;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,7 +30,7 @@ public class MAtmos
 {
     private static final Logger logger = (Logger) LogManager.getLogger("MAtmos");
 
-    public static long processTime = 0L;
+    public static Timer timer = new Timer();
     public static ConditionParser conditionParser;
     public final PackManager packManager = new PackManager(this);
     public final DataManager dataManager = new DataManager();
@@ -41,16 +44,19 @@ public class MAtmos
         conditionParser = new ConditionParser(this.dataManager);
     }
 
-    public void init(File configDir)
+    public void setConfigDir(File configDir)
     {
         configFolder = configDir;
+        if (!configFolder.exists() && configFolder.mkdirs())
+        {
+            log("Creating new directory: " + configFolder.getPath());
+        }
     }
 
     public void reload()
     {
         log("Reloading engine...");
         expansionManager.wipe();
-
         dataManager.wipe();
         dataManager.addDataGatherer(new PlayerGatherer().register(dataManager));
         dataManager.addDataGatherer(new PositionGatherer().register(dataManager));
@@ -62,7 +68,8 @@ public class MAtmos
         dataManager.registerScanner(new VolumeScanner("large", 28, (20 * 5) / 2 /* 5 secs */));
 
         guiData = new GuiData(this).display("active");
-        // create some test eventProcessors
+        // debug stuff
+        new Dump(dataManager).dumpToJson(configFolder);
         debug();
     }
 
@@ -86,12 +93,12 @@ public class MAtmos
 
     public void onTick()
     {
-        long start = System.currentTimeMillis();
+        timer.punchIn();
         checkLoadSoundPacks();
         MCGame.update();
         dataManager.process();
         expansionManager.process();
-        processTime = System.currentTimeMillis() - start;
+        timer.punchOut();
     }
 
     public void draw()

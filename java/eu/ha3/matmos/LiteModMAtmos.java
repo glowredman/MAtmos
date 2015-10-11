@@ -29,7 +29,7 @@ public class LiteModMAtmos implements Tickable, HUDRenderListener
     @Override
     public void init(File configPath)
     {
-        mAtmos.init(new File(configPath, "matmos"));
+        mAtmos.setConfigDir(new File(configPath, "matmos"));
         mAtmos.reload();
     }
 

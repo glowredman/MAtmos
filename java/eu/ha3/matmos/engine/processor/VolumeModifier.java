@@ -1,4 +1,4 @@
-package eu.ha3.matmos.engine;
+package eu.ha3.matmos.engine.processor;
 
 /**
  * @author dags_ <dags@dags.me>

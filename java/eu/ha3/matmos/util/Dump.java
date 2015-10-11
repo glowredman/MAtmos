@@ -1,4 +1,4 @@
-package eu.ha3.matmos.serialize.dump;
+package eu.ha3.matmos.util;
 
 import com.google.gson.GsonBuilder;
 import eu.ha3.matmos.MAtmos;

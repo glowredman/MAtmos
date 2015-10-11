@@ -1,4 +1,4 @@
-package eu.ha3.matmos.serialize.jsonadapters;
+package eu.ha3.matmos.engine.serialize.jsonadapters;
 
 import com.google.common.base.Optional;
 import com.google.gson.*;
