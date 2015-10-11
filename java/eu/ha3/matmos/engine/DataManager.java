@@ -15,6 +15,7 @@ import java.util.*;
 public class DataManager
 {
     public static long processTime = 0L;
+    private boolean flipFlop = false;
 
     public final Map<String, Scanner> scanners = new HashMap<String, Scanner>();
     public final Map<String, Data<Number>> numData = new HashMap<String, Data<Number>>();
@@ -22,14 +23,12 @@ public class DataManager
     public final Map<String, Data<Boolean>> boolData = new HashMap<String, Data<Boolean>>();
 
     public final Map<String, ConditionSet> conditions = new HashMap<String, ConditionSet>();
-    private final Map<String, SoundSet> soundSets = new HashMap<String, SoundSet>();
+    public final Map<String, SoundSet> soundSets = new HashMap<String, SoundSet>();
 
     private final List<DataGatherer> dataGatherers = new ArrayList<DataGatherer>();
     private final List<EventProcessor> eventProcessors = new ArrayList<EventProcessor>();
 
     public final Map<String, Boolean> active = new HashMap<String, Boolean>();
-
-    private boolean flipFlop = false;
 
     public void process()
     {
@@ -44,10 +43,25 @@ public class DataManager
         for (EventProcessor eventProcessor : eventProcessors)
         {
             eventProcessor.process();
+            // TODO only collect 'active' data if GUIData needs it
             active.putAll(eventProcessor.getActive());
         }
-        if (!flipFlop)
-            processTime = System.currentTimeMillis() - start;
+        processTime = System.currentTimeMillis() - start;
+    }
+
+    public void wipe()
+    {
+        processTime = 0L;
+        flipFlop = false;
+        scanners.clear();
+        numData.clear();
+        stringData.clear();
+        boolData.clear();
+        conditions.clear();
+        soundSets.clear();
+        dataGatherers.clear();
+        eventProcessors.clear();
+        active.clear();
     }
 
     private <T> Optional<T> get(String name, Map<String, T> map)

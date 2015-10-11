@@ -7,6 +7,7 @@ import eu.ha3.matmos.game.Position;
 import eu.ha3.matmos.util.NumberUtil;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.EnumSkyBlock;
 
 /**
  * @author dags_ <dags@dags.me>
@@ -17,7 +18,6 @@ public class PositionGatherer implements DataGatherer
     private Data<Number> xPos = new Data<Number>();
     private Data<Number> yPos = new Data<Number>();
     private Data<Number> zPos = new Data<Number>();
-    private Data<String> coords = new Data<String>();
     private Data<Number> pitch = new Data<Number>();
     private Data<Number> yaw = new Data<Number>();
     private Data<String> direction = new Data<String>();
@@ -27,7 +27,9 @@ public class PositionGatherer implements DataGatherer
     private Data<Number> overheadTotalThickness = new Data<Number>();
     private Data<String> overheadFirstBlock = new Data<String>();
     private Data<String> blockUnderFoot = new Data<String>();
-    private Data<Number> lightAtPos = new Data<Number>();
+
+    private Data<Number> skyLight = new Data<Number>();
+    private Data<Number> blockLight = new Data<Number>();
 
     private Data<String> biomeName = new Data<String>();
     private Data<Number> biomeId = new Data<Number>();
@@ -38,7 +40,6 @@ public class PositionGatherer implements DataGatherer
         manager.registerNum("position.x", xPos);
         manager.registerNum("position.y", yPos);
         manager.registerNum("position.z", zPos);
-        manager.registerString("position.coords", coords);
         manager.registerNum("position.pitch", pitch);
         manager.registerNum("position.yaw", yaw);
         manager.registerString("position.direction", direction);
@@ -48,7 +49,9 @@ public class PositionGatherer implements DataGatherer
         manager.registerNum("position.overhead.totalThickness", overheadTotalThickness);
         manager.registerString("position.overhead.firstBlock", overheadFirstBlock);
         manager.registerString("position.blockUnderFoot", blockUnderFoot);
-        manager.registerNum("position.lightAtPos", lightAtPos);
+
+        manager.registerNum("position.skyLight", skyLight);
+        manager.registerNum("position.blockLight", blockLight);
 
         manager.registerString("position.biomeName", biomeName);
         manager.registerNum("position.biomeId", biomeId);
@@ -67,10 +70,11 @@ public class PositionGatherer implements DataGatherer
         xPos.value = MCGame.playerPosition.getX();
         yPos.value = MCGame.playerPosition.getY();
         zPos.value = MCGame.playerPosition.getZ();
-        coords.value = MCGame.playerPosition.serial();
 
         calcBlocksUpAndDown();
-        lightAtPos.value = MCGame.currentWorld.getLight(MCGame.playerPosition);
+
+        skyLight.value = MCGame.currentChunk.getLightFor(EnumSkyBlock.SKY, MCGame.playerPosition);
+        blockLight.value = MCGame.currentChunk.getLightFor(EnumSkyBlock.BLOCK, MCGame.playerPosition);
 
         biomeName.value = MCGame.currentBiome.biomeName.replace(' ', '_');
         biomeId.value = MCGame.currentBiome.biomeID;
@@ -85,7 +89,7 @@ public class PositionGatherer implements DataGatherer
         String firstSolid = "none";
         for (int y = p.getY() + 2; y < 256; y++)
         {
-            Block b = MCGame.getBlock(p.getX(), y, p.getZ());
+            Block b = MCGame.getLocalBlock(p.getX(), y, p.getZ());
             if (!b.equals(Blocks.air))
             {
                 totalSolid++;

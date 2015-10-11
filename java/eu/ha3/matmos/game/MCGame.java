@@ -20,6 +20,7 @@ public class MCGame
     public static boolean isMultiplayer = false;
 
     public static World currentWorld;
+    public static Chunk currentChunk;
     public static String worldName;
     public static BiomeGenBase currentBiome;
 
@@ -48,15 +49,10 @@ public class MCGame
         playerPosition.update(playerXpos, playerYpos, playerZpos);
 
         currentWorld = minecraft.theWorld;
+        currentChunk = currentWorld.getChunkFromBlockCoords(playerPosition);
         currentBiome = currentWorld.getBiomeGenForCoords(playerPosition);
         worldName = isMultiplayer ? "N/A" : currentWorld.getWorldInfo().getWorldName();
-        if (firstTick)
-            firstTick = false;
-    }
-
-    public static void drawString(String s, int x, int y)
-    {
-        drawString(s, x, y, 0xFFFFFF);
+        firstTick = false;
     }
 
     public static void drawString(String s, int x, int y, int color)
@@ -84,21 +80,32 @@ public class MCGame
         return Block.blockRegistry.getNameForObject(block).toString();
     }
 
+    public static Block getLocalBlock(int x, int y, int z)
+    {
+        return getBlock(x, y, z, currentChunk);
+    }
+
     public static Block getBlock(int x, int y, int z)
     {
-        Block b = Blocks.air;
         if (y >= 0 && y <= 256)
         {
             Chunk c = MCGame.currentWorld.getChunkProvider().provideChunk(x >> 4, z >> 4);
-            ExtendedBlockStorage[] storageArray = c.getBlockStorageArray();
-            if (y >= 0 && y >> 4 < storageArray.length)
+            return getBlock(x, y, z, c);
+        }
+        return Blocks.air;
+    }
+
+    public static Block getBlock(int x, int y, int z, Chunk c)
+    {
+        Block b = Blocks.air;
+        ExtendedBlockStorage[] storageArray = c.getBlockStorageArray();
+        if (y >= 0 && y >> 4 < storageArray.length)
+        {
+            ExtendedBlockStorage storage = storageArray[y >> 4];
+            if (storage != null)
             {
-                ExtendedBlockStorage storage = storageArray[y >> 4];
-                if (storage != null)
-                {
-                    IBlockState state = storage.get(x & 15, y & 15, z & 15);
-                    b = state.getBlock();
-                }
+                IBlockState state = storage.get(x & 15, y & 15, z & 15);
+                b = state.getBlock();
             }
         }
         return b;

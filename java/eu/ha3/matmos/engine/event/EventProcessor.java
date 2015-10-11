@@ -2,6 +2,7 @@ package eu.ha3.matmos.engine.event;
 
 import com.google.common.base.Optional;
 import eu.ha3.matmos.MAtmos;
+import eu.ha3.matmos.engine.PackManager;
 import eu.ha3.matmos.engine.SoundSet;
 import eu.ha3.matmos.engine.condition.ConditionSet;
 import eu.ha3.matmos.serialize.EventSerialize;
@@ -20,8 +21,6 @@ import java.util.Map;
 
 public abstract class EventProcessor
 {
-    private static final Map<String, ResourceLocation> soundCache = new HashMap<String, ResourceLocation>();
-
     private final List<ConditionSet> triggers = new ArrayList<ConditionSet>();
     private final List<ConditionSet> blockers = new ArrayList<ConditionSet>();
     private final List<String> sounds = new ArrayList<String>();
@@ -31,8 +30,6 @@ public abstract class EventProcessor
     protected final float minPitch;
     protected final float maxPitch;
     protected final int distance;
-
-    private boolean active = false;
 
     protected EventProcessor(EventSerialize e, MAtmos mAtmos)
     {
@@ -52,7 +49,9 @@ public abstract class EventProcessor
         {
             Optional<SoundSet> optional = mAtmos.dataManager.getSoundSet(s);
             if (optional.isPresent())
+            {
                 sounds.addAll(optional.get().getSounds());
+            }
         }
         delay = new DelayTimer(e.delayMin, e.delayMax, e.delayAfter);
         minVol = e.volumeMin;
@@ -77,15 +76,15 @@ public abstract class EventProcessor
         {
             if (s.active())
             {
-                active = true;
-                if (delayComplete)
+                if (delayComplete && !soundIsPlaying())
+                {
                     trigger();
+                }
                 return;
             }
         }
-        if (active)
+        if (soundIsPlaying())
         {
-            active = false;
             interrupt();
         }
     }
@@ -100,15 +99,39 @@ public abstract class EventProcessor
         return active;
     }
 
-    public final ResourceLocation getRandomSound()
+    private Optional<ResourceLocation> checkAndReturn(Optional<ResourceLocation> optional, int index, String name)
     {
-        String sound = sounds.get(NumberUtil.nextInt(0, sounds.size()));
-        if (!soundCache.containsKey(sound))
+        if (!optional.isPresent())
         {
-            soundCache.put(sound, new ResourceLocation(sound));
+            sounds.remove(index);
+            MAtmos.log("Sound: " + name + " could not be found, removing from processor!");
         }
-        return soundCache.get(sound);
+        return optional;
     }
+
+    public final Optional<ResourceLocation> getRandomSound()
+    {
+        if (sounds.size() > 0)
+        {
+            int index = NumberUtil.nextInt(0, sounds.size());
+            String sound = sounds.get(index);
+            return checkAndReturn(PackManager.getSound(sound), index, sound);
+        }
+        return Optional.absent();
+    }
+
+    public final Optional<ResourceLocation> getRandomStream()
+    {
+        if (sounds.size() > 0)
+        {
+            int index = NumberUtil.nextInt(0, sounds.size());
+            String sound = sounds.get(index);
+            return checkAndReturn(PackManager.getStream(sound), index, sound);
+        }
+        return Optional.absent();
+    }
+
+    public abstract boolean soundIsPlaying();
 
     public abstract void interrupt();
 

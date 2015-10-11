@@ -1,6 +1,7 @@
 package eu.ha3.matmos;
 
 import eu.ha3.matmos.engine.DataManager;
+import eu.ha3.matmos.engine.PackManager;
 import eu.ha3.matmos.engine.event.EventProcessor;
 import eu.ha3.matmos.game.MCGame;
 import eu.ha3.matmos.game.gatherer.PlayerGatherer;
@@ -23,20 +24,23 @@ public class MAtmos
 {
     private static final Logger logger = (Logger) LogManager.getLogger("MAtmos");
 
+    public final PackManager packManager = new PackManager(this);
     public final DataManager dataManager = new DataManager();
     private GuiData guiData;
 
-    public void init()
+    public void reload()
     {
+        log("Reloading engine...");
+        dataManager.wipe();
         dataManager.addDataGatherer(new PlayerGatherer().register(dataManager));
         dataManager.addDataGatherer(new PositionGatherer().register(dataManager));
         dataManager.addDataGatherer(new WeatherGatherer().register(dataManager));
         dataManager.addDataGatherer(new WorldGatherer().register(dataManager));
         dataManager.registerScanner(new EntityScanner());
-        dataManager.registerScanner(new VolumeScanner("small", 8, 10));
-        dataManager.registerScanner(new VolumeScanner("large", 28, 10 * 5 /* 5 secs */));
-
-        guiData = new GuiData(this).display("position");
+        // NB volume scanners scan on alternate ticks, hence the /2
+        dataManager.registerScanner(new VolumeScanner("small", 8, 20 / 2 /*1 secs*/));
+        dataManager.registerScanner(new VolumeScanner("large", 28, (20 * 5) / 2 /* 5 secs */));
+        guiData = new GuiData(this).display("player");
         // create some test eventProcessors
         debug();
     }
@@ -47,6 +51,14 @@ public class MAtmos
             dataManager.addEventProcessor(ep);
     }
 
+    private void checkLoadSoundPacks()
+    {
+        if (MCGame.firstTick)
+        {
+            packManager.registerReloadable();
+        }
+    }
+
     public static void log(String message)
     {
         logger.info("(MAtmos) " + message);
@@ -54,6 +66,7 @@ public class MAtmos
 
     public void onTick()
     {
+        checkLoadSoundPacks();
         MCGame.update();
         dataManager.process();
     }

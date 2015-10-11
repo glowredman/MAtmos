@@ -29,12 +29,12 @@ public class PlayerGatherer implements DataGatherer
     private Data<Number> foodSaturation = new Data<Number>();
     private Data<Number> armour = new Data<Number>();
     private Data<Number> breath = new Data<Number>();
-
-    private Data<String> vehicle = new Data<String>();
-
     private Data<Number> velocityHorizontal = new Data<Number>();
     private Data<Number> velocityVertical = new Data<Number>();
     private Data<Number> fallDistance = new Data<Number>();
+
+    private Data<String> vehicle = new Data<String>();
+    private Data<String> gameMode = new Data<String>();
 
     @Override
     public PlayerGatherer register(DataManager manager)
@@ -55,12 +55,12 @@ public class PlayerGatherer implements DataGatherer
         manager.registerNum("player.stat.foodSaturation", foodSaturation);
         manager.registerNum("player.stat.armour", armour);
         manager.registerNum("player.stat.breath", breath);
+        manager.registerNum("player.stat.velocityHorizontal", velocityHorizontal);
+        manager.registerNum("player.stat.velocityVertical", velocityVertical);
+        manager.registerNum("player.stat.fallDistance", fallDistance);
 
         manager.registerString("player.vehicle", vehicle);
-
-        manager.registerNum("player.velocityHorizontal", velocityHorizontal);
-        manager.registerNum("player.velocityVertical", velocityVertical);
-        manager.registerNum("player.fallDistance", fallDistance);
+        manager.registerString("player.gameMode", gameMode);
         return this;
     }
 
@@ -85,11 +85,29 @@ public class PlayerGatherer implements DataGatherer
         breath.value = MCGame.player.getAir();
 
         Entity ridden = MCGame.player.ridingEntity;
-        vehicle.value = ridden != null ? ridden.getClass().getSimpleName() : "none";
+        vehicle.value = ridden != null ? ridden.getClass().getSimpleName().substring("entity".length()) : "none";
 
         Entity e = ridden == null ? MCGame.player : ridden;
         velocityHorizontal.value = NumberUtil.round1dp((e.motionX * e.motionX + e.motionZ * e.motionZ) * 100D);
         velocityVertical.value = NumberUtil.round1dp(e.motionY + (MCGame.player.capabilities.isFlying ? 0 : 0.08));
         fallDistance.value = NumberUtil.round1dp(MCGame.noFall() ? 0F : e.fallDistance);
+
+        calcGameMode();
+    }
+
+    private void calcGameMode()
+    {
+        if (MCGame.player.capabilities.isCreativeMode)
+        {
+            gameMode.value = "creative";
+        }
+        if (MCGame.player.isSpectator())
+        {
+            gameMode.value = "spectator";
+        }
+        else
+        {
+            gameMode.value = "survival";
+        }
     }
 }

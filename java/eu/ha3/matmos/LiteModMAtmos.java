@@ -2,7 +2,6 @@ package eu.ha3.matmos;
 
 import com.mumfrey.liteloader.HUDRenderListener;
 import com.mumfrey.liteloader.Tickable;
-import eu.ha3.matmos.serialize.dump.Dump;
 import net.minecraft.client.Minecraft;
 
 import java.io.File;
@@ -30,8 +29,7 @@ public class LiteModMAtmos implements Tickable, HUDRenderListener
     @Override
     public void init(File configPath)
     {
-        mAtmos.init();
-        new Dump(mAtmos.dataManager).dumpToJson(configPath);
+        mAtmos.reload();
     }
 
     @Override
