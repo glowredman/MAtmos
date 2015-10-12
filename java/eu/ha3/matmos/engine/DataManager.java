@@ -129,31 +129,40 @@ public class DataManager
         return get(key, boolData);
     }
 
-    public List<String> findDataKey(String match)
+    public List<String> findMatches(String in)
     {
-        match = match.toLowerCase().trim();
-        Set<String> matchSet = new HashSet<String>();
-        addMatches(match, scanners.keySet(), matchSet);
-        addMatches(match, numData.keySet(), matchSet);
-        addMatches(match, stringData.keySet(), matchSet);
-        addMatches(match, boolData.keySet(), matchSet);
-        List<String> results = new ArrayList<String>(matchSet);
-        Collections.sort(results);
-        return results;
+        Set<String> results = new HashSet<String>();
+        addMatches(in, results, scanners.keySet());
+        addMatches(in, results, numData.keySet());
+        addMatches(in, results, stringData.keySet());
+        addMatches(in, results, boolData.keySet());
+        List<String> ordered = new ArrayList<String>(results);
+        Collections.sort(ordered);
+        return ordered;
     }
 
-    private void addMatches(String find, Collection<String> lookIn, Collection<String> matches)
+    private void addMatches(String input, Collection<String> results, Collection<String> keys)
     {
-        int fromIndex = find.endsWith(".") ? find.length() : find.length() - 1;
-        for (String s : lookIn)
+        for (String key : keys)
         {
-            if (s.startsWith(find))
+            if (key.length() < input.length())
             {
-                int index = s.indexOf('.', fromIndex) + 1;
-                if (index > 0)
-                    matches.add(s.substring(0, index));
-                else
-                    matches.add(s);
+                continue;
+            }
+            boolean match = true;
+            for (int i = 0; i < input.length(); i++)
+            {
+                if (input.charAt(i) !=key.charAt(i))
+                {
+                    match = false;
+                    break;
+                }
+            }
+            if (match)
+            {
+                int next = key.indexOf(".", input.length());
+                next = next > 0 ? next : key.length();
+                results.add(key.substring(input.length(), next));
             }
         }
     }
@@ -172,17 +181,5 @@ public class DataManager
         if (key.startsWith("scan.entity"))
             return "entity_scan";
         return "invalid";
-    }
-
-    private String findShortestOccurance(String match, String currentShortest, Collection<String> collection)
-    {
-        for (String s : collection)
-        {
-            if (s.startsWith(match) && (currentShortest.equals("") || s.length() > currentShortest.length()))
-            {
-                currentShortest = s;
-            }
-        }
-        return currentShortest;
     }
 }
