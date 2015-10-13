@@ -30,12 +30,12 @@ public class VolumeScanner implements Scanner
     private int dz = 0;
 
 
-    public VolumeScanner(String name, int scanRadius, int scanDuration)
+    public VolumeScanner(String name, int horizontalRadius, int scanHeight,int scanDuration)
     {
         id = name;
-        radius = scanRadius;
-        height = radius / 2;
-        int w = 1 + scanRadius + scanRadius;
+        radius = horizontalRadius;
+        height = scanHeight;
+        int w = 1 + horizontalRadius + horizontalRadius;
         int h = 1 + height + height;
         int vol = w * h * w;
         countPer = 1 + (vol / scanDuration);
@@ -87,7 +87,7 @@ public class VolumeScanner implements Scanner
     @Override
     public String displayId()
     {
-        return "scan." + id;
+        return "scan.block." + id;
     }
 
     @Override

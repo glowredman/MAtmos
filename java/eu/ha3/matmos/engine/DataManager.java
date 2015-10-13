@@ -34,7 +34,7 @@ public class DataManager
             gatherer.update();
         }
         scanners.get("scan.entity").scan();
-        scanners.get(flipFlop ? "scan.small" : "scan.large").scan();
+        scanners.get(flipFlop ? "scan.block.small" : "scan.block.large").scan();
     }
 
     public void wipe()

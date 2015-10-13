@@ -27,17 +27,17 @@ public abstract class Div extends Gui
     {
         this.width = clamp(width, 0F, 1F);
         this.height = clamp(height, 0F, 1F);
-        this.marginLeft = clamp(marginLeft, 0F, width);
+        this.marginLeft = clamp(marginLeft, 0F, 1F);
         this.marginTop = clamp(marginTop, 0F, 1F);
     }
-
-    public abstract void onMouseMove(int mouseX, int mouseY);
 
     public abstract void onMouseClick(int mouseX, int mouseY, int button);
 
     public abstract void onKeyType(char c, int code);
 
-    protected final void onDraw(int parentLeft, int parentTop, int parentRight, int parentBottom)
+    public abstract void onDraw(int mouseX, int mouseY, int left, int top, int right, int bottom);
+
+    protected final void draw(int mouseX, int mouseY, int parentLeft, int parentTop, int parentRight, int parentBottom)
     {
         int parentWidth = parentRight - parentLeft;
         int parentHeight = parentBottom - parentTop;
@@ -50,15 +50,15 @@ public abstract class Div extends Gui
         int right = left + currentWidth;
         int bottom = top + currentHeight;
 
-        this.draw(left, top, right, bottom);
+        this.drawDiv(mouseX, mouseY, left, top, right, bottom);
 
         for (Div d : children)
         {
-            d.onDraw(left, top, right, bottom);
+            d.draw(mouseX, mouseY, left, top, right, bottom);
         }
     }
 
-    public void draw(int left, int top, int right, int bottom)
+    private void drawDiv(int mouseX, int mouseY, int left, int top, int right, int bottom)
     {
         if (background && border)
         {
@@ -75,12 +75,7 @@ public abstract class Div extends Gui
             drawVerticalLine(left, top, bottom - 1, borderColor);
             drawVerticalLine(right - 1, top, bottom - 1, borderColor);
         }
-    }
-
-    public final void mouseMoved(int mouseX, int mouseY)
-    {
-        for (Div d : children)
-            d.onMouseMove(mouseX, mouseY);
+        this.onDraw(mouseX, mouseY, left, top, right, bottom);
     }
 
     public final void mouseClicked(int mouseX, int mouseY, int button)
@@ -125,6 +120,11 @@ public abstract class Div extends Gui
         drawHorizontalLine(left, right - 1, bottom - 1, borderColor);
         drawVerticalLine(left, top, bottom - 1, borderColor);
         drawVerticalLine(right - 1, top, bottom - 1, borderColor);
+    }
+
+    protected static boolean mouseOver(int mouseX, int mouseY, int left, int top, int right, int bottom)
+    {
+        return mouseX > left && mouseX < right && mouseY > top && mouseY < bottom;
     }
 
     protected static int round(float in)

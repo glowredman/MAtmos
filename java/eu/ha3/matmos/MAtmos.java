@@ -13,7 +13,6 @@ import eu.ha3.matmos.game.scanner.EntityScanner;
 import eu.ha3.matmos.game.scanner.VolumeScanner;
 import eu.ha3.matmos.gui.GuiData;
 import eu.ha3.matmos.util.Debug;
-import eu.ha3.matmos.util.Dump;
 import eu.ha3.matmos.util.Timer;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
@@ -63,13 +62,9 @@ public class MAtmos
         dataManager.addDataGatherer(new WeatherGatherer().register(dataManager));
         dataManager.addDataGatherer(new WorldGatherer().register(dataManager));
         dataManager.registerScanner(new EntityScanner());
-        // NB volume scanners scan on alternate ticks, hence the /2
-        dataManager.registerScanner(new VolumeScanner("small", 8, 20 / 2 /*1 secs*/));
-        dataManager.registerScanner(new VolumeScanner("large", 28, (20 * 5) / 2 /* 5 secs */));
-
+        dataManager.registerScanner(new VolumeScanner("small", 8, 8, 20 / 2)); // 17 * 17 * 17 blocks over 1 secs
+        dataManager.registerScanner(new VolumeScanner("large", 28, 14,(20 * 5) / 2)); // 57 * 29 * 57 blocks over 5 secs
         guiData = new GuiData(this).display("active");
-        // debug stuff
-        new Dump(dataManager).dumpToJson(configFolder);
         debug();
     }
 

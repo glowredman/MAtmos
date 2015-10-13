@@ -23,15 +23,9 @@ public class ScreenDiv extends Div
         return this;
     }
 
-    public final void drawScreen()
+    public final void drawScreen(int mouseX, int mouseY)
     {
-        super.onDraw(0, 0, width, height);
-    }
-
-    @Override
-    public void onMouseMove(int mouseX, int mouseY)
-    {
-        super.mouseMoved(mouseX, mouseY);
+        super.draw(mouseX, mouseY, 0, 0, width, height);
     }
 
     @Override
@@ -47,8 +41,6 @@ public class ScreenDiv extends Div
     }
 
     @Override
-    public void draw(int left, int top, int right, int bottom)
-    {
-        super.draw(left, top, right, bottom);
-    }
+    public void onDraw(int mouseX, int mouseY, int left, int top, int right, int bottom)
+    {}
 }

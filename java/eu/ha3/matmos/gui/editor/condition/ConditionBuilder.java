@@ -1,8 +1,9 @@
-package eu.ha3.matmos.gui.editor;
+package eu.ha3.matmos.gui.editor.condition;
 
 import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.engine.condition.Check;
 import eu.ha3.matmos.game.MCGame;
+import eu.ha3.matmos.gui.editor.ScreenHolder;
 import eu.ha3.matmos.util.NumberUtil;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
@@ -32,11 +33,20 @@ public class ConditionBuilder
 
     public boolean hovered = false;
     public boolean active = false;
-    private boolean validCondition = false;
+    public boolean validCondition = false;
 
-    public ConditionBuilder(MAtmos instance)
+    public ConditionBuilder(MAtmos engine)
     {
-        mAtmos = instance;
+        mAtmos = engine;
+    }
+
+    public ConditionBuilder(MAtmos engine, String rule)
+    {
+        mAtmos = engine;
+        for (char c : rule.toCharArray())
+        {
+            onKeyType(c, (int) c);
+        }
     }
 
     public void onKeyType(char keyChar, int keyCode)
@@ -153,7 +163,7 @@ public class ConditionBuilder
     {
         if (hovered || active)
         {
-            EditorGuiScreen.drawRect(left, top, right, bottom, active ? 0x33FFFFFF : 0x22FFFFFF);
+            ScreenHolder.drawRect(left, top, right, bottom, active ? 0x33FFFFFF : 0x22FFFFFF);
         }
     }
 
@@ -223,13 +233,18 @@ public class ConditionBuilder
         return "string".equals(type) && value.length() > 0;
     }
 
-    private static boolean isOpChar(char c)
+    private boolean isOpChar(char c)
     {
         return c == '<' || c == '>' || c == '=' || c == '!';
     }
 
-    private static boolean isValidChar(char c)
+    private boolean isValidChar(char c)
     {
-        return Character.isAlphabetic(c) || Character.isDigit(c) || c == '.' || c == '-' || c == '_' || c ==':';
+        return Character.isAlphabetic(c) || Character.isDigit(c) || c == '.' || c == '-' || c == '_' || c ==':' || orValue(c);
+    }
+
+    private boolean orValue(char c)
+    {
+        return operator.length() > 0 && c == '|';
     }
 }

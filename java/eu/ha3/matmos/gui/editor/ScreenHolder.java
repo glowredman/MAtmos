@@ -1,8 +1,6 @@
 package eu.ha3.matmos.gui.editor;
 
 import eu.ha3.matmos.MAtmos;
-import eu.ha3.matmos.gui.editor.div.Div;
-import eu.ha3.matmos.gui.editor.div.EditorDiv;
 import eu.ha3.matmos.gui.editor.div.ScreenDiv;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -15,28 +13,23 @@ import java.io.IOException;
  * @author dags_ <dags@dags.me>
  */
 
-public class EditorGuiScreen extends GuiScreen
+public class ScreenHolder extends GuiScreen
 {
-    private final ScreenDiv screen;
+    // TODO: Save on close
+    private ScreenDiv screen;
 
-    public EditorGuiScreen(MAtmos mAtmos)
+    public ScreenHolder(MAtmos mAtmos)
     {
-        width = Minecraft.getMinecraft().displayWidth;
-        height = Minecraft.getMinecraft().displayHeight;
-        ScaledResolution r = new ScaledResolution(Minecraft.getMinecraft(), width, height);
-
-        screen = new ScreenDiv(r.getScaledWidth(), r.getScaledHeight());
-        screen.background(0xCC333333);
-        screen.border(0xFFFFFFFF);
-        Div editor = new EditorDiv(mAtmos, 0.49F, 0.98F, 0.005F, 0.01F).background(0xFF000000).border(0xFFFFFFFF);
-        screen.addChild(editor);
+        ScaledResolution r = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+        width = r.getScaledWidth();
+        height = r.getScaledHeight();
+        screen = Screens.buildConditionsScreen(mAtmos, width, height);
     }
 
     @Override
     public void drawScreen(int x, int y, float f)
     {
-        screen.mouseMoved(x, y);
-        screen.drawScreen();
+        screen.drawScreen(x, y);
     }
 
     public void mouseClicked(int x, int y, int mouseButton) throws IOException
@@ -70,7 +63,7 @@ public class EditorGuiScreen extends GuiScreen
                 toggle = !toggle;
                 if (toggle)
                 {
-                    Minecraft.getMinecraft().displayGuiScreen(new EditorGuiScreen(mAtmos));
+                    Minecraft.getMinecraft().displayGuiScreen(new ScreenHolder(mAtmos));
                 }
                 else
                 {
