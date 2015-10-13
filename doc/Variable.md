@@ -45,12 +45,12 @@ Finally you must specify which entity type to look-up. For example:
 
 ##### Block Scan Keys
 MAtmos runs 2 Block Scans:
-- **scan.small.** - a radius of 8 blocks that refreshes frequently (~every second)
-- **scan.large.** - a radius of 28 blocks horizontally, and +- 14 blocks vertically, that refreshes infrequently (~every 5 seconds)
+- **scan.block.small.** - a radius of 8 blocks that refreshes frequently (~every second)
+- **scan.block.large.** - a radius of 28 blocks horizontally, and +-14 blocks vertically, that refreshes infrequently (~every 5 seconds)
 
 Block counts can be looked up by appending the block name to the end of the desired scan key, as demonstrated below:
 
-    scan.block.r8.minecraft:leaves
-    scan.block.r28.minecraft:stone
+    scan.block.small.minecraft:leaves
+    scan.block.large.minecraft:stone
 
 **N.B.** vanilla blocks should be referenced with the 'minecraft:' prefix. Block variants/metadatas are not supported.
