@@ -60,7 +60,7 @@ public class EntityScanner implements Scanner
 
     private void incCounter(EntityLiving e, int rad)
     {
-        String id = "r" + rad + "." + e.getClass().getSimpleName().substring("entity".length());
+        String id = "r" + rad + "." + MCGame.getEntityName(e);
         if (!counters.containsKey(id))
             counters.put(id, new Counter());
         counters.get(id).count++;

@@ -36,7 +36,7 @@ We can use the following Condition statements:
 
     weather.israining = false
     world.time = morning | evening
-    scan.block.r28.minecraft:leaves > 500
-    scan.block.r28.minecraft:log > 100
+    scan.block.large.minecraft:leaves > 500
+    scan.block.large.minecraft:log > 100
 
 Here we are checking that it is **not raining**, it is **morning *or* evening**, and to confirm there are (probably) trees nearby, there are **more than 500 leaf blocks** (so probably tree canopies) and **more than 100 log blocks** (so probably tree trunks).

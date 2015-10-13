@@ -84,10 +84,9 @@ public class PlayerGatherer implements DataGatherer
         armour.value = MCGame.player.getTotalArmorValue();
         breath.value = MCGame.player.getAir();
 
-        Entity ridden = MCGame.player.ridingEntity;
-        vehicle.value = ridden != null ? ridden.getClass().getSimpleName().substring("entity".length()) : "none";
+        vehicle.value = MCGame.getEntityName(MCGame.player.ridingEntity);
 
-        Entity e = ridden == null ? MCGame.player : ridden;
+        Entity e = MCGame.player.ridingEntity == null ? MCGame.player : MCGame.player.ridingEntity;
         velocityHorizontal.value = NumberUtil.round1dp((e.motionX * e.motionX + e.motionZ * e.motionZ) * 100D);
         velocityVertical.value = NumberUtil.round1dp(e.motionY + (MCGame.player.capabilities.isFlying ? 0 : 0.08));
         fallDistance.value = NumberUtil.round1dp(MCGame.noFall() ? 0F : e.fallDistance);

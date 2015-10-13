@@ -105,7 +105,7 @@ public class GuiData
         for (Map.Entry<String, ConditionSet> e : mAtmos.dataManager.conditions.entrySet())
         {
             final boolean active = e.getValue().active();
-            if (toDisplay.contains("%active%"))
+            if (toDisplay.contains("active"))
             {
                 int color = active ? GREEN : WHITE;
                 MCGame.drawString(e.getKey(), xPos, yPos, color);
@@ -146,7 +146,7 @@ public class GuiData
     {
         if ("active".equals(s))
         {
-            toDisplay.add("%active%");
+            toDisplay.add(s);
             return this;
         }
         for (String key : data.keySet())
@@ -170,7 +170,7 @@ public class GuiData
     {
         if ("active".equals(s))
         {
-            toDisplay.remove("%active%");
+            toDisplay.remove(s);
             return this;
         }
         for (String key : data.keySet())

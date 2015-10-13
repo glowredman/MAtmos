@@ -3,6 +3,7 @@ package eu.ha3.matmos.game;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
@@ -65,6 +66,11 @@ public class MCGame
         return player.isSpectator() || player.capabilities.isCreativeMode || player.capabilities.isFlying;
     }
 
+    public static String getEntityName(Entity e)
+    {
+        return e != null ? e.getClass().getSimpleName().substring("entity".length()).toLowerCase() : "none";
+    }
+
     public static String getBlockName(BlockPos pos)
     {
         return getNameFor(currentWorld.getBlockState(pos).getBlock());
@@ -75,7 +81,7 @@ public class MCGame
         return getNameFor(getBlock(x, y, z));
     }
 
-    public static String  getNameFor(Block block)
+    public static String getNameFor(Block block)
     {
         return Block.blockRegistry.getNameForObject(block).toString();
     }
