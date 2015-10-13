@@ -1,18 +1,19 @@
 # Conditions
 Conditions are simple 'true or false' statements that you can use collectively to describe a certain situation in the game.
 
-There are three components to a condition statement.
+There are three components to a condition statement.  
 These are:
-1) **Variable** - the information you would like to lookup and compare.
-2) **Operator** - the type of comparison you would like to make.
-3) **Value** - the value you would like to compare the Variable to.
+
+1. **Variable** - the information you would like to lookup and compare.
+2. **Operator** - the type of comparison you would like to make.
+3. **Value** - the value you would like to compare the Variable to.
 
 ---
 #### Condition Statement
 ##### Example:
 Let's say we want to check if the player is sneaking:
 
-``player.action.sneaking = true``
+    player.action.sneaking = true
 
 The **Variable** is 'player.action.sneaking'
 The **Operator** is '='
@@ -26,6 +27,7 @@ You do so by creating a list of Condition statements that will describe it - whe
 
 ##### Example:
 Let's say we want to play the sound of birds chirping, but only when:
+
 - the weather is clear
 - it is during the morning or evening
 - there are trees nearby
