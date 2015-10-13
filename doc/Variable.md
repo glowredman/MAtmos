@@ -32,7 +32,7 @@ As with other Variables, you must provide a key to look-up in order to find the 
 Entity Scan lookups begin with:
 
     scan.entity.
-The Entity Scanner counts Entities within 3 different radius's from the player (8, 16 & 32 blocks). Your look-up must specify which radius to query:
+The Entity Scanner counts Entities within 3 different radii from the player (8, 16 & 32 blocks). Your look-up must specify which radius to query:
 
     scan.entity.r8.
     scan.entity.r16.
