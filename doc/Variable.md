@@ -12,7 +12,7 @@ Keys are defined in a way that attempts to make them intuitive to use and read.
 
 For example, MAtmos provides variables for player activities such as sneaking, sprinting, jumping etc. The keys for these Variables all begin with:
 
-``player.action.``
+    player.action.
 
 So:
 
