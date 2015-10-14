@@ -30,6 +30,12 @@ public class ScanCondition implements Checkable
     }
 
     @Override
+    public String getCurrentValue()
+    {
+        return "" + scanner.getCount(lookUp);
+    }
+
+    @Override
     public String serialize()
     {
         return scanner.displayId() + "." + lookUp + " " + check.asString() + " " + value;

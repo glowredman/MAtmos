@@ -18,9 +18,10 @@ import java.util.List;
 
 public class ConditionEditorDiv extends Div
 {
-    private final List<ConditionBuilder> lines = new ArrayList<ConditionBuilder>();
+    private final List<ConditionField> lines = new ArrayList<ConditionField>();
     private final Timer timer = new Timer();
     private final MAtmos engine;
+    private final ConditionParser parser;
 
     protected static int lineHeight = 20;
 
@@ -37,6 +38,7 @@ public class ConditionEditorDiv extends Div
     {
         super(w, h, ml, mt);
         engine = mAtmos;
+        parser = new ConditionParser(engine.dataManager);
     }
 
     public Optional<ConditionSet> clearCurrent()
@@ -45,12 +47,14 @@ public class ConditionEditorDiv extends Div
         {
             return Optional.absent();
         }
-        List<String> statements = new ArrayList<String>();
-        for (ConditionBuilder cb : lines)
+        ConditionSet result = new ConditionSet(conditionSetName);
+        for (ConditionField cb : lines)
         {
-            statements.add(cb.get(false));
+            if (cb.valid())
+            {
+                result.addCondition(cb.get());
+            }
         }
-        ConditionSet result = new ConditionParser(engine.dataManager).parse(conditionSetName, statements);
         conditionSetName = "Nothing Selected";
         lines.clear();
         return Optional.of(result);
@@ -62,7 +66,7 @@ public class ConditionEditorDiv extends Div
         conditionSetName = set.getName();
         for (Checkable c : set.getConditions())
         {
-            lines.add(new ConditionBuilder(engine, c.serialize()));
+            lines.add(new ConditionField(engine, parser, c.serialize()));
         }
         return this;
     }
@@ -79,12 +83,12 @@ public class ConditionEditorDiv extends Div
         editorRight = right - 1;
         editorBottom = bottom;
 
-        List<ConditionBuilder> empty = new ArrayList<ConditionBuilder>();
-        for (ConditionBuilder cb : lines)
+        List<ConditionField> empty = new ArrayList<ConditionField>();
+        for (ConditionField cf : lines)
         {
-            if (cb.empty() && !cb.active)
+            if (cf.empty() && !cf.active())
             {
-                empty.add(cb);
+                empty.add(cf);
             }
             else
             {
@@ -93,9 +97,9 @@ public class ConditionEditorDiv extends Div
                     timer.punchIn();
                     cursor = !cursor;
                 }
-                cb.hovered = mouseOver(mouseX, mouseY, editorLeft, top, editorRight, top + lineHeight);
-                cb.drawBox(editorLeft, top, editorRight, top + lineHeight);
-                cb.draw(cursor, left + 5, top + 6, editorRight);
+                cf.setHovered(mouseOver(mouseX, mouseY, editorLeft, top, editorRight, top + lineHeight));
+                cf.drawBox(editorLeft, top, editorRight, top + lineHeight);
+                cf.draw(cursor, left + 5, top + 6, editorRight);
                 drawHorizontalLine(editorLeft + 1, editorRight - 2, top + lineHeight, 0xAAFFFFFF);
                 top += (lineHeight + 1);
             }
@@ -110,40 +114,40 @@ public class ConditionEditorDiv extends Div
         if (mouseOver(mouseX, mouseY, editorLeft, editorTop, editorRight, editorBottom))
         {
             boolean noneSelected = true;
-            for (ConditionBuilder cb : lines)
+            for (ConditionField cf : lines)
             {
-                if (cb.hovered)
+                if (cf.hovered())
                 {
-                    cb.active = noneSelected;
+                    cf.setActive(noneSelected);
                     noneSelected = false;
                 }
-                else if (cb.active)
+                else if (cf.active())
                 {
-                    cb.active = false;
+                    cf.setActive(false);
                 }
             }
             if (noneSelected)
             {
-                ConditionBuilder cb = new ConditionBuilder(engine);
-                cb.active = true;
-                lines.add(cb);
+                ConditionField cf = new ConditionField(engine, parser);
+                cf.setActive(true);
+                lines.add(cf);
             }
         }
         else
         {
-            for (ConditionBuilder cb : lines)
-                cb.active = false;
+            for (ConditionField cf : lines)
+                cf.setActive(false);
         }
     }
 
     @Override
     public void onKeyType(char c, int code)
     {
-        for (ConditionBuilder cb : lines)
+        for (ConditionField cf : lines)
         {
-            if (cb.active)
+            if (cf.active())
             {
-                cb.onKeyType(c, code);
+                cf.onKeyType(c, code);
                 return;
             }
         }

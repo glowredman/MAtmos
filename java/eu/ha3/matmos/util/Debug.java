@@ -19,7 +19,7 @@ public class Debug
     public static void dummyExpansion(MAtmos mAtmos)
     {
         List<String> rules = new ArrayList<String>();
-        rules.add("scan.small.minecraft:stone >= 50");
+        rules.add("scan.block.small.minecraft:stone >= 50");
         rules.add("player.gamemode = creative | survival");
         rules.add("player.action.sneaking = true");
 

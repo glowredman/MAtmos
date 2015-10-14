@@ -8,6 +8,8 @@ public interface Checkable
 {
     public boolean active();
 
+    public String getCurrentValue();
+
     public String serialize();
 
     public String debugInfo();

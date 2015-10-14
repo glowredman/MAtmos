@@ -45,7 +45,7 @@ public class LiteModMAtmos implements Tickable, HUDRenderListener
         if (inGame && clock)
         {
             mAtmos.onTick();
-            // ScreenHolder.checkToggle(mAtmos);
+            //ScreenHolder.checkToggle(mAtmos);
         }
     }
 

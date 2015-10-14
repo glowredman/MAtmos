@@ -104,19 +104,21 @@ public class ConditionParser
         key = key.toLowerCase();
         if (key.startsWith("scan.") && values.size() == 1 && NumberUtil.isInt(values.get(0)))
         {
-            // subString to 'scan.<next_key>'
-            String scanType = key.substring(0, key.indexOf('.', "scan.".length()));
-            Optional<Scanner> scannerOptional = data.getScanner(scanType);
-            if (scannerOptional.isPresent())
+            int index = key.startsWith("scan.block") ? key.indexOf('.', 12) : key.indexOf('.', 11);
+            if (index > 0)
             {
-                Optional<Check<Number>> checkOptional = Check.numCheck(operator);
-                if (checkOptional.isPresent())
+                String scanType = key.substring(0, index);
+                Optional<Scanner> scannerOptional = data.getScanner(scanType);
+                if (scannerOptional.isPresent())
                 {
-                    // subString to anything after 'scan.<next_key>.'
-                    String lookUp = key.substring(scanType.length() + 1, key.length());
-                    int value = Integer.valueOf(values.get(0));
-                    Checkable c = new ScanCondition(lookUp, value, checkOptional.get(), scannerOptional.get());
-                    return Optional.of(c);
+                    Optional<Check<Number>> checkOptional = Check.numCheck(operator);
+                    if (checkOptional.isPresent())
+                    {
+                        String lookUp = key.substring(scanType.length() + 1, key.length());
+                        int value = Integer.valueOf(values.get(0));
+                        Checkable c = new ScanCondition(lookUp, value, checkOptional.get(), scannerOptional.get());
+                        return Optional.of(c);
+                    }
                 }
             }
         }

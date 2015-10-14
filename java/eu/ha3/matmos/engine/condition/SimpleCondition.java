@@ -30,6 +30,12 @@ public class SimpleCondition<T> implements Checkable
     }
 
     @Override
+    public String getCurrentValue()
+    {
+        return data.present() ? data.value.toString() : "";
+    }
+
+    @Override
     public String serialize()
     {
         StringBuilder sb = new StringBuilder();
