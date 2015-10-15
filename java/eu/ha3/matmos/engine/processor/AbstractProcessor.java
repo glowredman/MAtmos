@@ -4,9 +4,10 @@ import com.google.common.base.Optional;
 import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.engine.PackManager;
 import eu.ha3.matmos.engine.SoundSet;
+import eu.ha3.matmos.engine.VolumeModifier;
 import eu.ha3.matmos.engine.condition.ConditionSet;
-import eu.ha3.matmos.engine.serialize.EventSerialize;
-import eu.ha3.matmos.engine.serialize.StreamEventSerialize;
+import eu.ha3.matmos.serialize.EventSerialize;
+import eu.ha3.matmos.serialize.StreamEventSerialize;
 import eu.ha3.matmos.util.NumberUtil;
 import net.minecraft.util.ResourceLocation;
 
@@ -34,22 +35,22 @@ public abstract class AbstractProcessor
 
     protected AbstractProcessor(String expansionName, EventSerialize e, MAtmos mAtmos)
     {
-        volume = mAtmos.expansionManager.getVolume(expansionName);
+        volume = mAtmos.expansionRegistry.getVolume(expansionName);
         for (String s : e.triggers)
         {
-            Optional<ConditionSet> optional = mAtmos.dataManager.getConditionSet(s);
+            Optional<ConditionSet> optional = mAtmos.dataRegistry.getConditionSet(s);
             if (optional.isPresent())
                 triggers.add(optional.get());
         }
         for (String s : e.blockers)
         {
-            Optional<ConditionSet> optional = mAtmos.dataManager.getConditionSet(s);
+            Optional<ConditionSet> optional = mAtmos.dataRegistry.getConditionSet(s);
             if (optional.isPresent())
                 blockers.add(optional.get());
         }
         for (String s : e.sounds)
         {
-            Optional<SoundSet> optional = mAtmos.dataManager.getSoundSet(s);
+            Optional<SoundSet> optional = mAtmos.dataRegistry.getSoundSet(s);
             if (optional.isPresent())
             {
                 sounds.addAll(optional.get().getSounds());

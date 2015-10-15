@@ -17,13 +17,13 @@ public class LiteModMAtmos implements Tickable, HUDRenderListener
     @Override
     public String getVersion()
     {
-        return "2.0";
+        return mAtmos.getVersion();
     }
 
     @Override
     public String getName()
     {
-        return "MAtmos";
+        return mAtmos.getName();
     }
 
     @Override
@@ -45,7 +45,6 @@ public class LiteModMAtmos implements Tickable, HUDRenderListener
         if (inGame && clock)
         {
             mAtmos.onTick();
-            //ScreenHolder.checkToggle(mAtmos);
         }
     }
 

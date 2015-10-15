@@ -1,17 +1,17 @@
 package eu.ha3.matmos;
 
-import eu.ha3.matmos.engine.DataManager;
-import eu.ha3.matmos.engine.ExpansionManager;
+import eu.ha3.matmos.engine.DataRegistry;
+import eu.ha3.matmos.engine.ExpansionRegistry;
 import eu.ha3.matmos.engine.PackManager;
-import eu.ha3.matmos.engine.condition.ConditionParser;
 import eu.ha3.matmos.game.MCGame;
 import eu.ha3.matmos.game.gatherer.PlayerGatherer;
 import eu.ha3.matmos.game.gatherer.PositionGatherer;
 import eu.ha3.matmos.game.gatherer.WeatherGatherer;
 import eu.ha3.matmos.game.gatherer.WorldGatherer;
+import eu.ha3.matmos.game.gui.editor.ScreenHolder;
 import eu.ha3.matmos.game.scanner.EntityScanner;
 import eu.ha3.matmos.game.scanner.VolumeScanner;
-import eu.ha3.matmos.gui.GuiData;
+import eu.ha3.matmos.game.gui.GuiData;
 import eu.ha3.matmos.util.Debug;
 import eu.ha3.matmos.util.Timer;
 import net.minecraft.client.Minecraft;
@@ -29,18 +29,23 @@ public class MAtmos
 {
     private static final Logger logger = (Logger) LogManager.getLogger("MAtmos");
 
-    public static Timer timer = new Timer();
-    public static ConditionParser conditionParser;
+    public static final DataRegistry dataRegistry = new DataRegistry();
+    public static final ExpansionRegistry expansionRegistry = new ExpansionRegistry();
+    public static final Timer timer = new Timer();
+
     public final PackManager packManager = new PackManager(this);
-    public final DataManager dataManager = new DataManager();
-    public final ExpansionManager expansionManager = new ExpansionManager();
     public File configFolder;
 
     private GuiData guiData;
 
-    public MAtmos()
+    public String getName()
     {
-        conditionParser = new ConditionParser(this.dataManager);
+        return "MAtmos";
+    }
+
+    public String getVersion()
+    {
+        return "2.0";
     }
 
     public void setConfigDir(File configDir)
@@ -55,15 +60,15 @@ public class MAtmos
     public void reload()
     {
         log("Reloading engine...");
-        expansionManager.wipe();
-        dataManager.wipe();
-        dataManager.addDataGatherer(new PlayerGatherer().register(dataManager));
-        dataManager.addDataGatherer(new PositionGatherer().register(dataManager));
-        dataManager.addDataGatherer(new WeatherGatherer().register(dataManager));
-        dataManager.addDataGatherer(new WorldGatherer().register(dataManager));
-        dataManager.registerScanner(new EntityScanner());
-        dataManager.registerScanner(new VolumeScanner("small", 8, 8, 20 / 2)); // 17 * 17 * 17 blocks over 1 secs
-        dataManager.registerScanner(new VolumeScanner("large", 28, 14,(20 * 5) / 2)); // 57 * 29 * 57 blocks over 5 secs
+        expansionRegistry.wipe();
+        dataRegistry.wipe();
+        dataRegistry.addDataGatherer(new PlayerGatherer().register(dataRegistry));
+        dataRegistry.addDataGatherer(new PositionGatherer().register(dataRegistry));
+        dataRegistry.addDataGatherer(new WeatherGatherer().register(dataRegistry));
+        dataRegistry.addDataGatherer(new WorldGatherer().register(dataRegistry));
+        dataRegistry.registerScanner(new EntityScanner());
+        dataRegistry.registerScanner(new VolumeScanner("small", 8, 8, 20 / 2)); // 17 * 17 * 17 blocks over 1 secs
+        dataRegistry.registerScanner(new VolumeScanner("large", 28, 14, (20 * 5) / 2)); // 57 * 29 * 57 blocks over 5 secs
         guiData = new GuiData(this).display("active");
         debug();
     }
@@ -88,11 +93,13 @@ public class MAtmos
 
     public void onTick()
     {
+        ScreenHolder.checkToggle();
+
         timer.punchIn();
         checkLoadSoundPacks();
         MCGame.update();
-        dataManager.process();
-        expansionManager.process();
+        dataRegistry.process();
+        expansionRegistry.process();
         timer.punchOut();
     }
 

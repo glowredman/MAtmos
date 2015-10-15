@@ -1,6 +1,6 @@
 package eu.ha3.matmos.game;
 
-import eu.ha3.matmos.engine.processor.VolumeModifier;
+import eu.ha3.matmos.engine.VolumeModifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.util.ResourceLocation;

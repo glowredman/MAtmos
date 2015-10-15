@@ -1,4 +1,4 @@
-package eu.ha3.matmos.engine.serialize;
+package eu.ha3.matmos.serialize;
 
 import eu.ha3.matmos.MAtmos;
 

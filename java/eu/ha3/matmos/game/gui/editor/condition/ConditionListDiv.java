@@ -1,10 +1,10 @@
-package eu.ha3.matmos.gui.editor.condition;
+package eu.ha3.matmos.game.gui.editor.condition;
 
 import com.google.common.base.Optional;
 import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.engine.condition.ConditionSet;
 import eu.ha3.matmos.game.MCGame;
-import eu.ha3.matmos.gui.editor.div.Div;
+import eu.ha3.matmos.game.gui.editor.div.Div;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,11 +24,11 @@ public class ConditionListDiv extends Div
     private int top = 0;
     private int bottom = 0;
 
-    public ConditionListDiv(MAtmos mAtmos, ConditionEditorDiv editor, float width, float height, float marginLeft, float marginTop)
+    public ConditionListDiv(ConditionEditorDiv editor, float width, float height, float marginLeft, float marginTop)
     {
         super(width, height, marginLeft, marginTop);
         editorDiv = editor;
-        conditionSets.putAll(mAtmos.dataManager.conditions);
+        conditionSets.putAll(MAtmos.dataRegistry.conditions);
     }
 
     @Override

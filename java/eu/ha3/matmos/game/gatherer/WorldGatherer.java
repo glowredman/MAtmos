@@ -1,7 +1,7 @@
 package eu.ha3.matmos.game.gatherer;
 
 import eu.ha3.matmos.engine.Data;
-import eu.ha3.matmos.engine.DataManager;
+import eu.ha3.matmos.engine.DataRegistry;
 import eu.ha3.matmos.game.MCGame;
 
 /**
@@ -17,7 +17,7 @@ public class WorldGatherer implements DataGatherer
     private Data<Number> worldTimeTicks = new Data<Number>();
 
     @Override
-    public DataGatherer register(DataManager manager)
+    public DataGatherer register(DataRegistry manager)
     {
         manager.registerString("world.name", worldName);
         manager.registerNum("world.dimensionId", dimensionId);

@@ -1,6 +1,6 @@
 package eu.ha3.matmos.game.gatherer;
 
-import eu.ha3.matmos.engine.DataManager;
+import eu.ha3.matmos.engine.DataRegistry;
 
 /**
  * @author dags_ <dags@dags.me>
@@ -8,7 +8,7 @@ import eu.ha3.matmos.engine.DataManager;
 
 public interface DataGatherer
 {
-    public DataGatherer register(DataManager manager);
+    public DataGatherer register(DataRegistry manager);
 
     public void update();
 }

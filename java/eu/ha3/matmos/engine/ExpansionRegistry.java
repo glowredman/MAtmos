@@ -1,7 +1,6 @@
 package eu.ha3.matmos.engine;
 
 import eu.ha3.matmos.engine.processor.AbstractProcessor;
-import eu.ha3.matmos.engine.processor.VolumeModifier;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,8 +11,10 @@ import java.util.Map;
  * @author dags_ <dags@dags.me>
  */
 
-public class ExpansionManager
+public class ExpansionRegistry
 {
+    public static final VolumeModifier masterVolume = new VolumeModifier(true);
+
     private final Map<String, VolumeModifier> volumes = new HashMap<String, VolumeModifier>();
     private final List<AbstractProcessor> abstractProcessors = new ArrayList<AbstractProcessor>();
     public final Map<String, Boolean> active = new HashMap<String, Boolean>();

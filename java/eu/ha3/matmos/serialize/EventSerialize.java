@@ -1,4 +1,4 @@
-package eu.ha3.matmos.engine.serialize;
+package eu.ha3.matmos.serialize;
 
 import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.util.NumberUtil;
@@ -64,7 +64,7 @@ public class EventSerialize
     {
         for (String s : triggers)
         {
-            if (mAtmos.dataManager.getConditionSet(s).isPresent())
+            if (mAtmos.dataRegistry.getConditionSet(s).isPresent())
             {
                 return true;
             }
@@ -77,7 +77,7 @@ public class EventSerialize
     {
         for (String s : sounds)
         {
-            if (mAtmos.dataManager.getSoundSet(s).isPresent())
+            if (mAtmos.dataRegistry.getSoundSet(s).isPresent())
             {
                 return true;
             }

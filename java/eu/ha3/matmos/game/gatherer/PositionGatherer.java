@@ -1,7 +1,7 @@
 package eu.ha3.matmos.game.gatherer;
 
 import eu.ha3.matmos.engine.Data;
-import eu.ha3.matmos.engine.DataManager;
+import eu.ha3.matmos.engine.DataRegistry;
 import eu.ha3.matmos.game.MCGame;
 import eu.ha3.matmos.game.Position;
 import eu.ha3.matmos.util.NumberUtil;
@@ -35,7 +35,7 @@ public class PositionGatherer implements DataGatherer
     private Data<Number> biomeId = new Data<Number>();
 
     @Override
-    public DataGatherer register(DataManager manager)
+    public DataGatherer register(DataRegistry manager)
     {
         manager.registerNum("position.x", xPos);
         manager.registerNum("position.y", yPos);

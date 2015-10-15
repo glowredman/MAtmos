@@ -1,4 +1,4 @@
-package eu.ha3.matmos.gui;
+package eu.ha3.matmos.game.gui;
 
 import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.engine.Data;
@@ -38,9 +38,9 @@ public class GuiData
         mAtmos = instance;
         Map<String, Data<?>> all = new HashMap<String, Data<?>>();
 
-        all.putAll(mAtmos.dataManager.boolData);
-        all.putAll(mAtmos.dataManager.numData);
-        all.putAll(mAtmos.dataManager.stringData);
+        all.putAll(mAtmos.dataRegistry.boolData);
+        all.putAll(mAtmos.dataRegistry.numData);
+        all.putAll(mAtmos.dataRegistry.stringData);
 
         List<String> keys = new ArrayList<String>(all.keySet());
         Collections.sort(keys);
@@ -90,7 +90,7 @@ public class GuiData
                 newLine();
             }
         }
-        for (Scanner s : mAtmos.dataManager.scanners.values())
+        for (Scanner s : mAtmos.dataRegistry.scanners.values())
         {
             List<String> list = new ArrayList<String>(s.getCounts().keySet());
             Collections.sort(list);
@@ -102,7 +102,7 @@ public class GuiData
                 }
             }
         }
-        for (Map.Entry<String, ConditionSet> e : mAtmos.dataManager.conditions.entrySet())
+        for (Map.Entry<String, ConditionSet> e : mAtmos.dataRegistry.conditions.entrySet())
         {
             final boolean active = e.getValue().active();
             if (toDisplay.contains("active"))
@@ -156,7 +156,7 @@ public class GuiData
                 toDisplay.add(key);
             }
         }
-        for (Scanner sc : mAtmos.dataManager.scanners.values())
+        for (Scanner sc : mAtmos.dataRegistry.scanners.values())
         {
             if (sc.displayId().startsWith(s))
             {
@@ -180,7 +180,7 @@ public class GuiData
                 toDisplay.remove(key);
             }
         }
-        for (Scanner sc : mAtmos.dataManager.scanners.values())
+        for (Scanner sc : mAtmos.dataRegistry.scanners.values())
         {
             if (sc.displayId().startsWith(s))
             {

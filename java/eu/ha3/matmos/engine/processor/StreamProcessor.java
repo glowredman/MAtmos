@@ -3,7 +3,7 @@ package eu.ha3.matmos.engine.processor;
 import com.google.common.base.Optional;
 import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.game.StreamingSound;
-import eu.ha3.matmos.engine.serialize.StreamEventSerialize;
+import eu.ha3.matmos.serialize.StreamEventSerialize;
 import net.minecraft.util.ResourceLocation;
 
 /**

@@ -11,7 +11,7 @@ import java.util.*;
  * @author dags_ <dags@dags.me>
  */
 
-public class DataManager
+public class DataRegistry
 {
     private boolean flipFlop = false;
 
@@ -27,14 +27,12 @@ public class DataManager
 
     public void process()
     {
-        long start = System.currentTimeMillis();
-        flipFlop = !flipFlop;
         for (DataGatherer gatherer : dataGatherers)
         {
             gatherer.update();
         }
         scanners.get("scan.entity").scan();
-        scanners.get(flipFlop ? "scan.block.small" : "scan.block.large").scan();
+        scanners.get((flipFlop = !flipFlop) ? "scan.block.small" : "scan.block.large").scan();
     }
 
     public void wipe()
@@ -129,6 +127,17 @@ public class DataManager
         return get(key, boolData);
     }
 
+    public Optional<String> getCurrentData(String key)
+    {
+        if (boolData.containsKey(key))
+            return Optional.of(boolData.get(key).value.toString());
+        if (numData.containsKey(key))
+            return Optional.of(numData.get(key).value.toString());
+        if (stringData.containsKey(key))
+            return Optional.of(stringData.get(key).value);
+        return Optional.absent();
+    }
+
     public List<String> findMatches(String in)
     {
         Set<String> results = new HashSet<String>();
@@ -167,7 +176,7 @@ public class DataManager
         }
     }
 
-    public String dataKeyType(String key)
+    public String dataTypeFromKey(String key)
     {
         key = key.toLowerCase().trim();
         if (numData.containsKey(key))
@@ -177,9 +186,9 @@ public class DataManager
         if (boolData.containsKey(key))
             return "boolean";
         if (key.startsWith("scan.small") || key.startsWith("scan.large"))
-            return "volume_scan";
+            return "scan_volume";
         if (key.startsWith("scan.entity"))
-            return "entity_scan";
+            return "scan_entity";
         return "invalid";
     }
 }

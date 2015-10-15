@@ -1,11 +1,12 @@
-package eu.ha3.matmos.gui.editor.condition;
+package eu.ha3.matmos.game.gui.editor.condition;
 
 import com.google.common.base.Optional;
 import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.engine.condition.Checkable;
+import eu.ha3.matmos.engine.condition.ConditionBuilder;
 import eu.ha3.matmos.engine.condition.ConditionParser;
 import eu.ha3.matmos.game.MCGame;
-import eu.ha3.matmos.gui.editor.TextField;
+import eu.ha3.matmos.game.gui.editor.TextField;
 import net.minecraft.client.Minecraft;
 
 import java.util.List;
@@ -16,24 +17,20 @@ import java.util.List;
 
 public class ConditionField extends TextField
 {
-    private final MAtmos mAtmos;
-    private final ConditionParser parser;
-
     private int opStart = -1;
     private String statement = "";
     private boolean updated = false;
+    private ConditionBuilder builder = new ConditionBuilder();
     private Optional<Checkable> condition = Optional.absent();
 
-    public ConditionField(MAtmos engine, ConditionParser conditionParser)
+    public ConditionField()
     {
-        this(engine, conditionParser, "");
+        this("");
     }
 
-    public ConditionField(MAtmos engine, ConditionParser conditionParser, String rule)
+    public ConditionField(String rule)
     {
         super();
-        parser = conditionParser;
-        mAtmos = engine;
         setText(rule);
     }
 
@@ -44,6 +41,7 @@ public class ConditionField extends TextField
         {
             return;
         }
+        updated = true;
         super.onKeyType(c, keyCode);
     }
 
@@ -59,13 +57,11 @@ public class ConditionField extends TextField
             if (getOperator().length() < 2)
             {
                 super.append(c);
-                updated = true;
             }
         }
         else if (validChar(c))
         {
             super.append(c);
-            updated = true;
         }
     }
 
@@ -125,7 +121,8 @@ public class ConditionField extends TextField
             {
                 statement = statement.replace(op, " " + op + " ");
             }
-            condition = parser.parse(statement);
+            builder = ConditionParser.parse(statement);
+            condition = builder.build();
         }
         return statement;
     }
@@ -143,7 +140,6 @@ public class ConditionField extends TextField
 
     public boolean valid()
     {
-        updated = true;
         return condition.isPresent();
     }
 
@@ -157,18 +153,20 @@ public class ConditionField extends TextField
         {
             super.draw(false, left, top, right, valid() ? 0xFFFFFFFF : 0xD15E56);
         }
-        if (valid())
+        int color = valid() && get().active() ? 0xFFFFFF : 0x999999;
+        Optional<String> optionalData = builder.getCurrentValue();
+        if (optionalData.isPresent())
         {
-            String data = get().getCurrentValue();
+            String data = optionalData.get();
             int x = Minecraft.getMinecraft().fontRendererObj.getStringWidth("[" + data + "]");
-            MCGame.drawString("[" + data + "]", right - x - 1, top, get().active() ? 0xFFFFFF : 0x999999);
+            MCGame.drawString("[" + data + "]", right - x - 1, top, color);
         }
     }
 
     @Override
     protected List<String> tabComplete(String match)
     {
-        return mAtmos.dataManager.findMatches(match);
+        return MAtmos.dataRegistry.findMatches(match);
     }
 
     private static boolean opChar(char c)

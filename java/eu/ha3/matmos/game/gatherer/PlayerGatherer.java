@@ -1,7 +1,7 @@
 package eu.ha3.matmos.game.gatherer;
 
 import eu.ha3.matmos.engine.Data;
-import eu.ha3.matmos.engine.DataManager;
+import eu.ha3.matmos.engine.DataRegistry;
 import eu.ha3.matmos.game.MCGame;
 import eu.ha3.matmos.util.NumberUtil;
 import net.minecraft.client.Minecraft;
@@ -37,7 +37,7 @@ public class PlayerGatherer implements DataGatherer
     private Data<String> gameMode = new Data<String>();
 
     @Override
-    public PlayerGatherer register(DataManager manager)
+    public PlayerGatherer register(DataRegistry manager)
     {
         manager.registerBool("player.action.jumping", jumping);
         manager.registerBool("player.action.sprinting", sprinting);

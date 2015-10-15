@@ -1,8 +1,8 @@
-package eu.ha3.matmos.engine.serialize.jsonadapters;
+package eu.ha3.matmos.serialize.jsonadapters;
 
 import com.google.gson.*;
-import eu.ha3.matmos.engine.serialize.EventSerialize;
-import eu.ha3.matmos.engine.serialize.StreamEventSerialize;
+import eu.ha3.matmos.serialize.EventSerialize;
+import eu.ha3.matmos.serialize.StreamEventSerialize;
 
 import java.lang.reflect.Type;
 

@@ -1,9 +1,9 @@
-package eu.ha3.matmos.engine.serialize.jsonadapters;
+package eu.ha3.matmos.serialize.jsonadapters;
 
 import com.google.common.base.Optional;
 import com.google.gson.*;
-import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.engine.condition.Checkable;
+import eu.ha3.matmos.engine.condition.ConditionParser;
 import eu.ha3.matmos.engine.condition.ConditionSet;
 
 import java.lang.reflect.Type;
@@ -31,7 +31,7 @@ public class ConditionAdapter implements JsonSerializer<ConditionSet>, JsonDeser
         ConditionSet conditionSet = new ConditionSet(name);
         for (JsonElement jsonElement1 : jsonElement.getAsJsonObject().getAsJsonArray("conditions"))
         {
-            Optional<Checkable> condition = MAtmos.conditionParser.parse(jsonElement1.getAsString());
+            Optional<Checkable> condition = ConditionParser.parse(jsonElement1.getAsString()).build();
             if (condition.isPresent())
             {
                 conditionSet.addCondition(condition.get());

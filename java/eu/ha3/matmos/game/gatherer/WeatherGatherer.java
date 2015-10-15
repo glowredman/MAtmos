@@ -1,7 +1,7 @@
 package eu.ha3.matmos.game.gatherer;
 
 import eu.ha3.matmos.engine.Data;
-import eu.ha3.matmos.engine.DataManager;
+import eu.ha3.matmos.engine.DataRegistry;
 import eu.ha3.matmos.game.MCGame;
 import eu.ha3.matmos.util.NumberUtil;
 
@@ -19,7 +19,7 @@ public class WeatherGatherer implements DataGatherer
     private Data<Boolean> canSnowHere = new Data<Boolean>();
 
     @Override
-    public DataGatherer register(DataManager manager)
+    public DataGatherer register(DataRegistry manager)
     {
         manager.registerBool("weather.canRainHere", canRainHere);
         manager.registerBool("weather.canSnowHere", canSnowHere);

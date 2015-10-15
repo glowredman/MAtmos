@@ -1,4 +1,4 @@
-package eu.ha3.matmos.gui.editor;
+package eu.ha3.matmos.game.gui.editor;
 
 import eu.ha3.matmos.game.MCGame;
 import org.lwjgl.input.Keyboard;

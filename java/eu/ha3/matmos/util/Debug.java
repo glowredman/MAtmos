@@ -4,8 +4,8 @@ import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.engine.SoundSet;
 import eu.ha3.matmos.engine.condition.ConditionParser;
 import eu.ha3.matmos.engine.condition.ConditionSet;
-import eu.ha3.matmos.engine.serialize.Expansion;
-import eu.ha3.matmos.engine.serialize.StreamEventSerialize;
+import eu.ha3.matmos.serialize.Expansion;
+import eu.ha3.matmos.serialize.StreamEventSerialize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +23,7 @@ public class Debug
         rules.add("player.gamemode = creative | survival");
         rules.add("player.action.sneaking = true");
 
-        ConditionParser parser = new ConditionParser(mAtmos.dataManager);
-        ConditionSet conditions = parser.parse("debug_rules", rules);
+        ConditionSet conditions = ConditionParser.parse("debug_rules", rules);
         SoundSet sounds = new SoundSet("debug_sounds").add("matmosphere_stream.stream_out");
         StreamEventSerialize e = new StreamEventSerialize("debug_processor");
         e.triggers.add("debug_rules");

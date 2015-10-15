@@ -1,4 +1,4 @@
-package eu.ha3.matmos.engine.serialize;
+package eu.ha3.matmos.serialize;
 
 import com.google.common.base.Optional;
 import com.google.gson.Gson;
@@ -7,8 +7,8 @@ import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.engine.SoundSet;
 import eu.ha3.matmos.engine.condition.ConditionSet;
 import eu.ha3.matmos.engine.processor.AbstractProcessor;
-import eu.ha3.matmos.engine.serialize.jsonadapters.ConditionAdapter;
-import eu.ha3.matmos.engine.serialize.jsonadapters.EventAdapter;
+import eu.ha3.matmos.serialize.jsonadapters.ConditionAdapter;
+import eu.ha3.matmos.serialize.jsonadapters.EventAdapter;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -63,18 +63,18 @@ public class Expansion
         MAtmos.log("Registering expansion: " + name + ". Conditions: " + conditions.size() + ", SoundSets: " + sounds.size() + ", Processors: " + processors.size());
         for (ConditionSet conditionSet : conditions)
         {
-            mAtmos.dataManager.registerConditionSet(conditionSet);
+            mAtmos.dataRegistry.registerConditionSet(conditionSet);
         }
         for (SoundSet soundSet : sounds)
         {
-            mAtmos.dataManager.registerSoundSet(soundSet);
+            mAtmos.dataRegistry.registerSoundSet(soundSet);
         }
         for (EventSerialize eventSerialize : processors)
         {
             Optional<AbstractProcessor> optional = AbstractProcessor.of(name, eventSerialize, mAtmos);
             if (optional.isPresent())
             {
-                mAtmos.expansionManager.addEventProcessor(optional.get());
+                mAtmos.expansionRegistry.addEventProcessor(optional.get());
             }
         }
     }

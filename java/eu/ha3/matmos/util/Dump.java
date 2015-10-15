@@ -2,7 +2,6 @@ package eu.ha3.matmos.util;
 
 import com.google.gson.GsonBuilder;
 import eu.ha3.matmos.MAtmos;
-import eu.ha3.matmos.engine.DataManager;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -21,11 +20,11 @@ public class Dump
     private List<String> boolKeys = new ArrayList<String>();
     private List<String> numKeys = new ArrayList<String>();
 
-    public Dump(DataManager dataManager)
+    public Dump()
     {
-        stringKeys.addAll(dataManager.stringData.keySet());
-        boolKeys.addAll(dataManager.boolData.keySet());
-        numKeys.addAll(dataManager.numData.keySet());
+        stringKeys.addAll(MAtmos.dataRegistry.stringData.keySet());
+        boolKeys.addAll(MAtmos.dataRegistry.boolData.keySet());
+        numKeys.addAll(MAtmos.dataRegistry.numData.keySet());
         Collections.sort(stringKeys);
         Collections.sort(boolKeys);
         Collections.sort(numKeys);

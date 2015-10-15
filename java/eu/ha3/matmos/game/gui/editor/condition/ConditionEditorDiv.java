@@ -1,12 +1,10 @@
-package eu.ha3.matmos.gui.editor.condition;
+package eu.ha3.matmos.game.gui.editor.condition;
 
 import com.google.common.base.Optional;
-import eu.ha3.matmos.MAtmos;
 import eu.ha3.matmos.engine.condition.Checkable;
-import eu.ha3.matmos.engine.condition.ConditionParser;
 import eu.ha3.matmos.engine.condition.ConditionSet;
 import eu.ha3.matmos.game.MCGame;
-import eu.ha3.matmos.gui.editor.div.Div;
+import eu.ha3.matmos.game.gui.editor.div.Div;
 import eu.ha3.matmos.util.Timer;
 
 import java.util.ArrayList;
@@ -20,8 +18,6 @@ public class ConditionEditorDiv extends Div
 {
     private final List<ConditionField> lines = new ArrayList<ConditionField>();
     private final Timer timer = new Timer();
-    private final MAtmos engine;
-    private final ConditionParser parser;
 
     protected static int lineHeight = 20;
 
@@ -34,11 +30,9 @@ public class ConditionEditorDiv extends Div
 
     private boolean cursor = false;
 
-    public ConditionEditorDiv(MAtmos mAtmos, float w, float h, float ml, float mt)
+    public ConditionEditorDiv(float w, float h, float ml, float mt)
     {
         super(w, h, ml, mt);
-        engine = mAtmos;
-        parser = new ConditionParser(engine.dataManager);
     }
 
     public Optional<ConditionSet> clearCurrent()
@@ -66,7 +60,7 @@ public class ConditionEditorDiv extends Div
         conditionSetName = set.getName();
         for (Checkable c : set.getConditions())
         {
-            lines.add(new ConditionField(engine, parser, c.serialize()));
+            lines.add(new ConditionField(c.serialize()));
         }
         return this;
     }
@@ -128,7 +122,7 @@ public class ConditionEditorDiv extends Div
             }
             if (noneSelected)
             {
-                ConditionField cf = new ConditionField(engine, parser);
+                ConditionField cf = new ConditionField();
                 cf.setActive(true);
                 lines.add(cf);
             }

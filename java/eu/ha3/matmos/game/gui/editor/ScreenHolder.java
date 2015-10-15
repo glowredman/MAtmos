@@ -1,7 +1,6 @@
-package eu.ha3.matmos.gui.editor;
+package eu.ha3.matmos.game.gui.editor;
 
-import eu.ha3.matmos.MAtmos;
-import eu.ha3.matmos.gui.editor.div.ScreenDiv;
+import eu.ha3.matmos.game.gui.editor.div.ScreenDiv;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -18,12 +17,12 @@ public class ScreenHolder extends GuiScreen
     // TODO: Save on close
     private ScreenDiv screen;
 
-    public ScreenHolder(MAtmos mAtmos)
+    public ScreenHolder()
     {
         ScaledResolution r = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
         width = r.getScaledWidth();
         height = r.getScaledHeight();
-        screen = Screens.buildConditionsScreen(mAtmos, width, height);
+        screen = Screens.buildConditionsScreen(width, height);
     }
 
     @Override
@@ -53,7 +52,7 @@ public class ScreenHolder extends GuiScreen
     private static boolean toggle = false;
     private static boolean latch = false;
 
-    public static void checkToggle(MAtmos mAtmos)
+    public static void checkToggle()
     {
         if (Keyboard.isKeyDown(Keyboard.KEY_END))
         {
@@ -63,7 +62,7 @@ public class ScreenHolder extends GuiScreen
                 toggle = !toggle;
                 if (toggle)
                 {
-                    Minecraft.getMinecraft().displayGuiScreen(new ScreenHolder(mAtmos));
+                    Minecraft.getMinecraft().displayGuiScreen(new ScreenHolder());
                 }
                 else
                 {

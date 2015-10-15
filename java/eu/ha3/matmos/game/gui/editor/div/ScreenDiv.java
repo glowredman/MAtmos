@@ -1,4 +1,4 @@
-package eu.ha3.matmos.gui.editor.div;
+package eu.ha3.matmos.game.gui.editor.div;
 
 /**
  * @author dags_ <dags@dags.me>
