@@ -35,6 +35,12 @@ public class ScreenDiv extends Div
     }
 
     @Override
+    public void onMouseRelease()
+    {
+        super.mouseReleased();
+    }
+
+    @Override
     public void onKeyType(char c, int code)
     {
         super.keyTyped(c, code);

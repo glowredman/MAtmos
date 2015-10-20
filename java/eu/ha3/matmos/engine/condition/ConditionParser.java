@@ -110,18 +110,19 @@ public class ConditionParser
 
     public static ConditionBuilder parse(String in)
     {
-        ConditionParser parser = new ConditionParser(in, true);
         ConditionBuilder builder = new ConditionBuilder();
-        builder.setKey(parser.parseIf(string()));
-        builder.setOperator(parser.parseIf(operator()));
-        while (parser.hasNext())
+        for (int i = 0; i < in.length(); i++)
         {
-            builder.addValue(parser.parseIf(string()));
-            if (parser.current() != '|')
-                break;
-            parser.skip();
+            char c = in.charAt(i);
+            if (Character.isLetterOrDigit(c) || c == '.' || c == '_' || c == '-' || c == ':' || c == '|')
+            {
+                builder.append(c);
+            }
+            else if (c == '<' || c == '>' || c == '=' || c == '!')
+            {
+                builder.appendOp(c);
+            }
         }
-        return builder;
+        return builder.finish();
     }
-
 }

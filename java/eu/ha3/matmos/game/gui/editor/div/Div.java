@@ -33,6 +33,8 @@ public abstract class Div extends Gui
 
     public abstract void onMouseClick(int mouseX, int mouseY, int button);
 
+    public abstract void onMouseRelease();
+
     public abstract void onKeyType(char c, int code);
 
     public abstract void onDraw(int mouseX, int mouseY, int left, int top, int right, int bottom);
@@ -84,6 +86,12 @@ public abstract class Div extends Gui
             d.onMouseClick(mouseX, mouseY, button);
     }
 
+    public final void mouseReleased()
+    {
+        for (Div d : children)
+            d.onMouseRelease();
+    }
+
     public final void keyTyped(char c, int code)
     {
         for (Div d : children)
@@ -122,7 +130,7 @@ public abstract class Div extends Gui
         drawVerticalLine(right - 1, top, bottom - 1, borderColor);
     }
 
-    protected static boolean mouseOver(int mouseX, int mouseY, int left, int top, int right, int bottom)
+    public static boolean mouseOver(int mouseX, int mouseY, int left, int top, int right, int bottom)
     {
         return mouseX > left && mouseX < right && mouseY > top && mouseY < bottom;
     }

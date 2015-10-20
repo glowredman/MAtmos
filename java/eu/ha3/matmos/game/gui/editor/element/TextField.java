@@ -1,6 +1,7 @@
-package eu.ha3.matmos.game.gui.editor;
+package eu.ha3.matmos.game.gui.editor.element;
 
 import eu.ha3.matmos.game.MCGame;
+import net.minecraft.client.gui.Gui;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
@@ -151,7 +152,7 @@ public class TextField
 
     public String getString(boolean showCursor)
     {
-        return getString() + (showCursor ? "|" : "");
+        return getString() + (showCursor && active() ? "|" : "");
     }
 
     protected List<String> tabComplete(String match)
@@ -168,7 +169,7 @@ public class TextField
     {
         if (hovered || active)
         {
-            ScreenHolder.drawRect(left, top, right, bottom, active ? 0x33FFFFFF : 0x22FFFFFF);
+            Gui.drawRect(left, top, right, bottom, active ? 0x33FFFFFF : 0x22FFFFFF);
         }
     }
 

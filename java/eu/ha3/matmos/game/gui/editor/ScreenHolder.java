@@ -36,6 +36,12 @@ public class ScreenHolder extends GuiScreen
         screen.mouseClicked(x, y, mouseButton);
     }
 
+    @Override
+    public void mouseReleased(int x, int y, int mouseButton)
+    {
+        screen.mouseReleased();
+    }
+
     public void keyTyped(char typedChar, int keyCode) throws IOException
     {
         screen.keyTyped(typedChar, keyCode);

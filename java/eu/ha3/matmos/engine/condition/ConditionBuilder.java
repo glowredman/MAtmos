@@ -16,21 +16,46 @@ import java.util.List;
 
 public class ConditionBuilder
 {
-    private String key = "";
-    private String operator = "";
+    private StringBuilder key = new StringBuilder();
+    private StringBuilder operator = new StringBuilder();
+    private StringBuilder value = new StringBuilder();
     private List<String> values = new ArrayList<String>();
 
-    public ConditionBuilder setKey(String s)
+    public ConditionBuilder append(char c)
     {
-        if (s.length() > 0)
-            key = s;
+        if (hasOperator())
+        {
+            if (c == '|')
+            {
+                addValue(value.toString());
+                value.setLength(0);
+            }
+            else
+            {
+                value.append(c);
+            }
+        }
+        else
+        {
+            key.append(c);
+        }
         return this;
     }
 
-    public ConditionBuilder setOperator(String s)
+    public ConditionBuilder appendOp(char c)
     {
-        if (s.length() > 0)
-            operator = s;
+        if (operator.length() < 2 && values.size() == 0 && value.length() == 0)
+            operator.append(c);
+        return this;
+    }
+
+    public ConditionBuilder finish()
+    {
+        if (value.length() > 0)
+        {
+            addValue(value.toString());
+            value.setLength(0);
+        }
         return this;
     }
 
@@ -41,31 +66,36 @@ public class ConditionBuilder
         return this;
     }
 
-    public boolean validKey()
-    {
-        return !"invalid".equals(MAtmos.dataRegistry.dataTypeFromKey(key));
-    }
-
-    public boolean validOperator()
-    {
-        return Check.validOperator(operator);
-    }
-
     public boolean valid()
     {
-        return validKey() && validOperator() && values.size() > 0;
+        return hasKey() && hasOperator() && hasValue();
+    }
+
+    public boolean hasKey()
+    {
+        return key.length() > 0;
+    }
+
+    public boolean hasOperator()
+    {
+        return operator.length() > 0;
+    }
+
+    public boolean hasValue()
+    {
+        return values.size() > 0;
     }
 
     public Optional<String> getCurrentValue()
     {
-        return MAtmos.dataRegistry.getCurrentData(key);
+        return MAtmos.dataRegistry.getCurrentData(key.toString());
     }
 
     public Optional<Checkable> build()
     {
         if (valid())
         {
-            String type = MAtmos.dataRegistry.dataTypeFromKey(key);
+            String type = MAtmos.dataRegistry.dataTypeFromKey(key.toString());
             if ("number".equals(type))
                 return getNumericCondition(MAtmos.dataRegistry);
             else if (type.startsWith("scan"))
@@ -80,12 +110,13 @@ public class ConditionBuilder
 
     private Optional<Checkable> getScanCondition(DataRegistry dataRegistry)
     {
+        String key = this.key.toString();
         int index = key.startsWith("scan.block") ? key.indexOf('.', 12) : key.indexOf('.', 11);
         if (index > 0)
         {
             String scanType = key.substring(0, index);
             Optional<Scanner> scannerOptional = dataRegistry.getScanner(scanType);
-            Optional<Check<Number>> checkOptional = Check.numCheck(operator);
+            Optional<Check<Number>> checkOptional = Check.numCheck(operator.toString());
             if (scannerOptional.isPresent() && checkOptional.isPresent() && NumberUtil.isInt(values.get(0)))
             {
                 String lookUp = key.substring(scanType.length() + 1, key.length());
@@ -101,7 +132,7 @@ public class ConditionBuilder
     {
         if (NumberUtil.isNumber(values.get(0)))
         {
-            return getCondition(dataRegistry.getNumData(key), Check.numCheck(operator), new Double[]{Double.valueOf(values.get(0))});
+            return getCondition(dataRegistry.getNumData(key.toString()), Check.numCheck(operator.toString()), new Double[]{Double.valueOf(values.get(0))});
         }
         return Optional.absent();
     }
@@ -112,21 +143,21 @@ public class ConditionBuilder
         if (bool.equals("true") || bool.equals("false"))
         {
             Boolean[] bools = {Boolean.valueOf(bool)};
-            return getCondition(dataRegistry.getBoolData(key), Check.boolCheck(operator), bools);
+            return getCondition(dataRegistry.getBoolData(key.toString()), Check.boolCheck(operator.toString()), bools);
         }
         return Optional.absent();
     }
 
     private Optional<Checkable> getStringCondition(DataRegistry dataRegistry)
     {
-        return getCondition(dataRegistry.getStringData(key), Check.stringCheck(operator), values.toArray(new String[values.size()]));
+        return getCondition(dataRegistry.getStringData(key.toString()), Check.stringCheck(operator.toString()), values.toArray(new String[values.size()]));
     }
 
     private <T> Optional<Checkable> getCondition(Optional<Data<T>> dataOptional, Optional<Check<T>> checkOptional, T[] vals)
     {
         if (checkOptional.isPresent() && dataOptional.isPresent())
         {
-            Checkable c = new SimpleCondition<T>(key, vals, checkOptional.get(), dataOptional.get());
+            Checkable c = new SimpleCondition<T>(key.toString(), vals, checkOptional.get(), dataOptional.get());
             return Optional.of(c);
         }
         return Optional.absent();

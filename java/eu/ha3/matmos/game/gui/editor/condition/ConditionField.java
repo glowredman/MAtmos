@@ -6,7 +6,7 @@ import eu.ha3.matmos.engine.condition.Checkable;
 import eu.ha3.matmos.engine.condition.ConditionBuilder;
 import eu.ha3.matmos.engine.condition.ConditionParser;
 import eu.ha3.matmos.game.MCGame;
-import eu.ha3.matmos.game.gui.editor.TextField;
+import eu.ha3.matmos.game.gui.editor.element.TextField;
 import net.minecraft.client.Minecraft;
 
 import java.util.List;
