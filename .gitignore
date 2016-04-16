@@ -1,2 +1,9 @@
-lib/
+.classpath
+.metadata
+.gradle
+.project
+.settings
+bin/
+build/
+jars/
 *.iml

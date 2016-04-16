@@ -1,0 +1,76 @@
+buildscript {
+	repositories {
+		jcenter()
+		mavenCentral()
+		maven {
+			name = "sonatype"
+			url = "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+		maven {
+			name 'forge'
+			url 'http://files.minecraftforge.net/maven/'
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+	}
+}
+configurations {
+	embed
+	compile.extendsFrom(embed)
+}
+dependencies {
+	embed 'net.sf.practicalxml:practicalxml:1.1.19'
+}
+apply plugin: 'net.minecraftforge.gradle.liteloader'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+sourceSets {
+	main {
+		java {
+			srcDir "lib/MC-Commons/mc-src"
+			srcDir "main-src"
+		}
+		resources {
+			srcDirs "matmos-packaging"
+		}
+	}
+}
+
+// Basic project information
+version = "r29ub5"
+group = "eu.ha3"
+archivesBaseName = 'presencefootsteps'
+ext.revision = "29"
+
+minecraft {
+	version = project.mcVersion
+	mappings = project.mcMappings
+	runDir = 'jars'
+}
+
+processResources{
+	// this will ensure that this task is redone when the versions change.
+	def props = [
+		version: version,
+		mcversion: minecraft.version,
+		revision: revision
+	]
+	inputs.properties props
+	// replace stuff in litemod.json, nothing else
+	from(sourceSets.main.resources.srcDirs) {
+		include 'litemod.json'
+		// replace version and mcversion
+		expand props
+	}
+	
+	// copy everything else, thats not the litemod.json
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'litemod.json'
+	}
+}
+
+jar {
+	from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
+}
