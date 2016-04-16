@@ -188,42 +188,56 @@ public class EditorMaster implements Runnable, Editor
 	private void loadFile(File potentialFile) throws IOException, MalformedJsonException
 	{
 		flushFileAndSerial();
-		String jasonString = new Scanner(new FileInputStream(potentialFile)).useDelimiter("\\Z").next();
-		System.out.println(jasonString);
-		this.root = new JasonExpansions_Engine1Deserializer2000().jsonToSerial(jasonString);
-		this.hasModifiedContents = false;
-		updateFileAndContentsState();
+		//Solly edit - resource leak
+		Scanner sc = null;
+		try {
+			sc = new Scanner(new FileInputStream(potentialFile));
+			String jasonString = sc.useDelimiter("\\Z").next();
+			System.out.println(jasonString);
+			this.root = new JasonExpansions_Engine1Deserializer2000().jsonToSerial(jasonString);
+			this.hasModifiedContents = false;
+			updateFileAndContentsState();
+		} finally {
+			if (sc != null) sc.close();
+		}
 	}
 	
 	private void mergeFile(File potentialFile) throws IOException, MalformedJsonException
 	{
-		String jasonString = new Scanner(new FileInputStream(potentialFile)).useDelimiter("\\Z").next();
-		System.out.println(jasonString);
-		SerialRoot mergeFrom = new JasonExpansions_Engine1Deserializer2000().jsonToSerial(jasonString);
-		
-		if (Collections.disjoint(this.root.condition.keySet(), mergeFrom.condition.keySet())
-			&& Collections.disjoint(this.root.dynamic.keySet(), mergeFrom.dynamic.keySet())
-			&& Collections.disjoint(this.root.event.keySet(), mergeFrom.event.keySet())
-			&& Collections.disjoint(this.root.list.keySet(), mergeFrom.list.keySet())
-			&& Collections.disjoint(this.root.machine.keySet(), mergeFrom.machine.keySet())
-			&& Collections.disjoint(this.root.set.keySet(), mergeFrom.set.keySet()))
-		{
+		//Solly edit - resource leak
+		Scanner sc = null;
+		try {
+			sc = new Scanner(new FileInputStream(potentialFile));
+			String jasonString = sc.useDelimiter("\\Z").next();
+			System.out.println(jasonString);
+			SerialRoot mergeFrom = new JasonExpansions_Engine1Deserializer2000().jsonToSerial(jasonString);
+			
+			if (Collections.disjoint(this.root.condition.keySet(), mergeFrom.condition.keySet())
+				&& Collections.disjoint(this.root.dynamic.keySet(), mergeFrom.dynamic.keySet())
+				&& Collections.disjoint(this.root.event.keySet(), mergeFrom.event.keySet())
+				&& Collections.disjoint(this.root.list.keySet(), mergeFrom.list.keySet())
+				&& Collections.disjoint(this.root.machine.keySet(), mergeFrom.machine.keySet())
+				&& Collections.disjoint(this.root.set.keySet(), mergeFrom.set.keySet()))
+			{
+			}
+			else
+			{
+				showErrorPopup("The two expansions have elements in common.\n"
+					+ "The elements in common will be overriden by the file you are currently importing for the merge.");
+			}
+			
+			this.root.condition.putAll(mergeFrom.condition);
+			this.root.dynamic.putAll(mergeFrom.dynamic);
+			this.root.event.putAll(mergeFrom.event);
+			this.root.list.putAll(mergeFrom.list);
+			this.root.machine.putAll(mergeFrom.machine);
+			this.root.set.putAll(mergeFrom.set);
+			
+			this.hasModifiedContents = true;
+			updateFileAndContentsState();
+		} finally {
+			if (sc != null) sc.close();
 		}
-		else
-		{
-			showErrorPopup("The two expansions have elements in common.\n"
-				+ "The elements in common will be overriden by the file you are currently importing for the merge.");
-		}
-		
-		this.root.condition.putAll(mergeFrom.condition);
-		this.root.dynamic.putAll(mergeFrom.dynamic);
-		this.root.event.putAll(mergeFrom.event);
-		this.root.list.putAll(mergeFrom.list);
-		this.root.machine.putAll(mergeFrom.machine);
-		this.root.set.putAll(mergeFrom.set);
-		
-		this.hasModifiedContents = true;
-		updateFileAndContentsState();
 	}
 	
 	private void updateFileAndContentsState()
