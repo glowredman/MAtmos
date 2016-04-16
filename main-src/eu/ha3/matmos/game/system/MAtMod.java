@@ -34,30 +34,25 @@ import paulscode.sound.SoundSystem;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.*;
 
 /* x-placeholder */
 
-public class MAtMod extends HaddonImpl
-	implements SupportsFrameEvents, SupportsTickEvents, NotifiableHaddon, IResourceManagerReloadListener,
-	SoundAccessor, Stable
+public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, NotifiableHaddon, IResourceManagerReloadListener, SoundAccessor, Stable
 {
 	private static final boolean _COMPILE_IS_UNSTABLE = true;
 	
 	// Identity
 	protected final String NAME = "MAtmos-UnofficialBeta";
 	protected final int VERSION = 29;
-	protected final String FOR = "1.8";
+	protected final String FOR = "1.8.9";
 	protected final String ADDRESS = "http://matmos.ha3.eu";
-	protected final Date DATE = new Date(1394610076);
 	protected final Identity identity = new HaddonIdentity(this.NAME, this.VERSION, this.FOR, this.ADDRESS).setPrefix("r");
 	
 	// NotifiableHaddon and UpdateNotifier
 	private final ConfigProperty config = new ConfigProperty();
-	private final Chatter chatter = new Chatter(this, this.NAME + ": ");
-	private final UpdateNotifier updateNotifier = new UpdateNotifier(
-		this, "http://q.mc.ha3.eu/query/matmos-main-version-vn.json?ver=%d");
+	private final Chatter chatter = new Chatter(this, "<MatMos> ");
+	private final UpdateNotifier updateNotifier = new UpdateNotifier(this, "http://q.mc.ha3.eu/query/matmos-main-version-vn.json?ver=%d");
 	
 	// State
 	private boolean isListenerInstalled; 
@@ -112,6 +107,8 @@ public class MAtMod extends HaddonImpl
 		this.config.setProperty("useroptions.biome.override", -1);
 		this.config.setProperty("debug.mode", 0);
 		this.config.setProperty("minecraftsound.ambient.volume", 1f);
+		this.config.setProperty("version.last", this.VERSION);
+		this.config.setProperty("version.warnunstable", 3);
 		this.config.commit();
 		
 		// Load configuration from source
@@ -216,7 +213,8 @@ public class MAtMod extends HaddonImpl
 	@Override
 	public void onFrame(float semi)
 	{
-		if (!isActivated())
+		//Solly edit - only play sounds whilst the game is running (and not paused)
+		if (!isActivated() || util().isGamePaused())
 			return;
 		
 		this.simulacrum.get().onFrame(semi);
@@ -278,19 +276,23 @@ public class MAtMod extends HaddonImpl
 			
 			if (MAtMod._COMPILE_IS_UNSTABLE)
 			{
-				getChatter().printChatShort("http://matmos.ha3.eu/");
-				getChatter().printChat(
-                        EnumChatFormatting.RED,
-                        "You are using an ",
-                        EnumChatFormatting.YELLOW,
-                        "Unofficial Beta",
-                        EnumChatFormatting.RED,
-                        " version of MAtmos.");
-
-				getChatter().printChatShort("By using this version, you understand that this mod isn't intended for " +
-                        "actual game sessions, MAtmos may not work, might crash, the sound ambience is incomplete, etc.");
-
-				getChatter().printChatShort("Use at your own risk. Please check regularly for updates and resource pack updates.");
+				int lastVersion = config.getInteger("version.last");
+				int warns = config.getInteger("version.warnunstable");
+				if (lastVersion != VERSION){
+					warns = 3;
+					config.setProperty("version.last", VERSION);
+				}
+				if (warns > 0) {
+					warns--;
+					config.setProperty("version.warnunstable", warns);
+					getChatter().printChat(
+	                        EnumChatFormatting.RED, "You are using an ", EnumChatFormatting.YELLOW, "Unofficial Beta", EnumChatFormatting.RED, " version of MAtmos.");
+					getChatter().printChatShort("By using this version, you understand that this mod isn't intended for " +
+	                        "actual game sessions, MAtmos may not work, might crash, the sound ambience is incomplete, etc. Use at your own risk. ");
+					getChatter().printChatShort("Please check regularly for updates and resource pack updates.");
+					if (warns > 0) getChatter().printChatShort("This message will appear ", EnumChatFormatting.YELLOW, warns, " more times.");
+				}
+				if (config.commit()) config.save();
 			}
 			
 			if (isDebugMode())
@@ -358,10 +360,8 @@ public class MAtMod extends HaddonImpl
 	@SuppressWarnings("unchecked")
 	public Map<String, Expansion> getExpansionList()
 	{
-		if (isActivated())
-			return this.simulacrum.get().getExpansions();
-		else
-			return (Map<String, Expansion>) Collections.EMPTY_MAP;
+		if (isActivated()) return this.simulacrum.get().getExpansions();
+		return (Map<String, Expansion>) Collections.EMPTY_MAP;
 	}
 	
 	public boolean isInitialized()
@@ -409,7 +409,7 @@ public class MAtMod extends HaddonImpl
 		}
 		catch (PrivateAccessException e)
 		{
-			throw new RuntimeException();
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -422,7 +422,7 @@ public class MAtMod extends HaddonImpl
 		}
 		catch (PrivateAccessException e)
 		{
-			throw new RuntimeException();
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -497,42 +497,17 @@ public class MAtMod extends HaddonImpl
 		refresh();
 	}
 	
-	public boolean isEditorAvailable()
-	{
-		try
-		{
-			return Class.forName("eu.ha3.matmos.editor.EditorMaster", false, this.getClass().getClassLoader()) != null;
-		}
-		catch (Exception e)
-		{
-			return false;
-		}
+	public boolean isEditorAvailable() {
+		return util().isPresent("eu.ha3.matmos.editor.EditorMaster");
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Runnable instantiateRunnableEditor(PluggableIntoMinecraft pluggable)
-	{
-		try
-		{
-			Class editorClass =
-				Class.forName("eu.ha3.matmos.editor.EditorMaster", false, this.getClass().getClassLoader());
-			Constructor ctor = editorClass.getDeclaredConstructor(PluggableIntoMinecraft.class);
-			ctor.setAccessible(true);
-			
-			return (Runnable) ctor.newInstance(pluggable);
-		}
-		catch (Exception e)
-		{
-			return null;
-		}
+	public Runnable instantiateRunnableEditor(PluggableIntoMinecraft pluggable) {
+		return util().<Runnable>getInstantiator("eu.ha3.matmos.editor.EditorMaster", PluggableIntoMinecraft.class).instantiate(pluggable);
 	}
 
 	public Optional<Expansion> getExpansionEffort(String expansionName)
 	{
-		if (!isActivated())
-			return Optional.absent();
-
-		if (!simulacrum.get().getExpansions().containsKey(expansionName))
+		if (!isActivated() || !simulacrum.get().getExpansions().containsKey(expansionName))
 			return Optional.absent();
 
 		return Optional.of(simulacrum.get().getExpansions().get(expansionName));
