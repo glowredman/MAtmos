@@ -37,7 +37,7 @@ public class VisualExpansionDebugging implements SupportsFrameEvents
 	public void onFrame(float semi)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-		int fac = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight).getScaleFactor();
+		int fac = new ScaledResolution(mc).getScaleFactor();
 		
 		float scale = 1f / fac;
 		GL11.glPushMatrix();

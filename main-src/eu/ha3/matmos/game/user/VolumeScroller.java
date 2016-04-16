@@ -40,7 +40,7 @@ public class VolumeScroller extends Ha3Scroller
 		
 		String msgper = (int) Math.floor(this.doneValue * 100) + "%";
 		
-		ScaledResolution screenRes = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution screenRes = new ScaledResolution(mc);
 		
 		int scrWidth = screenRes.getScaledWidth();
 		int scrHeight = screenRes.getScaledHeight();

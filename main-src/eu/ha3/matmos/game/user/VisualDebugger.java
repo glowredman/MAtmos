@@ -110,7 +110,7 @@ public class VisualDebugger implements SupportsFrameEvents
 	private void debugScanWithSheet(final Sheet sheet, boolean isDeltaPass)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-		int fac = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight).getScaleFactor();
+		int fac = new ScaledResolution(mc).getScaleFactor();
 		
 		float scale = 1f / fac;
 		GL11.glPushMatrix();
