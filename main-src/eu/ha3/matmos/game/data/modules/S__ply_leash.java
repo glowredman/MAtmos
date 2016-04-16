@@ -34,7 +34,6 @@ public class S__ply_leash extends ModuleProcessor implements Module
 		int count = 0;
 
         // dag edit AxisAlignedBB.getBoundingBox(..) -> AxisAlignedBB.fromBounds(..)
-		@SuppressWarnings("unchecked")
 		List<EntityLiving> var6 =
 			w.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.fromBounds(
                     player.posX - distance, player.posY - distance, player.posZ - distance, player.posX + distance,

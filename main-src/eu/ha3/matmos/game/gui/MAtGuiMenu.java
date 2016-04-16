@@ -52,7 +52,6 @@ public class MAtGuiMenu extends GuiScreen
 		in_memory_page = this.pageFromZero;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui()
 	{

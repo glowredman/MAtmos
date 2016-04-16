@@ -23,8 +23,6 @@ public class S__detect implements Processor, PassOnceModule
 	
 	private AxisAlignedBB bbox;
 	
-	private int max;
-	
 	private ModuleProcessor mindistModel;
 	private Map<Integer, Double> minimumDistanceReports;
 	
@@ -76,8 +74,6 @@ public class S__detect implements Processor, PassOnceModule
 
         // dag edit AxisAlignedBB.getBoundingBox(..) -> AxisAlignedBB.fromBounds(..)
         this.bbox = AxisAlignedBB.fromBounds(0, 0, 0, 0, 0, 0);
-		
-		this.max = max;
 	}
 	
 	private void refresh()
@@ -129,7 +125,6 @@ public class S__detect implements Processor, PassOnceModule
         this.bbox = AxisAlignedBB.fromBounds(x - this.maxel, y - this.maxel, z - this.maxel, x + this.maxel, y
             + this.maxel, z + this.maxel);
 		
-		@SuppressWarnings("unchecked")
 		List<Entity> entityList = mc.theWorld.getEntitiesWithinAABB(Entity.class, this.bbox);
 		
 		for (Entity e : entityList)

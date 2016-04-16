@@ -15,7 +15,6 @@ import java.util.Map;
 
 public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents
 {
-	private final MAtMod mod;
 	private ExpansionManager expansionManager;
 	private ModularDataGatherer dataGatherer;
 	private VisualDebugger visualDebugger;
@@ -26,8 +25,6 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents
 
 	public Simulacrum(MAtMod mod)
 	{
-		this.mod = mod;
-
 		this.expansionManager =
 			new ExpansionManager(new File(mod.util().getModsFolder(), "matmos/expansions_r29_userconfig/"), mod);
 		this.expansionManager.setVolumeAndUpdate(mod.getConfig().getFloat("globalvolume.scale"));

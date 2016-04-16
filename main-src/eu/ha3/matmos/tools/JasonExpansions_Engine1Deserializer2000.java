@@ -65,9 +65,8 @@ public class JasonExpansions_Engine1Deserializer2000
 	
 	private void parseJsonUnsafe(String jasonString, ExpansionIdentity identity, Knowledge knowledge)
 	{
-		prepare(identity, knowledge);
-		SerialRoot root = new Gson().fromJson(new JsonParser().parse(jasonString).getAsJsonObject(), SerialRoot.class);
-		continueFromSerial(root, identity, knowledge);
+		SerialRoot root = jsonToSerial(jasonString);
+		loadSerial(root, identity, knowledge);
 	}
 	
 	private void continueFromSerial(SerialRoot root, ExpansionIdentity identity, Knowledge knowledge)
@@ -81,8 +80,7 @@ public class JasonExpansions_Engine1Deserializer2000
 				{
 					sheetIndexes.add(new SheetEntry(eelt.sheet, eelt.index));
 				}
-				this.elements.add(new Dynamic(
-					dynamicSheetHash(entry.getKey()), this.providers.getSheetCommander(), sheetIndexes));
+				this.elements.add(new Dynamic(dynamicSheetHash(entry.getKey()), this.providers.getSheetCommander(), sheetIndexes));
 			}
 		}
 		if (root.list != null)
@@ -103,8 +101,7 @@ public class JasonExpansions_Engine1Deserializer2000
 				}
 				
 				this.elements.add(new Condition(
-					entry.getKey(), this.providers.getSheetCommander(), new SheetEntry(
-						entry.getValue().sheet, indexNotComputed),
+					entry.getKey(), this.providers.getSheetCommander(), new SheetEntry(entry.getValue().sheet, indexNotComputed),
 					Operator.fromSerializedForm(entry.getValue().symbol), entry.getValue().value));
 			}
 		}
@@ -112,9 +109,7 @@ public class JasonExpansions_Engine1Deserializer2000
 		{
 			for (Entry<String, SerialSet> entry : root.set.entrySet())
 			{
-				this.elements.add(new Junction(
-					entry.getKey(), this.providers.getCondition(), asList(entry.getValue().yes), asList(entry
-						.getValue().no)));
+				this.elements.add(new Junction(entry.getKey(), this.providers.getCondition(), asList(entry.getValue().yes), asList(entry.getValue().no)));
 			}
 		}
 		if (root.event != null)
@@ -139,41 +134,34 @@ public class JasonExpansions_Engine1Deserializer2000
 				{
 					for (SerialMachineEvent eelt : serial.event)
 					{
-						events.add(new TimedEvent(
-							eelt.event, this.providers.getEvent(), eelt.vol_mod, eelt.pitch_mod, eelt.delay_min,
-							eelt.delay_max, eelt.delay_start));
+						events.add(new TimedEvent(this.providers.getEvent(), eelt));
 					}
 				}
 				
 				StreamInformation stream = null;
 				if (serial.stream != null)
 				{
-					stream =
-						new StreamInformation(
-							entry.getKey(), this.providers.getMachine(), this.providers.getReferenceTime(),
-							this.providers.getSoundRelay(), serial.stream.path, serial.stream.vol, serial.stream.pitch,
-							serial.delay_fadein, serial.delay_fadeout, serial.fadein, serial.fadeout,
-							serial.stream.looping, serial.stream.pause);
+					stream = new StreamInformation(entry.getKey(), this.providers.getMachine(), this.providers.getReferenceTime(), this.providers.getSoundRelay(), serial.stream.path, serial.stream.vol, serial.stream.pitch, serial.delay_fadein, serial.delay_fadeout, serial.fadein, serial.fadeout, serial.stream.looping, serial.stream.pause);
 				}
 				
 				TimedEventInformation tie = null;
 				if (serial.event.size() > 0)
 				{
-					tie =
-						new TimedEventInformation(
-							entry.getKey(), this.providers.getMachine(), this.providers.getReferenceTime(), events,
-							serial.delay_fadein, serial.delay_fadeout, serial.fadein, serial.fadeout);
+					tie = new TimedEventInformation(entry.getKey(), this.providers.getMachine(), this.providers.getReferenceTime(), events, serial.delay_fadein, serial.delay_fadeout, serial.fadein, serial.fadeout);
 				}
 				
-				Named element =
-					new Machine(
-						entry.getKey(), this.providers.getJunction(), asList(serial.allow), asList(serial.restrict),
-						tie, stream);
-				this.elements.add(element);
+				//Solly edit - only add a Machine if one is needed.
+				if (tie != null || stream != null) {
+					Named element = new Machine(entry.getKey(), this.providers.getJunction(), asList(serial.allow), asList(serial.restrict), tie, stream);
+					this.elements.add(element);
+				}
 			}
 		}
 		
-		this.knowledgeWorkstation.addKnowledge(this.elements);
+		//Solly edit - only add knowledge is there is knowledge to give
+		if (this.elements.size() > 0) {
+			this.knowledgeWorkstation.addKnowledge(this.elements);
+		}
 	}
 	
 	private String dynamicSheetHash(String name)

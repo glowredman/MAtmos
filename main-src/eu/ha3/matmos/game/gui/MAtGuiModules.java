@@ -39,7 +39,6 @@ public class MAtGuiModules extends GuiScreen
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void initGui()
     {

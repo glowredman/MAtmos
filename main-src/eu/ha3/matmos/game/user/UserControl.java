@@ -113,11 +113,12 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 	@Override
 	public void beginHold()
 	{
-		if (this.mod.getConfig().getBoolean("reversed.controls") && false)
+		/*if (this.mod.getConfig().getBoolean("reversed.controls") && false)
 		{
+			//TODO: Disabled for now
 			displayMenu();
 		}
-		else if (this.mod.isActivated())
+		else*/ if (this.mod.isActivated())
 		{
 			this.scroller.start();
 		}
@@ -126,12 +127,13 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 	@Override
 	public void shortPress()
 	{
-		if (this.mod.getConfig().getBoolean("reversed.controls") && false)
+		/*if (this.mod.getConfig().getBoolean("reversed.controls") && false)
 		{
+			//TODO: Disabled for now
 			whenWantsToggle();
 		}
 		else
-		{
+		{*/
 			if (!this.mod.isActivated())
 			{
 				whenWantsToggle();
@@ -140,7 +142,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 			{
 				displayMenu();
 			}
-		}
+		//}
 		
 		printUnusualMessages();
 	}

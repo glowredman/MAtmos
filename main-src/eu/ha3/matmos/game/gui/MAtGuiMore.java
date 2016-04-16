@@ -34,7 +34,6 @@ public class MAtGuiMore extends GuiScreen
         this.mod = matmos;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void initGui()
     {

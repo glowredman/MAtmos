@@ -55,9 +55,8 @@ public class PluggableIntoMAtmos implements PluggableIntoMinecraft
 					Expansion expansion = opt.get();
 
 					PluggableIntoMAtmos.this.mod.getChatter().printChat(
-						EnumChatFormatting.AQUA
-							+ "Reloading from editor state: " + expansion.getName() + " "
-							+ getTimestamp());
+						EnumChatFormatting.AQUA,
+						"Reloading from editor state: " + expansion.getName() + " " + getTimestamp());
 					expansion.pushDebugJasonAndRefreshKnowledge(jasonString);
 				}
 			}
@@ -78,8 +77,8 @@ public class PluggableIntoMAtmos implements PluggableIntoMinecraft
 					Expansion expansion = opt.get();
 
 					PluggableIntoMAtmos.this.mod.getChatter().printChat(
-						EnumChatFormatting.BLUE
-							+ "Reloading from disk: " + expansion.getName() + " " + getTimestamp());
+						EnumChatFormatting.BLUE,
+						"Reloading from disk: ", expansion.getName() + " " + getTimestamp());
 					expansion.refreshKnowledge();
 				}
 			}
