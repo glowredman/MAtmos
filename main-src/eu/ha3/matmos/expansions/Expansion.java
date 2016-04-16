@@ -405,17 +405,21 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated
 			@Override
 			public String obtainJasonString()
 			{
+				//Solly edit - resource leak
+				Scanner sc = null;
 				try
 				{
+					sc = new Scanner(Expansion.this.identity.getPack().getInputStream(Expansion.this.identity.getLocation()));
 					// XXX does not handle XML 
-					return new Scanner(Expansion.this.identity.getPack().getInputStream(
-						Expansion.this.identity.getLocation())).useDelimiter("\\Z").next();
+					return sc.useDelimiter("\\Z").next();
 				}
 				catch (IOException e)
 				{
 					e.printStackTrace();
 					System.err.println("Jason unavailable.");
 					return "{}";
+				} finally {
+					if (sc != null) sc.close();
 				}
 			}
 		};
@@ -428,15 +432,19 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated
 	
 	public String getInfo()
 	{
+		//Solly edit - resource leak
+		Scanner sc = null;
 		try
 		{
-			return new Scanner(this.identity.getPack().getInputStream(new ResourceLocation("matmos", "info.txt")))
-				.useDelimiter("\\Z").next();
+			sc = new Scanner(this.identity.getPack().getInputStream(new ResourceLocation("matmos", "info.txt")));
+			return sc.useDelimiter("\\Z").next();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			return "Error while fetching info.txt";
+		} finally {
+			if (sc != null) sc.close();
 		}
 	}
 }
