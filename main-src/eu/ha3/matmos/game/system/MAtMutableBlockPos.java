@@ -1,6 +1,6 @@
 package eu.ha3.matmos.game.system;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * @author dags_ <dags@dags.me>

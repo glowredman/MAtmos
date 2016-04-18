@@ -31,13 +31,13 @@ public class L__legacy extends ModuleProcessor implements Module
 		Minecraft mc = Minecraft.getMinecraft();
         // dag edit EntityClientPlayerMP -> EntityPlayerSP
 		EntityPlayerSP player = mc.thePlayer;
-		Entity ride = player.ridingEntity;
+		Entity ride = player.getRidingEntity();
 		
 		setValue("player_health_ceil", (int) Math.ceil(player.getHealth()));
 		setValue("world_nether", player.dimension == -1);
 		setValue("player_current_item_as_number", number(player.inventory.getCurrentItem()));
 		
-		setValue("72000_minus_item_use_duration", 72000 - player.getItemInUseDuration());
+		setValue("72000_minus_item_use_duration", 72000 - player.getItemInUseCount());
 		setValue("riding_minecart", ride != null && ride.getClass() == EntityMinecartEmpty.class);
 		setValue("riding_boat", ride != null && ride.getClass() == EntityBoat.class);
 		setValue("armor_0_as_number", number(player.inventory.armorInventory[0]));

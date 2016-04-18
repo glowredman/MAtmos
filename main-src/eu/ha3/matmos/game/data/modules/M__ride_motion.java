@@ -20,7 +20,7 @@ public class M__ride_motion extends ModuleProcessor implements Module
 	@Override
 	protected void doProcess()
 	{
-		Entity ride = Minecraft.getMinecraft().thePlayer.ridingEntity;
+		Entity ride = Minecraft.getMinecraft().thePlayer.getRidingEntity();
 		
 		if (ride != null)
 		{

@@ -5,10 +5,10 @@ import eu.ha3.mc.gui.HDisplayStringProvider;
 import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.TextFormatting;
 
 import java.io.IOException;
 
@@ -116,7 +116,7 @@ public class MAtGuiMore extends GuiScreen
 
         this.buttonList.add(new GuiButton(215, _LEFT + _MIX, _MIX * (6 + 1), _WIDTH - _MIX * 2, _UNIT, this.mod
                 .getConfig().getInteger("debug.mode") == 1
-                ? EnumChatFormatting.GOLD + "Dev/Editor mode: ON" : "Dev/Editor mode: OFF"));
+                ? TextFormatting.GOLD + "Dev/Editor mode: ON" : "Dev/Editor mode: OFF"));
 
         this.buttonList.add(new GuiButton(200, _LEFT + _MIX, _SEPARATOR + _MIX * (this.IDS_PER_PAGE + 4), _WIDTH
                 - _MIX * 2 - _GAP - _TURNOFFWIDTH, _UNIT, "Done"));
@@ -167,7 +167,7 @@ public class MAtGuiMore extends GuiScreen
         {
             this.mod.getConfig().setProperty("debug.mode", this.mod.getConfig().getInteger("debug.mode") == 0 ? 1 : 0);
             par1GuiButton.displayString =
-                    this.mod.getConfig().getInteger("debug.mode") == 1 ? EnumChatFormatting.GOLD + "Dev/Editor mode: ON" : "Dev/Editor mode: OFF";
+                    this.mod.getConfig().getInteger("debug.mode") == 1 ? TextFormatting.GOLD + "Dev/Editor mode: ON" : "Dev/Editor mode: OFF";
             this.mod.changedDebugMode();
             this.mod.saveConfig();
         }
@@ -213,15 +213,15 @@ public class MAtGuiMore extends GuiScreen
         {
 
             drawGradientRect(0, 0, this.width, this.height, 0xC0C06000, 0x60C06000);
-            drawCenteredString(this.fontRendererObj, "MAtmos Advanced options " + EnumChatFormatting.GOLD + "(Dev mode)", this.width / 2, 8, 0xffffff);
+            drawCenteredString(this.fontRendererObj, "MAtmos Advanced options " + TextFormatting.GOLD + "(Dev mode)", this.width / 2, 8, 0xffffff);
 
-            drawCenteredString(this.fontRendererObj, EnumChatFormatting.YELLOW
+            drawCenteredString(this.fontRendererObj, TextFormatting.YELLOW
                     + "Dev mode is enabled. This may cause Minecraft to run slower.", this.width / 2, _SEPARATOR
                     + _MIX * (this.IDS_PER_PAGE + 3) - 9, 0xffffff);
         }
 
         this.mod.util().prepareDrawString();
-        this.mod.util().drawString(EnumChatFormatting.GRAY.toString() + this.mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0, 0, '3', 0, 0, 0, 0, true);
+        this.mod.util().drawString(TextFormatting.GRAY.toString() + this.mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0, 0, '3', 0, 0, 0, 0, true);
 
         super.drawScreen(par1, par2, par3);
 

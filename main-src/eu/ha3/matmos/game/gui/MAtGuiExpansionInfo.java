@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 /*
 --filenotes-placeholder
@@ -38,8 +38,8 @@ public class MAtGuiExpansionInfo extends GuiScreen
 	{
 		drawGradientRect(0, 0, this.width, this.height, 0xF0000000, 0x90000000);
 		
-		drawCenteredString(this.fontRendererObj, "About " + EnumChatFormatting.YELLOW + EnumChatFormatting.ITALIC
-                + this.expansion.getFriendlyName() + EnumChatFormatting.RESET + "...", this.width / 2, 4, 0xffffff);
+		drawCenteredString(this.fontRendererObj, "About " + TextFormatting.YELLOW + TextFormatting.ITALIC
+                + this.expansion.getFriendlyName() + TextFormatting.RESET + "...", this.width / 2, 4, 0xffffff);
 		
 		int lc = 0;
 		for (String line : this.info)

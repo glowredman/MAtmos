@@ -27,7 +27,7 @@ public class M__ride_general extends ModuleProcessor implements Module
 	@Override
 	protected void doProcess()
 	{
-		Entity ride = Minecraft.getMinecraft().thePlayer.ridingEntity;
+		Entity ride = Minecraft.getMinecraft().thePlayer.getRidingEntity();
 		
 		// http://stackoverflow.com/questions/2950319/is-null-check-needed-before-calling-instanceof
 		

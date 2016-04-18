@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.*;
 
@@ -73,7 +73,7 @@ public class S__detect implements Processor, PassOnceModule
 		}
 
         // dag edit AxisAlignedBB.getBoundingBox(..) -> AxisAlignedBB.fromBounds(..)
-        this.bbox = AxisAlignedBB.fromBounds(0, 0, 0, 0, 0, 0);
+        this.bbox = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
 	}
 	
 	private void refresh()
@@ -122,7 +122,7 @@ public class S__detect implements Processor, PassOnceModule
 		double z = mc.thePlayer.posZ;
 
         // dag edit bbox.setBounds(..) -> bbox = AxisAlignedBB.fromBounds(..) ?
-        this.bbox = AxisAlignedBB.fromBounds(x - this.maxel, y - this.maxel, z - this.maxel, x + this.maxel, y
+        this.bbox = new AxisAlignedBB(x - this.maxel, y - this.maxel, z - this.maxel, x + this.maxel, y
             + this.maxel, z + this.maxel);
 		
 		List<Entity> entityList = mc.theWorld.getEntitiesWithinAABB(Entity.class, this.bbox);

@@ -6,7 +6,7 @@ import eu.ha3.matmos.game.data.abstractions.module.ModuleProcessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import java.util.Iterator;
@@ -35,7 +35,7 @@ public class S__ply_leash extends ModuleProcessor implements Module
 
         // dag edit AxisAlignedBB.getBoundingBox(..) -> AxisAlignedBB.fromBounds(..)
 		List<EntityLiving> var6 =
-			w.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.fromBounds(
+			w.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(
                     player.posX - distance, player.posY - distance, player.posZ - distance, player.posX + distance,
                     player.posY + distance, player.posZ + distance));
 		

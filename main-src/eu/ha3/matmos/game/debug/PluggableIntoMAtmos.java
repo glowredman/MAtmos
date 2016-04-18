@@ -6,7 +6,7 @@ import eu.ha3.matmos.expansions.debugunit.FolderResourcePackEditableEDU;
 import eu.ha3.matmos.game.system.MAtMod;
 import eu.ha3.matmos.pluggable.PluggableIntoMinecraft;
 import java.io.File;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 /*
 --filenotes-placeholder
@@ -55,7 +55,7 @@ public class PluggableIntoMAtmos implements PluggableIntoMinecraft
 					Expansion expansion = opt.get();
 
 					PluggableIntoMAtmos.this.mod.getChatter().printChat(
-						EnumChatFormatting.AQUA,
+						TextFormatting.AQUA,
 						"Reloading from editor state: " + expansion.getName() + " " + getTimestamp());
 					expansion.pushDebugJasonAndRefreshKnowledge(jasonString);
 				}
@@ -77,7 +77,7 @@ public class PluggableIntoMAtmos implements PluggableIntoMinecraft
 					Expansion expansion = opt.get();
 
 					PluggableIntoMAtmos.this.mod.getChatter().printChat(
-						EnumChatFormatting.BLUE,
+						TextFormatting.BLUE,
 						"Reloading from disk: ", expansion.getName() + " " + getTimestamp());
 					expansion.refreshKnowledge();
 				}
@@ -87,7 +87,7 @@ public class PluggableIntoMAtmos implements PluggableIntoMinecraft
 	
 	protected String getTimestamp()
 	{
-		return EnumChatFormatting.BLACK + "(" + System.currentTimeMillis() + ")";
+		return TextFormatting.BLACK + "(" + System.currentTimeMillis() + ")";
 	}
 	
 	@Override

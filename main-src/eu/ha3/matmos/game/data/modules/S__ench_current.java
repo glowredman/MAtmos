@@ -19,6 +19,6 @@ public class S__ench_current extends AbstractEnchantmentModule
 	@Override
 	protected ItemStack getItem(EntityPlayer player)
 	{
-		return player.getCurrentEquippedItem();
+		return player.getActiveItemStack();
 	}
 }

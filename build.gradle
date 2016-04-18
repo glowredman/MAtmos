@@ -39,10 +39,10 @@ sourceSets {
 }
 
 // Basic project information
-version = "r29ub5"
+version = "r30"
 group = "eu.ha3"
 archivesBaseName = 'presencefootsteps'
-ext.revision = "29"
+ext.revision = "0"
 
 minecraft {
 	version = project.mcVersion

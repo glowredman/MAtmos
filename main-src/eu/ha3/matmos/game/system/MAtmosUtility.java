@@ -4,7 +4,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundCategory;
+import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -194,7 +197,7 @@ public class MAtmosUtility
      */
     public static void playSound(String name, float nx, float ny, float nz, float volume, float pitch, int attenuation, float rollf)
     {
-        Minecraft.getMinecraft().theWorld.playSound(nx, ny, nz, name, volume, pitch, false);
+        playSound(nx, ny, nz, name, volume, pitch);
     }
 
     /**
@@ -209,9 +212,14 @@ public class MAtmosUtility
      */
     public static void playSound(String name, float nx, float ny, float nz, float volume, float pitch)
     {
-        Minecraft.getMinecraft().theWorld.playSound(nx, ny, nz, name, volume, pitch, false);
+        playSound(nx, ny, nz, name, volume, pitch);
     }
-
+    
+    private static void playSound(float x, float y, float z, String soundName, float volume, float pitch) {
+        PositionedSoundRecord positionedsoundrecord = new PositionedSoundRecord(new ResourceLocation(soundName), SoundCategory.MASTER, volume, pitch, false, 0, ISound.AttenuationType.LINEAR, x, y, z);
+        Minecraft.getMinecraft().getSoundHandler().playSound(positionedsoundrecord);
+    }
+    
     /**
      * Returns the PowerMeta of the block at the specified coordinates.<br>
      * The PowerMeta is a string that combines the block name and the metadata

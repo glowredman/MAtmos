@@ -8,6 +8,7 @@ import eu.ha3.mc.haddon.PrivateAccessException;
 import eu.ha3.mc.haddon.Utility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.item.ItemShield;
 
 /*
 --filenotes-placeholder
@@ -45,11 +46,11 @@ public class M__ply_general extends ModuleProcessor implements Module
         }
         setValue("on_ladder", player.isOnLadder());
 
-        setValue("blocking", player.isBlocking());
+        setValue("blocking", player.isHandActive() && player.getHeldItemOffhand().getItem() instanceof ItemShield);
         setValue("sprinting", player.isSprinting());
         setValue("sneaking", player.isSneaking());
         setValue("airborne", player.isAirBorne);
-        setValue("using_item", player.isUsingItem());
+        setValue("using_item", player.isHandActive());
         setValue("riding", player.isRiding());
         setValue("creative", player.capabilities.isCreativeMode);
         setValue("flying", player.capabilities.isFlying);

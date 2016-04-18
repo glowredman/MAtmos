@@ -12,7 +12,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.EntityList;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -72,7 +72,7 @@ public class VisualDebugger implements SupportsFrameEvents
 		{
 			this.mod.util().prepareDrawString();
 			this.mod.util().drawString(
-                    EnumChatFormatting.GRAY.toString() + this.mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0, 0, '3', 0, 0, 0,
+                    TextFormatting.GRAY.toString() + this.mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0, 0, '3', 0, 0, 0,
 				0, true);
 		}
 		
@@ -220,11 +220,11 @@ public class VisualDebugger implements SupportsFrameEvents
 							String bars = "";
 							if (superFill > 0)
 							{
-								bars = bars + EnumChatFormatting.YELLOW + StringUtils.repeat("|", superFill);
+								bars = bars + TextFormatting.YELLOW + StringUtils.repeat("|", superFill);
 							}
 							bars =
 								bars
-									+ EnumChatFormatting.RESET
+									+ TextFormatting.RESET
 									+ StringUtils.repeat("|", fill - superFill * 2);
 							
 							if (index.startsWith("minecraft:"))
@@ -234,7 +234,7 @@ public class VisualDebugger implements SupportsFrameEvents
 							
 							fontRenderer.drawStringWithShadow(bars
 								+ (fill == ALL * 2
-									? EnumChatFormatting.YELLOW + "++" + EnumChatFormatting.RESET : "") + " ("
+									? TextFormatting.YELLOW + "++" + TextFormatting.RESET : "") + " ("
 								+ count + ", " + percentage + "%) " + index, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
 							lineNumber = lineNumber + 1;
 						}
@@ -248,7 +248,8 @@ public class VisualDebugger implements SupportsFrameEvents
 						if (!index.equals("0"))
 						{
 							fontRenderer.drawStringWithShadow(
-								index + " (" + EntityList.getStringFromID(Integer.parseInt(index)) + "): " + val,
+													     //getIdFromClass
+								index + " (" + EntityList.func_188430_a(EntityList.getClassFromID(Integer.parseInt(index))) + "): " + val,
 								leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
 						}
 						else

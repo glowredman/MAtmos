@@ -4,6 +4,8 @@ import eu.ha3.matmos.game.system.MAtMod;
 import eu.ha3.mc.gui.HDisplayStringProvider;
 import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.RegistryNamespaced;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import java.util.ArrayList;
@@ -28,16 +30,12 @@ public class MAtGuiBiomeSlider implements HDisplayStringProvider, HSliderListene
 		computeBiomes();
 	}
 	
-	private void computeBiomes()
-	{
-		BiomeGenBase[] biomes = BiomeGenBase.getBiomeGenArray();
+	private void computeBiomes() {
+		RegistryNamespaced<ResourceLocation, BiomeGenBase> biomes = BiomeGenBase.biomeRegistry;
 		
-		for (int i = 0; i < biomes.length; i++)
-		{
-			if (biomes[i] != null)
-			{
-				this.validBiomes.add(i);
-			}
+		for (BiomeGenBase i : biomes) {
+			int id = biomes.getIDForObject(i);
+			validBiomes.add(id);
 		}
 	}
 	
@@ -68,18 +66,14 @@ public class MAtGuiBiomeSlider implements HDisplayStringProvider, HSliderListene
 	{
 		final String base = "Override biome detection: ";
 		// biomeList
-		if (this.definedBiomeID >= 0 && this.definedBiomeID < BiomeGenBase.getBiomeGenArray().length)
-		{
-			BiomeGenBase biome = BiomeGenBase.getBiomeGenArray()[this.definedBiomeID];
-			if (biome == null)
-				return base + "Undefined biome (" + this.definedBiomeID + ")";
-			else if (biome.biomeName.equals(""))
-				return base + "Unnamed biome (" + this.definedBiomeID + ")";
-			else
-				return base + "Only " + biome.biomeName + " (" + this.definedBiomeID + ")";
+		if (definedBiomeID >= 0 && definedBiomeID <= maxBiomes) {
+			BiomeGenBase biome = BiomeGenBase.getBiomeForId(definedBiomeID);
+			if (biome == null) return base + "Undefined biome (" + definedBiomeID + ")";
+			if (biome.getBiomeName().equals("")) return base + "Unnamed biome (" + definedBiomeID + ")";
+			
+			return base + "Only " + biome.getBiomeName() + " (" + definedBiomeID + ")";
 		}
-		else if (this.definedBiomeID == -1)
-			return base + "Disabled (use current biome)";
+		if (definedBiomeID == -1) return base + "Disabled (use current biome)";
 		
 		return "";
 	}
@@ -94,20 +88,14 @@ public class MAtGuiBiomeSlider implements HDisplayStringProvider, HSliderListene
 			return 1f;
 	}
 	
-	private int calculateMaxBiomes()
-	{
-		// biomeList
-		BiomeGenBase[] biomes = BiomeGenBase.getBiomeGenArray();
+	private int calculateMaxBiomes() {
+		RegistryNamespaced<ResourceLocation, BiomeGenBase> biomes = BiomeGenBase.biomeRegistry;
 		int max = 0;
 		
-		for (int i = 0; i < biomes.length; i++)
-		{
-			if (biomes[i] != null)
-			{
-				max = i + 1;
-			}
+		for (BiomeGenBase i : biomes) {
+			int id = biomes.getIDForObject(i);
+			if (id > max) max = id;
 		}
-		
 		return max;
 	}
 	

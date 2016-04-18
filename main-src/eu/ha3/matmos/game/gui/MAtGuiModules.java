@@ -4,7 +4,7 @@ import eu.ha3.matmos.game.data.abstractions.module.ModuleProcessor;
 import eu.ha3.matmos.game.system.MAtMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -124,7 +124,7 @@ public class MAtGuiModules extends GuiScreen
     public void drawScreen(int par1, int par2, float par3)
     {
         drawGradientRect(0, 0, this.width, this.height, 0xC0C06000, 0x60C06000);
-        drawCenteredString(this.fontRendererObj, EnumChatFormatting.GOLD + "Dev mode: On-screen Display", this.width / 2, 1,0xffffff);
+        drawCenteredString(this.fontRendererObj, TextFormatting.GOLD + "Dev mode: On-screen Display", this.width / 2, 1,0xffffff);
 
         this.mod.getVisualDebugger().onFrame(-1f);
 

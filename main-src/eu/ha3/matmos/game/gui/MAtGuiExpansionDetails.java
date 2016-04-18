@@ -14,7 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 /*
 --filenotes-placeholder
@@ -40,8 +40,8 @@ public class MAtGuiExpansionDetails extends GuiScreen
 	{
 		drawGradientRect(0, 0, this.width, this.height, 0xF0000000, 0x90000000);
 		
-		drawCenteredString(this.fontRendererObj, EnumChatFormatting.GOLD + "Dev mode: Viewing " + EnumChatFormatting.YELLOW
-                + EnumChatFormatting.ITALIC + this.expansion.getFriendlyName() + " (" + this.expansion.getName() + ")",
+		drawCenteredString(this.fontRendererObj, TextFormatting.GOLD + "Dev mode: Viewing " + TextFormatting.YELLOW
+                + TextFormatting.ITALIC + this.expansion.getFriendlyName() + " (" + this.expansion.getName() + ")",
                 this.width / 2, 4, 0xffffff);
 		
 		this.debug.onFrame(0f);
@@ -66,7 +66,7 @@ public class MAtGuiExpansionDetails extends GuiScreen
 		
 		this.buttonList.add(new GuiButton(200, _GAP, h, 70, _UNIT, "Close"));
 		this.buttonList
-			.add(new GuiButton(201, _GAP * 2 + 70, h, 70, _UNIT, EnumChatFormatting.GOLD + "Use in OSD"));
+			.add(new GuiButton(201, _GAP * 2 + 70, h, 70, _UNIT, TextFormatting.GOLD + "Use in OSD"));
 		this.buttonList.add(new GuiButton(202, _GAP * 3 + 70 * 2, h, 70, _UNIT, "Reload file"));
 		if (this.mod.isEditorAvailable())
 		{
@@ -115,15 +115,15 @@ public class MAtGuiExpansionDetails extends GuiScreen
 					if (debugUnit instanceof ReadOnlyJasonStringEDU)
 					{
 						// XXX Read only mode
-						this.mod.getChatter().printChat(EnumChatFormatting.RED,
+						this.mod.getChatter().printChat(TextFormatting.RED,
                                 "Expansions inside ZIP files are not supported in this version.");
-						this.mod.getChatter().printChatShort(EnumChatFormatting.RED,
+						this.mod.getChatter().printChatShort(TextFormatting.RED,
                                 "Please unzip the resource packs to be able to view them.");
 					}
 				}
 				else
 				{
-					this.mod.getChatter().printChat(EnumChatFormatting.RED, "Could not start editor for an unknown reason.");
+					this.mod.getChatter().printChat(TextFormatting.RED, "Could not start editor for an unknown reason.");
 				}
 			}
 		}
@@ -154,12 +154,12 @@ public class MAtGuiExpansionDetails extends GuiScreen
 					}
 					else
 					{
-						this.mod.getChatter().printChat(EnumChatFormatting.RED, "Create the sounds/ folder first.");
+						this.mod.getChatter().printChat(TextFormatting.RED, "Create the sounds/ folder first.");
 					}
 				}
 				else
 				{
-					this.mod.getChatter().printChat(EnumChatFormatting.RED, "Create the minecraft/ folder first.");
+					this.mod.getChatter().printChat(TextFormatting.RED, "Create the minecraft/ folder first.");
 				}
 			}
 		}

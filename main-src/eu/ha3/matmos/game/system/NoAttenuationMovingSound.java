@@ -6,7 +6,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 
 /*
 --filenotes-placeholder
@@ -21,8 +23,9 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
 
 	protected NoAttenuationMovingSound(ResourceLocation myResource, float volume, float pitch, boolean isLooping, boolean usesPause)
 	{
-		super(myResource);
-
+		super(SoundEvents.ambient_cave, SoundCategory.MASTER);
+		
+		positionedSoundLocation = myResource;
 		this.attenuationType = ISound.AttenuationType.NONE;
 		this.repeat = isLooping;
 		this.repeatDelay = 0;

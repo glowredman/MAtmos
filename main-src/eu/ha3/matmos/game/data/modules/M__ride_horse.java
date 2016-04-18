@@ -22,7 +22,7 @@ public class M__ride_horse extends ModuleProcessor implements Module
 	@Override
 	protected void doProcess()
 	{
-		Entity xride = Minecraft.getMinecraft().thePlayer.ridingEntity;
+		Entity xride = Minecraft.getMinecraft().thePlayer.getRidingEntity();
 		
 		if (xride == null || !(xride instanceof EntityHorse))
 		{
@@ -57,7 +57,7 @@ public class M__ride_horse extends ModuleProcessor implements Module
 		setValue("chested", ride.isChested());
 		setValue("tame", ride.isTame());
 		
-		setValue("type", ride.getHorseType());
+		setValue("type", ride.getType().isUndead());
 		setValue("variant", ride.getHorseVariant());
 		
 		setValue("name_tag", ride.getCustomNameTag());
@@ -67,15 +67,15 @@ public class M__ride_horse extends ModuleProcessor implements Module
         // dag edit func_152119_ch() -> getOwnerId()
 		setValue(
 			"ridden_by_owner",
-			ride.riddenByEntity instanceof EntityPlayer
-				&& !ride.getOwnerId().equals("")
-				&& ride.getOwnerId().equals(((EntityPlayer) ride.riddenByEntity).getGameProfile().getId().toString()));
+			ride.getControllingPassenger() instanceof EntityPlayer
+				&& ride.getOwnerUniqueId() != null
+				&& ride.getOwnerUniqueId().equals(((EntityPlayer) ride.getControllingPassenger()).getGameProfile().getId()));
         // dag edit func_152119_ch() -> getOwnerId()
 		setValue(
 			"leashed_to_owner",
 			ride.getLeashedToEntity() instanceof EntityPlayer
-				&& !ride.getOwnerId().equals("")
-				&& ride.getOwnerId().equals(((EntityPlayer) ride.getLeashedToEntity()).getGameProfile().getId().toString()));
+				&& !ride.getOwnerUniqueId().equals("")
+				&& ride.getOwnerUniqueId().equals(((EntityPlayer) ride.getLeashedToEntity()).getGameProfile().getId().toString()));
 		
 		if (ride.getLeashed() && ride.getLeashedToEntity() != null)
 		{
@@ -90,7 +90,7 @@ public class M__ride_horse extends ModuleProcessor implements Module
 		// Server only?
 		setValue("temper", ride.getTemper());
         // dag edit func_152119_ch() -> getOwnerId()
-		setValue("owner_uuid", ride.getOwnerId());
+		setValue("owner_uuid", ride.getOwnerUniqueId().toString());
 		setValue("reproduced", ride.getHasReproduced());
         // dag edit func_110205_ce() -> isBreeding() [this is probably wrong, not sure what 'bred' represents]
         setValue("bred", ride.isBreeding());

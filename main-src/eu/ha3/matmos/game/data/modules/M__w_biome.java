@@ -6,7 +6,7 @@ import eu.ha3.matmos.game.data.abstractions.module.ModuleProcessor;
 import eu.ha3.matmos.game.system.MAtMod;
 import eu.ha3.matmos.game.system.MAtmosUtility;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 
@@ -30,8 +30,10 @@ public class M__w_biome extends ModuleProcessor implements Module
 		int biomej = this.mod.getConfig().getInteger("useroptions.biome.override");
 		if (biomej <= -1)
 		{
-			setValue("id", calculateBiome().biomeID);
-			setValue("biome_name", calculateBiome().biomeName);
+			//Solly edit - only calculate biome once
+			BiomeGenBase biome = calculateBiome();
+			setValue("id", BiomeGenBase.getIdForBiome(biome));
+			setValue("biome_name", biome.getBiomeName());
 		}
 		else
 		{
@@ -49,6 +51,6 @@ public class M__w_biome extends ModuleProcessor implements Module
 
 		Chunk chunk = mc.theWorld.getChunkFromBlockCoords(playerPos);
         // dag edit getBiomeGenForWorldCoords(..) -> getBiome(..)
-		return chunk.getBiome(playerPos, mc.theWorld.getWorldChunkManager());
+		return chunk.getBiome(playerPos, mc.theWorld.getBiomeProvider());
 	}
 }

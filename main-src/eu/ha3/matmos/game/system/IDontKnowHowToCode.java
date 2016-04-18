@@ -2,7 +2,7 @@ package eu.ha3.matmos.game.system;
 
 import eu.ha3.matmos.log.MAtLog;
 import eu.ha3.mc.quick.chat.Chatter;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -45,18 +45,18 @@ public class IDontKnowHowToCode
 			return;
 		crash.add(crashToken);
 		
-		chatter.printChat(EnumChatFormatting.RED, "MAtmos is crashing: ", EnumChatFormatting.WHITE, e.getClass().getName(), ": ", e.getCause());
+		chatter.printChat(TextFormatting.RED, "MAtmos is crashing: ", TextFormatting.WHITE, e.getClass().getName(), ": ", e.getCause());
 		
 		int i = 0;
 		for (StackTraceElement x : e.getStackTrace())
 		{
 			if (i <= 5 || x.toString().contains("MAt") || x.toString().contains("eu.ha3.matmos."))
 			{
-				chatter.printChat(EnumChatFormatting.WHITE, x.toString());
+				chatter.printChat(TextFormatting.WHITE, x.toString());
 			}
 			i++;
 		}
 		
-		chatter.printChat(EnumChatFormatting.RED, "Please report this issue :(");
+		chatter.printChat(TextFormatting.RED, "Please report this issue :(");
 	}
 }

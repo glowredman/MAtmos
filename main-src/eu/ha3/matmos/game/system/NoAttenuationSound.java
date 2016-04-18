@@ -3,6 +3,7 @@ package eu.ha3.matmos.game.system;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 
 /*
 --filenotes-placeholder
@@ -10,9 +11,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class NoAttenuationSound extends PositionedSoundRecord
 {
-	public NoAttenuationSound(ResourceLocation r, float a, float b, float c, float d, float e)
+	public NoAttenuationSound(ResourceLocation loc, float volume, float pitch, float x, float y, float z)
 	{
-		super(r, a, b, c, d, e);
-		this.attenuationType = ISound.AttenuationType.NONE;
+		super(loc, SoundCategory.MASTER, volume, pitch, false, 0, ISound.AttenuationType.NONE, x, y, z);
 	}
 }
