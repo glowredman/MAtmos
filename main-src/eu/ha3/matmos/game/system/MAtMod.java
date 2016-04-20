@@ -51,7 +51,7 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 	
 	// NotifiableHaddon and UpdateNotifier
 	private final ConfigProperty config = new ConfigProperty();
-	private final Chatter chatter = new Chatter(this, "<MatMos> ");
+	private final Chatter chatter = new Chatter(this, "<MAtmos> ");
 	private final UpdateNotifier updateNotifier = new UpdateNotifier(this, "http://q.mc.ha3.eu/query/matmos-main-version-vn.json?ver=%d");
 	
 	// State
@@ -81,11 +81,10 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 	@Override
 	public void onLoad()
 	{
-		util().registerPrivateGetter("getSoundManager", SoundHandler.class, 5, "field_147694_f", "f");
-		util().registerPrivateGetter("getSoundSystem", SoundManager.class, 4, "field_148620_e", "e");
-
-        // dag edit - update to 1.8 obf stuff
-		util().registerPrivateGetter("isInWeb", Entity.class, -1, "isInWeb", "field_70134_J", "H");
+		util().registerPrivateGetter("getSoundManager", SoundHandler.class, 5, "sndManager", "field_147694_f", "f");
+		util().registerPrivateGetter("getSoundSystem", SoundManager.class, 3, "sndHandler", "field_148622_c", "d");
+		
+		util().registerPrivateGetter("isInWeb", Entity.class, 30, "isInWeb", "field_70134_J", "E");
 		
 		((OperatorCaster) op()).setTickEnabled(true);
 		((OperatorCaster) op()).setFrameEnabled(true);
