@@ -48,15 +48,13 @@ public class S__ply_hitscan extends ModuleProcessor implements Module
 		setValue("mouse_over_something", mc.objectMouseOver.typeOfHit != Type.MISS);
 		setValue("mouse_over_what", this.equiv.get(mc.objectMouseOver.typeOfHit));
         // dag edit -> getBlockPos().get..()
-		setValue(
-			"block",
+		setValue("block",
 			mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtmosUtility.getNameAt(
 				mc.objectMouseOver.getBlockPos().getX(), mc.objectMouseOver.getBlockPos().getY(),
                     mc.objectMouseOver.getBlockPos().getZ(),
 				MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS) : MODULE_CONSTANTS.NO_BLOCK_IN_THIS_CONTEXT);
         // dag edit -> getBlockPos().get..()
-		setValue(
-			"meta",
+		setValue("meta",
 			mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtmosUtility.getMetaAsStringAt(
 				mc.objectMouseOver.getBlockPos().getX(), mc.objectMouseOver.getBlockPos().getY(),
                     mc.objectMouseOver.getBlockPos().getZ(),

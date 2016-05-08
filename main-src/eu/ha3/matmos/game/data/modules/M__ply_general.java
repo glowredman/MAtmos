@@ -9,6 +9,7 @@ import eu.ha3.mc.haddon.Utility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.ItemShield;
+import net.minecraft.item.ItemStack;
 
 /*
 --filenotes-placeholder
@@ -45,8 +46,11 @@ public class M__ply_general extends ModuleProcessor implements Module
             throw new RuntimeException(e);
         }
         setValue("on_ladder", player.isOnLadder());
-
-        setValue("blocking", player.isHandActive() && player.getHeldItemOffhand().getItem() instanceof ItemShield);
+        
+        ItemStack held = player.getHeldItemMainhand();
+        if (held == null) held = player.getHeldItemOffhand();
+        
+        setValue("blocking", player.isHandActive() && held != null && held.getItem() instanceof ItemShield);
         setValue("sprinting", player.isSprinting());
         setValue("sneaking", player.isSneaking());
         setValue("airborne", player.isAirBorne);
