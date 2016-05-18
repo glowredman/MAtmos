@@ -23,7 +23,7 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
 
 	protected NoAttenuationMovingSound(ResourceLocation myResource, float volume, float pitch, boolean isLooping, boolean usesPause)
 	{
-		super(SoundEvents.ambient_cave, SoundCategory.MASTER);
+		super(SoundEvents.AMBIENT_CAVE, SoundCategory.MASTER);
 		
 		positionedSoundLocation = myResource;
 		this.attenuationType = ISound.AttenuationType.NONE;

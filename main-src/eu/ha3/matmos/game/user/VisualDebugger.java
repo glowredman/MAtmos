@@ -248,8 +248,7 @@ public class VisualDebugger implements SupportsFrameEvents
 						if (!index.equals("0"))
 						{
 							fontRenderer.drawStringWithShadow(
-													     //getIdFromClass
-								index + " (" + EntityList.func_188430_a(EntityList.getClassFromID(Integer.parseInt(index))) + "): " + val,
+								index + " (" + EntityList.getEntityStringFromClass(EntityList.getClassFromID(Integer.parseInt(index))) + "): " + val,
 								leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
 						}
 						else

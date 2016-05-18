@@ -6,7 +6,7 @@ import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.RegistryNamespaced;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +31,9 @@ public class MAtGuiBiomeSlider implements HDisplayStringProvider, HSliderListene
 	}
 	
 	private void computeBiomes() {
-		RegistryNamespaced<ResourceLocation, BiomeGenBase> biomes = BiomeGenBase.biomeRegistry;
+		RegistryNamespaced<ResourceLocation, Biome> biomes = Biome.REGISTRY;
 		
-		for (BiomeGenBase i : biomes) {
+		for (Biome i : biomes) {
 			int id = biomes.getIDForObject(i);
 			validBiomes.add(id);
 		}
@@ -67,7 +67,7 @@ public class MAtGuiBiomeSlider implements HDisplayStringProvider, HSliderListene
 		final String base = "Override biome detection: ";
 		// biomeList
 		if (definedBiomeID >= 0 && definedBiomeID <= maxBiomes) {
-			BiomeGenBase biome = BiomeGenBase.getBiomeForId(definedBiomeID);
+			Biome biome = Biome.getBiomeForId(definedBiomeID);
 			if (biome == null) return base + "Undefined biome (" + definedBiomeID + ")";
 			if (biome.getBiomeName().equals("")) return base + "Unnamed biome (" + definedBiomeID + ")";
 			
@@ -89,10 +89,10 @@ public class MAtGuiBiomeSlider implements HDisplayStringProvider, HSliderListene
 	}
 	
 	private int calculateMaxBiomes() {
-		RegistryNamespaced<ResourceLocation, BiomeGenBase> biomes = BiomeGenBase.biomeRegistry;
+		RegistryNamespaced<ResourceLocation, Biome> biomes = Biome.REGISTRY;
 		int max = 0;
 		
-		for (BiomeGenBase i : biomes) {
+		for (Biome i : biomes) {
 			int id = biomes.getIDForObject(i);
 			if (id > max) max = id;
 		}

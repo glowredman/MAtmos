@@ -40,7 +40,7 @@ public class MAtmosUtility
 
     public static boolean isUnderwaterAnyGamemode()
     {
-        return Minecraft.getMinecraft().thePlayer.isInsideOfMaterial(Material.water);
+        return Minecraft.getMinecraft().thePlayer.isInsideOfMaterial(Material.WATER);
     }
 
     /**
@@ -148,7 +148,7 @@ public class MAtmosUtility
      */
     public static String nameOf(Block block)
     {
-        return Block.blockRegistry.getNameForObject(block).toString();
+        return Block.REGISTRY.getNameForObject(block).toString();
     }
 
     /**
@@ -170,7 +170,7 @@ public class MAtmosUtility
      */
     public static String nameOf(Item item)
     {
-        return Item.itemRegistry.getNameForObject(item).toString();
+        return Item.REGISTRY.getNameForObject(item).toString();
     }
 
     public static boolean isSoundMasterEnabled()
@@ -336,7 +336,7 @@ public class MAtmosUtility
      */
     public static int legacyOf(ItemStack itemStack)
     {
-        return Item.itemRegistry.getIDForObject(itemStack.getItem());
+        return Item.REGISTRY.getIDForObject(itemStack.getItem());
     }
 
     /**
@@ -347,7 +347,7 @@ public class MAtmosUtility
      */
     public static int legacyOf(Block block)
     {
-        return Block.blockRegistry.getIDForObject(block);
+        return Block.REGISTRY.getIDForObject(block);
     }
 
     public static String sanitizeUniqueName(String name)

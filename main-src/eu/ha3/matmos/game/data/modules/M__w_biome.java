@@ -7,7 +7,7 @@ import eu.ha3.matmos.game.system.MAtMod;
 import eu.ha3.matmos.game.system.MAtmosUtility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 
 /*
@@ -31,8 +31,8 @@ public class M__w_biome extends ModuleProcessor implements Module
 		if (biomej <= -1)
 		{
 			//Solly edit - only calculate biome once
-			BiomeGenBase biome = calculateBiome();
-			setValue("id", BiomeGenBase.getIdForBiome(biome));
+			Biome biome = calculateBiome();
+			setValue("id", Biome.getIdForBiome(biome));
 			setValue("biome_name", biome.getBiomeName());
 		}
 		else
@@ -42,7 +42,7 @@ public class M__w_biome extends ModuleProcessor implements Module
 		}
 	}
 	
-	private BiomeGenBase calculateBiome()
+	private Biome calculateBiome()
 	{
 		Minecraft mc = Minecraft.getMinecraft();
 
