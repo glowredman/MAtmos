@@ -1,7 +1,7 @@
 package eu.ha3.matmos.game.gui;
 
 import eu.ha3.matmos.expansions.Expansion;
-import eu.ha3.matmos.game.system.MAtMod;
+import eu.ha3.matmos.game.mod.MAtMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;

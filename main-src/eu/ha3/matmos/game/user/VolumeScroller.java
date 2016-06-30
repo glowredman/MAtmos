@@ -1,6 +1,6 @@
 package eu.ha3.matmos.game.user;
 
-import eu.ha3.matmos.game.system.MAtMod;
+import eu.ha3.matmos.game.mod.MAtMod;
 import eu.ha3.matmos.game.system.MAtmosUtility;
 import eu.ha3.mc.convenience.Ha3Scroller;
 import net.minecraft.client.Minecraft;

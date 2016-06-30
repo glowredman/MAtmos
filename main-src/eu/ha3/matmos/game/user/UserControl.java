@@ -2,7 +2,7 @@ package eu.ha3.matmos.game.user;
 
 import eu.ha3.easy.TimeStatistic;
 import eu.ha3.matmos.game.gui.MAtGuiMenu;
-import eu.ha3.matmos.game.system.MAtMod;
+import eu.ha3.matmos.game.mod.MAtMod;
 import eu.ha3.matmos.game.system.MAtmosUtility;
 import eu.ha3.mc.convenience.Ha3HoldActions;
 import eu.ha3.mc.convenience.Ha3KeyHolding;

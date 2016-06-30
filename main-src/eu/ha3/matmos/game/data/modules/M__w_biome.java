@@ -3,7 +3,7 @@ package eu.ha3.matmos.game.data.modules;
 import eu.ha3.matmos.engine.core.interfaces.Data;
 import eu.ha3.matmos.game.data.abstractions.module.Module;
 import eu.ha3.matmos.game.data.abstractions.module.ModuleProcessor;
-import eu.ha3.matmos.game.system.MAtMod;
+import eu.ha3.matmos.game.mod.MAtMod;
 import eu.ha3.matmos.game.system.MAtmosUtility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;

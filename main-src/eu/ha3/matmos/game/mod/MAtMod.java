@@ -1,4 +1,4 @@
-package eu.ha3.matmos.game.system;
+package eu.ha3.matmos.game.mod;
 
 import com.google.common.base.Optional;
 import eu.ha3.easy.StopWatchStatistic;
@@ -6,6 +6,9 @@ import eu.ha3.easy.TimeStatistic;
 import eu.ha3.matmos.expansions.Expansion;
 import eu.ha3.matmos.expansions.Stable;
 import eu.ha3.matmos.expansions.volume.VolumeUpdatable;
+import eu.ha3.matmos.game.system.MAtmosUtility;
+import eu.ha3.matmos.game.system.Simulacrum;
+import eu.ha3.matmos.game.system.SoundAccessor;
 import eu.ha3.matmos.game.user.UserControl;
 import eu.ha3.matmos.game.user.VisualDebugger;
 import eu.ha3.matmos.log.MAtLog;
@@ -19,7 +22,6 @@ import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
 import eu.ha3.mc.quick.chat.Chatter;
 import eu.ha3.mc.quick.update.NotifiableHaddon;
-import eu.ha3.mc.quick.update.UpdateNotifier;
 import eu.ha3.util.property.simple.ConfigProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.SoundCategory;
@@ -43,16 +45,16 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 	private static final boolean _COMPILE_IS_UNSTABLE = true;
 	
 	// Identity
-	protected final String NAME = "MAtmos-UnofficialBeta";
-	protected final int VERSION = 30;
-	protected final String FOR = "1.9";
+	protected final String NAME = "MAtmos";
+	protected final int VERSION = 32;
+	protected final String FOR = "1.10";
 	protected final String ADDRESS = "http://matmos.ha3.eu";
-	protected final Identity identity = new HaddonIdentity(this.NAME, this.VERSION, this.FOR, this.ADDRESS);
+	protected final Identity identity = new HaddonIdentity(NAME, VERSION, FOR, ADDRESS);
 	
 	// NotifiableHaddon and UpdateNotifier
 	private final ConfigProperty config = new ConfigProperty();
 	private final Chatter chatter = new Chatter(this, "<MAtmos> ");
-	private final UpdateNotifier updateNotifier = new UpdateNotifier(this, "http://q.mc.ha3.eu/query/matmos-main-version-vn.json?ver=%d");
+	//private final UpdateNotifier updateNotifier = new UpdateNotifier(this, "http://q.mc.ha3.eu/query/matmos-main-version-vn.json?ver=%d");
 	
 	// State
 	private boolean isListenerInstalled; 
@@ -93,7 +95,7 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 		this.userControl = new UserControl(this);
 
 		// Create default configuration
-		this.updateNotifier.fillDefaults(this.config);
+		//this.updateNotifier.fillDefaults(this.config);
 		this.config.setProperty("world.height", 256);
 		this.config.setProperty("dump.sheets.enabled", false);
 		this.config.setProperty("start.enabled", true);
@@ -124,7 +126,7 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 		
 		resetAmbientVolume();
 		
-		this.updateNotifier.loadConfig(this.config);
+		//this.updateNotifier.loadConfig(this.config);
 		
 		// This registers stuff to Minecraft (key bindings...)
 		this.userControl.load();
@@ -271,7 +273,7 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 		{
 			this.hasFirstTickPassed = true;
 			
-			this.updateNotifier.attempt();
+			//this.updateNotifier.attempt();
 			
 			if (MAtMod._COMPILE_IS_UNSTABLE)
 			{

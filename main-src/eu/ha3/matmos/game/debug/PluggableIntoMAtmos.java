@@ -3,7 +3,7 @@ package eu.ha3.matmos.game.debug;
 import com.google.common.base.Optional;
 import eu.ha3.matmos.expansions.Expansion;
 import eu.ha3.matmos.expansions.debugunit.FolderResourcePackEditableEDU;
-import eu.ha3.matmos.game.system.MAtMod;
+import eu.ha3.matmos.game.mod.MAtMod;
 import eu.ha3.matmos.pluggable.PluggableIntoMinecraft;
 import java.io.File;
 import net.minecraft.util.text.TextFormatting;

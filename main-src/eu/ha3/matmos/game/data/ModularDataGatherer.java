@@ -14,8 +14,8 @@ import eu.ha3.matmos.game.data.abstractions.module.ProcessorModel;
 import eu.ha3.matmos.game.data.abstractions.scanner.Progress;
 import eu.ha3.matmos.game.data.abstractions.scanner.ScannerModule;
 import eu.ha3.matmos.game.data.modules.*;
+import eu.ha3.matmos.game.mod.MAtMod;
 import eu.ha3.matmos.game.system.IDontKnowHowToCode;
-import eu.ha3.matmos.game.system.MAtMod;
 import eu.ha3.matmos.log.MAtLog;
 
 import java.util.*;

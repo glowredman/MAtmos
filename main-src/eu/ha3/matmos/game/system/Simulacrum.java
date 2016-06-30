@@ -5,6 +5,7 @@ import eu.ha3.matmos.expansions.Expansion;
 import eu.ha3.matmos.expansions.ExpansionManager;
 import eu.ha3.matmos.expansions.volume.VolumeUpdatable;
 import eu.ha3.matmos.game.data.ModularDataGatherer;
+import eu.ha3.matmos.game.mod.MAtMod;
 import eu.ha3.matmos.game.user.VisualDebugger;
 import eu.ha3.matmos.log.MAtLog;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
