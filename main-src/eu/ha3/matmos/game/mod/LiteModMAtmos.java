@@ -6,10 +6,8 @@ import eu.ha3.mc.haddon.litemod.TempLiteKey;
 --filenotes-placeholder
 */
 
-public class LiteModMAtmos extends TempLiteKey
-{
-	public LiteModMAtmos()
-	{
+public class LiteModMAtmos extends TempLiteKey {
+	public LiteModMAtmos() {
 		super(new MAtMod());
 	}
 }
