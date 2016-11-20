@@ -112,7 +112,7 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 		
 		// Load configuration from source
 		try {
-			config.setSource(new File(util().getModsFolder(), "matmos/userconfig.cfg").getCanonicalPath());
+			config.setSource(new File(util().getMcFolder(), "matmos/userconfig.cfg").getCanonicalPath());
 			config.load();
 		}
 		catch (IOException e) {
