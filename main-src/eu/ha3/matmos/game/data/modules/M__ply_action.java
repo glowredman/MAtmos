@@ -21,7 +21,7 @@ public class M__ply_action extends ModuleProcessor implements Module
 	protected void doProcess()
 	{
         // dag edit EntityClientPlayerMP -> EntityPlayerSP
-        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayerSP player = Minecraft.getMinecraft().player;
 		
 		setValue("swing_progress16", (int) Math.floor(player.swingProgress * 16));
 		setValue("swinging", player.swingProgress != 0);

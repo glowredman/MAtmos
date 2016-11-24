@@ -51,7 +51,7 @@ public class ScanVolumetric implements Progress
 		if (opspercallIn <= 0)
 			throw new IllegalArgumentException();
 		
-		int worldHeight = Minecraft.getMinecraft().theWorld.getHeight();
+		int worldHeight = Minecraft.getMinecraft().world.getHeight();
 		
 		if (ysizeIn > worldHeight)
 		{

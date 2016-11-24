@@ -48,7 +48,7 @@ public class SoundHelper implements SoundCapabilities
 			return;
 		
 		// Play the sound 2048 blocks above the player to keep support of mono sounds
-		Entity e = Minecraft.getMinecraft().thePlayer;
+		Entity e = Minecraft.getMinecraft().player;
 		playUnattenuatedSound(e.posX, e.posY + 2048, e.posZ, event, volume * this.volumeModulator, pitch);
 	}
 	

@@ -69,7 +69,7 @@ public class S__ply_hitscan extends ModuleProcessor implements Module
         // dag edit -> getBlockPos().get..()
 		setValue(
 			"entity_id",
-			mc.objectMouseOver.typeOfHit == Type.ENTITY ? EntityList
-				.getEntityID(mc.objectMouseOver.entityHit) : MODULE_CONSTANTS.NO_ENTITY);
+			mc.objectMouseOver.typeOfHit == Type.ENTITY ? /*EntityList*/
+				/*.getEntityID(*/mc.objectMouseOver.entityHit.getEntityId()/*)*/ : MODULE_CONSTANTS.NO_ENTITY);
 	}
 }

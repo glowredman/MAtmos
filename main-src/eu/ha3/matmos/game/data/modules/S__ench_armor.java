@@ -22,6 +22,6 @@ public class S__ench_armor extends AbstractEnchantmentModule
 	@Override
 	protected ItemStack getItem(EntityPlayer player)
 	{
-		return player.inventory.armorInventory[this.zeronth];
+		return player.inventory.armorInventory.get(zeronth);
 	}
 }

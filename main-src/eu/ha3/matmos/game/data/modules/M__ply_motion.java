@@ -21,7 +21,7 @@ public class M__ply_motion extends ModuleProcessor implements Module
 	protected void doProcess()
 	{
         // dag edit EntityClientPlayerMP -> EntityPlayerSP
-		EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayerSP player = Minecraft.getMinecraft().player;
 		
 		int mxx = (int) Math.round(player.motionX * 1000);
 		int mzz = (int) Math.round(player.motionZ * 1000);

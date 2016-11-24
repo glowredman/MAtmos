@@ -25,22 +25,22 @@ public class MAtmosUtility
 
     public static int getPlayerX()
     {
-        return (int) Math.floor(Minecraft.getMinecraft().thePlayer.posX);
+        return (int) Math.floor(Minecraft.getMinecraft().player.posX);
     }
 
     public static int getPlayerY()
     {
-        return (int) Math.floor(Minecraft.getMinecraft().thePlayer.posY);
+        return (int) Math.floor(Minecraft.getMinecraft().player.posY);
     }
 
     public static int getPlayerZ()
     {
-        return (int) Math.floor(Minecraft.getMinecraft().thePlayer.posZ);
+        return (int) Math.floor(Minecraft.getMinecraft().player.posZ);
     }
 
     public static boolean isUnderwaterAnyGamemode()
     {
-        return Minecraft.getMinecraft().thePlayer.isInsideOfMaterial(Material.WATER);
+        return Minecraft.getMinecraft().player.isInsideOfMaterial(Material.WATER);
     }
 
     /**
@@ -52,7 +52,7 @@ public class MAtmosUtility
      */
     public static boolean isWithinBounds(int y)
     {
-        return y >= 0 && y < Minecraft.getMinecraft().theWorld.getHeight();
+        return y >= 0 && y < Minecraft.getMinecraft().world.getHeight();
     }
 
     /**
@@ -67,8 +67,8 @@ public class MAtmosUtility
         if (y < 0)
             return 0;
 
-        if (y >= Minecraft.getMinecraft().theWorld.getHeight())
-            return Minecraft.getMinecraft().theWorld.getHeight() - 1;
+        if (y >= Minecraft.getMinecraft().world.getHeight())
+            return Minecraft.getMinecraft().world.getHeight() - 1;
 
         return y;
     }
@@ -84,7 +84,7 @@ public class MAtmosUtility
      */
     public static Block getBlockAt(int x, int y, int z)
     {
-        return getBlockAt(Minecraft.getMinecraft().theWorld, x, y, z);
+        return getBlockAt(Minecraft.getMinecraft().world, x, y, z);
     }
 
     /**
@@ -104,7 +104,7 @@ public class MAtmosUtility
         if (!isWithinBounds(y))
             return defaultIfFail;
 
-        return getNameAt(Minecraft.getMinecraft().theWorld, x, y, z);
+        return getNameAt(Minecraft.getMinecraft().world, x, y, z);
     }
 
     /**
@@ -237,7 +237,7 @@ public class MAtmosUtility
             return defaultIfFail;
 
         Block block = getBlockAt(x, y, z);
-        IBlockState blockState = Minecraft.getMinecraft().theWorld.getBlockState(position.of(x, y, z));
+        IBlockState blockState = Minecraft.getMinecraft().world.getBlockState(position.of(x, y, z));
         return asPowerMeta(block, block.getMetaFromState(blockState));
     }
 
@@ -306,7 +306,7 @@ public class MAtmosUtility
         if (!isWithinBounds(y))
             return defaultIfFail;
 
-        IBlockState blockState = Minecraft.getMinecraft().theWorld.getBlockState(position.of(x, y, z));
+        IBlockState blockState = Minecraft.getMinecraft().world.getBlockState(position.of(x, y, z));
         return blockState.getBlock().getMetaFromState(blockState);
     }
 
@@ -324,7 +324,7 @@ public class MAtmosUtility
         if (!isWithinBounds(y))
             return defaultIfFail;
 
-        IBlockState blockState = Minecraft.getMinecraft().theWorld.getBlockState(position.of(x, y, z));
+        IBlockState blockState = Minecraft.getMinecraft().world.getBlockState(position.of(x, y, z));
         return Integer.toString(blockState.getBlock().getMetaFromState(blockState));
     }
 

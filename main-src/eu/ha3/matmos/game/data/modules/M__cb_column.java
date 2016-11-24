@@ -31,7 +31,7 @@ public class M__cb_column extends ModuleProcessor implements Module
 	@Override
 	protected void doProcess()
 	{
-		World w = Minecraft.getMinecraft().theWorld;
+		World w = Minecraft.getMinecraft().world;
 
         BlockPos pos = MAtmosUtility.getPlayerPosition();
         BlockPos topMostBlock = w.getTopSolidOrLiquidBlock(pos);

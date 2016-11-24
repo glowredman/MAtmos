@@ -117,19 +117,19 @@ public class S__detect implements Processor, PassOnceModule
 		
 		Minecraft mc = Minecraft.getMinecraft();
 		
-		double x = mc.thePlayer.posX;
-		double y = mc.thePlayer.posY;
-		double z = mc.thePlayer.posZ;
+		double x = mc.player.posX;
+		double y = mc.player.posY;
+		double z = mc.player.posZ;
 
         // dag edit bbox.setBounds(..) -> bbox = AxisAlignedBB.fromBounds(..) ?
         this.bbox = new AxisAlignedBB(x - this.maxel, y - this.maxel, z - this.maxel, x + this.maxel, y
             + this.maxel, z + this.maxel);
 		
-		List<Entity> entityList = mc.theWorld.getEntitiesWithinAABB(Entity.class, this.bbox);
+		List<Entity> entityList = mc.world.getEntitiesWithinAABB(Entity.class, this.bbox);
 		
 		for (Entity e : entityList)
 		{
-			if (e != null && e != mc.thePlayer)
+			if (e != null && e != mc.player)
 			{
 				double dx = e.posX - x;
 				double dy = e.posY - y;
@@ -143,7 +143,7 @@ public class S__detect implements Processor, PassOnceModule
 				}
 				else
 				{
-					int entityID = EntityList.getEntityID(e);
+					int entityID = e.getEntityId();//EntityList.getEntityID(e);
 					if (entityID != 0)
 					{
 						reportDistance(entityID, distance);
@@ -158,7 +158,7 @@ public class S__detect implements Processor, PassOnceModule
 					{
 						// If something is within 1 meter, it certainly also is within 5 meters:
 						// expand now and exit the loop.
-						int eID = e instanceof EntityPlayer ? 0 : EntityList.getEntityID(e);
+						int eID = e instanceof EntityPlayer ? 0 : e.getEntityId();//EntityList.getEntityID(e);
 						if (eID >= 0)
 						{
 							for (int above = i; above < this.radiusValuesSorted.length; above++)

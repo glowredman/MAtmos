@@ -21,7 +21,7 @@ public class L__legacy_column extends ModuleProcessor implements Module
 	@Override
 	protected void doProcess()
 	{
-		EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayerSP player = Minecraft.getMinecraft().player;
 		
 		int x = (int) Math.floor(player.posX);
 		int y = (int) Math.floor(player.posY);

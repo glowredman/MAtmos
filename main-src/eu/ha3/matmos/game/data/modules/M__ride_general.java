@@ -27,7 +27,7 @@ public class M__ride_general extends ModuleProcessor implements Module
 	@Override
 	protected void doProcess()
 	{
-		Entity ride = Minecraft.getMinecraft().thePlayer.getRidingEntity();
+		Entity ride = Minecraft.getMinecraft().player.getRidingEntity();
 		
 		// http://stackoverflow.com/questions/2950319/is-null-check-needed-before-calling-instanceof
 		
@@ -48,6 +48,6 @@ public class M__ride_general extends ModuleProcessor implements Module
 		
 		// All null unsafe operations go here
 		setValue("burning", ride.isBurning());
-		setValue("entity_id", EntityList.getEntityID(ride));
+		setValue("entity_id", ride.getEntityId()/*EntityList.getEntityID(ride)*/);
 	}
 }

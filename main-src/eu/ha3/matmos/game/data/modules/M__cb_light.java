@@ -23,7 +23,7 @@ public class M__cb_light extends ModuleProcessor implements Module
 	@Override
 	protected void doProcess()
 	{
-		World w = Minecraft.getMinecraft().theWorld;
+		World w = Minecraft.getMinecraft().world;
         BlockPos playerPos = MAtmosUtility.getPlayerPosition();
 
         /* dag edits

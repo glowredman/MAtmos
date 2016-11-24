@@ -43,7 +43,7 @@ public class VisualDebugger implements SupportsFrameEvents
 	
 	public List<String> obtainSheetNamesCopy()
 	{
-		List<String> sheetNames = new ArrayList<String>(this.dataGatherer.getData().getSheetNames());
+		List<String> sheetNames = new ArrayList<>(this.dataGatherer.getData().getSheetNames());
 		Collections.sort(sheetNames);
 		return sheetNames;
 	}
@@ -118,7 +118,7 @@ public class VisualDebugger implements SupportsFrameEvents
 		
 		final int ALL = 50;
 		
-		List<String> sort = new ArrayList<String>(sheet.keySet());
+		List<String> sort = new ArrayList<>(sheet.keySet());
 		
 		if (this.scanDebug.startsWith("scan_"))
 		{
@@ -150,7 +150,7 @@ public class VisualDebugger implements SupportsFrameEvents
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				e.printStackTrace(System.out);
 			}
 		}
 		
@@ -178,7 +178,7 @@ public class VisualDebugger implements SupportsFrameEvents
 			
 			fontRenderer.drawStringWithShadow(
 				"Scan ["
-					+ mc.theWorld.getHeight() + "]: " + StringUtils.repeat("|", (int) (100 * progress)) + " ("
+					+ mc.world.getHeight() + "]: " + StringUtils.repeat("|", (int) (100 * progress)) + " ("
 					+ (int) (progress * 100) + "%)", 20, 2 + 9 * lineNumber, 0xFFFFCC);
 		}
 		
@@ -247,9 +247,16 @@ public class VisualDebugger implements SupportsFrameEvents
 					{
 						if (!index.equals("0"))
 						{
-							fontRenderer.drawStringWithShadow(
-								index + " (" + EntityList.getEntityStringFromClass(EntityList.getClassFromID(Integer.parseInt(index))) + "): " + val,
-								leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
+							fontRenderer.drawStringWithShadow( 
+									index
+										+ " ("
+										+ "TODO: FIX NAME"
+										//+ EntityList.getEntityStringFromClass(EntityList.getClassFromID(Integer.parseInt(index))) 
+										+ "): " 
+										+ val,
+									leftAlign,
+									2 + 9 * lineNumber,
+									0xFFFFFF );
 						}
 						else
 						{
@@ -283,7 +290,6 @@ public class VisualDebugger implements SupportsFrameEvents
 	public void toggleDeltas()
 	{
 		this.deltas = !this.deltas;
-		
 	}
 	
 	private enum DebugMode

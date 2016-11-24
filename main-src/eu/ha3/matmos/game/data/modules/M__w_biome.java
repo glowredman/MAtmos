@@ -49,8 +49,8 @@ public class M__w_biome extends ModuleProcessor implements Module
         // dag edit - use BlockPos
         BlockPos playerPos = MAtmosUtility.getPlayerPosition();
 
-		Chunk chunk = mc.theWorld.getChunkFromBlockCoords(playerPos);
+		Chunk chunk = mc.world.getChunkFromBlockCoords(playerPos);
         // dag edit getBiomeGenForWorldCoords(..) -> getBiome(..)
-		return chunk.getBiome(playerPos, mc.theWorld.getBiomeProvider());
+		return chunk.getBiome(playerPos, mc.world.getBiomeProvider());
 	}
 }

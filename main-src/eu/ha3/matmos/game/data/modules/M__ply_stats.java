@@ -21,7 +21,7 @@ public class M__ply_stats extends ModuleProcessor implements Module
 	protected void doProcess()
 	{
         // dag edit EntityClientPlayerMP -> EntityPlayerSP
-        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayerSP player = Minecraft.getMinecraft().player;
 		
 		setValue("health1k", (int) (player.getHealth() * 1000));
 		setValue("oxygen", player.getAir());

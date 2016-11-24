@@ -37,7 +37,7 @@ public abstract class AbstractEnchantmentModule extends ModuleProcessor implemen
 	@Override
 	protected void doProcess()
 	{
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		ItemStack item = getItem(player);
 		
 		for (String i : this.oldThings)

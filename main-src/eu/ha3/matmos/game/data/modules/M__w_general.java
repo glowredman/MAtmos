@@ -22,8 +22,8 @@ public class M__w_general extends ModuleProcessor implements Module
 	@Override
 	protected void doProcess()
 	{
-		World w = Minecraft.getMinecraft().theWorld;
-		EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+		World w = Minecraft.getMinecraft().world;
+		EntityPlayerSP player = Minecraft.getMinecraft().player;
 		WorldInfo info = w.getWorldInfo();
 
 		setValue("time_modulo24k", (int) (info.getWorldTime() % 24000L));
