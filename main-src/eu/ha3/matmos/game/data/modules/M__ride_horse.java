@@ -22,7 +22,7 @@ public class M__ride_horse extends ModuleProcessor implements Module
 	@Override
 	protected void doProcess()
 	{
-		Entity xride = Minecraft.getMinecraft().thePlayer.getRidingEntity();
+		Entity xride = Minecraft.getMinecraft().player.getRidingEntity();
 		
 		if (xride == null || !(xride instanceof EntityHorse))
 		{
@@ -54,10 +54,10 @@ public class M__ride_horse extends ModuleProcessor implements Module
 		setValue("rearing", ride.isRearing());
 		setValue("saddled", ride.isHorseSaddled());
 		setValue("leashed", ride.getLeashed());
-		setValue("chested", ride.isChested());
+		//setValue("chested", ride.isChested()); TODO: find out usage
 		setValue("tame", ride.isTame());
 		
-		setValue("type", ride.getType().isUndead());
+		setValue("type", !ride.isDead/*getType().isUndead()*/);
 		setValue("variant", ride.getHorseVariant());
 		
 		setValue("name_tag", ride.getCustomNameTag());
@@ -91,7 +91,7 @@ public class M__ride_horse extends ModuleProcessor implements Module
 		setValue("temper", ride.getTemper());
         // dag edit func_152119_ch() -> getOwnerId()
 		setValue("owner_uuid", ride.getOwnerUniqueId().toString());
-		setValue("reproduced", ride.getHasReproduced());
+		//setValue("reproduced", ride.getHasReproduced()); TODO: find out usage
         // dag edit func_110205_ce() -> isBreeding() [this is probably wrong, not sure what 'bred' represents]
         setValue("bred", ride.isBreeding());
 	}

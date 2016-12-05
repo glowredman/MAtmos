@@ -46,7 +46,7 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
 	@Override
 	public void update()
 	{
-		Entity e = Minecraft.getMinecraft().thePlayer;
+		Entity e = Minecraft.getMinecraft().player;
 		
 		this.xPosF = (float) e.posX;
 		this.yPosF = (float) e.posY;

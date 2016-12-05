@@ -38,7 +38,7 @@ public abstract class AbstractPotionQualityModule extends ModuleProcessor implem
 	@Override
 	protected void doProcess()
 	{
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		
 		for (String i : this.oldThings)
 		{

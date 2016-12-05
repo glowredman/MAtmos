@@ -9,12 +9,11 @@ import eu.ha3.matmos.engine.core.visualize.Visualized;
 import eu.ha3.matmos.game.mod.MAtMod;
 import eu.ha3.matmos.game.system.IDontKnowHowToCode;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
+import java.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.opengl.GL11;
-
-import java.util.*;
 
 /*
 --filenotes-placeholder
@@ -37,9 +36,8 @@ public class VisualExpansionDebugging implements SupportsFrameEvents
 	public void onFrame(float semi)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-		int fac = new ScaledResolution(mc).getScaleFactor();
-		
-		float scale = 1f / fac;
+		int fac = new ScaledResolution(mc).getScaleFactor();		
+		float scale = 2f / fac;
 		GL11.glPushMatrix();
 		GL11.glScalef(scale, scale, 1.0F);
 		
@@ -104,8 +102,7 @@ public class VisualExpansionDebugging implements SupportsFrameEvents
 			int yRapplied = yR + this.GAP * reliables.get(dependency);
 			
 			// Equivalent of isOn = isActive; if (!right) isOn = !isOn;
-			boolean isOn = reliables.visualize(dependency).isActive() == right;
-			
+			boolean isOn = reliables.visualize(dependency).isActive() == right;			
 		}
 	}
 	

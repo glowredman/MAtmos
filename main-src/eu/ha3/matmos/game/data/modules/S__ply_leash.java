@@ -27,8 +27,8 @@ public class S__ply_leash extends ModuleProcessor implements Module
 	protected void doProcess()
 	{
         // dag edit EntityClientPlayerMP -> EntityPlayerSP
-		EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
-		World w = Minecraft.getMinecraft().theWorld;
+		EntityPlayerSP player = Minecraft.getMinecraft().player;
+		World w = Minecraft.getMinecraft().world;
 		
 		final int distance = 20;
 		int count = 0;

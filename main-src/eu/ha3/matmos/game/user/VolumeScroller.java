@@ -112,7 +112,7 @@ public class VolumeScroller extends Ha3Scroller
 			// Calculate pitch
 			float res = (float) Math.pow(2, -Math.floor(getPitch() / caps) / 12);
 			
-			EntityPlayer ply = Minecraft.getMinecraft().thePlayer;
+			EntityPlayer ply = Minecraft.getMinecraft().player;
 			float posX = (float) ply.posX;
 			float posY = (float) ply.posY;
 			float posZ = (float) ply.posZ;

@@ -7,19 +7,18 @@ import eu.ha3.matmos.game.data.abstractions.scanner.Progress;
 import eu.ha3.matmos.game.data.abstractions.scanner.ScannerModule;
 import eu.ha3.matmos.game.mod.MAtMod;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 /*
 --filenotes-placeholder
@@ -43,7 +42,7 @@ public class VisualDebugger implements SupportsFrameEvents
 	
 	public List<String> obtainSheetNamesCopy()
 	{
-		List<String> sheetNames = new ArrayList<String>(this.dataGatherer.getData().getSheetNames());
+		List<String> sheetNames = new ArrayList<>(this.dataGatherer.getData().getSheetNames());
 		Collections.sort(sheetNames);
 		return sheetNames;
 	}
@@ -107,50 +106,46 @@ public class VisualDebugger implements SupportsFrameEvents
 		}
 	}
 	
-	private void debugScanWithSheet(final Sheet sheet, boolean isDeltaPass)
+	private void debugScanWithSheet( final Sheet sheet, boolean isDeltaPass )
 	{
 		Minecraft mc = Minecraft.getMinecraft();
 		int fac = new ScaledResolution(mc).getScaleFactor();
-		
-		float scale = 1f / fac;
+		float scale = 2f / fac;
 		GL11.glPushMatrix();
 		GL11.glScalef(scale, scale, 1.0F);
 		
 		final int ALL = 50;
 		
-		List<String> sort = new ArrayList<String>(sheet.keySet());
+		List<String> sort = new ArrayList<>(sheet.keySet());
 		
-		if (this.scanDebug.startsWith("scan_"))
+		if ( scanDebug.startsWith("scan_") )
 		{
 			try
 			{
-				Collections.sort(sort, new Comparator<String>() {
-					@Override
-					public int compare(String o1, String o2)
-					{
-						Long l1 = LongFloatSimplificator.longOf(sheet.get(o1));
-						Long l2 = LongFloatSimplificator.longOf(sheet.get(o2));
-						
-						if (l1 == null && l2 == null)
-							return o1.compareTo(o2);
-						else if (l1 == null)
-							return -1;
-						else if (l2 == null)
-							return 1;
-						
-						if (l1 > l2)
-							return 1;
-						else if (l1 < l2)
-							return -1;
-						else
-							return o1.compareTo(o2);
-					}
+				Collections.sort(sort, (String o1, String o2) -> 
+				{
+					Long l1 = LongFloatSimplificator.longOf(sheet.get(o1));
+					Long l2 = LongFloatSimplificator.longOf(sheet.get(o2));
+					
+					if (l1 == null && l2 == null)
+						return o1.compareTo(o2);
+					else if (l1 == null)
+						return -1;
+					else if (l2 == null)
+						return 1;
+					
+					if (l1 > l2)
+						return 1;
+					else if (l1 < l2)
+						return -1;
+					else
+						return o1.compareTo(o2);
 				});
 				Collections.reverse(sort);
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				e.printStackTrace(System.out);
 			}
 		}
 		
@@ -178,7 +173,7 @@ public class VisualDebugger implements SupportsFrameEvents
 			
 			fontRenderer.drawStringWithShadow(
 				"Scan ["
-					+ mc.theWorld.getHeight() + "]: " + StringUtils.repeat("|", (int) (100 * progress)) + " ("
+					+ mc.world.getHeight() + "]: " + StringUtils.repeat("|", (int) (100 * progress)) + " ("
 					+ (int) (progress * 100) + "%)", 20, 2 + 9 * lineNumber, 0xFFFFCC);
 		}
 		
@@ -240,16 +235,28 @@ public class VisualDebugger implements SupportsFrameEvents
 						}
 					}
 				}
-				else if (this.scanDebug.startsWith("detect_"))
+				else if ( scanDebug.startsWith("detect_") )
 				{
 					String val = sheet.get(index);
-					if (!val.equals("0") && !val.equals(Integer.toString(Integer.MAX_VALUE)))
+					if ( !val.equals("0") && !val.equals(Integer.toString(Integer.MAX_VALUE)) )
 					{
-						if (!index.equals("0"))
+						if ( !index.equals("0") )
 						{
-							fontRenderer.drawStringWithShadow(
-								index + " (" + EntityList.getEntityStringFromClass(EntityList.getClassFromID(Integer.parseInt(index))) + "): " + val,
-								leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
+							Entity ent = mc.world.getEntityByID(Integer.parseInt(index));
+							String entName = ( ent == null ? "Unknown entity: ".concat(index) : 
+									EntityList.getEntityString(ent)
+											.concat(": ")
+											.concat(ent.getName()) );
+							
+							fontRenderer.drawStringWithShadow( 
+									index
+										+ " ("
+										+ entName
+										+ "): " 
+										+ val,
+									leftAlign,
+									2 + 9 * lineNumber,
+									0xFFFFFF );
 						}
 						else
 						{
@@ -283,12 +290,10 @@ public class VisualDebugger implements SupportsFrameEvents
 	public void toggleDeltas()
 	{
 		this.deltas = !this.deltas;
-		
 	}
 	
 	private enum DebugMode
 	{
 		NONE, SCAN, EXPANSION;
-	}
-	
+	}	
 }

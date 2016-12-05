@@ -148,7 +148,7 @@ public class MAtGuiExpansionDetails extends GuiScreen
 						}
 						catch (Exception e)
 						{
-							e.printStackTrace();
+							e.printStackTrace(System.out);
 							IDontKnowHowToCode.whoops__printExceptionToChat(this.mod.getChatter(), e, this);
 						}
 					}

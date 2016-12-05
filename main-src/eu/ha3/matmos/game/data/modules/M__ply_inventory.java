@@ -21,7 +21,7 @@ public class M__ply_inventory extends ModuleProcessor implements Module
     protected void doProcess()
     {
         // dag edit EntityClientPlayerMP -> EntityPlayerSP
-        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayerSP player = Minecraft.getMinecraft().player;
 
         setValue("held_slot", player.inventory.currentItem);
         ItemProcessorHelper.setValue(this, player.inventory.getCurrentItem(), "current");

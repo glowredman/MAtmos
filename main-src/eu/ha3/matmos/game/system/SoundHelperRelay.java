@@ -40,7 +40,7 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay
 	{
 		// XXX 2014-01-12 TEMPORARY: USE MONO-STEREO
 		//playStereo(this.paths.get(path), volume, pitch);
-		Entity e = Minecraft.getMinecraft().thePlayer;
+		Entity e = Minecraft.getMinecraft().player;
 		if (meta <= 0)
 		{
 			playStereo(this.paths.get(path), volume, pitch);

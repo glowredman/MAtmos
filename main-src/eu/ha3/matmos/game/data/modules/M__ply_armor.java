@@ -22,11 +22,11 @@ public class M__ply_armor extends ModuleProcessor implements Module
 	protected void doProcess()
 	{
         // dag edit EntityClientPlayerMP -> EntityPlayerSP
-		EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayerSP player = Minecraft.getMinecraft().player;
 		
 		for (int i = 0; i < 4; i++)
 		{
-			ItemStack item = player.inventory.armorInventory[i];
+			ItemStack item = player.inventory.armorInventory.get(i);
 			ItemProcessorHelper.setValue(this, item, Integer.toString(i));
 		}
 	}

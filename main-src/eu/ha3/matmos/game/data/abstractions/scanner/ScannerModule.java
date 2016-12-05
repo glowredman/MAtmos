@@ -148,7 +148,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 		int y = MAtmosUtility.clampToBounds(MAtmosUtility.getPlayerY());
 		int z = MAtmosUtility.getPlayerZ();
 		
-		if (Minecraft.getMinecraft().thePlayer.dimension != this.dimension)
+		if (Minecraft.getMinecraft().player.dimension != this.dimension)
 		{
 			reboot();
 			return true;
@@ -174,7 +174,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 		this.ticksSinceBoot = 0;
 		this.firstScan = true;
 		
-		this.dimension = Minecraft.getMinecraft().thePlayer.dimension;
+		this.dimension = Minecraft.getMinecraft().player.dimension;
 		this.xx = MAtmosUtility.getPlayerX();
 		this.yy = MAtmosUtility.clampToBounds(MAtmosUtility.getPlayerY());
 		this.zz = MAtmosUtility.getPlayerZ();

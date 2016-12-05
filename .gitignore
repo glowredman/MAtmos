@@ -8,3 +8,4 @@ build/
 jars/
 *.iml
 *.launch
+/.nb-gradle/
