@@ -10,10 +10,6 @@ import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.ResourcePackRepository;
 import net.minecraft.util.ResourceLocation;
 
-/*
- * --filenotes-placeholder
- */
-
 public class MAtResourcePackDealer {
     private final ResourceLocation mat_pack = new ResourceLocation("matmos", "mat_pack.json");
     private final ResourceLocation expansions = new ResourceLocation("matmos", "expansions.json");

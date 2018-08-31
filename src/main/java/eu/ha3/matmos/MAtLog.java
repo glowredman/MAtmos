@@ -1,5 +1,9 @@
 package eu.ha3.matmos;
 
+/**
+ * @deprecated Minecraft has log4j. Use that.
+ */
+@Deprecated
 public class MAtLog {
     private static final String modName = "MAtmos";
 

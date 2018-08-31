@@ -1,7 +1,6 @@
 package eu.ha3.matmos.data;
 
-/* x-placeholder */
-
+@FunctionalInterface
 public interface Processor {
     void process();
 }

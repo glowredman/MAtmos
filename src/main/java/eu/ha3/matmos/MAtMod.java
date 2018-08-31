@@ -43,8 +43,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import paulscode.sound.SoundSystem;
 
-/* x-placeholder */
-
 public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, NotifiableHaddon, IResourceManagerReloadListener, SoundAccessor, Stable {
     private static final boolean _COMPILE_IS_UNSTABLE = true;
 
@@ -197,7 +195,6 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void onFrame(float semi) {
-        //Solly edit - only play sounds whilst the game is running (and not paused)
         if (!isActivated() || util().isGamePaused()) {
             return;
         }

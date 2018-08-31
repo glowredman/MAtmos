@@ -11,8 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.util.ResourceLocation;
 
-/* x-placeholder */
-
 public class Event extends Component implements EventInterface {
     private static Random random = new Random();
 

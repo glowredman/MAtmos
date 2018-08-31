@@ -16,7 +16,7 @@ import com.google.gson.JsonParser;
 
 import eu.ha3.matmos.MAtLog;
 import eu.ha3.matmos.MAtResourcePackDealer;
-import eu.ha3.matmos.core.expansion.agents.JasonLoadingAgent;
+import eu.ha3.matmos.core.expansion.agents.JsonLoadingAgent;
 import eu.ha3.matmos.core.expansion.agents.LegacyXMLLoadingAgent;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sound.SoundAccessor;
@@ -106,7 +106,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
             }
             expansion.setLoadingAgent(new LegacyXMLLoadingAgent(new File(folder, filename)));
         } else {
-            expansion.setLoadingAgent(new JasonLoadingAgent());
+            expansion.setLoadingAgent(new JsonLoadingAgent());
         }
 
         expansion.updateVolume();

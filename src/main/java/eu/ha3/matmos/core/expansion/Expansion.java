@@ -20,7 +20,7 @@ import eu.ha3.matmos.core.Simulated;
 import eu.ha3.matmos.core.SystemClock;
 import eu.ha3.matmos.core.event.EventInterface;
 import eu.ha3.matmos.core.expansion.agents.LoadingAgent;
-import eu.ha3.matmos.core.expansion.agents.RawJasonLoadingAgent;
+import eu.ha3.matmos.core.expansion.agents.RawJsonLoadingAgent;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sound.SoundAccessor;
 import eu.ha3.matmos.core.sound.SoundHelperRelay;
@@ -98,7 +98,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
     }
 
     public void pushDebugJasonAndRefreshKnowledge(String jasonString) {
-        jasonDebugPush = new RawJasonLoadingAgent(jasonString);
+        jasonDebugPush = new RawJsonLoadingAgent(jasonString);
         refreshKnowledge();
     }
 

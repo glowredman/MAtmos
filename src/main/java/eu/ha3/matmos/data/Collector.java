@@ -2,10 +2,6 @@ package eu.ha3.matmos.data;
 
 import java.util.Set;
 
-/*
- * --filenotes-placeholder
- */
-
 public interface Collector {
 
     void addModuleStack(String name, Set<String> requiredModules);
@@ -14,9 +10,6 @@ public interface Collector {
 
     /**
      * Tells if this collector requires a certain module.
-     *
-     * @param  moduleName
-     * @return
      */
     boolean requires(String moduleName);
 }
