@@ -13,7 +13,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-public class MAtGuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
+public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
     final protected MAtMod mod;
 
     final protected int maxBiomes = calculateMaxBiomes();
@@ -21,7 +21,7 @@ public class MAtGuiBiomeSlider implements HDisplayStringProvider, HSliderListene
 
     private List<Integer> validBiomes = new ArrayList<Integer>();
 
-    public MAtGuiBiomeSlider(MAtMod mod, int define) {
+    public GuiBiomeSlider(MAtMod mod, int define) {
         this.mod = mod;
         this.definedBiomeID = define;
 

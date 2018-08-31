@@ -15,7 +15,7 @@ import net.minecraft.util.text.TextFormatting;
 import java.io.IOException;
 import java.util.*;
 
-public class MAtGuiMenu extends GuiScreen {
+public class GuiMatMenu extends GuiScreen {
     private GuiScreen parentScreen;
 
     private MAtMod mod;
@@ -30,11 +30,11 @@ public class MAtGuiMenu extends GuiScreen {
     // Keep the active page in memory. Globally... (herpderp)
     private static int in_memory_page = 0;
 
-    public MAtGuiMenu(GuiScreen par1GuiScreen, MAtMod matmos) {
+    public GuiMatMenu(GuiScreen par1GuiScreen, MAtMod matmos) {
         this(par1GuiScreen, matmos, in_memory_page);
     }
 
-    public MAtGuiMenu(GuiScreen par1GuiScreen, MAtMod matmos, int pageFromZero) {
+    public GuiMatMenu(GuiScreen par1GuiScreen, MAtMod matmos, int pageFromZero) {
         this.buttonId = -1;
         this.parentScreen = par1GuiScreen;
         this.mod = matmos;
@@ -70,7 +70,7 @@ public class MAtGuiMenu extends GuiScreen {
             sliderControl.setListener((slider, value) -> {
                 globalVolumeControl.setVolumeAndUpdate(value * 2);
                 slider.updateDisplayString();
-                MAtGuiMenu.this.mod.getConfig().setProperty("globalvolume.scale", globalVolumeControl.getVolume());
+                GuiMatMenu.this.mod.getConfig().setProperty("globalvolume.scale", globalVolumeControl.getVolume());
             });
             sliderControl.setDisplayStringProvider(() -> {
                 return I18n.format("mat.options.volume", (int)Math.floor(globalVolumeControl.getVolume() * 100) + "%");
@@ -107,7 +107,7 @@ public class MAtGuiMenu extends GuiScreen {
 
                 @Override
                 public void sliderReleased(HGuiSliderControl hGuiSliderControl) {
-                    if (MAtGuiMenu.this.isAutopreviewEnabled()) {
+                    if (GuiMatMenu.this.isAutopreviewEnabled()) {
                         expansion.playSample();
                     }
                 }
@@ -140,12 +140,12 @@ public class MAtGuiMenu extends GuiScreen {
 
                 if (expansion.hasMoreInfo()) {
                     buttonList.add(new GuiButton(Make.make(() -> {
-                        mc.displayGuiScreen(new MAtGuiExpansionInfo(this, mod, expansion));
+                        mc.displayGuiScreen(new GuiExpansionInfo(this, mod, expansion));
                     }), _RIGHT + _GAP, _MIX * (id + 1), _UNIT, _UNIT, "..."));
                 }
             } else {
                 this.buttonList.add(new GuiButton(Make.make(() -> {
-                    mc.displayGuiScreen(new MAtGuiExpansionDetails(this, mod, expansion));
+                    mc.displayGuiScreen(new GuiExpansionDetails(this, mod, expansion));
                 }), _RIGHT - _UNIT, _MIX * (id + 1), _UNIT, _UNIT, TextFormatting.GOLD + "+"));
             }
 
@@ -190,16 +190,16 @@ public class MAtGuiMenu extends GuiScreen {
             // This triggers onGuiClosed
             this.mc.displayGuiScreen(new GuiScreenResourcePacks(this));
         } else if (par1GuiButton.id == 201) {
-            mc.displayGuiScreen(new MAtGuiMenu(parentScreen, mod, pageFromZero - 1));
+            mc.displayGuiScreen(new GuiMatMenu(parentScreen, mod, pageFromZero - 1));
         } else if (par1GuiButton.id == 202) {
-            mc.displayGuiScreen(new MAtGuiMenu(parentScreen, mod, pageFromZero + 1));
+            mc.displayGuiScreen(new GuiMatMenu(parentScreen, mod, pageFromZero + 1));
         } else if (par1GuiButton.id == 210) {
             boolean newEnabledState = !this.mod.getConfig().getBoolean("start.enabled");
             this.mod.getConfig().setProperty("start.enabled", newEnabledState);
             par1GuiButton.displayString = I18n.format("mat.options.start." + newEnabledState);
             this.mod.saveConfig();
         } else if (par1GuiButton.id == 211) {
-            mc.displayGuiScreen(new MAtGuiMore(this, this.mod));
+            mc.displayGuiScreen(new GuiMore(this, this.mod));
         } else if (par1GuiButton.id == 212) {
             mc.displayGuiScreen(this.parentScreen);
             this.mod.deactivate();
@@ -208,7 +208,7 @@ public class MAtGuiMenu extends GuiScreen {
             par1GuiButton.displayString = isAutopreviewEnabled() ? "^o^" : "^_^";
             this.mod.saveConfig();
         } else if (par1GuiButton.id == 230) {
-            mc.displayGuiScreen(new MAtGuiModules(this, this.mod));
+            mc.displayGuiScreen(new GuiModules(this, this.mod));
         } else {
             Make.perform(par1GuiButton.id);
         }

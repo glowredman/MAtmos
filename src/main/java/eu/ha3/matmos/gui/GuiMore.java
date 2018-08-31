@@ -12,7 +12,7 @@ import net.minecraft.util.text.TextFormatting;
 
 import java.io.IOException;
 
-public class MAtGuiMore extends GuiScreen {
+public class GuiMore extends GuiScreen {
     private final int IDS_PER_PAGE = 5;
 
     private GuiScreen parentScreen;
@@ -21,7 +21,7 @@ public class MAtGuiMore extends GuiScreen {
 
     private int buttonId = -1;
 
-    public MAtGuiMore(GuiScreen parent, MAtMod matmos) {
+    public GuiMore(GuiScreen parent, MAtMod matmos) {
         parentScreen = parent;
         mod = matmos;
     }
@@ -44,7 +44,7 @@ public class MAtGuiMore extends GuiScreen {
         buttonList.add(new GuiButton(212, _LEFT + _MIX, _MIX * (1 + 1), _WIDTH - _MIX * 2, _UNIT, formatOpt("mat.options.ambience.low", mod.getConfig().getBoolean("useroptions.altitudes.low"))));
         buttonList.add(new GuiButton(213, _LEFT + _MIX, _MIX * (2 + 1), _WIDTH - _MIX * 2, _UNIT, formatOpt("mat.options.ambience.high", mod.getConfig().getBoolean("useroptions.altitudes.high"))));
 
-        MAtGuiBiomeSlider biomeSlider = new MAtGuiBiomeSlider(mod, mod.getConfig().getInteger("useroptions.biome.override"));
+        GuiBiomeSlider biomeSlider = new GuiBiomeSlider(mod, mod.getConfig().getInteger("useroptions.biome.override"));
         HGuiSliderControl biomeControl = new HGuiSliderControl(214, _LEFT, _MIX * (3 + 1), _WIDTH, _UNIT, "", biomeSlider.calculateSliderLocation(mod.getConfig().getInteger("useroptions.biome.override")));
 
         biomeControl.setListener(biomeSlider);

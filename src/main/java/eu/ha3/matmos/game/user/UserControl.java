@@ -2,7 +2,7 @@ package eu.ha3.matmos.game.user;
 
 import eu.ha3.easy.TimeStatistic;
 import eu.ha3.matmos.MAtMod;
-import eu.ha3.matmos.gui.MAtGuiMenu;
+import eu.ha3.matmos.gui.GuiMatMenu;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.convenience.Ha3HoldActions;
 import eu.ha3.mc.convenience.Ha3KeyHolding;
@@ -188,7 +188,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
         if (this.mod.isActivated() && this.mod.util().isCurrentScreen(null)) {
             // OBF displayGuiScreen
             Minecraft.getMinecraft().displayGuiScreen(
-                    new MAtGuiMenu((GuiScreen)this.mod.util().getCurrentScreen(), this.mod));
+                    new GuiMatMenu((GuiScreen)this.mod.util().getCurrentScreen(), this.mod));
         }
     }
 

@@ -10,14 +10,14 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-public class MAtGuiModules extends GuiScreen {
+public class GuiModules extends GuiScreen {
     private final MAtMod mod;
     private GuiScreen parentScreen;
 
     private int buttonId;
     private List<String> val;
 
-    public MAtGuiModules(GuiScreen par1GuiScreen, MAtMod mod) {
+    public GuiModules(GuiScreen par1GuiScreen, MAtMod mod) {
         this.mod = mod;
         this.buttonId = -1;
         this.parentScreen = par1GuiScreen;

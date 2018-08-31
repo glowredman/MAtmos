@@ -9,14 +9,14 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
 
-public class MAtGuiExpansionInfo extends GuiScreen {
-    private final MAtGuiMenu parentScreen;
+public class GuiExpansionInfo extends GuiScreen {
+    private final GuiMatMenu parentScreen;
     
     private final Expansion expansion;
 
     private final String[] info;
 
-    public MAtGuiExpansionInfo(MAtGuiMenu menu, MAtMod mod, Expansion expansion) {
+    public GuiExpansionInfo(GuiMatMenu menu, MAtMod mod, Expansion expansion) {
         this.parentScreen = menu;
         this.expansion = expansion;
 
