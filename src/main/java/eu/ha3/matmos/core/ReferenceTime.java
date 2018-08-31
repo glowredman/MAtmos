@@ -5,5 +5,5 @@ package eu.ha3.matmos.core;
  */
 
 public interface ReferenceTime {
-    public long getMilliseconds();
+    long getMilliseconds();
 }

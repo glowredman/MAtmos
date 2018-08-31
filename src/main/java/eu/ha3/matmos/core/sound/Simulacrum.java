@@ -1,5 +1,9 @@
 package eu.ha3.matmos.core.sound;
 
+import java.io.File;
+import java.util.Locale;
+import java.util.Map;
+
 import eu.ha3.easy.TimeStatistic;
 import eu.ha3.matmos.MAtLog;
 import eu.ha3.matmos.MAtMod;
@@ -11,9 +15,6 @@ import eu.ha3.matmos.data.modules.ModuleRegistry;
 import eu.ha3.matmos.game.user.VisualDebugger;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
-import java.io.File;
-import java.util.Locale;
-import java.util.Map;
 
 public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
     private ExpansionManager expansionManager;
@@ -25,48 +26,52 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
     private boolean hasDisabledResourcePacks;
 
     public Simulacrum(MAtMod mod) {
-        this.expansionManager = new ExpansionManager(new File(mod.util().getModsFolder(), "matmos/expansions_r29_userconfig/"), mod);
-        this.expansionManager.setVolumeAndUpdate(mod.getConfig().getFloat("globalvolume.scale"));
+        expansionManager = new ExpansionManager(new File(mod.util().getModsFolder(), "matmos/expansions_r29_userconfig/"), mod);
+        expansionManager.setVolumeAndUpdate(mod.getConfig().getFloat("globalvolume.scale"));
 
         TimeStatistic stat = new TimeStatistic(Locale.ENGLISH);
 
-        this.dataGatherer = new ModuleRegistry(mod);
-        this.dataGatherer.load();
-        this.visualDebugger = new VisualDebugger(mod, this.dataGatherer);
-        this.expansionManager.setData(this.dataGatherer.getData());
-        this.expansionManager.setCollector(this.dataGatherer);
-        this.expansionManager.loadExpansions();
+        dataGatherer = new ModuleRegistry(mod);
+        dataGatherer.load();
+        visualDebugger = new VisualDebugger(mod, dataGatherer);
+        expansionManager.setData(dataGatherer.getData());
+        expansionManager.setCollector(dataGatherer);
+        expansionManager.loadExpansions();
 
-        this.hasResourcePacks = true;
-        if (this.expansionManager.getExpansions().size() == 0) {
+        hasResourcePacks = true;
+        if (expansionManager.getExpansions().size() == 0) {
             MAtResourcePackDealer dealer = new MAtResourcePackDealer();
             if (dealer.findResourcePacks().size() == 0) {
-                this.hasResourcePacks = false;
-                this.hasDisabledResourcePacks = dealer.findDisabledResourcePacks().size() > 0;
+                hasResourcePacks = false;
+                hasDisabledResourcePacks = dealer.findDisabledResourcePacks().size() > 0;
             }
         }
 
-        this.expansionManager.synchronize();
+        expansionManager.synchronize();
 
         MAtLog.info("Expansions loaded (" + stat.getSecondsAsString(1) + "s).");
     }
 
     public void interruptBrutally() {
-        this.isBrutallyInterrupted = true;
+        isBrutallyInterrupted = true;
     }
 
     public void dispose() {
-        if (!isBrutallyInterrupted) expansionManager.dispose();
+        if (!isBrutallyInterrupted) {
+            expansionManager.dispose();
+        }
     }
 
+    @Override
     public void onFrame(float semi) {
         expansionManager.onFrame(semi);
         visualDebugger.onFrame(semi);
     }
 
+    @Override
     public void onTick() {
-        this.dataGatherer.process();
-        this.expansionManager.onTick();
+        dataGatherer.process();
+        expansionManager.onTick();
     }
 
     public boolean hasResourcePacks() {

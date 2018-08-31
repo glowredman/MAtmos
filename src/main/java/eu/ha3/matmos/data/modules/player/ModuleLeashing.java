@@ -1,5 +1,7 @@
 package eu.ha3.matmos.data.modules.player;
 
+import java.util.List;
+
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
@@ -7,10 +9,9 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 
-import java.util.List;
-
 /**
- * Processing module for the total entities a player has leashed and withing range. (default 20 blocks)
+ * Processing module for the total entities a player has leashed and withing range. (default 20
+ * blocks)
  */
 public class ModuleLeashing extends ModuleProcessor implements Module {
     private static final int RADIUS = 20;

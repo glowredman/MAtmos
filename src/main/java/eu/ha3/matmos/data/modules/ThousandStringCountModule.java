@@ -23,15 +23,15 @@ public class ThousandStringCountModule extends ExternalStringCountModule {
     @Override
     public void increment(String name) {
         super.increment(name);
-        this.total = this.total + 1;
+        total = total + 1;
     }
 
     @Override
     public void apply() {
-        for (Entry<String, Integer> entry : this.things.entrySet()) {
-            entry.setValue((int)Math.ceil((float)entry.getValue() / this.total * 1000f));
+        for (Entry<String, Integer> entry : things.entrySet()) {
+            entry.setValue((int)Math.ceil((float)entry.getValue() / total * 1000f));
         }
         super.apply();
-        this.total = 0;
+        total = 0;
     }
 }

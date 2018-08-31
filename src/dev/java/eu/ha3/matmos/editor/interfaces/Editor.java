@@ -1,11 +1,11 @@
 package eu.ha3.matmos.editor.interfaces;
 
+import java.io.File;
+
 import eu.ha3.matmos.editor.KnowledgeItemType;
 import eu.ha3.matmos.editor.tree.Selector;
 import eu.ha3.matmos.serialisation.expansion.SerialEvent;
 import eu.ha3.matmos.serialisation.expansion.SerialRoot;
-
-import java.io.File;
 
 public interface Editor {
     File getExpansionDirectory();

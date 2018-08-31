@@ -1,12 +1,11 @@
 package eu.ha3.matmos.core.sound;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import eu.ha3.matmos.core.SoundRelay;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 
 /*
  * --filenotes-placeholder
@@ -19,7 +18,7 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
     public SoundHelperRelay(SoundAccessor accessor) {
         super(accessor);
 
-        this.paths = new HashMap<String, String>();
+        paths = new HashMap<>();
     }
 
     @Override
@@ -29,7 +28,7 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
     @Override
     public void cacheSound(String path) {
         String dotted = path.replace(".ogg", "").replace('/', '.').replaceAll("[0-9]", "");
-        this.paths.put(path, dotted);
+        paths.put(path, dotted);
     }
 
     @Override
@@ -39,9 +38,9 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
         Entity e = Minecraft.getMinecraft().player;
 
         if (meta <= 0) {
-            playStereo(this.paths.get(path), volume, pitch);
+            playStereo(paths.get(path), volume, pitch);
         } else {
-            playMono(this.paths.get(path), e.posX, e.posY, e.posZ, volume, pitch);
+            playMono(paths.get(path), e.posX, e.posY, e.posZ, volume, pitch);
         }
     }
 

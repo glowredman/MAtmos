@@ -1,9 +1,10 @@
 package eu.ha3.matmos.editor;
 
+import java.awt.Component;
+import java.awt.EventQueue;
+
 import eu.ha3.matmos.editor.interfaces.Window;
 import eu.ha3.matmos.serialisation.expansion.SerialRoot;
-
-import java.awt.*;
 
 public class WindowEventQueue implements Window {
     private Window window;
@@ -24,7 +25,7 @@ public class WindowEventQueue implements Window {
 
     @Override
     public Component asComponent() {
-        return this.window.asComponent();
+        return window.asComponent();
     }
 
     @Override

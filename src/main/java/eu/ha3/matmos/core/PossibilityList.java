@@ -5,5 +5,5 @@ package eu.ha3.matmos.core;
  */
 
 public interface PossibilityList {
-    public boolean listHas(String element);
+    boolean listHas(String element);
 }

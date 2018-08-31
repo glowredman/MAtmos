@@ -8,5 +8,5 @@ import java.util.TreeMap;
  */
 
 public class DVSerialRoot {
-    public Map<String, String> entries = new TreeMap<String, String>();
+    public Map<String, String> entries = new TreeMap<>();
 }

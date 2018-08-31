@@ -1,21 +1,27 @@
 package eu.ha3.matmos.editor.edit;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
+
 import eu.ha3.matmos.core.Operator;
 import eu.ha3.matmos.editor.InstantTextField;
 import eu.ha3.matmos.serialisation.expansion.SerialCondition;
-
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 @SuppressWarnings("serial")
 public class EditCondition extends JPanel {
     private final EditPanel edit;
     private final SerialCondition condition;
-
-    //
 
     private InstantTextField sheet;
     private InstantTextField index;
@@ -23,8 +29,8 @@ public class EditCondition extends JPanel {
     private JComboBox<Operator> comboBox;
 
     public EditCondition(EditPanel parentConstruct, SerialCondition conditionConstruct) {
-        this.edit = parentConstruct;
-        this.condition = conditionConstruct;
+        edit = parentConstruct;
+        condition = conditionConstruct;
         setLayout(new BorderLayout(0, 0));
 
         JPanel activation = new JPanel();
@@ -47,13 +53,13 @@ public class EditCondition extends JPanel {
         gbc_lblSheet.gridy = 0;
         activation.add(lblSheet, gbc_lblSheet);
 
-        this.sheet = new InstantTextField() {
+        sheet = new InstantTextField() {
             @Override
             protected void editEvent() {
                 String text = getText();
-                if (!EditCondition.this.condition.sheet.equals(text)) {
-                    EditCondition.this.condition.sheet = text;
-                    EditCondition.this.edit.flagChange();
+                if (!condition.sheet.equals(text)) {
+                    condition.sheet = text;
+                    edit.flagChange();
                 }
             };
         };
@@ -62,7 +68,7 @@ public class EditCondition extends JPanel {
         gbc_sheet.insets = new Insets(0, 0, 5, 0);
         gbc_sheet.gridx = 1;
         gbc_sheet.gridy = 0;
-        activation.add(this.sheet, gbc_sheet);
+        activation.add(sheet, gbc_sheet);
 
         JLabel lblIndex = new JLabel("Index");
         GridBagConstraints gbc_lblIndex = new GridBagConstraints();
@@ -72,13 +78,18 @@ public class EditCondition extends JPanel {
         gbc_lblIndex.gridy = 1;
         activation.add(lblIndex, gbc_lblIndex);
 
-        this.index = new InstantTextField() {
+        index = new InstantTextField() {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
+
             @Override
             protected void editEvent() {
                 String text = getText();
-                if (!EditCondition.this.condition.index.equals(text)) {
-                    EditCondition.this.condition.index = text;
-                    EditCondition.this.edit.flagChange();
+                if (!condition.index.equals(text)) {
+                    condition.index = text;
+                    edit.flagChange();
                 }
             };
         };
@@ -87,17 +98,14 @@ public class EditCondition extends JPanel {
         gbc_index.insets = new Insets(0, 0, 5, 0);
         gbc_index.gridx = 1;
         gbc_index.gridy = 1;
-        activation.add(this.index, gbc_index);
+        activation.add(index, gbc_index);
 
-        this.comboBox = new JComboBox<Operator>();
-        this.comboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                if (Operator.fromSerializedForm(EditCondition.this.condition.symbol) != EditCondition.this.comboBox
-                        .getSelectedItem()) {
-                    EditCondition.this.condition.symbol = ((Operator)EditCondition.this.comboBox.getSelectedItem()).getSerializedForm();
-                    EditCondition.this.edit.flagChange();
-                }
+        comboBox = new JComboBox<>();
+        comboBox.addActionListener(arg0 -> {
+            if (Operator.fromSerializedForm(condition.symbol) != comboBox
+                    .getSelectedItem()) {
+                condition.symbol = ((Operator)comboBox.getSelectedItem()).getSerializedForm();
+                edit.flagChange();
             }
         });
         GridBagConstraints gbc_comboBox = new GridBagConstraints();
@@ -105,8 +113,8 @@ public class EditCondition extends JPanel {
         gbc_comboBox.insets = new Insets(0, 0, 5, 0);
         gbc_comboBox.gridx = 1;
         gbc_comboBox.gridy = 2;
-        activation.add(this.comboBox, gbc_comboBox);
-        this.comboBox.setModel(new DefaultComboBoxModel<Operator>(Operator.values()));
+        activation.add(comboBox, gbc_comboBox);
+        comboBox.setModel(new DefaultComboBoxModel<>(Operator.values()));
 
         JLabel lblValue = new JLabel("Value");
         GridBagConstraints gbc_lblValue = new GridBagConstraints();
@@ -116,13 +124,18 @@ public class EditCondition extends JPanel {
         gbc_lblValue.gridy = 3;
         activation.add(lblValue, gbc_lblValue);
 
-        this.value = new InstantTextField() {
+        value = new InstantTextField() {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
+
             @Override
             protected void editEvent() {
                 String text = getText();
-                if (!EditCondition.this.condition.value.equals(text)) {
-                    EditCondition.this.condition.value = text;
-                    EditCondition.this.edit.flagChange();
+                if (!condition.value.equals(text)) {
+                    condition.value = text;
+                    edit.flagChange();
                 }
             };
         };
@@ -130,7 +143,7 @@ public class EditCondition extends JPanel {
         gbc_value.fill = GridBagConstraints.HORIZONTAL;
         gbc_value.gridx = 1;
         gbc_value.gridy = 3;
-        activation.add(this.value, gbc_value);
+        activation.add(value, gbc_value);
 
         JPanel options = new JPanel();
         options.setBorder(new TitledBorder(
@@ -151,9 +164,9 @@ public class EditCondition extends JPanel {
     }
 
     private void updateValues() {
-        this.sheet.setText(this.condition.sheet);
-        this.index.setText(this.condition.index);
-        this.comboBox.setSelectedItem(Operator.fromSerializedForm(this.condition.symbol));
-        this.value.setText(this.condition.value);
+        sheet.setText(condition.sheet);
+        index.setText(condition.index);
+        comboBox.setSelectedItem(Operator.fromSerializedForm(condition.symbol));
+        value.setText(condition.value);
     }
 }

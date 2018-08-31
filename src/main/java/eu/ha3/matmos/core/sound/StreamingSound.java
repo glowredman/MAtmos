@@ -7,29 +7,29 @@ package eu.ha3.matmos.core.sound;
 public interface StreamingSound {
     /**
      * Fading unit is in seconds.
-     * 
+     *
      * @param fadeIn
      */
-    public void play(float fadeIn);
+    void play(float fadeIn);
 
     /**
      * Fading unit is in seconds.
-     * 
+     *
      * @param fadeOut
      */
-    public void stop(float fadeOut);
+    void stop(float fadeOut);
 
     /**
      * Instantly applies a volume modulation to this stream, upon the initially set volume.
-     * 
+     *
      * @param volumeMod
      */
-    public void applyVolume(float volumeMod);
+    void applyVolume(float volumeMod);
 
     /**
      * Dispose of this StreamingSound. The StreamingSound should never be able to be used again.
      */
-    public void dispose();
+    void dispose();
 
-    public void interrupt();
+    void interrupt();
 }

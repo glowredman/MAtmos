@@ -15,6 +15,6 @@ public class StringListContainer extends Component implements ListContainer {
 
     @Override
     public boolean contains(String element) {
-        return this.list.contains(element);
+        return list.contains(element);
     }
 }

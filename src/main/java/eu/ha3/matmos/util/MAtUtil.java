@@ -7,11 +7,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 /* x-placeholder */
@@ -90,7 +90,9 @@ public class MAtUtil {
      */
     @Deprecated
     public static String getNameAt(int x, int y, int z, String defaultIfFail) {
-        if (!isWithinBounds(y)) return defaultIfFail;
+        if (!isWithinBounds(y)) {
+            return defaultIfFail;
+        }
 
         return getNameAt(Minecraft.getMinecraft().world, x, y, z);
     }
@@ -218,7 +220,9 @@ public class MAtUtil {
      */
     @Deprecated
     public static String getPowerMetaAt(int x, int y, int z, String defaultIfFail) {
-        if (!isWithinBounds(y)) return defaultIfFail;
+        if (!isWithinBounds(y)) {
+            return defaultIfFail;
+        }
 
         Block block = getBlockAt(x, y, z);
         IBlockState blockState = Minecraft.getMinecraft().world.getBlockState(position.of(x, y, z));
@@ -288,7 +292,9 @@ public class MAtUtil {
      */
     @Deprecated
     public static int getMetaAt(int x, int y, int z, int defaultIfFail) {
-        if (!isWithinBounds(y)) return defaultIfFail;
+        if (!isWithinBounds(y)) {
+            return defaultIfFail;
+        }
 
         IBlockState blockState = Minecraft.getMinecraft().world.getBlockState(position.of(x, y, z));
         return blockState.getBlock().getMetaFromState(blockState);
@@ -310,7 +316,9 @@ public class MAtUtil {
      */
     @Deprecated
     public static String getMetaAsStringAt(int x, int y, int z, String defaultIfFail) {
-        if (!isWithinBounds(y)) return defaultIfFail;
+        if (!isWithinBounds(y)) {
+            return defaultIfFail;
+        }
 
         IBlockState blockState = Minecraft.getMinecraft().world.getBlockState(position.of(x, y, z));
         return Integer.toString(blockState.getBlock().getMetaFromState(blockState));

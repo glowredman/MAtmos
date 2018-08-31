@@ -2,8 +2,23 @@ package eu.ha3.matmos.data.modules;
 
 import eu.ha3.matmos.core.sheet.DataPackage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.*;
-import net.minecraft.client.gui.inventory.*;
+import net.minecraft.client.gui.GuiCommandBlock;
+import net.minecraft.client.gui.GuiEnchantment;
+import net.minecraft.client.gui.GuiHopper;
+import net.minecraft.client.gui.GuiMerchant;
+import net.minecraft.client.gui.GuiRepair;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiBeacon;
+import net.minecraft.client.gui.inventory.GuiBrewingStand;
+import net.minecraft.client.gui.inventory.GuiChest;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiContainerCreative;
+import net.minecraft.client.gui.inventory.GuiCrafting;
+import net.minecraft.client.gui.inventory.GuiDispenser;
+import net.minecraft.client.gui.inventory.GuiFurnace;
+import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
+import net.minecraft.client.gui.inventory.GuiShulkerBox;
 
 public class ModuleContainer extends ModuleProcessor implements Module {
     public ModuleContainer(DataPackage data) {
@@ -28,7 +43,7 @@ public class ModuleContainer extends ModuleProcessor implements Module {
         setValue("is_anvil", gui instanceof GuiRepair);
         setValue("is_horse", gui instanceof GuiScreenHorseInventory);
         setValue("is_shulker", gui instanceof GuiShulkerBox);
-        
+
         setValue("is_commandblock", gui instanceof GuiCommandBlock);
         setValue("is_container", gui instanceof GuiContainer);
         setValue("is_inventory", gui instanceof GuiInventory);

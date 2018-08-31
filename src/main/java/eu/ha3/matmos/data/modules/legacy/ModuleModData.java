@@ -17,6 +17,6 @@ public class ModuleModData extends ModuleProcessor implements Module {
 
     @Override
     protected void doProcess() {
-        setValue("mod_tick", this.mod.util().getClientTick());
+        setValue("mod_tick", mod.util().getClientTick());
     }
 }

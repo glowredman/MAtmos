@@ -26,7 +26,7 @@ public class VolumeScroller extends Ha3Scroller {
         super(Minecraft.getMinecraft());
         this.mod = mod;
 
-        this.knowsHowToUse = false;
+        knowsHowToUse = false;
 
     }
 
@@ -35,7 +35,7 @@ public class VolumeScroller extends Ha3Scroller {
         Minecraft mc = Minecraft.getMinecraft();
         FontRenderer fontRenderer = mc.fontRenderer;
 
-        String msgper = (int)Math.floor(this.doneValue * 100) + "%";
+        String msgper = (int)Math.floor(doneValue * 100) + "%";
 
         ScaledResolution screenRes = new ScaledResolution(mc);
 
@@ -43,31 +43,31 @@ public class VolumeScroller extends Ha3Scroller {
         int scrHeight = screenRes.getScaledHeight();
 
         int uwidth = getWidthOf("_");
-        int uposx = (scrWidth - uwidth) / 2 + getWidthOf(this.MESSAGE_TITLE) / 2;
+        int uposx = (scrWidth - uwidth) / 2 + getWidthOf(MESSAGE_TITLE) / 2;
 
-        fontRenderer.drawStringWithShadow(this.MESSAGE_TITLE, uposx + uwidth * 2, scrHeight / 2, 0xffffff);
+        fontRenderer.drawStringWithShadow(MESSAGE_TITLE, uposx + uwidth * 2, scrHeight / 2, 0xffffff);
 
         fontRenderer.drawStringWithShadow(msgper, uposx + uwidth * 2, scrHeight / 2 + 10, 255 << 16
-                | (int)(200 + 55 * (this.doneValue < 1 ? 1 : 2 - this.doneValue)) << 8);
+                | (int)(200 + 55 * (doneValue < 1 ? 1 : 2 - doneValue)) << 8);
 
-        if (!this.knowsHowToUse) {
-            float glocount = this.mod.util().getClientTick() + fspan;
+        if (!knowsHowToUse) {
+            float glocount = mod.util().getClientTick() + fspan;
             int blink = (int)(200 + 55 * (Math.sin(glocount * Math.PI * 0.07) + 1) / 2F);
             fontRenderer.drawStringWithShadow(
-                    this.MESSAGE_HINT, uposx + uwidth * 2, scrHeight / 2 + 10 * 2, blink << 16 | blink << 8 | blink);
+                    MESSAGE_HINT, uposx + uwidth * 2, scrHeight / 2 + 10 * 2, blink << 16 | blink << 8 | blink);
 
             if (Math.abs(getInitialPitch() - getPitch()) > 60) {
-                this.knowsHowToUse = true;
+                knowsHowToUse = true;
 
             }
 
         }
 
         fontRenderer.drawStringWithShadow(
-                this.MESSAGE_MORE, uposx + uwidth * 2, scrHeight / 2 - scrHeight / 6 + 3, 0xffff00);
+                MESSAGE_MORE, uposx + uwidth * 2, scrHeight / 2 - scrHeight / 6 + 3, 0xffff00);
 
         fontRenderer.drawStringWithShadow(
-                this.MESSAGE_LESS, uposx + uwidth * 2, scrHeight / 2 + scrHeight / 6 + 3, 0xffff00);
+                MESSAGE_LESS, uposx + uwidth * 2, scrHeight / 2 + scrHeight / 6 + 3, 0xffff00);
 
         final int ucount = 8;
         final float speedytude = 20;
@@ -87,15 +87,15 @@ public class VolumeScroller extends Ha3Scroller {
     }
 
     public float getValue() {
-        return this.doneValue;
+        return doneValue;
 
     }
 
     @Override
     protected void doRoutineBefore() {
         final int caps = 10;
-        if (this.mod.getConfig().getBoolean("sound.autopreview")
-                && (int)Math.floor((this.prevPitch + 90F) / caps) != (int)Math.floor((getPitch() + 90F) / caps)) {
+        if (mod.getConfig().getBoolean("sound.autopreview")
+                && (int)Math.floor((prevPitch + 90F) / caps) != (int)Math.floor((getPitch() + 90F) / caps)) {
             // Calculate volume from 0f to 2f
             float hgn = (-getPitch() + 90F) / 90F;
 
@@ -108,17 +108,17 @@ public class VolumeScroller extends Ha3Scroller {
 
         }
 
-        this.doneValue = -getPitch() / 90F + 1F;
+        doneValue = -getPitch() / 90F + 1F;
         if (Math.abs(getPitch()) < 3) {
-            this.doneValue = 1F;
+            doneValue = 1F;
 
         }
-        if (Math.abs(this.doneValue - 0.2F) < 0.05F) {
-            this.doneValue = 0.2F;
+        if (Math.abs(doneValue - 0.2F) < 0.05F) {
+            doneValue = 0.2F;
 
         }
 
-        this.prevPitch = getPitch();
+        prevPitch = getPitch();
 
     }
 
@@ -129,7 +129,7 @@ public class VolumeScroller extends Ha3Scroller {
 
     @Override
     protected void doStart() {
-        this.prevPitch = getPitch();
+        prevPitch = getPitch();
 
     }
 

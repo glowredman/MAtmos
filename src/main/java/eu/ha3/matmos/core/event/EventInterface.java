@@ -4,8 +4,8 @@ import net.minecraft.client.resources.IResourcePack;
 
 public interface EventInterface {
 
-    public abstract void cacheSounds(IResourcePack resourcePack);
+    void cacheSounds(IResourcePack resourcePack);
 
-    public abstract void playSound(float volMod, float pitchMod);
+    void playSound(float volMod, float pitchMod);
 
 }

@@ -29,12 +29,12 @@ public class HelperFadeCalculator {
 
         long minTime = (long)(currentFade * durationMs);
 
-        this.fadeInTime = this.time.getMilliseconds() - minTime;
-        this.fadeInDuration = durationMs;
+        fadeInTime = time.getMilliseconds() - minTime;
+        fadeInDuration = durationMs;
 
-        this.foLast = false;
-        this.complete = false;
-        this.doneFadingOut = false;
+        foLast = false;
+        complete = false;
+        doneFadingOut = false;
     }
 
     public void fadeOut(long durationMs) {
@@ -42,48 +42,50 @@ public class HelperFadeCalculator {
 
         long minTime = (long)(durationMs - durationMs * currentFade);
 
-        this.fadeOutTime = this.time.getMilliseconds() - minTime;
-        this.fadeOutDuration = durationMs;
+        fadeOutTime = time.getMilliseconds() - minTime;
+        fadeOutDuration = durationMs;
 
-        this.foLast = true;
-        this.complete = false;
-        this.doneFadingOut = false;
+        foLast = true;
+        complete = false;
+        doneFadingOut = false;
     }
 
     public float calculateFadeFactor() {
-        if (this.complete) return this.fade;
+        if (complete) {
+            return fade;
+        }
 
-        long curTime = this.time.getMilliseconds();
-        if (this.foLast) {
-            if (this.fadeOutDuration <= 0f) {
-                this.fade = 0f;
-                this.complete = true;
-                this.doneFadingOut = true;
+        long curTime = time.getMilliseconds();
+        if (foLast) {
+            if (fadeOutDuration <= 0f) {
+                fade = 0f;
+                complete = true;
+                doneFadingOut = true;
             } else {
-                this.fade = 1 - (curTime - this.fadeOutTime) / (float)this.fadeOutDuration;
-                if (this.fade < 0f) {
-                    this.fade = 0f;
-                    this.complete = true;
-                    this.doneFadingOut = true;
+                fade = 1 - (curTime - fadeOutTime) / (float)fadeOutDuration;
+                if (fade < 0f) {
+                    fade = 0f;
+                    complete = true;
+                    doneFadingOut = true;
                 }
             }
         } else {
-            if (this.fadeInDuration <= 0f) {
-                this.fade = 1f;
-                this.complete = true;
+            if (fadeInDuration <= 0f) {
+                fade = 1f;
+                complete = true;
             } else {
-                this.fade = (curTime - this.fadeInTime) / (float)this.fadeInDuration;
-                if (this.fade > 1f) {
-                    this.fade = 1f;
-                    this.complete = true;
+                fade = (curTime - fadeInTime) / (float)fadeInDuration;
+                if (fade > 1f) {
+                    fade = 1f;
+                    complete = true;
                 }
             }
         }
 
-        return this.fade;
+        return fade;
     }
 
     public boolean isDoneFadingOut() {
-        return this.doneFadingOut;
+        return doneFadingOut;
     }
 }

@@ -5,5 +5,5 @@ package eu.ha3.matmos.core;
  */
 
 public interface ListContainer {
-    public boolean contains(String element);
+    boolean contains(String element);
 }

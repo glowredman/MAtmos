@@ -8,7 +8,7 @@ import paulscode.sound.SoundSystem;
  */
 
 public interface SoundAccessor {
-    public SoundManager getSoundManager();
+    SoundManager getSoundManager();
 
-    public SoundSystem getSoundSystem();
+    SoundSystem getSoundSystem();
 }

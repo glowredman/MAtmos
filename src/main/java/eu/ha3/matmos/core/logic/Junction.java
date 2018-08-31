@@ -1,11 +1,15 @@
 package eu.ha3.matmos.core.logic;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeSet;
+
 import eu.ha3.matmos.MAtLog;
 import eu.ha3.matmos.core.Dependable;
 import eu.ha3.matmos.core.MultistateComponent;
 import eu.ha3.matmos.core.Provider;
-
-import java.util.*;
 
 /* x-placeholder */
 
@@ -24,18 +28,18 @@ public class Junction extends MultistateComponent implements Dependable, Visuali
         this.yes = yes;
         this.no = no;
 
-        this.dependencies = new TreeSet<String>();
-        this.dependencies.addAll(yes);
-        this.dependencies.addAll(no);
+        dependencies = new TreeSet<>();
+        dependencies.addAll(yes);
+        dependencies.addAll(no);
     }
 
     @Override
     public void evaluate() {
-        boolean pre = this.isActive;
-        this.isActive = testIfTrue();
+        boolean pre = isActive;
+        isActive = testIfTrue();
 
-        if (pre != this.isActive) {
-            MAtLog.fine("S: " + getName() + " -> " + this.isActive);
+        if (pre != isActive) {
+            MAtLog.fine("S: " + getName() + " -> " + isActive);
 
             incrementVersion();
         }
@@ -44,20 +48,22 @@ public class Junction extends MultistateComponent implements Dependable, Visuali
     private boolean testIfTrue() {
         boolean isTrue = true;
 
-        Iterator<String> iterYes = this.yes.iterator();
+        Iterator<String> iterYes = yes.iterator();
         while (isTrue && iterYes.hasNext()) {
             String yes = iterYes.next();
-            if (!this.provider.exists(yes) || !this.provider.get(yes).isActive()) {
+            if (!provider.exists(yes) || !provider.get(yes).isActive()) {
                 isTrue = false;
             }
         }
 
-        if (!isTrue) return false;
+        if (!isTrue) {
+            return false;
+        }
 
-        Iterator<String> iterNo = this.no.iterator();
+        Iterator<String> iterNo = no.iterator();
         while (isTrue && iterNo.hasNext()) {
             String no = iterNo.next();
-            if (!this.provider.exists(no) || this.provider.get(no).isActive()) {
+            if (!provider.exists(no) || provider.get(no).isActive()) {
                 isTrue = false;
             }
         }
@@ -66,7 +72,7 @@ public class Junction extends MultistateComponent implements Dependable, Visuali
 
     @Override
     public Collection<String> getDependencies() {
-        return this.dependencies;
+        return dependencies;
     }
 
     @Override
@@ -76,9 +82,12 @@ public class Junction extends MultistateComponent implements Dependable, Visuali
 
     @Override
     public Collection<String> getSpecialDependencies(String type) {
-        if (type.equals("yes")) return this.yes;
-        else if (type.equals("no")) return this.no;
+        if (type.equals("yes")) {
+            return yes;
+        } else if (type.equals("no")) {
+            return no;
+        }
 
-        return new HashSet<String>();
+        return new HashSet<>();
     }
 }

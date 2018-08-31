@@ -29,21 +29,27 @@ public class ScanVolumetric implements Progress {
     private int zz;
 
     public ScanVolumetric() {
-        this.pipeline = null;
-        this.isScanning = false;
+        pipeline = null;
+        isScanning = false;
     }
 
     public void setPipeline(ScanOperations pipelineIn) {
-        this.pipeline = pipelineIn;
+        pipeline = pipelineIn;
     }
 
     public void startScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn) //throws MAtScannerTooLargeException
     {
-        if (this.isScanning) return;
+        if (isScanning) {
+            return;
+        }
 
-        if (this.pipeline == null) return;
+        if (pipeline == null) {
+            return;
+        }
 
-        if (opspercallIn <= 0) throw new IllegalArgumentException();
+        if (opspercallIn <= 0) {
+            throw new IllegalArgumentException();
+        }
 
         int worldHeight = Minecraft.getMinecraft().world.getHeight();
 
@@ -51,57 +57,59 @@ public class ScanVolumetric implements Progress {
             ysizeIn = worldHeight;
         }
 
-        this.xsize = xsizeIn;
-        this.ysize = ysizeIn;
-        this.zsize = zsizeIn;
+        xsize = xsizeIn;
+        ysize = ysizeIn;
+        zsize = zsizeIn;
 
-        y = y - this.ysize / 2;
+        y = y - ysize / 2;
 
         if (y < 0) {
             y = 0;
-        } else if (y > worldHeight - this.ysize) {
-            y = worldHeight - this.ysize;
+        } else if (y > worldHeight - ysize) {
+            y = worldHeight - ysize;
         }
 
-        this.xstart = x - this.xsize / 2;
-        this.ystart = y; // ((y - ysize / 2)) already done before
-        this.zstart = z - this.zsize / 2;
-        this.opspercall = opspercallIn;
+        xstart = x - xsize / 2;
+        ystart = y; // ((y - ysize / 2)) already done before
+        zstart = z - zsize / 2;
+        opspercall = opspercallIn;
 
-        this.progress = 0;
-        this.finalProgress = this.xsize * this.ysize * this.zsize;
+        progress = 0;
+        finalProgress = xsize * ysize * zsize;
 
-        this.xx = 0;
-        this.yy = 0;
-        this.zz = 0;
+        xx = 0;
+        yy = 0;
+        zz = 0;
 
-        this.pipeline.begin();
-        this.isScanning = true;
+        pipeline.begin();
+        isScanning = true;
     }
 
     public boolean routine() {
-        if (!this.isScanning) return false;
+        if (!isScanning) {
+            return false;
+        }
         long ops = 0;
-        while (ops < this.opspercall && this.progress < this.finalProgress) {
-            this.pipeline.input(this.xstart + this.xx, this.ystart + this.yy, this.zstart + this.zz);
+        while (ops < opspercall && progress < finalProgress) {
+            pipeline.input(xstart + xx, ystart + yy, zstart + zz);
 
-            this.xx = (this.xx + 1) % this.xsize;
-            if (this.xx == 0) {
-                this.zz = (this.zz + 1) % this.zsize;
-                if (this.zz == 0) {
-                    this.yy = this.yy + 1;
-                    if (this.yy >= this.ysize && this.progress != this.finalProgress - 1) {
+            xx = (xx + 1) % xsize;
+            if (xx == 0) {
+                zz = (zz + 1) % zsize;
+                if (zz == 0) {
+                    yy = yy + 1;
+                    if (yy >= ysize && progress != finalProgress - 1) {
                         System.err.println("LOGIC ERROR");
                     }
                 }
             }
 
             ops++;
-            this.progress++;
+            progress++;
 
         }
 
-        if (this.progress >= this.finalProgress) {
+        if (progress >= finalProgress) {
             scanDoneEvent();
         }
 
@@ -109,24 +117,26 @@ public class ScanVolumetric implements Progress {
     }
 
     public void stopScan() {
-        this.isScanning = false;
+        isScanning = false;
     }
 
     private void scanDoneEvent() {
-        if (!this.isScanning) return;
+        if (!isScanning) {
+            return;
+        }
 
-        this.pipeline.finish();
+        pipeline.finish();
         stopScan();
     }
 
     @Override
     public int getProgress_Current() {
-        return this.progress;
+        return progress;
     }
 
     @Override
     public int getProgress_Total() {
-        return this.finalProgress;
+        return finalProgress;
     }
 
 }

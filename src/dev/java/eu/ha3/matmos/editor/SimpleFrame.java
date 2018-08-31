@@ -1,10 +1,12 @@
 package eu.ha3.matmos.editor;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 
 /**
  * Utility lib to quickly format frames.
- * 
+ *
  * @author Hurry
  */
 public class SimpleFrame {
@@ -16,7 +18,7 @@ public class SimpleFrame {
      * <li>Look and feel of the frame using the system's</li>
      * <li>EXIT_ON_CLOSE as the default close operation.</li>
      * </ul>
-     * 
+     *
      * @param frame
      */
     public static void genericMinimal(JFrame frame) {
@@ -41,7 +43,7 @@ public class SimpleFrame {
      * <li>Center the frame.</li>
      * <li>Sets the title.</li>
      * </ul>
-     * 
+     *
      * @param frame
      * @param title
      * @param width

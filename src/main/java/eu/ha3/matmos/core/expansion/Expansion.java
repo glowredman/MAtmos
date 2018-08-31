@@ -1,5 +1,15 @@
 package eu.ha3.matmos.core.expansion;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Scanner;
+import java.util.Set;
+
 import eu.ha3.easy.TimeStatistic;
 import eu.ha3.matmos.MAtLog;
 import eu.ha3.matmos.core.Evaluated;
@@ -20,15 +30,6 @@ import eu.ha3.matmos.debug.expansions.ExpansionDebugUnit;
 import eu.ha3.matmos.debug.expansions.FolderResourcePackEditableEDU;
 import eu.ha3.matmos.debug.expansions.ReadOnlyJasonStringEDU;
 import eu.ha3.util.property.simple.ConfigProperty;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Scanner;
-import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.FolderResourcePack;
 import net.minecraft.util.ResourceLocation;
@@ -61,23 +62,23 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
     public Expansion(ExpansionIdentity identity, DataPackage data, Collector collector, SoundAccessor accessor, VolumeContainer masterVolume, File configurationSource) {
         this.identity = identity;
         this.masterVolume = masterVolume;
-        this.capabilities = new SoundHelperRelay(accessor);
+        capabilities = new SoundHelperRelay(accessor);
         this.data = data;
         this.collector = collector;
 
         newKnowledge();
 
-        this.myConfiguration = new ConfigProperty();
-        this.myConfiguration.setProperty("volume", 1f);
-        this.myConfiguration.commit();
+        myConfiguration = new ConfigProperty();
+        myConfiguration.setProperty("volume", 1f);
+        myConfiguration.commit();
         try {
-            this.myConfiguration.setSource(configurationSource.getCanonicalPath());
-            this.myConfiguration.load();
+            myConfiguration.setSource(configurationSource.getCanonicalPath());
+            myConfiguration.load();
         } catch (IOException e1) {
             e1.printStackTrace();
         }
 
-        setVolumeAndUpdate(this.myConfiguration.getFloat("volume"));
+        setVolumeAndUpdate(myConfiguration.getFloat("volume"));
     }
 
     public void setLoadingAgent(LoadingAgent agent) {
@@ -89,7 +90,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
         deactivate();
 
         newKnowledge();
-        this.isSuccessfullyBuilt = false;
+        isSuccessfullyBuilt = false;
 
         if (reactivate) {
             activate();
@@ -97,68 +98,74 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
     }
 
     public void pushDebugJasonAndRefreshKnowledge(String jasonString) {
-        this.jasonDebugPush = new RawJasonLoadingAgent(jasonString);
+        jasonDebugPush = new RawJasonLoadingAgent(jasonString);
         refreshKnowledge();
     }
 
     private void newKnowledge() {
-        this.knowledge = new Knowledge(this.capabilities, TIME);
-        this.knowledge.setData(this.data);
+        knowledge = new Knowledge(capabilities, TIME);
+        knowledge.setData(data);
     }
 
     private void buildKnowledge() {
-        if (this.agent == null) return;
+        if (agent == null) {
+            return;
+        }
 
         newKnowledge();
 
-        if (this.jasonDebugPush == null) {
-            this.isSuccessfullyBuilt = this.agent.load(this.identity, this.knowledge);
+        if (jasonDebugPush == null) {
+            isSuccessfullyBuilt = agent.load(identity, knowledge);
         } else {
-            this.isSuccessfullyBuilt = this.jasonDebugPush.load(this.identity, this.knowledge);
-            this.jasonDebugPush = null;
+            isSuccessfullyBuilt = jasonDebugPush.load(identity, knowledge);
+            jasonDebugPush = null;
         }
 
-        if (!this.isSuccessfullyBuilt) {
+        if (!isSuccessfullyBuilt) {
             newKnowledge();
         }
 
-        this.knowledge.cacheSounds(this.identity);
+        knowledge.cacheSounds(identity);
     }
 
     public void playSample() {
-        if (!isActivated()) return;
+        if (!isActivated()) {
+            return;
+        }
 
-        EventInterface event = this.knowledge.obtainProviders().getEvent().get("__SAMPLE");
+        EventInterface event = knowledge.obtainProviders().getEvent().get("__SAMPLE");
         if (event != null) {
             event.playSound(1f, 1f);
         }
     }
 
     public String getName() {
-        return this.identity.getUniqueName();
+        return identity.getUniqueName();
     }
 
     public String getFriendlyName() {
-        return this.identity.getFriendlyName();
+        return identity.getFriendlyName();
     }
 
     public void saveConfig() {
-        this.myConfiguration.setProperty("volume", this.volume);
-        if (this.myConfiguration.commit()) {
-            this.myConfiguration.save();
+        myConfiguration.setProperty("volume", volume);
+        if (myConfiguration.commit()) {
+            myConfiguration.save();
         }
     }
 
     public boolean reliesOnLegacyModules() {
-        return this.reliesOnLegacyModules;
+        return reliesOnLegacyModules;
     }
 
     @Override
     public void simulate() {
-        if (!this.isActive) return;
+        if (!isActive) {
+            return;
+        }
 
         try {
-            this.knowledge.simulate();
+            knowledge.simulate();
         } catch (Exception e) {
             e.printStackTrace();
             deactivate();
@@ -167,10 +174,12 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
 
     @Override
     public void evaluate() {
-        if (!this.isActive) return;
+        if (!isActive) {
+            return;
+        }
 
         try {
-            this.knowledge.evaluate();
+            knowledge.evaluate();
         } catch (Exception e) {
             e.printStackTrace();
             deactivate();
@@ -179,20 +188,24 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
 
     @Override
     public boolean isActivated() {
-        return this.isActive;
+        return isActive;
     }
 
     @Override
     public void activate() {
-        if (this.isActive) return;
+        if (isActive) {
+            return;
+        }
 
-        if (getVolume() <= 0f) return;
+        if (getVolume() <= 0f) {
+            return;
+        }
 
-        if (!this.isSuccessfullyBuilt && this.agent != null) {
+        if (!isSuccessfullyBuilt && agent != null) {
             MAtLog.info("Building expansion " + getName() + "...");
             TimeStatistic stat = new TimeStatistic(Locale.ENGLISH);
             buildKnowledge();
-            if (this.isSuccessfullyBuilt) {
+            if (isSuccessfullyBuilt) {
                 MAtLog.info("Expansion " + getName() + " built (" + stat.getSecondsAsString(3) + "s).");
             } else {
                 MAtLog.warning("Expansion "
@@ -200,15 +213,15 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
             }
         }
 
-        if (this.collector != null) {
-            Set<String> requiredModules = this.knowledge.calculateRequiredModules();
-            this.collector.addModuleStack(this.identity.getUniqueName(), requiredModules);
+        if (collector != null) {
+            Set<String> requiredModules = knowledge.calculateRequiredModules();
+            collector.addModuleStack(identity.getUniqueName(), requiredModules);
 
             MAtLog.info("Expansion "
-                    + this.identity.getUniqueName() + " requires " + requiredModules.size() + " found modules: "
+                    + identity.getUniqueName() + " requires " + requiredModules.size() + " found modules: "
                     + Arrays.toString(requiredModules.toArray()));
 
-            List<String> legacyModules = new ArrayList<String>();
+            List<String> legacyModules = new ArrayList<>();
             for (String module : requiredModules) {
                 if (module.startsWith(ModuleRegistry.LEGACY_PREFIX)) {
                     legacyModules.add(module);
@@ -217,38 +230,40 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
             if (legacyModules.size() > 0) {
                 Collections.sort(legacyModules);
                 MAtLog.warning("Expansion "
-                        + this.identity.getUniqueName() + " uses LEGACY modules: "
+                        + identity.getUniqueName() + " uses LEGACY modules: "
                         + Arrays.toString(legacyModules.toArray()));
-                this.reliesOnLegacyModules = true;
+                reliesOnLegacyModules = true;
             }
         }
 
-        this.isActive = true;
+        isActive = true;
 
     }
 
     @Override
     public void deactivate() {
-        if (!this.isActive) return;
-
-        if (this.collector != null) {
-            this.collector.removeModuleStack(this.identity.getUniqueName());
+        if (!isActive) {
+            return;
         }
 
-        this.isActive = false;
+        if (collector != null) {
+            collector.removeModuleStack(identity.getUniqueName());
+        }
+
+        isActive = false;
     }
 
     @Override
     public void dispose() {
         deactivate();
-        this.capabilities.cleanUp();
+        capabilities.cleanUp();
         newKnowledge();
         setLoadingAgent(null);
     }
 
     @Override
     public float getVolume() {
-        return this.volume;
+        return volume;
     }
 
     @Override
@@ -259,7 +274,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
 
     @Override
     public void updateVolume() {
-        this.capabilities.applyVolume(this.masterVolume.getVolume() * getVolume());
+        capabilities.applyVolume(masterVolume.getVolume() * getVolume());
     }
 
     /**
@@ -267,40 +282,40 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
      */
     @Override
     public void interrupt() {
-        this.capabilities.interrupt();
+        capabilities.interrupt();
     }
 
     /**
      * Obtain the providers of the knowledge, for debugging purposes.
-     * 
+     *
      * @return
      */
     public ProviderCollection obtainProvidersForDebugging() {
-        return this.knowledge.obtainProviders();
+        return knowledge.obtainProviders();
     }
 
     public ExpansionDebugUnit obtainDebugUnit() {
         try {
-            if (this.identity.getPack() instanceof FolderResourcePack) {
-                FolderResourcePack frp = (FolderResourcePack)this.identity.getPack();
+            if (identity.getPack() instanceof FolderResourcePack) {
+                FolderResourcePack frp = (FolderResourcePack)identity.getPack();
                 String folderName = frp.getPackName();
                 // XXX: getPackName might not be specified to return the folder name?
 
                 final File folder = new File(Minecraft.getMinecraft().gameDir, "resourcepacks/" + folderName);
 
                 if (folder.exists() && folder.isDirectory()) {
-                    System.out.println(this.identity.getLocation().getPath());
-                    final File file = new File(folder, "assets/matmos/" + this.identity.getLocation().getPath());
+                    System.out.println(identity.getLocation().getPath());
+                    final File file = new File(folder, "assets/matmos/" + identity.getLocation().getPath());
 
                     return new FolderResourcePackEditableEDU() {
                         @Override
                         public Knowledge obtainKnowledge() {
-                            return Expansion.this.knowledge;
+                            return knowledge;
                         }
 
                         @Override
                         public DataPackage obtainData() {
-                            return Expansion.this.data;
+                            return data;
                         }
 
                         @Override
@@ -323,12 +338,12 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
 
             @Override
             public Knowledge obtainKnowledge() {
-                return Expansion.this.knowledge;
+                return knowledge;
             }
 
             @Override
             public DataPackage obtainData() {
-                return Expansion.this.data;
+                return data;
             }
 
             @Override
@@ -336,35 +351,39 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
                 //Solly edit - resource leak
                 Scanner sc = null;
                 try {
-                    sc = new Scanner(Expansion.this.identity.getPack().getInputStream(Expansion.this.identity.getLocation()));
-                    // XXX does not handle XML 
+                    sc = new Scanner(identity.getPack().getInputStream(identity.getLocation()));
+                    // XXX does not handle XML
                     return sc.useDelimiter("\\Z").next();
                 } catch (IOException e) {
                     e.printStackTrace();
                     System.err.println("Jason unavailable.");
                     return "{}";
                 } finally {
-                    if (sc != null) sc.close();
+                    if (sc != null) {
+                        sc.close();
+                    }
                 }
             }
         };
     }
 
     public boolean hasMoreInfo() {
-        return this.identity.getPack().resourceExists(new ResourceLocation("matmos", "info.txt"));
+        return identity.getPack().resourceExists(new ResourceLocation("matmos", "info.txt"));
     }
 
     public String getInfo() {
         //Solly edit - resource leak
         Scanner sc = null;
         try {
-            sc = new Scanner(this.identity.getPack().getInputStream(new ResourceLocation("matmos", "info.txt")));
+            sc = new Scanner(identity.getPack().getInputStream(new ResourceLocation("matmos", "info.txt")));
             return sc.useDelimiter("\\Z").next();
         } catch (Exception e) {
             e.printStackTrace();
             return "Error while fetching info.txt";
         } finally {
-            if (sc != null) sc.close();
+            if (sc != null) {
+                sc.close();
+            }
         }
     }
 }

@@ -14,5 +14,5 @@ public class SerialEvent {
     public float pitch_max = 1f;
     public int distance = 0;
 
-    public List<String> path = new ArrayList<String>();
+    public List<String> path = new ArrayList<>();
 }

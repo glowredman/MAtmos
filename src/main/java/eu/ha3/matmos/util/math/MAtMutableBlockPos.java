@@ -21,15 +21,18 @@ public class MAtMutableBlockPos extends BlockPos {
         return this;
     }
 
+    @Override
     public int getX() {
-        return this.x;
+        return x;
     }
 
+    @Override
     public int getY() {
-        return this.y;
+        return y;
     }
 
+    @Override
     public int getZ() {
-        return this.z;
+        return z;
     }
 }

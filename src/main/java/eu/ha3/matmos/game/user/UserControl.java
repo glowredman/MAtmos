@@ -1,5 +1,8 @@
 package eu.ha3.matmos.game.user;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.lwjgl.input.Keyboard;
+
 import eu.ha3.easy.TimeStatistic;
 import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.gui.GuiMatMenu;
@@ -13,10 +16,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.text.TextFormatting;
-import org.apache.commons.lang3.ArrayUtils;
-import org.lwjgl.input.Keyboard;
-
-/* x-placeholder */
 
 public class UserControl implements Ha3HoldActions, SupportsTickEvents, SupportsFrameEvents {
     private final MAtMod mod;
@@ -34,25 +33,27 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 
     public void load() {
         // new KeyBinding registers it rightaway to the list of keys
-        this.keyBindingMain = new KeyBinding("MAtmos", 65, "key.categories.misc");
-        Minecraft.getMinecraft().gameSettings.keyBindings = ArrayUtils.addAll(Minecraft.getMinecraft().gameSettings.keyBindings, this.keyBindingMain);
-        this.keyBindingMain.setKeyCode(this.mod.getConfig().getInteger("key.code"));
+        keyBindingMain = new KeyBinding("MAtmos", 65, "key.categories.misc");
+        Minecraft.getMinecraft().gameSettings.keyBindings = ArrayUtils.addAll(Minecraft.getMinecraft().gameSettings.keyBindings, keyBindingMain);
+        keyBindingMain.setKeyCode(mod.getConfig().getInteger("key.code"));
         KeyBinding.resetKeyBindingArrayAndHash();
 
-        this.keyManager.addKeyBinding(this.keyBindingMain, new Ha3KeyHolding(this, 7));
+        keyManager.addKeyBinding(keyBindingMain, new Ha3KeyHolding(this, 7));
 
-        this.scroller = new VolumeScroller(this.mod);
+        scroller = new VolumeScroller(mod);
     }
 
     private String getKeyBindingMainFriendlyName() {
-        if (this.keyBindingMain == null) return "undefined";
+        if (keyBindingMain == null) {
+            return "undefined";
+        }
 
-        return Keyboard.getKeyName(this.keyBindingMain.getKeyCode()); // OBF getKeyCode(), or .keyCode
+        return Keyboard.getKeyName(keyBindingMain.getKeyCode()); // OBF getKeyCode(), or .keyCode
     }
 
     @Override
     public void onTick() {
-        this.keyManager.onTick();
+        keyManager.onTick();
 
         // Copied from Sollace's Presence Footsteps solution to bindings disappearing
         if (tickRound == 0) {
@@ -65,28 +66,28 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
         }
         tickRound = (tickRound + 1) % 100;
 
-        this.scroller.routine();
-        if (this.scroller.isRunning()) {
-            this.mod.getGlobalVolumeControl().setVolumeAndUpdate(this.scroller.getValue());
+        scroller.routine();
+        if (scroller.isRunning()) {
+            mod.getGlobalVolumeControl().setVolumeAndUpdate(scroller.getValue());
         }
     }
 
     @Override
     public void onFrame(float fspan) {
-        this.scroller.draw(fspan);
+        scroller.draw(fspan);
     }
 
     private void printUnusualMessages() {
-        if (!this.mod.isInitialized()) {
-            this.mod.getChatter().printChat(TextFormatting.RED, "Unknown error: MAtmos isn't initialized");
+        if (!mod.isInitialized()) {
+            mod.getChatter().printChat(TextFormatting.RED, "Unknown error: MAtmos isn't initialized");
         } else {
             if (!MAtUtil.isSoundMasterEnabled()) {
-                this.mod.getChatter().printChat(
+                mod.getChatter().printChat(
                         TextFormatting.RED, "Warning: ", TextFormatting.WHITE,
                         "Sounds are turned off in your game settings!");
             }
             if (!MAtUtil.isSoundAmbientEnabled()) {
-                this.mod.getChatter().printChat(
+                mod.getChatter().printChat(
                         TextFormatting.RED, "Warning: ", TextFormatting.WHITE,
                         "Ambient sounds are at 0% volume in the advanced MAtmos options menu!");
             }
@@ -100,8 +101,8 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
         	//TODO: Disabled for now
         	displayMenu();
         }
-        else*/ if (this.mod.isActivated()) {
-            this.scroller.start();
+        else*/ if (mod.isActivated()) {
+            scroller.start();
         }
     }
 
@@ -114,7 +115,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
         }
         else
         {*/
-        if (!this.mod.isActivated()) {
+        if (!mod.isActivated()) {
             whenWantsToggle();
         } else {
             displayMenu();
@@ -126,10 +127,10 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 
     @Override
     public void endHold() {
-        if (this.scroller.isRunning()) {
-            this.scroller.stop();
-            this.mod.getConfig().setProperty("globalvolume.scale", this.mod.getGlobalVolumeControl().getVolume());
-            this.mod.saveConfig();
+        if (scroller.isRunning()) {
+            scroller.stop();
+            mod.getConfig().setProperty("globalvolume.scale", mod.getGlobalVolumeControl().getVolume());
+            mod.saveConfig();
         }
 
         whenWantsForcing();
@@ -138,57 +139,59 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
     }
 
     private void whenWantsToggle() {
-        if (this.mod.isActivated()) {
-            this.mod.deactivate();
-            this.mod.getChatter().printChat(
+        if (mod.isActivated()) {
+            mod.deactivate();
+            mod.getChatter().printChat(
                     TextFormatting.YELLOW, "Stopped. Press ", TextFormatting.WHITE,
                     getKeyBindingMainFriendlyName(), TextFormatting.YELLOW, " to re-enable.");
 
-        } else if (this.mod.isInitialized()) {
-            if (this.loadingCount != 0) {
-                this.mod.getChatter().printChat(TextFormatting.GREEN, "Loading...");
+        } else if (mod.isInitialized()) {
+            if (loadingCount != 0) {
+                mod.getChatter().printChat(TextFormatting.GREEN, "Loading...");
             } else {
-                this.mod.getChatter().printChat(
+                mod.getChatter().printChat(
                         TextFormatting.GREEN, "Loading...", TextFormatting.YELLOW, " (Hold ",
                         TextFormatting.WHITE, getKeyBindingMainFriendlyName() + " down",
                         TextFormatting.YELLOW, " to tweak the volume)");
             }
 
-            this.loadingCount++;
-            this.mod.activate();
+            loadingCount++;
+            mod.activate();
 
-        } else if (!this.mod.isInitialized()) {
+        } else if (!mod.isInitialized()) {
             whenUninitializedAction();
         }
 
     }
 
     private void whenUninitializedAction() {
-        if (this.mod.isInitialized()) return;
+        if (mod.isInitialized()) {
+            return;
+        }
 
         TimeStatistic stat = new TimeStatistic();
-        this.mod.start();
-        this.mod.getChatter().printChat(
+        mod.start();
+        mod.getChatter().printChat(
                 TextFormatting.GREEN, "Loading for the first time (" + stat.getSecondsAsString(2) + "s)");
     }
 
     private void whenWantsForcing() {
-        if (!this.mod.isActivated() && this.mod.isInitialized()) {
+        if (!mod.isActivated() && mod.isInitialized()) {
             TimeStatistic stat = new TimeStatistic();
-            this.mod.refresh();
-            this.mod.activate();
-            this.mod.getChatter().printChat(
+            mod.refresh();
+            mod.activate();
+            mod.getChatter().printChat(
                     TextFormatting.GREEN, "Reloading expansions (" + stat.getSecondsAsString(2) + "s)");
-        } else if (!this.mod.isInitialized()) {
+        } else if (!mod.isInitialized()) {
             whenUninitializedAction();
         }
     }
 
     private void displayMenu() {
-        if (this.mod.isActivated() && this.mod.util().isCurrentScreen(null)) {
+        if (mod.isActivated() && mod.util().isCurrentScreen(null)) {
             // OBF displayGuiScreen
             Minecraft.getMinecraft().displayGuiScreen(
-                    new GuiMatMenu((GuiScreen)this.mod.util().getCurrentScreen(), this.mod));
+                    new GuiMatMenu((GuiScreen)mod.util().getCurrentScreen(), mod));
         }
     }
 

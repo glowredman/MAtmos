@@ -5,13 +5,13 @@ package eu.ha3.matmos.core.expansion;
  */
 
 public interface Stable {
-    public boolean isActivated();
+    boolean isActivated();
 
-    public void activate();
+    void activate();
 
-    public void deactivate();
+    void deactivate();
 
-    public void dispose();
+    void dispose();
 
-    public void interrupt();
+    void interrupt();
 }

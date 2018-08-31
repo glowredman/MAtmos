@@ -1,10 +1,10 @@
 package eu.ha3.matmos.core.expansion.agents;
 
+import java.util.Scanner;
+
 import eu.ha3.matmos.core.Knowledge;
 import eu.ha3.matmos.core.expansion.ExpansionIdentity;
 import eu.ha3.matmos.serialisation.JsonExpansions_EngineDeserializer;
-
-import java.util.Scanner;
 
 /*
  * --filenotes-placeholder
@@ -23,7 +23,9 @@ public class JasonLoadingAgent implements LoadingAgent {
             e.printStackTrace();
             return false;
         } finally {
-            if (sc != null) sc.close();
+            if (sc != null) {
+                sc.close();
+            }
         }
     }
 

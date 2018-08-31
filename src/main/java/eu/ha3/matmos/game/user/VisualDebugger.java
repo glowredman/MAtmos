@@ -1,5 +1,12 @@
 package eu.ha3.matmos.game.user;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.opengl.GL11;
+
 import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.core.sheet.Sheet;
 import eu.ha3.matmos.data.modules.ModuleRegistry;
@@ -7,16 +14,11 @@ import eu.ha3.matmos.data.scanners.Progress;
 import eu.ha3.matmos.data.scanners.ScannerModule;
 import eu.ha3.matmos.util.math.LongFloatSimplificator;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.text.TextFormatting;
-import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.opengl.GL11;
 
 public class VisualDebugger implements SupportsFrameEvents {
     private final MAtMod mod;
@@ -33,46 +35,50 @@ public class VisualDebugger implements SupportsFrameEvents {
     }
 
     public List<String> obtainSheetNamesCopy() {
-        List<String> sheetNames = new ArrayList<>(this.dataGatherer.getData().getSheetNames());
+        List<String> sheetNames = new ArrayList<>(dataGatherer.getData().getSheetNames());
         Collections.sort(sheetNames);
         return sheetNames;
     }
 
     public void debugModeExpansion(VisualExpansionDebugging ed) {
         this.ed = ed;
-        this.mode = DebugMode.EXPANSION;
+        mode = DebugMode.EXPANSION;
     }
 
     public void debugModeScan(String name) {
-        this.scanDebug = name;
-        this.mode = DebugMode.SCAN;
+        scanDebug = name;
+        mode = DebugMode.SCAN;
     }
 
     public void noDebug() {
-        this.mode = DebugMode.NONE;
+        mode = DebugMode.NONE;
     }
 
     @Override
     public void onFrame(float semi) {
-        if (this.mod.isDebugMode()) {
-            this.mod.util().prepareDrawString();
-            this.mod.util().drawString(
-                    TextFormatting.GRAY.toString() + this.mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0, 0, '3', 0, 0, 0,
+        if (mod.isDebugMode()) {
+            mod.util().prepareDrawString();
+            mod.util().drawString(
+                    TextFormatting.GRAY.toString() + mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0, 0, '3', 0, 0, 0,
                     0, true);
         }
 
-        if (this.mode == DebugMode.NONE) return;
+        if (mode == DebugMode.NONE) {
+            return;
+        }
 
-        if (this.mode == DebugMode.EXPANSION
-                && semi >= 0f && this.mod.util().getCurrentScreen() != null
-                && !(this.mod.util().getCurrentScreen() instanceof GuiChat)) return;
+        if (mode == DebugMode.EXPANSION
+                && semi >= 0f && mod.util().getCurrentScreen() != null
+                && !(mod.util().getCurrentScreen() instanceof GuiChat)) {
+            return;
+        }
 
-        switch (this.mode) {
+        switch (mode) {
             case SCAN:
                 debugScan();
                 break;
             case EXPANSION:
-                this.ed.onFrame(semi);
+                ed.onFrame(semi);
                 break;
             default:
                 break;
@@ -81,9 +87,9 @@ public class VisualDebugger implements SupportsFrameEvents {
     }
 
     private void debugScan() {
-        debugScanWithSheet(this.dataGatherer.getData().getSheet(this.scanDebug), false);
-        if (this.deltas && this.dataGatherer.getData().getSheetNames().contains(this.scanDebug + "_delta")) {
-            debugScanWithSheet(this.dataGatherer.getData().getSheet(this.scanDebug + "_delta"), true);
+        debugScanWithSheet(dataGatherer.getData().getSheet(scanDebug), false);
+        if (deltas && dataGatherer.getData().getSheetNames().contains(scanDebug + "_delta")) {
+            debugScanWithSheet(dataGatherer.getData().getSheet(scanDebug + "_delta"), true);
         }
     }
 
@@ -104,13 +110,21 @@ public class VisualDebugger implements SupportsFrameEvents {
                     Long l1 = LongFloatSimplificator.longOf(sheet.get(o1));
                     Long l2 = LongFloatSimplificator.longOf(sheet.get(o2));
 
-                    if (l1 == null && l2 == null) return o1.compareTo(o2);
-                    else if (l1 == null) return -1;
-                    else if (l2 == null) return 1;
+                    if (l1 == null && l2 == null) {
+                        return o1.compareTo(o2);
+                    } else if (l1 == null) {
+                        return -1;
+                    } else if (l2 == null) {
+                        return 1;
+                    }
 
-                    if (l1 > l2) return 1;
-                    else if (l1 < l2) return -1;
-                    else return o1.compareTo(o2);
+                    if (l1 > l2) {
+                        return 1;
+                    } else if (l1 < l2) {
+                        return -1;
+                    } else {
+                        return o1.compareTo(o2);
+                    }
                 });
                 Collections.reverse(sort);
             } catch (Exception e) {
@@ -132,8 +146,8 @@ public class VisualDebugger implements SupportsFrameEvents {
 
         int lineNumber = 0;
 
-        if (this.scanDebug.startsWith("scan_large")) {
-            Progress progressObject = this.dataGatherer.getLargeScanProgress();
+        if (scanDebug.startsWith("scan_large")) {
+            Progress progressObject = dataGatherer.getLargeScanProgress();
             float progress = (float)progressObject.getProgress_Current() / progressObject.getProgress_Total();
 
             fontRenderer.drawStringWithShadow(
@@ -148,12 +162,12 @@ public class VisualDebugger implements SupportsFrameEvents {
 
         for (String index : sort) {
             if (lineNumber <= 100 && !index.contains("^")) {
-                if (this.scanDebug.startsWith("scan_") || this.scanDebug.equals("block_contact")) {
+                if (scanDebug.startsWith("scan_") || scanDebug.equals("block_contact")) {
                     Long count = LongFloatSimplificator.longOf(sheet.get(index));
                     if (count != null) {
                         if (count > 0) {
                             float scalar = (float)count / total;
-                            String percentage = !this.scanDebug.endsWith(ScannerModule.THOUSAND_SUFFIX) ? Float.toString(Math.round(scalar * 1000f) / 10f) : Integer.toString(Math.round(scalar * 100f));
+                            String percentage = !scanDebug.endsWith(ScannerModule.THOUSAND_SUFFIX) ? Float.toString(Math.round(scalar * 1000f) / 10f) : Integer.toString(Math.round(scalar * 100f));
 
                             if (percentage.equals("0.0")) {
                                 percentage = "0";
@@ -185,7 +199,7 @@ public class VisualDebugger implements SupportsFrameEvents {
                             lineNumber = lineNumber + 1;
                         }
                     }
-                } else if (this.scanDebug.startsWith("detect_")) {
+                } else if (scanDebug.startsWith("detect_")) {
                     String val = sheet.get(index);
                     if (!val.equals("0") && !val.equals(Integer.toString(Integer.MAX_VALUE))) {
                         fontRenderer.drawStringWithShadow(String.format("%s (%s): %s", index, index, val), leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
@@ -210,7 +224,7 @@ public class VisualDebugger implements SupportsFrameEvents {
     }
 
     public void toggleDeltas() {
-        this.deltas = !this.deltas;
+        deltas = !deltas;
     }
 
     private enum DebugMode {

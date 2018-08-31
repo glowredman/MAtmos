@@ -39,7 +39,7 @@ public class TimedEventInformation extends MultistateComponent implements Simula
         this.provider = provider;
         this.time = time;
 
-        this.calc = new HelperFadeCalculator(time);
+        calc = new HelperFadeCalculator(time);
 
         this.events = events;
         this.delayBeforeFadeIn = delayBeforeFadeIn;
@@ -49,20 +49,22 @@ public class TimedEventInformation extends MultistateComponent implements Simula
     }
 
     private void signalPlayable() {
-        this.startTime = this.time.getMilliseconds() + (long)(this.delayBeforeFadeIn * 1000);
+        startTime = time.getMilliseconds() + (long)(delayBeforeFadeIn * 1000);
     }
 
     private void signalStoppable() {
-        this.stopTime = this.time.getMilliseconds() + (long)(this.delayBeforeFadeOut * 1000);
+        stopTime = time.getMilliseconds() + (long)(delayBeforeFadeOut * 1000);
     }
 
     @Override
     public void evaluate() {
-        if (!this.provider.exists(this.machineName)) return;
+        if (!provider.exists(machineName)) {
+            return;
+        }
 
-        boolean active = this.provider.get(this.machineName).isActive();
-        if (active != this.isActive) {
-            this.isActive = active;
+        boolean active = provider.get(machineName).isActive();
+        if (active != isActive) {
+            isActive = active;
             incrementVersion();
             if (active) {
                 signalPlayable();
@@ -74,30 +76,30 @@ public class TimedEventInformation extends MultistateComponent implements Simula
 
     @Override
     public void simulate() {
-        if (this.isActive && !this.isPlaying) {
-            if (this.time.getMilliseconds() > this.startTime) {
-                this.isPlaying = true;
-                this.calc.fadeIn((long)(this.fadeInTime * 1000));
-                for (TimedEventInterface t : this.events) {
-                    t.restart(this.time);
+        if (isActive && !isPlaying) {
+            if (time.getMilliseconds() > startTime) {
+                isPlaying = true;
+                calc.fadeIn((long)(fadeInTime * 1000));
+                for (TimedEventInterface t : events) {
+                    t.restart(time);
                 }
             }
-        } else if (!this.isActive && this.isPlaying) {
-            if (this.time.getMilliseconds() > this.stopTime) {
-                this.isPlaying = false;
-                this.calc.fadeOut((long)(this.fadeOutTime * 1000));
+        } else if (!isActive && isPlaying) {
+            if (time.getMilliseconds() > stopTime) {
+                isPlaying = false;
+                calc.fadeOut((long)(fadeOutTime * 1000));
             }
         }
 
-        if (this.isPlaying || this.calc.calculateFadeFactor() > 0f) {
+        if (isPlaying || calc.calculateFadeFactor() > 0f) {
             play();
         }
     }
 
     private void play() {
-        float fadeFactor = this.calc.calculateFadeFactor();
-        for (TimedEventInterface t : this.events) {
-            t.play(this.time, fadeFactor);
+        float fadeFactor = calc.calculateFadeFactor();
+        for (TimedEventInterface t : events) {
+            t.play(time, fadeFactor);
         }
     }
 }

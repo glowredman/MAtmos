@@ -1,6 +1,6 @@
 package eu.ha3.matmos.editor;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
 
 public class PopupHelper {
     private static KnowledgeItemType lastChoice = KnowledgeItemType.CONDITION;

@@ -1,5 +1,8 @@
 package eu.ha3.matmos.data.modules.items;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import eu.ha3.matmos.data.modules.RegistryBasedModule;
@@ -8,20 +11,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 /* x-placeholder */
 
 /**
  * An abstract module that extracts a certain quality of all potion effects (such as time,
  * strength...) that is currently affecting the player. The quality is defined by the implementing
  * class.
- * 
+ *
  * @author Hurry
  */
 abstract class AbstractPotionQualityModule extends ModuleProcessor implements RegistryBasedModule {
-    private Set<String> oldThings = new LinkedHashSet<String>();
+    private Set<String> oldThings = new LinkedHashSet<>();
 
     public AbstractPotionQualityModule(DataPackage data, String name) {
         super(data, name);
@@ -38,17 +38,17 @@ abstract class AbstractPotionQualityModule extends ModuleProcessor implements Re
     protected void doProcess() {
         EntityPlayer player = Minecraft.getMinecraft().player;
 
-        for (String i : this.oldThings) {
+        for (String i : oldThings) {
             setValue(i, 0);
         }
-        this.oldThings.clear();
+        oldThings.clear();
 
         for (Object oeffect : player.getActivePotionEffects()) {
             PotionEffect effect = (PotionEffect)oeffect;
 
             int id = Potion.getIdFromPotion(effect.getPotion());
             setValue(Integer.toString(id), getQuality(effect));
-            this.oldThings.add(Integer.toString(id));
+            oldThings.add(Integer.toString(id));
         }
     }
 

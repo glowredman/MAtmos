@@ -1,5 +1,8 @@
 package eu.ha3.matmos.data.modules.player;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.MODULE_CONSTANTS;
 import eu.ha3.matmos.data.modules.Module;
@@ -9,20 +12,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.math.RayTraceResult.Type;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Processes values for the entity/block that a player focuses over with the cursor.
  */
 public class ModuleHitscan extends ModuleProcessor implements Module {
-    private final Map<Type, String> equiv = new HashMap<Type, String>();
+    private final Map<Type, String> equiv = new HashMap<>();
 
     public ModuleHitscan(DataPackage data) {
         super(data, "ply_hitscan");
-        this.equiv.put(Type.MISS, "");
-        this.equiv.put(Type.ENTITY, "entity");
-        this.equiv.put(Type.BLOCK, "block");
+        equiv.put(Type.MISS, "");
+        equiv.put(Type.ENTITY, "entity");
+        equiv.put(Type.BLOCK, "block");
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ModuleHitscan extends ModuleProcessor implements Module {
         }
 
         setValue("mouse_over_something", mc.objectMouseOver.typeOfHit != Type.MISS);
-        setValue("mouse_over_what", this.equiv.get(mc.objectMouseOver.typeOfHit));
+        setValue("mouse_over_what", equiv.get(mc.objectMouseOver.typeOfHit));
         // dag edit -> getBlockPos().get..()
         setValue("block", mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtUtil.getNameAt(mc.objectMouseOver.getBlockPos(), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS)
                 : MODULE_CONSTANTS.NO_BLOCK_IN_THIS_CONTEXT);

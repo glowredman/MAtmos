@@ -8,5 +8,5 @@ public interface Evaluated {
     /**
      * Evaluate this.
      */
-    public void evaluate();
+    void evaluate();
 }

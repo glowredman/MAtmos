@@ -1,18 +1,19 @@
 package eu.ha3.matmos.data.modules;
 
-import eu.ha3.matmos.MAtLog;
-import eu.ha3.matmos.core.sheet.DataPackage;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ServerData;
-
-import javax.naming.directory.Attributes;
-import javax.naming.directory.InitialDirContext;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.naming.directory.Attributes;
+import javax.naming.directory.InitialDirContext;
+
+import eu.ha3.matmos.MAtLog;
+import eu.ha3.matmos.core.sheet.DataPackage;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ServerData;
 
 public class ModuleServerInfo extends ModuleProcessor implements Module {
     private final Map<String, Integer> serverAddresses;
@@ -21,8 +22,8 @@ public class ModuleServerInfo extends ModuleProcessor implements Module {
     public ModuleServerInfo(DataPackage data) {
         super(data, "server_info", true);
 
-        this.serverAddresses = new HashMap<String, Integer>();
-        this.serverPorts = new HashMap<String, Integer>();
+        serverAddresses = new HashMap<>();
+        serverPorts = new HashMap<>();
     }
 
     @Override
@@ -48,8 +49,8 @@ public class ModuleServerInfo extends ModuleProcessor implements Module {
             setValue("addressinput_hashcode", serverData.serverIP.toLowerCase(Locale.ENGLISH).hashCode());
             setValue("motd_hashcode", MOTDsec.hashCode());
             setValue("name_hashcode", NAMEsec.hashCode());
-            setValue("ip_computed_hashcode", this.serverAddresses.get(playerDefinedAddress));
-            setValue("port_computed", this.serverPorts.get(playerDefinedAddress));
+            setValue("ip_computed_hashcode", serverAddresses.get(playerDefinedAddress));
+            setValue("port_computed", serverPorts.get(playerDefinedAddress));
         } else {
             setValue("has_server_info", false);
             setValue("addressinput_hashcode", "");
@@ -61,7 +62,9 @@ public class ModuleServerInfo extends ModuleProcessor implements Module {
     }
 
     private void queryActualIP_useCache(String playerDefinedAddress) {
-        if (this.serverAddresses.containsKey(playerDefinedAddress)) return;
+        if (serverAddresses.containsKey(playerDefinedAddress)) {
+            return;
+        }
 
         String[] splitIp = playerDefinedAddress.split(":");
 
@@ -105,16 +108,16 @@ public class ModuleServerInfo extends ModuleProcessor implements Module {
         } catch (UnknownHostException e) {
             e.printStackTrace();
 
-            this.serverAddresses.put(playerDefinedAddress, 0);
-            this.serverPorts.put(playerDefinedAddress, conPort);
+            serverAddresses.put(playerDefinedAddress, 0);
+            serverPorts.put(playerDefinedAddress, conPort);
 
             MAtLog.info("Error while hashing server addess: Defaulted to 0");
 
             return;
         }
 
-        this.serverAddresses.put(playerDefinedAddress, wellHashCode);
-        this.serverPorts.put(playerDefinedAddress, conPort);
+        serverAddresses.put(playerDefinedAddress, wellHashCode);
+        serverPorts.put(playerDefinedAddress, conPort);
 
         MAtLog.info("Computed server IP and hashed as (" + wellHashCode + ") : " + conPort);
 
@@ -126,7 +129,7 @@ public class ModuleServerInfo extends ModuleProcessor implements Module {
             Hashtable hash = new Hashtable();
             hash.put("java.naming.factory.initial", "com.sun.jndi.dns.DnsContextFactory");
             hash.put("java.naming.provider.url", "dns:");
-            
+
             InitialDirContext idc = new InitialDirContext(hash);
             Attributes att = idc.getAttributes("_minecraft._tcp." + resolve, new String[] {"SRV"});
             String[] cts = att.get("srv").get().toString().split(" ", 4);

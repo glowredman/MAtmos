@@ -10,14 +10,14 @@ import java.util.TreeSet;
  */
 
 public class SerialMachine {
-    public Set<String> allow = new TreeSet<String>();
-    public Set<String> restrict = new TreeSet<String>();
+    public Set<String> allow = new TreeSet<>();
+    public Set<String> restrict = new TreeSet<>();
 
     public float fadein;
     public float fadeout;
     public float delay_fadein;
     public float delay_fadeout;
 
-    public List<SerialMachineEvent> event = new ArrayList<SerialMachineEvent>();
+    public List<SerialMachineEvent> event = new ArrayList<>();
     public SerialMachineStream stream = null;
 }

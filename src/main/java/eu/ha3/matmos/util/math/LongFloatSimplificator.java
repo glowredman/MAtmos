@@ -6,9 +6,13 @@ package eu.ha3.matmos.util.math;
 
 public class LongFloatSimplificator {
     public static Long longOf(Object o) {
-        if (o == null) return null;
+        if (o == null) {
+            return null;
+        }
 
-        if (o instanceof Long) return (Long)o;
+        if (o instanceof Long) {
+            return (Long)o;
+        }
 
         if (o instanceof String) {
             try {
@@ -22,9 +26,13 @@ public class LongFloatSimplificator {
     }
 
     public static Float floatOf(Object o) {
-        if (o == null) return null;
+        if (o == null) {
+            return null;
+        }
 
-        if (o instanceof Float) return (Float)o;
+        if (o instanceof Float) {
+            return (Float)o;
+        }
 
         if (o instanceof String) {
             try {

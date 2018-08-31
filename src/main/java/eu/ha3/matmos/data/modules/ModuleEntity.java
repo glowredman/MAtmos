@@ -1,5 +1,12 @@
 package eu.ha3.matmos.data.modules;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.Collector;
 import eu.ha3.matmos.data.Processor;
@@ -10,8 +17,6 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-
-import java.util.*;
 
 /* x-placeholder */
 
@@ -35,67 +40,67 @@ public class ModuleEntity implements Processor, PassOnceModule {
     @SuppressWarnings("unchecked")
     public ModuleEntity(DataPackage dataIn, Collector collector, String minDistModule, String radiModulePrefix, int max, int... radiis) {
         this.collector = collector;
-        this.submodules = new LinkedHashSet<String>();
+        submodules = new LinkedHashSet<>();
 
-        this.mindistModel = new ModuleProcessor(dataIn, minDistModule) {
+        mindistModel = new ModuleProcessor(dataIn, minDistModule) {
             @Override
             protected void doProcess() {
             }
         };
         dataIn.getSheet(minDistModule).setDefaultValue("0");
-        this.submodules.add(minDistModule);
-        this.minimumDistanceReports = new HashMap<String, Double>();
+        submodules.add(minDistModule);
+        minimumDistanceReports = new HashMap<>();
 
-        this.radiusSheets = new ModuleProcessor[radiis.length];
-        this.entityCount = (Map<String, Integer>[])new Map<?, ?>[radiis.length];
+        radiusSheets = new ModuleProcessor[radiis.length];
+        entityCount = (Map<String, Integer>[])new Map<?, ?>[radiis.length];
 
-        this.radiusValuesSorted = Arrays.copyOf(radiis, radiis.length);
-        Arrays.sort(this.radiusValuesSorted);
-        this.maxel = this.radiusValuesSorted[this.radiusValuesSorted.length - 1] + 10;
+        radiusValuesSorted = Arrays.copyOf(radiis, radiis.length);
+        Arrays.sort(radiusValuesSorted);
+        maxel = radiusValuesSorted[radiusValuesSorted.length - 1] + 10;
 
-        for (int i = 0; i < this.radiusValuesSorted.length; i++) {
-            int radiNum = this.radiusValuesSorted[i];
-            this.radiusSheets[i] = new ModuleProcessor(dataIn, radiModulePrefix + radiNum) {
+        for (int i = 0; i < radiusValuesSorted.length; i++) {
+            int radiNum = radiusValuesSorted[i];
+            radiusSheets[i] = new ModuleProcessor(dataIn, radiModulePrefix + radiNum) {
                 @Override
                 protected void doProcess() {
                 }
             };
             dataIn.getSheet(radiModulePrefix + radiNum).setDefaultValue(Integer.toString(Integer.MAX_VALUE));
-            this.submodules.add(radiModulePrefix + radiNum);
-            this.entityCount[i] = new HashMap<String, Integer>();
+            submodules.add(radiModulePrefix + radiNum);
+            entityCount[i] = new HashMap<>();
         }
 
-        this.bbox = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
+        bbox = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
     }
 
     private void refresh() {
-        this.isRequired = false;
-        this.isRequired = this.collector.requires(this.mindistModel.getModuleName());
+        isRequired = false;
+        isRequired = collector.requires(mindistModel.getModuleName());
 
-        for (ModuleProcessor processor : this.radiusSheets) {
-            this.isRequired = this.isRequired || this.collector.requires(processor.getModuleName());
+        for (ModuleProcessor processor : radiusSheets) {
+            isRequired = isRequired || collector.requires(processor.getModuleName());
         }
 
-        for (Map<String, Integer> mappy : this.entityCount) {
+        for (Map<String, Integer> mappy : entityCount) {
             mappy.clear();
         }
 
         // Reset old things
-        for (String type : this.minimumDistanceReports.keySet()) {
-            for (int i = 0; i < this.radiusValuesSorted.length; i++) {
-                this.radiusSheets[i].setValue(type, 0);
+        for (String type : minimumDistanceReports.keySet()) {
+            for (int i = 0; i < radiusValuesSorted.length; i++) {
+                radiusSheets[i].setValue(type, 0);
             }
 
-            this.mindistModel.setValue(type, Integer.MAX_VALUE);
+            mindistModel.setValue(type, Integer.MAX_VALUE);
         }
-        this.minimumDistanceReports.clear();
+        minimumDistanceReports.clear();
     }
 
     @Override
     public void process() {
         refresh();
 
-        if (!this.isRequired) {
+        if (!isRequired) {
             IDontKnowHowToCode.warnOnce("EntityDetector is running but not required. Logic error?");
             return;
         }
@@ -106,9 +111,9 @@ public class ModuleEntity implements Processor, PassOnceModule {
         double y = mc.player.posY;
         double z = mc.player.posZ;
 
-        this.bbox = new AxisAlignedBB(x - this.maxel, y - this.maxel, z - this.maxel, x + this.maxel, y + this.maxel, z + this.maxel);
+        bbox = new AxisAlignedBB(x - maxel, y - maxel, z - maxel, x + maxel, y + maxel, z + maxel);
 
-        List<Entity> entityList = mc.world.getEntitiesWithinAABB(Entity.class, this.bbox);
+        List<Entity> entityList = mc.world.getEntitiesWithinAABB(Entity.class, bbox);
 
         for (Entity e : entityList) {
             if (e != null && e != mc.player) {
@@ -130,8 +135,8 @@ public class ModuleEntity implements Processor, PassOnceModule {
 
                 int i = 0;
                 boolean reported = false;
-                while (i < this.radiusValuesSorted.length && !reported) {
-                    if (distance <= this.radiusValuesSorted[i]) {
+                while (i < radiusValuesSorted.length && !reported) {
+                    if (distance <= radiusValuesSorted[i]) {
                         // If something is within 1 meter, it certainly also is within 5 meters:
                         // expand now and exit the loop.
                         if (!(e instanceof EntityPlayer)) {
@@ -151,43 +156,43 @@ public class ModuleEntity implements Processor, PassOnceModule {
             }
         }
 
-        for (int i = 0; i < this.radiusValuesSorted.length; i++) {
-            if (this.collector.requires(this.radiusSheets[i].getModuleName())) {
-                for (String entityID : this.entityCount[i].keySet()) {
-                    this.radiusSheets[i].setValue(entityID, this.entityCount[i].get(entityID));
+        for (int i = 0; i < radiusValuesSorted.length; i++) {
+            if (collector.requires(radiusSheets[i].getModuleName())) {
+                for (String entityID : entityCount[i].keySet()) {
+                    radiusSheets[i].setValue(entityID, entityCount[i].get(entityID));
                 }
             }
         }
 
-        if (this.collector.requires(this.mindistModel.getModuleName())) {
-            for (String entityID : this.minimumDistanceReports.keySet()) {
-                this.mindistModel.setValue(entityID, (int)Math.floor(this.minimumDistanceReports.get(entityID) * 1000));
+        if (collector.requires(mindistModel.getModuleName())) {
+            for (String entityID : minimumDistanceReports.keySet()) {
+                mindistModel.setValue(entityID, (int)Math.floor(minimumDistanceReports.get(entityID) * 1000));
             }
         }
 
         // Apply the virtual sheets
-        if (this.collector.requires(this.mindistModel.getModuleName())) {
-            this.mindistModel.process();
+        if (collector.requires(mindistModel.getModuleName())) {
+            mindistModel.process();
         }
 
-        for (int i = 0; i < this.radiusValuesSorted.length; i++) {
-            if (this.collector.requires(this.radiusSheets[i].getModuleName())) {
-                this.radiusSheets[i].process();
+        for (int i = 0; i < radiusValuesSorted.length; i++) {
+            if (collector.requires(radiusSheets[i].getModuleName())) {
+                radiusSheets[i].process();
             }
         }
     }
 
     protected void addToEntityCount(int radiIndex, String entityID, int count) {
-        if (this.entityCount[radiIndex].containsKey(entityID)) {
-            this.entityCount[radiIndex].put(entityID, this.entityCount[radiIndex].get(entityID) + count);
+        if (entityCount[radiIndex].containsKey(entityID)) {
+            entityCount[radiIndex].put(entityID, entityCount[radiIndex].get(entityID) + count);
         } else {
-            this.entityCount[radiIndex].put(entityID, count);
+            entityCount[radiIndex].put(entityID, count);
         }
     }
 
     protected void reportDistance(String type, double distance) {
-        if (!this.minimumDistanceReports.containsKey(type) || this.minimumDistanceReports.get(type) > distance) {
-            this.minimumDistanceReports.put(type, distance);
+        if (!minimumDistanceReports.containsKey(type) || minimumDistanceReports.get(type) > distance) {
+            minimumDistanceReports.put(type, distance);
         }
     }
 
@@ -198,7 +203,7 @@ public class ModuleEntity implements Processor, PassOnceModule {
 
     @Override
     public Set<String> getSubModules() {
-        return this.submodules;
+        return submodules;
     }
 
 }

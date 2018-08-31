@@ -1,23 +1,34 @@
 package eu.ha3.matmos.serialisation;
 
-import eu.ha3.matmos.core.Dynamic;
-import eu.ha3.matmos.core.Operator;
-import eu.ha3.matmos.core.sheet.SheetEntry;
-import eu.ha3.matmos.core.sheet.SheetIndex;
-import eu.ha3.matmos.serialisation.expansion.*;
-import eu.ha3.matmos.util.MAtUtil;
-import eu.ha3.matmos.util.math.LongFloatSimplificator;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.sf.practicalxml.DomUtil;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.xml.xpath.XPathExpressionException;
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import javax.xml.xpath.XPathExpressionException;
-import java.util.HashMap;
-import java.util.Map;
+import eu.ha3.matmos.core.Dynamic;
+import eu.ha3.matmos.core.Operator;
+import eu.ha3.matmos.core.sheet.SheetEntry;
+import eu.ha3.matmos.core.sheet.SheetIndex;
+import eu.ha3.matmos.serialisation.expansion.SerialCondition;
+import eu.ha3.matmos.serialisation.expansion.SerialDynamic;
+import eu.ha3.matmos.serialisation.expansion.SerialDynamicSheetIndex;
+import eu.ha3.matmos.serialisation.expansion.SerialEvent;
+import eu.ha3.matmos.serialisation.expansion.SerialList;
+import eu.ha3.matmos.serialisation.expansion.SerialMachine;
+import eu.ha3.matmos.serialisation.expansion.SerialMachineEvent;
+import eu.ha3.matmos.serialisation.expansion.SerialMachineStream;
+import eu.ha3.matmos.serialisation.expansion.SerialRoot;
+import eu.ha3.matmos.serialisation.expansion.SerialSet;
+import eu.ha3.matmos.util.MAtUtil;
+import eu.ha3.matmos.util.math.LongFloatSimplificator;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.sf.practicalxml.DomUtil;
 
 /* x-placeholder */
 
@@ -77,20 +88,20 @@ public class LegacyXMLExpansions_Engine1 {
     private SerialRoot root;
 
     public LegacyXMLExpansions_Engine1() {
-        this.scanDicts = new HashMap<String, String>();
-        this.scanDicts.put("LargeScan", "scan_large");
-        this.scanDicts.put("LargeScanPerMil", "scan_large_p1k");
-        this.scanDicts.put("SmallScan", "scan_small");
-        this.scanDicts.put("SmallScanPerMil", "scan_small_p1k");
-        this.scanDicts.put("ContactScan", "scan_contact");
+        scanDicts = new HashMap<>();
+        scanDicts.put("LargeScan", "scan_large");
+        scanDicts.put("LargeScanPerMil", "scan_large_p1k");
+        scanDicts.put("SmallScan", "scan_small");
+        scanDicts.put("SmallScanPerMil", "scan_small_p1k");
+        scanDicts.put("ContactScan", "scan_contact");
     }
 
     public SerialRoot loadXMLtoSerial(Document doc) {
-        this.root = new SerialRoot();
+        root = new SerialRoot();
 
         try {
             parseXMLtoSerial(doc);
-            return this.root;
+            return root;
         } catch (Exception e) {
             e.printStackTrace();
             return new SerialRoot();
@@ -99,32 +110,44 @@ public class LegacyXMLExpansions_Engine1 {
 
     private String asBlock(int il) {
         Block block = Block.getBlockById(il);
-        if (block == null) return null;
+        if (block == null) {
+            return null;
+        }
 
         return MAtUtil.nameOf(block);
     }
 
     private String asBlock(String longFloatSimplificated) {
-        if (longFloatSimplificated == null) return null;
+        if (longFloatSimplificated == null) {
+            return null;
+        }
 
         Long l = LongFloatSimplificator.longOf(longFloatSimplificated);
-        if (l == null) return null;
+        if (l == null) {
+            return null;
+        }
 
         return asBlock((int)(long)l);
     }
 
     private String asItem(int il) {
         Item item = Item.getItemById(il);
-        if (item == null) return null;
+        if (item == null) {
+            return null;
+        }
 
         return MAtUtil.nameOf(item);
     }
 
     private String asItem(String longFloatSimplificated) {
-        if (longFloatSimplificated == null) return null;
+        if (longFloatSimplificated == null) {
+            return null;
+        }
 
         Long l = LongFloatSimplificator.longOf(longFloatSimplificated);
-        if (l == null) return null;
+        if (l == null) {
+            return null;
+        }
 
         return asItem((int)(long)l);
     }
@@ -180,10 +203,14 @@ public class LegacyXMLExpansions_Engine1 {
     }
 
     private String nameOf(Element element) {
-        if (element == null) return null;
+        if (element == null) {
+            return null;
+        }
 
         Node nameNode = element.getAttributes().getNamedItem(NAME);
-        if (nameNode == null) return null;
+        if (nameNode == null) {
+            return null;
+        }
 
         return nameNode.getNodeValue();
     }
@@ -245,7 +272,7 @@ public class LegacyXMLExpansions_Engine1 {
             dynamic.entries.add(sdsi);
         }
 
-        this.root.dynamic.put(name, dynamic);
+        root.dynamic.put(name, dynamic);
     }
 
     private void parseXML_2_list(Element capsule, String name) {
@@ -267,9 +294,9 @@ public class LegacyXMLExpansions_Engine1 {
                 }
             }
         }
-        this.root.list.put(name, list);
-        this.root.list.put(name + AS_BLOCK, asBlock);
-        this.root.list.put(name + AS_ITEM, asItem);
+        root.list.put(name, list);
+        root.list.put(name + AS_BLOCK, asBlock);
+        root.list.put(name + AS_ITEM, asItem);
     }
 
     private void parseXML_3_condition(Element capsule, String name) {
@@ -307,7 +334,7 @@ public class LegacyXMLExpansions_Engine1 {
             condition.symbol = Operator.fromSymbol(symbol).getSerializedForm();
             condition.value = value;
 
-            this.root.condition.put(name, condition);
+            root.condition.put(name, condition);
         }
         if (si instanceof LegacySheetIndex_Engine0to1) {
             if (((LegacySheetIndex_Engine0to1)si).isBlock() && asBlock(value) != null) {
@@ -318,7 +345,7 @@ public class LegacyXMLExpansions_Engine1 {
                 condition.symbol = Operator.fromSymbol(symbol).getSerializedForm();
                 condition.value = asBlock(value);
 
-                this.root.condition.put(name + AS_BLOCK, condition);
+                root.condition.put(name + AS_BLOCK, condition);
             }
 
             if (((LegacySheetIndex_Engine0to1)si).isItem() && asItem(value) != null) {
@@ -329,7 +356,7 @@ public class LegacyXMLExpansions_Engine1 {
                 condition.symbol = Operator.fromSymbol(symbol).getSerializedForm();
                 condition.value = asItem(value);
 
-                this.root.condition.put(name + AS_ITEM, condition);
+                root.condition.put(name + AS_ITEM, condition);
             }
         }
     }
@@ -345,7 +372,7 @@ public class LegacyXMLExpansions_Engine1 {
             set.no.add(textOf(eelt));
         }
 
-        this.root.set.put(name, set);
+        root.set.put(name, set);
     }
 
     private void parseXML_5_event(Element capsule, String name) {
@@ -367,7 +394,7 @@ public class LegacyXMLExpansions_Engine1 {
             event.path.add(textOf(eelt));
         }
 
-        this.root.event.put(name, event);
+        root.event.put(name, event);
     }
 
     private void parseXML_6_machine(Element capsule, String name) {
@@ -398,7 +425,7 @@ public class LegacyXMLExpansions_Engine1 {
             machine.restrict.add(textOf(eelt));
         }
 
-        this.root.machine.put(name, machine);
+        root.machine.put(name, machine);
     }
 
     private String recomputeBlockName(String index) {
@@ -418,15 +445,19 @@ public class LegacyXMLExpansions_Engine1 {
     }
 
     private String recomputeScanSheetName(String sheet) {
-        if (this.scanDicts.containsKey(sheet)) return this.scanDicts.get(sheet);
+        if (scanDicts.containsKey(sheet)) {
+            return scanDicts.get(sheet);
+        }
 
-        System.err.println("Scan sheet has no equivalent: " + this.scanDicts);
+        System.err.println("Scan sheet has no equivalent: " + scanDicts);
         return sheet;
 
     }
 
     private String textOf(Element ele) {
-        if (ele == null || ele.getFirstChild() == null) return null;
+        if (ele == null || ele.getFirstChild() == null) {
+            return null;
+        }
 
         return ele.getFirstChild().getNodeValue();
     }

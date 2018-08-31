@@ -9,39 +9,39 @@ import java.util.Set;
 public interface Provider<T> {
     /**
      * Returns whether a named object exists.
-     * 
+     *
      * @param  name
      * @return
      */
-    public boolean exists(String name);
+    boolean exists(String name);
 
     /**
      * Returns a named object version from the provider, or -1 if it doesn't exist.
-     * 
+     *
      * @param  name
      * @return
      */
-    public int version(String name);
+    int version(String name);
 
     /**
      * Returns an named object from the provider, or null if it doesn't exist.
-     * 
+     *
      * @param  name
      * @return
      */
-    public T get(String name);
+    T get(String name);
 
     /**
      * Returns a commanding instance of the provider.
-     * 
+     *
      * @return
      */
-    public T instance();
+    T instance();
 
     /**
      * Returns the keySet. Use with care, preferably for debugging purposes.
-     * 
+     *
      * @return
      */
-    public Set<String> keySet();
+    Set<String> keySet();
 }

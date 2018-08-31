@@ -1,25 +1,14 @@
 package eu.ha3.matmos.editor;
 
-import eu.ha3.matmos.editor.edit.EditPanel;
-import eu.ha3.matmos.editor.filechooser.JsonFileChooser;
-import eu.ha3.matmos.editor.filechooser.OverwriteWarningJsonFileChooser;
-import eu.ha3.matmos.editor.interfaces.Editor;
-import eu.ha3.matmos.editor.interfaces.Window;
-import eu.ha3.matmos.editor.tree.ItemTreeBranch;
-import eu.ha3.matmos.editor.tree.ItemTreeNode;
-import eu.ha3.matmos.editor.tree.ItemTreeViewPanel;
-import eu.ha3.matmos.serialisation.expansion.SerialRoot;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,8 +25,19 @@ import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
-@SuppressWarnings("serial")
+import eu.ha3.matmos.editor.edit.EditPanel;
+import eu.ha3.matmos.editor.filechooser.JsonFileChooser;
+import eu.ha3.matmos.editor.filechooser.OverwriteWarningJsonFileChooser;
+import eu.ha3.matmos.editor.interfaces.Editor;
+import eu.ha3.matmos.editor.interfaces.Window;
+import eu.ha3.matmos.editor.tree.ItemTreeBranch;
+import eu.ha3.matmos.editor.tree.ItemTreeNode;
+import eu.ha3.matmos.editor.tree.ItemTreeViewPanel;
+import eu.ha3.matmos.serialisation.expansion.SerialRoot;
+
 public class EditorWindow extends JFrame implements Window {
+    private static final long serialVersionUID = 1L;
+
     private final Editor model;
 
     private static final String WINDOW_TITLE = "MAtmos Editor";
@@ -62,18 +62,20 @@ public class EditorWindow extends JFrame implements Window {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent arg0) {
-                if (EditorWindow.this.model.hasUnsavedChanges()) {
-                    if (!continueUnsavedChangesWarningIfNecessary()) return;
+                if (model.hasUnsavedChanges()) {
+                    if (!continueUnsavedChangesWarningIfNecessary()) {
+                        return;
+                    }
                 }
 
-                if (EditorWindow.this.model.isMinecraftControlled()) {
+                if (model.isMinecraftControlled()) {
                     setVisible(false);
                 } else {
                     dispose();
                 }
             }
         });
-        this.model = modelConstruct;
+        model = modelConstruct;
 
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
@@ -82,16 +84,20 @@ public class EditorWindow extends JFrame implements Window {
         mnFile.setMnemonic('f');
         menuBar.add(mnFile);
 
-        this.mntmFSave = new JMenuItem("Save");
-        this.mntmFSave.addActionListener(e -> model.quickSave());
+        mntmFSave = new JMenuItem("Save");
+        mntmFSave.addActionListener(e -> model.quickSave());
 
-        this.mntmOpenFile = new JMenuItem("Open file...");
-        this.mntmOpenFile.addActionListener(e -> {
-            if (!continueUnsavedChangesWarningIfNecessary()) return;
+        mntmOpenFile = new JMenuItem("Open file...");
+        mntmOpenFile.addActionListener(e -> {
+            if (!continueUnsavedChangesWarningIfNecessary()) {
+                return;
+            }
 
             JFileChooser fc = new JsonFileChooser(EditorWindow.this.model.getExpansionDirectory());
             int returnValue = fc.showOpenDialog(EditorWindow.this);
-            if (returnValue != JFileChooser.APPROVE_OPTION) return;
+            if (returnValue != JFileChooser.APPROVE_OPTION) {
+                return;
+            }
 
             File file = fc.getSelectedFile();
             if (file == null || !file.exists() || file.isDirectory()) {
@@ -105,21 +111,22 @@ public class EditorWindow extends JFrame implements Window {
 
             model.trySetAndLoadFile(file);
         });
-        mnFile.add(this.mntmOpenFile);
+        mnFile.add(mntmOpenFile);
 
         JSeparator separator_1 = new JSeparator();
         mnFile.add(separator_1);
-        this.mntmFSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-        mnFile.add(this.mntmFSave);
+        mntmFSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+        mnFile.add(mntmFSave);
 
-        this.mntmFSaveAs = new JMenuItem("Save as...");
-        this.mntmFSaveAs.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fc = new OverwriteWarningJsonFileChooser(EditorWindow.this.model.getExpansionDirectory());
+        mntmFSaveAs = new JMenuItem("Save as...");
+        mntmFSaveAs.addActionListener(e -> {
+            while (true) {
+                JFileChooser fc = new OverwriteWarningJsonFileChooser(model.getExpansionDirectory());
                 int returnValue = fc.showSaveDialog(EditorWindow.this);
-                if (returnValue != JFileChooser.APPROVE_OPTION) return;
-
+                if (returnValue != JFileChooser.APPROVE_OPTION) {
+                    return;
+                }
+    
                 File file = fc.getSelectedFile();
                 if (file == null || file.isDirectory()) {
                     if (file.isDirectory()) {
@@ -129,23 +136,24 @@ public class EditorWindow extends JFrame implements Window {
                     }
                     return;
                 }
-
-                boolean success = EditorWindow.this.model.longSave(file, true);
-                if (!success) {
-                    actionPerformed(e);
+    
+                if (model.longSave(file, true)) {
+                    return;
                 }
             }
         });
-        mnFile.add(this.mntmFSaveAs);
+        mnFile.add(mntmFSaveAs);
 
         JMenuItem mntmFSaveACopy = new JMenuItem("Save a backup copy...");
-        mntmFSaveACopy.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fc = new OverwriteWarningJsonFileChooser(EditorWindow.this.model.getExpansionDirectory());
+        mntmFSaveACopy.addActionListener(e -> {
+            
+            while (true) {
+                JFileChooser fc = new OverwriteWarningJsonFileChooser(model.getExpansionDirectory());
                 int returnValue = fc.showSaveDialog(EditorWindow.this);
-                if (returnValue != JFileChooser.APPROVE_OPTION) return;
-
+                if (returnValue != JFileChooser.APPROVE_OPTION) {
+                    return;
+                }
+    
                 File file = fc.getSelectedFile();
                 if (file == null || file.isDirectory()) {
                     if (file.isDirectory()) {
@@ -155,51 +163,50 @@ public class EditorWindow extends JFrame implements Window {
                     }
                     return;
                 }
-
-                boolean success = EditorWindow.this.model.longSave(file, false);
-                if (!success) {
-                    actionPerformed(e);
+    
+                if (model.longSave(file, false)) {
+                    return;
                 }
             }
         });
-        mntmFSaveACopy
-                .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.ALT_MASK));
+        mntmFSaveACopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.ALT_MASK));
         mnFile.add(mntmFSaveACopy);
 
         JSeparator separator_2 = new JSeparator();
         mnFile.add(separator_2);
 
-        this.mntmReplaceCurrentFile = new JMenuItem("Replace current file with backup... (NOT IMPLEMENTED)");
-        mnFile.add(this.mntmReplaceCurrentFile);
+        mntmReplaceCurrentFile = new JMenuItem("Replace current file with backup... (NOT IMPLEMENTED)");
+        mnFile.add(mntmReplaceCurrentFile);
 
-        this.mntmFDiscardChanges = new JMenuItem("Discard changes and reload (NOT IMPLEMENTED)");
-        mnFile.add(this.mntmFDiscardChanges);
+        mntmFDiscardChanges = new JMenuItem("Discard changes and reload (NOT IMPLEMENTED)");
+        mnFile.add(mntmFDiscardChanges);
 
         JSeparator separator_7 = new JSeparator();
         mnFile.add(separator_7);
 
         JMenuItem mntmMergeAnotherFile = new JMenuItem("Merge another file in...");
-        mntmMergeAnotherFile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                if (!continueUnsavedChangesWarningIfNecessary()) return;
-
-                JFileChooser fc = new JsonFileChooser(EditorWindow.this.model.getExpansionDirectory());
-                int returnValue = fc.showOpenDialog(EditorWindow.this);
-                if (returnValue != JFileChooser.APPROVE_OPTION) return;
-
-                File file = fc.getSelectedFile();
-                if (file == null || !file.exists() || file.isDirectory()) {
-                    if (file.isDirectory()) {
-                        showErrorPopup("Unexpected error: The file is a directory.");
-                    } else {
-                        showErrorPopup("Unexpected error: The file does not exist.");
-                    }
-                    return;
-                }
-
-                EditorWindow.this.model.mergeFrom(file);
+        mntmMergeAnotherFile.addActionListener(arg0 -> {
+            if (!continueUnsavedChangesWarningIfNecessary()) {
+                return;
             }
+
+            JFileChooser fc = new JsonFileChooser(model.getExpansionDirectory());
+            int returnValue = fc.showOpenDialog(EditorWindow.this);
+            if (returnValue != JFileChooser.APPROVE_OPTION) {
+                return;
+            }
+
+            File file = fc.getSelectedFile();
+            if (file == null || !file.exists() || file.isDirectory()) {
+                if (file.isDirectory()) {
+                    showErrorPopup("Unexpected error: The file is a directory.");
+                } else {
+                    showErrorPopup("Unexpected error: The file does not exist.");
+                }
+                return;
+            }
+
+            model.mergeFrom(file);
         });
         mnFile.add(mntmMergeAnotherFile);
 
@@ -213,32 +220,30 @@ public class EditorWindow extends JFrame implements Window {
         menuBar.add(mnCreate);
 
         JMenuItem mntmAdd = new JMenuItem("Create new item...");
-        mntmAdd.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                new PopupHelper();
-                KnowledgeItemType choice = PopupHelper.askForType(EditorWindow.this, "Create new item...");
+        mntmAdd.addActionListener(arg0 -> {
+            new PopupHelper();
+            KnowledgeItemType choice = PopupHelper.askForType(EditorWindow.this, "Create new item...");
 
-                String name = "New item";
-                while (true) {
-                    name = PopupHelper.askForName(EditorWindow.this, "Create new item...", name);
+            String name = "New item";
+            while (true) {
+                name = PopupHelper.askForName(EditorWindow.this, "Create new item...", name);
 
-                    if (name == null || EditorWindow.this.model.createItem(choice, name)) return;
+                if (name == null || model.createItem(choice, name)) {
+                    return;
                 }
             }
         });
         mnCreate.add(mntmAdd);
 
         JMenuItem mntmNewMenuItem = new JMenuItem("Duplicate item...");
-        mntmNewMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                ItemTreeNode node = getSelectedITN();
-                if (node == null) return;
-
-                EditorWindow.this.model.duplicateItem(
-                        ((ItemTreeBranch)node.getParent()).getSelector(), node.getItemName());
+        mntmNewMenuItem.addActionListener(arg0 -> {
+            ItemTreeNode node = getSelectedITN();
+            if (node == null) {
+                return;
             }
+
+            model.duplicateItem(
+                    ((ItemTreeBranch)node.getParent()).getSelector(), node.getItemName());
         });
         mnCreate.add(mntmNewMenuItem);
 
@@ -292,25 +297,22 @@ public class EditorWindow extends JFrame implements Window {
         JMenuItem mntmLoadDefaultDatavalues = new JMenuItem("Load last generated data values");
         mnOptions.add(mntmLoadDefaultDatavalues);
 
-        this.mnMinecraft = new JMenu("Minecraft");
-        this.mnMinecraft.setMnemonic('m');
-        menuBar.add(this.mnMinecraft);
+        mnMinecraft = new JMenu("Minecraft");
+        mnMinecraft.setMnemonic('m');
+        menuBar.add(mnMinecraft);
 
         JMenuItem mntmMCPushEditorState = new JMenuItem("Push editor state to Minecraft");
-        mntmMCPushEditorState.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                EditorWindow.this.model.minecraftPushCurrentState();
-            }
-        });
+        mntmMCPushEditorState.addActionListener(e -> model.minecraftPushCurrentState());
         mntmMCPushEditorState.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
-        this.mnMinecraft.add(mntmMCPushEditorState);
+        mnMinecraft.add(mntmMCPushEditorState);
 
-        this.mntmMCSaveAndPush = new JMenuItem("Save file and push to Minecraft");
-        this.mntmMCSaveAndPush.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, InputEvent.CTRL_MASK));
-        this.mntmMCSaveAndPush.addActionListener(event -> {
+        mntmMCSaveAndPush = new JMenuItem("Save file and push to Minecraft");
+        mntmMCSaveAndPush.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, InputEvent.CTRL_MASK));
+        mntmMCSaveAndPush.addActionListener(event -> {
             // Should never happen hopefully...
-            if (!EditorWindow.this.model.isMinecraftControlled()) return;
+            if (!EditorWindow.this.model.isMinecraftControlled()) {
+                return;
+            }
 
             if (attemptToQuickSave()) {
                 EditorWindow.this.model.minecraftReloadFromDisk();
@@ -318,35 +320,35 @@ public class EditorWindow extends JFrame implements Window {
                 showErrorPopup("Saving was unsuccessful.");
             }
         });
-        this.mnMinecraft.add(this.mntmMCSaveAndPush);
+        mnMinecraft.add(mntmMCSaveAndPush);
 
         JSeparator separator_3 = new JSeparator();
-        this.mnMinecraft.add(separator_3);
+        mnMinecraft.add(separator_3);
 
         JMenuItem mntmCaptureCurrentState = new JMenuItem("Capture current state");
         mntmCaptureCurrentState.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
-        this.mnMinecraft.add(mntmCaptureCurrentState);
+        mnMinecraft.add(mntmCaptureCurrentState);
 
-        this.mntmStartLiveCapture = new JMenuItem("Start live capture");
-        this.mnMinecraft.add(this.mntmStartLiveCapture);
+        mntmStartLiveCapture = new JMenuItem("Start live capture");
+        mnMinecraft.add(mntmStartLiveCapture);
 
-        this.mntmStopLiveCapture = new JMenuItem("Stop live capture");
-        this.mntmStopLiveCapture.setEnabled(false);
-        this.mnMinecraft.add(this.mntmStopLiveCapture);
+        mntmStopLiveCapture = new JMenuItem("Stop live capture");
+        mntmStopLiveCapture.setEnabled(false);
+        mnMinecraft.add(mntmStopLiveCapture);
 
         JSeparator separator_5 = new JSeparator();
-        this.mnMinecraft.add(separator_5);
+        mnMinecraft.add(separator_5);
 
         JMenuItem mntmGenerateDataValues = new JMenuItem("Generate data values file");
-        this.mnMinecraft.add(mntmGenerateDataValues);
+        mnMinecraft.add(mntmGenerateDataValues);
 
-        this.omniPanel = new JPanel();
-        this.omniPanel.setBorder(new EmptyBorder(0, 4, 4, 4));
-        getContentPane().add(this.omniPanel, BorderLayout.CENTER);
-        this.omniPanel.setLayout(new BorderLayout(0, 0));
+        omniPanel = new JPanel();
+        omniPanel.setBorder(new EmptyBorder(0, 4, 4, 4));
+        getContentPane().add(omniPanel, BorderLayout.CENTER);
+        omniPanel.setLayout(new BorderLayout(0, 0));
 
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        this.omniPanel.add(tabbedPane, BorderLayout.CENTER);
+        omniPanel.add(tabbedPane, BorderLayout.CENTER);
 
         JPanel treeTab = new JPanel();
         tabbedPane.addTab("Knowledge", null, treeTab, null);
@@ -356,15 +358,15 @@ public class EditorWindow extends JFrame implements Window {
         treeTab.add(splitPane, BorderLayout.CENTER);
         splitPane.setResizeWeight(0.5);
 
-        this.panelTree = new ItemTreeViewPanel(this.model);
-        splitPane.setLeftComponent(this.panelTree);
+        panelTree = new ItemTreeViewPanel(model);
+        splitPane.setLeftComponent(panelTree);
 
         JScrollPane scrollPane = new JScrollPane();
         splitPane.setRightComponent(scrollPane);
 
-        this.editPanel = new EditPanel(this.model);
-        scrollPane.setViewportView(this.editPanel);
-        this.editPanel.setBorder(new EmptyBorder(4, 4, 4, 4));
+        editPanel = new EditPanel(model);
+        scrollPane.setViewportView(editPanel);
+        editPanel.setBorder(new EmptyBorder(4, 4, 4, 4));
 
         JPanel sheetsTab = new JPanel();
         tabbedPane.addTab("Sheets", null, sheetsTab, null);
@@ -373,14 +375,14 @@ public class EditorWindow extends JFrame implements Window {
         tabbedPane.addTab("Json", null, jsonTab, null);
         jsonTab.setLayout(new BorderLayout(0, 0));
 
-        JsonPanel jsonPanel = new JsonPanel(this.model);
+        JsonPanel jsonPanel = new JsonPanel(model);
         jsonTab.add(jsonPanel, BorderLayout.CENTER);
 
         init();
     }
 
     private ItemTreeNode getSelectedITN() {
-        return this.panelTree.getSelectedITN();
+        return panelTree.getSelectedITN();
     }
 
     private void init() {
@@ -389,29 +391,31 @@ public class EditorWindow extends JFrame implements Window {
 
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
-        if (this.model.isMinecraftControlled()) {
-            this.windowTitle = WINDOW_TITLE + " - Minecraft integration (WILL CLOSE IF MINECRAFT CLOSES)";
+        if (model.isMinecraftControlled()) {
+            windowTitle = WINDOW_TITLE + " - Minecraft integration (WILL CLOSE IF MINECRAFT CLOSES)";
 
-            this.specialWarningLabel = new JLabel(
+            specialWarningLabel = new JLabel(
                     "Integrated with Minecraft. If Minecraft closes/crashes, this window will close. SAVE FREQUENTLY (CTRL-F5 / CTRL-S)");
-            this.omniPanel.add(this.specialWarningLabel, BorderLayout.NORTH);
-            this.specialWarningLabel.setForeground(Color.RED);
+            omniPanel.add(specialWarningLabel, BorderLayout.NORTH);
+            specialWarningLabel.setForeground(Color.RED);
 
-            this.mntmOpenFile.setEnabled(false);
-            this.mntmFSaveAs.setEnabled(false);
+            mntmOpenFile.setEnabled(false);
+            mntmFSaveAs.setEnabled(false);
         } else {
-            this.windowTitle = WINDOW_TITLE;
+            windowTitle = WINDOW_TITLE;
 
-            this.mnMinecraft.setEnabled(false);
-            this.mntmReplaceCurrentFile.setEnabled(false);
+            mnMinecraft.setEnabled(false);
+            mntmReplaceCurrentFile.setEnabled(false);
         }
-        setTitle(this.windowTitle);
+        setTitle(windowTitle);
 
         refreshFileState();
     }
 
     protected boolean continueUnsavedChangesWarningIfNecessary() {
-        if (!this.model.hasUnsavedChanges()) return true;
+        if (!model.hasUnsavedChanges()) {
+            return true;
+        }
 
         int saveOption = JOptionPane.showConfirmDialog(
                 this, "You have unsaved changes. Are you sure you want to continue?", "Unsaved changes",
@@ -422,21 +426,21 @@ public class EditorWindow extends JFrame implements Window {
 
     @Override
     public void refreshFileState() {
-        boolean hasValidFile = this.model.hasValidFile();
-        boolean hasUnsavedChanges = this.model.hasUnsavedChanges();
+        boolean hasValidFile = model.hasValidFile();
+        boolean hasUnsavedChanges = model.hasUnsavedChanges();
 
-        this.mntmFSave.setEnabled(hasValidFile && hasUnsavedChanges);
-        this.mntmFDiscardChanges.setEnabled(hasValidFile && !hasUnsavedChanges);
-        this.mntmMCSaveAndPush.setEnabled(hasValidFile && hasUnsavedChanges);
+        mntmFSave.setEnabled(hasValidFile && hasUnsavedChanges);
+        mntmFDiscardChanges.setEnabled(hasValidFile && !hasUnsavedChanges);
+        mntmMCSaveAndPush.setEnabled(hasValidFile && hasUnsavedChanges);
 
         if (hasValidFile) {
-            setTitle((this.model.hasUnsavedChanges() ? "*" : "")
-                    + this.model.getFile().getName() + " - " + this.windowTitle);
+            setTitle((model.hasUnsavedChanges() ? "*" : "")
+                    + model.getFile().getName() + " - " + windowTitle);
         } else {
-            if (this.model.hasUnsavedChanges()) {
-                setTitle("*(no file) - " + this.windowTitle);
+            if (model.hasUnsavedChanges()) {
+                setTitle("*(no file) - " + windowTitle);
             } else {
-                setTitle(this.windowTitle);
+                setTitle(windowTitle);
             }
         }
     }
@@ -444,7 +448,7 @@ public class EditorWindow extends JFrame implements Window {
     @Override
     public void display() {
         setVisible(true);
-        if (this.model.isMinecraftControlled()) {
+        if (model.isMinecraftControlled()) {
             toFront();
             repaint();
         }
@@ -457,7 +461,7 @@ public class EditorWindow extends JFrame implements Window {
 
     @Override
     public void updateSerial(SerialRoot root) {
-        this.panelTree.updateSerial(root);
+        panelTree.updateSerial(root);
     }
 
     @Override
@@ -467,34 +471,36 @@ public class EditorWindow extends JFrame implements Window {
 
     /**
      * Returns true even if the file has no changes.
-     * 
+     *
      * @return
      */
     private boolean attemptToQuickSave() {
-        if (!this.model.hasValidFile()) {
+        if (!model.hasValidFile()) {
             showErrorPopup("Cannot Quick Save: No file is open.");
             return false;
         }
 
-        if (this.model.hasUnsavedChanges()) return this.model.quickSave();
+        if (model.hasUnsavedChanges()) {
+            return model.quickSave();
+        }
 
         return true;
     }
 
     @Override
     public void disableMinecraftCapabilitites() {
-        if (this.specialWarningLabel != null) {
-            this.specialWarningLabel.setText("MINECRAFT CONNECTION LOST. If Minecraft closes/crashes, this window will close. YOU SHOULD SAVE (CTRL-S)");
+        if (specialWarningLabel != null) {
+            specialWarningLabel.setText("MINECRAFT CONNECTION LOST. If Minecraft closes/crashes, this window will close. YOU SHOULD SAVE (CTRL-S)");
         }
 
-        this.mnMinecraft.setEnabled(false);
+        mnMinecraft.setEnabled(false);
 
         showErrorPopup("Minecraft connection lost!\nThis may be due to Resource Packs being reloaded.\nYou should save!");
     }
 
     @Override
     public void setEditFocus(String name, Object item, boolean forceSelect) {
-        this.panelTree.setEditFocus(name, item, forceSelect);
-        this.editPanel.setEditFocus(name, item, forceSelect);
+        panelTree.setEditFocus(name, item, forceSelect);
+        editPanel.setEditFocus(name, item, forceSelect);
     }
 }

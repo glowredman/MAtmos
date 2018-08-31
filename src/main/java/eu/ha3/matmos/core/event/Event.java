@@ -1,15 +1,15 @@
 package eu.ha3.matmos.core.event;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import eu.ha3.matmos.MAtLog;
 import eu.ha3.matmos.core.Component;
 import eu.ha3.matmos.core.SoundRelay;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.util.ResourceLocation;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 /* x-placeholder */
 
@@ -43,11 +43,11 @@ public class Event extends Component implements EventInterface {
     public void cacheSounds(IResourcePack resourcePack) {
         //Solly edit - if it's not in the current resourcepack don't panic! It might be in a previous one.
         IResourcePack def = Minecraft.getMinecraft().getResourcePackRepository().rprDefaultResourcePack;
-        List<String> toRemove = new ArrayList<String>();
-        for (String path : this.paths) {
+        List<String> toRemove = new ArrayList<>();
+        for (String path : paths) {
             ResourceLocation location = new ResourceLocation("minecraft", "sounds/" + path);
             if (resourcePack.resourceExists(location) || def.resourceExists(location)) {
-                this.relay.cacheSound(path);
+                relay.cacheSound(path);
             } else {
                 MAtLog.warning("File: " + path + " appears to be missing from: " + resourcePack.getPackName() + " [This sound will not be cached or played in-game]");
                 toRemove.add(path);
@@ -58,18 +58,20 @@ public class Event extends Component implements EventInterface {
 
     @Override
     public void playSound(float volMod, float pitchMod) {
-        if (this.paths.isEmpty()) return;
+        if (paths.isEmpty()) {
+            return;
+        }
 
-        float volume = this.volMax - this.volMin;
-        float pitch = this.pitchMax - this.pitchMin;
-        volume = this.volMin + (volume > 0 ? random.nextFloat() * volume : 0);
-        pitch = this.pitchMin + (pitch > 0 ? random.nextFloat() * pitch : 0);
+        float volume = volMax - volMin;
+        float pitch = pitchMax - pitchMin;
+        volume = volMin + (volume > 0 ? random.nextFloat() * volume : 0);
+        pitch = pitchMin + (pitch > 0 ? random.nextFloat() * pitch : 0);
 
-        String path = this.paths.get(random.nextInt(this.paths.size()));
+        String path = paths.get(random.nextInt(paths.size()));
 
         volume = volume * volMod;
         pitch = pitch * pitchMod;
 
-        this.relay.playSound(path, volume, pitch, this.distance);
+        relay.playSound(path, volume, pitch, distance);
     }
 }

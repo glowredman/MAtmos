@@ -1,5 +1,8 @@
 package eu.ha3.matmos.data.modules.player;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import eu.ha3.matmos.data.modules.RegistryBasedModule;
@@ -8,17 +11,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 /**
  * An abstract module that extracts all enchantments associated to an item defined by the
  * implementing class.
- * 
+ *
  * @author Hurry
  */
 public abstract class AbstractEnchantmentModule extends ModuleProcessor implements RegistryBasedModule {
-    private Set<String> oldThings = new LinkedHashSet<String>();
+    private Set<String> oldThings = new LinkedHashSet<>();
 
     public AbstractEnchantmentModule(DataPackage dataIn, String name) {
         super(dataIn, name);
@@ -36,10 +36,10 @@ public abstract class AbstractEnchantmentModule extends ModuleProcessor implemen
         EntityPlayer player = Minecraft.getMinecraft().player;
         ItemStack item = getItem(player);
 
-        for (String i : this.oldThings) {
+        for (String i : oldThings) {
             setValue(i, 0);
         }
-        this.oldThings.clear();
+        oldThings.clear();
 
         if (item != null && item.getEnchantmentTagList() != null && item.getEnchantmentTagList().tagCount() > 0) {
             int total = item.getEnchantmentTagList().tagCount();
@@ -50,7 +50,7 @@ public abstract class AbstractEnchantmentModule extends ModuleProcessor implemen
 
                 short lvl = enchantments.getCompoundTagAt(i).getShort("lvl");
                 setValue(Integer.toString(id), Short.toString(lvl));
-                this.oldThings.add(Integer.toString(id));
+                oldThings.add(Integer.toString(id));
             }
         }
     }

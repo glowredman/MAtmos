@@ -1,22 +1,21 @@
 package eu.ha3.matmos.game.user;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.TreeMap;
+
+import org.lwjgl.opengl.GL11;
+
 import eu.ha3.matmos.MAtMod;
-import eu.ha3.matmos.core.Dependable;
 import eu.ha3.matmos.core.Provider;
 import eu.ha3.matmos.core.ProviderCollection;
-import eu.ha3.matmos.core.logic.Junction;
-import eu.ha3.matmos.core.logic.Machine;
 import eu.ha3.matmos.core.logic.Visualized;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
-import java.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import org.lwjgl.opengl.GL11;
-
-/*
- * --filenotes-placeholder
- */
 
 public class VisualExpansionDebugging implements SupportsFrameEvents {
     private final MAtMod mod;
@@ -37,13 +36,13 @@ public class VisualExpansionDebugging implements SupportsFrameEvents {
         GL11.glPushMatrix();
         GL11.glScalef(scale, scale, 1.0F);
 
-        if (!this.mod.getExpansionList().containsKey(this.ex)) {
-            IDontKnowHowToCode.warnOnce("Problem getting expansion " + this.ex + " to debug");
+        if (!mod.getExpansionList().containsKey(ex)) {
+            IDontKnowHowToCode.warnOnce("Problem getting expansion " + ex + " to debug");
             return;
         }
 
         try {
-            ProviderCollection providers = this.mod.getExpansionList().get(this.ex).obtainProvidersForDebugging();
+            ProviderCollection providers = mod.getExpansionList().get(ex).obtainProvidersForDebugging();
             Distances condition = distances(providers.getCondition());
             Distances junction = distances(providers.getJunction());
             Distances machine = distances(providers.getMachine());
@@ -57,36 +56,18 @@ public class VisualExpansionDebugging implements SupportsFrameEvents {
             //link(condition, 0, 0, junction, 40, 0);
             //link(junction, 40, 0, machine, 80, 0);
         } catch (Exception e) {
-            IDontKnowHowToCode.whoops__printExceptionToChat(this.mod.getChatter(), e, this);
+            IDontKnowHowToCode.whoops__printExceptionToChat(mod.getChatter(), e, this);
         }
 
         GL11.glPopMatrix();
     }
 
     @SuppressWarnings("unused")
-    private void link(Distances reliables, int xR, int yR, Distances dependables, int xD, int yD) {
-        for (String name : dependables.keySet()) {
-            int yDapplied = yD + this.GAP * dependables.get(name);
-            Dependable dependable = dependables.dependable(name);
-
-            if (dependable instanceof Junction) {
-                link(reliables, xR, yR, ((Junction)dependable).getSpecialDependencies("yes"), xD, yDapplied, true);
-                link(reliables, xR, yR, ((Junction)dependable).getSpecialDependencies("no"), xD, yDapplied, false);
-            } else if (dependable instanceof Machine) {
-                link(reliables, xR, yR, ((Junction)dependable).getSpecialDependencies("allow"), xD, yDapplied, true);
-                link(
-                        reliables, xR, yR, ((Junction)dependable).getSpecialDependencies("restrict"), xD, yDapplied, false);
-            }
-        }
-    }
-
-    @SuppressWarnings("unused")
     private void link(Distances reliables, int xR, int yR, Collection<String> dependencies, int xD, int yDapplied, boolean right) {
         for (String dependency : dependencies) {
-            int yRapplied = yR + this.GAP * reliables.get(dependency);
+            reliables.get(dependency);
 
-            // Equivalent of isOn = isActive; if (!right) isOn = !isOn;
-            boolean isOn = reliables.visualize(dependency).isActive() == right;
+            reliables.visualize(dependency).isActive();
         }
     }
 
@@ -94,7 +75,7 @@ public class VisualExpansionDebugging implements SupportsFrameEvents {
         for (String name : subject.keySet()) {
             Visualized vis = subject.visualize(name);
 
-            paint(x, y + subject.get(name) * this.GAP, vis);
+            paint(x, y + subject.get(name) * GAP, vis);
         }
     }
 
@@ -113,7 +94,7 @@ public class VisualExpansionDebugging implements SupportsFrameEvents {
     public Distances distances(Provider<? extends Visualized> provider) {
         Distances map = new Distances(provider);
 
-        List<String> list = new ArrayList<String>(provider.keySet());
+        List<String> list = new ArrayList<>(provider.keySet());
         Collections.sort(list);
 
         int i = 0;
@@ -135,28 +116,7 @@ public class VisualExpansionDebugging implements SupportsFrameEvents {
         }
 
         public Visualized visualize(String name) {
-            return this.provider.get(name);
-        }
-
-        public Dependable dependable(String name) {
-            Visualized vis = this.provider.get(name);
-            if (vis instanceof Dependable) return (Dependable)vis;
-
-            return new DependableNullObject();
-        }
-
-        /**
-         * A shortcut so that we don't waste time checking for nulls in case a dependable doesn't exist
-         * 
-         * @author Hurry
-         */
-        public class DependableNullObject implements Dependable {
-            private Set<String> dep = new HashSet<String>();
-
-            @Override
-            public Collection<String> getDependencies() {
-                return this.dep;
-            }
+            return provider.get(name);
         }
     }
 

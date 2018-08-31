@@ -9,5 +9,5 @@ import eu.ha3.matmos.core.Dependable;
  */
 
 public interface VisualizedSpecialDependencies extends Visualized, Dependable {
-    public Collection<String> getSpecialDependencies(String type);
+    Collection<String> getSpecialDependencies(String type);
 }

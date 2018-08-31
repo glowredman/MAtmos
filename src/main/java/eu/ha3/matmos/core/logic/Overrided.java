@@ -8,15 +8,15 @@ public interface Overrided {
     /**
      * Bypass internal logic to force this on.
      */
-    public void overrideForceOn();
+    void overrideForceOn();
 
     /**
      * Bypass internal logic to force this off.
      */
-    public void overrideForceOff();
+    void overrideForceOff();
 
     /**
      * Stop bypassing internal logic.
      */
-    public void overrideFinish();
+    void overrideFinish();
 }

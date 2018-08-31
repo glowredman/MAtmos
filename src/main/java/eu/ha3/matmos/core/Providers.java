@@ -34,42 +34,42 @@ public class Providers implements ProviderCollection {
 
     @Override
     public ReferenceTime getReferenceTime() {
-        return this.time;
+        return time;
     }
 
     @Override
     public SoundRelay getSoundRelay() {
-        return this.soundRelay;
+        return soundRelay;
     }
 
     @Override
     public SheetCommander<String> getSheetCommander() {
-        return this.commander;
+        return commander;
     }
 
     @Override
     public Provider<Condition> getCondition() {
-        return this.conditionProvider;
+        return conditionProvider;
     }
 
     @Override
     public Provider<Junction> getJunction() {
-        return this.junctionProvider;
+        return junctionProvider;
     }
 
     @Override
     public Provider<Machine> getMachine() {
-        return this.machineProvider;
+        return machineProvider;
     }
 
     @Override
     public Provider<Event> getEvent() {
-        return this.eventProvider;
+        return eventProvider;
     }
 
     @Override
     public Provider<Dynamic> getDynamic() {
-        return this.dynamicProvider;
+        return dynamicProvider;
     }
 
 }

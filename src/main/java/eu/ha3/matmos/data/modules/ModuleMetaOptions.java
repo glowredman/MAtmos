@@ -17,7 +17,7 @@ public class ModuleMetaOptions extends ModuleProcessor implements Module {
 
     @Override
     protected void doProcess() {
-        setValue("altitudes_high", this.mod.getConfig().getBoolean("useroptions.altitudes.high"));
-        setValue("altitudes_low", this.mod.getConfig().getBoolean("useroptions.altitudes.low"));
+        setValue("altitudes_high", mod.getConfig().getBoolean("useroptions.altitudes.high"));
+        setValue("altitudes_low", mod.getConfig().getBoolean("useroptions.altitudes.low"));
     }
 }

@@ -7,5 +7,5 @@ import java.util.Map;
  */
 
 public interface EntryBasedModule extends Module {
-    public Map<String, EI> getModuleEntries();
+    Map<String, EI> getModuleEntries();
 }

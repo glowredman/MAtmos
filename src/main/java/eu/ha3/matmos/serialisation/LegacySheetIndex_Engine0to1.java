@@ -1,11 +1,11 @@
 package eu.ha3.matmos.serialisation;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import eu.ha3.matmos.core.sheet.SheetIndex;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import eu.ha3.matmos.util.math.LongFloatSimplificator;
-
-import java.util.Map;
-import java.util.TreeMap;
 
 /*
  * --filenotes-placeholder
@@ -24,9 +24,9 @@ public class LegacySheetIndex_Engine0to1 implements SheetIndex {
     private boolean isBlock;
 
     static {
-        forward = new TreeMap<String, LegacyMapping>();
-        blocks = new TreeMap<String, LegacyMapping>();
-        items = new TreeMap<String, LegacyMapping>();
+        forward = new TreeMap<>();
+        blocks = new TreeMap<>();
+        items = new TreeMap<>();
 
         setWork("Instants", "Deltas");
 
@@ -215,11 +215,11 @@ public class LegacySheetIndex_Engine0to1 implements SheetIndex {
     }
 
     public boolean isItem() {
-        return this.isItem;
+        return isItem;
     }
 
     public boolean isBlock() {
-        return this.isBlock;
+        return isBlock;
     }
 
     private static void fillOut(int count, String module) {
@@ -261,17 +261,17 @@ public class LegacySheetIndex_Engine0to1 implements SheetIndex {
             this.index = index;
         }
 
-        this.isItem = LegacySheetIndex_Engine0to1.items.containsKey(sheet + "@@@" + index);
-        this.isBlock = LegacySheetIndex_Engine0to1.blocks.containsKey(sheet + "@@@" + index);
+        isItem = LegacySheetIndex_Engine0to1.items.containsKey(sheet + "@@@" + index);
+        isBlock = LegacySheetIndex_Engine0to1.blocks.containsKey(sheet + "@@@" + index);
     }
 
     @Override
     public String getSheet() {
-        return this.sheet;
+        return sheet;
     }
 
     @Override
     public String getIndex() {
-        return this.index;
+        return index;
     }
 }

@@ -5,7 +5,7 @@ package eu.ha3.matmos.core.expansion;
  */
 
 public interface VolumeUpdatable extends VolumeContainer {
-    public void setVolumeAndUpdate(float volume);
+    void setVolumeAndUpdate(float volume);
 
-    public void updateVolume();
+    void updateVolume();
 }

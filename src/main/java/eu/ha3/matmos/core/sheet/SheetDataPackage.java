@@ -12,37 +12,37 @@ public class SheetDataPackage implements DataPackage {
     private final Class<? extends Sheet> sheetType;
 
     public SheetDataPackage(Class<? extends Sheet> sheetType) {
-        this.sheets = new TreeMap<String, Sheet>();
+        sheets = new TreeMap<>();
         this.sheetType = sheetType;
     }
 
     @Override
     public Sheet getSheet(String name) {
-        if (!this.sheets.containsKey(name)) {
+        if (!sheets.containsKey(name)) {
             try {
-                this.sheets.put(name, this.sheetType.newInstance());
+                sheets.put(name, sheetType.newInstance());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
 
-        return this.sheets.get(name);
+        return sheets.get(name);
 
     }
 
     @Override
     public Set<String> getSheetNames() {
-        return this.sheets.keySet();
+        return sheets.keySet();
     }
 
     @Override
     public void clear() {
-        this.sheets.clear();
+        sheets.clear();
     }
 
     @Override
     public void clearContents() {
-        for (Sheet sheet : this.sheets.values()) {
+        for (Sheet sheet : sheets.values()) {
             sheet.clear();
         }
     }

@@ -8,10 +8,10 @@ public class ItemTreeNode extends DefaultMutableTreeNode {
 
     public ItemTreeNode(String name) {
         super(name);
-        this.itemName = name;
+        itemName = name;
     }
 
     public String getItemName() {
-        return this.itemName;
+        return itemName;
     }
 }

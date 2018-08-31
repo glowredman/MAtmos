@@ -27,39 +27,39 @@ public class Dynamic extends Component implements Evaluated, InformationContaine
 
         this.indexes = indexes;
 
-        this.dependencies = new HashSet<String>();
+        dependencies = new HashSet<>();
         for (SheetIndex index : indexes) {
-            this.dependencies.add(index.getSheet());
+            dependencies.add(index.getSheet());
         }
     }
 
     @Override
     public void evaluate() {
-        long previous = this.value;
+        long previous = value;
 
-        this.value = 0;
+        value = 0;
 
-        for (SheetIndex sheetIndex : this.indexes) {
-            if (this.sheetCommander.exists(sheetIndex)) {
-                Long value = LongFloatSimplificator.longOf(this.sheetCommander.get(sheetIndex));
+        for (SheetIndex sheetIndex : indexes) {
+            if (sheetCommander.exists(sheetIndex)) {
+                Long value = LongFloatSimplificator.longOf(sheetCommander.get(sheetIndex));
                 if (value != null) {
                     this.value = this.value + value;
                 }
             }
         }
 
-        if (previous != this.value) {
+        if (previous != value) {
             incrementVersion();
         }
     }
 
     @Override
     public Long getInformation() {
-        return this.value;
+        return value;
     }
 
     @Override
     public Collection<String> getDependencies() {
-        return this.dependencies;
+        return dependencies;
     }
 }

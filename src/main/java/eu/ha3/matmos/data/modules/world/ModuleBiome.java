@@ -18,7 +18,7 @@ public class ModuleBiome extends ModuleProcessor implements Module {
 
     @Override
     protected void doProcess() {
-        int biomej = this.mod.getConfig().getInteger("useroptions.biome.override");
+        int biomej = mod.getConfig().getInteger("useroptions.biome.override");
 
         if (biomej <= -1) {
             //Solly edit - only calculate biome once

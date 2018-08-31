@@ -1,14 +1,14 @@
 package eu.ha3.matmos;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IResourcePack;
-import net.minecraft.client.resources.ResourcePackRepository;
-import net.minecraft.util.ResourceLocation;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResourcePack;
+import net.minecraft.client.resources.ResourcePackRepository;
+import net.minecraft.util.ResourceLocation;
 
 /*
  * --filenotes-placeholder
@@ -21,7 +21,7 @@ public class MAtResourcePackDealer {
     public List<ResourcePackRepository.Entry> findResourcePacks() {
         List<ResourcePackRepository.Entry> repo = Minecraft.getMinecraft().getResourcePackRepository().getRepositoryEntries();
 
-        List<ResourcePackRepository.Entry> foundEntries = new ArrayList<ResourcePackRepository.Entry>();
+        List<ResourcePackRepository.Entry> foundEntries = new ArrayList<>();
 
         for (ResourcePackRepository.Entry pack : repo) {
             if (checkCompatible(pack)) {
@@ -34,10 +34,10 @@ public class MAtResourcePackDealer {
     public List<ResourcePackRepository.Entry> findDisabledResourcePacks() {
         ResourcePackRepository rrr = Minecraft.getMinecraft().getResourcePackRepository();
 
-        List<ResourcePackRepository.Entry> repo = new ArrayList<ResourcePackRepository.Entry>(rrr.getRepositoryEntriesAll());
+        List<ResourcePackRepository.Entry> repo = new ArrayList<>(rrr.getRepositoryEntriesAll());
         repo.removeAll(rrr.getRepositoryEntries());
 
-        List<ResourcePackRepository.Entry> foundEntries = new ArrayList<ResourcePackRepository.Entry>();
+        List<ResourcePackRepository.Entry> foundEntries = new ArrayList<>();
         for (ResourcePackRepository.Entry pack : repo) {
             if (checkCompatible(pack)) {
                 foundEntries.add(pack);
@@ -47,11 +47,11 @@ public class MAtResourcePackDealer {
     }
 
     private boolean checkCompatible(ResourcePackRepository.Entry pack) {
-        return pack.getResourcePack().resourceExists(this.mat_pack);
+        return pack.getResourcePack().resourceExists(mat_pack);
     }
 
     public InputStream openExpansionsPointerFile(IResourcePack pack) throws IOException {
-        InputStream is = pack.getInputStream(this.expansions);
+        InputStream is = pack.getInputStream(expansions);
         return is;
     }
 }

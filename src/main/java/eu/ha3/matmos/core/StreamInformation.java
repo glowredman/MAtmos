@@ -47,16 +47,18 @@ public class StreamInformation extends MultistateComponent implements Simulated 
         this.isLooping = isLooping;
         this.usesPause = usesPause;
 
-        this.token = -1;
+        token = -1;
     }
 
     @Override
     public void evaluate() {
-        if (!this.provider.exists(this.machineName)) return;
+        if (!provider.exists(machineName)) {
+            return;
+        }
 
-        boolean active = this.provider.get(this.machineName).isActive();
-        if (active != this.isActive) {
-            this.isActive = active;
+        boolean active = provider.get(machineName).isActive();
+        if (active != isActive) {
+            isActive = active;
             incrementVersion();
             if (active) {
                 signalPlayable();
@@ -67,36 +69,38 @@ public class StreamInformation extends MultistateComponent implements Simulated 
     }
 
     private void signalPlayable() {
-        this.startTime = this.time.getMilliseconds() + (long)(this.delayBeforeFadeIn * 1000);
+        startTime = time.getMilliseconds() + (long)(delayBeforeFadeIn * 1000);
     }
 
     private void signalStoppable() {
-        this.stopTime = this.time.getMilliseconds() + (long)(this.delayBeforeFadeOut * 1000);
+        stopTime = time.getMilliseconds() + (long)(delayBeforeFadeOut * 1000);
     }
 
     @Override
     public void simulate() {
-        if (!this.isLooping && this.usesPause) return; // FIXME: A non-looping sound cannot use the pause scheme. 
+        if (!isLooping && usesPause) {
+            return; // FIXME: A non-looping sound cannot use the pause scheme. 
+        }
 
-        if (this.isActive && !this.isPlaying) {
-            if (this.time.getMilliseconds() > this.startTime) {
-                this.isPlaying = true;
+        if (isActive && !isPlaying) {
+            if (time.getMilliseconds() > startTime) {
+                isPlaying = true;
 
-                if (!this.initialized) {
-                    this.token = this.relay.getNewStreamingToken();
+                if (!initialized) {
+                    token = relay.getNewStreamingToken();
 
-                    if (this.relay.setupStreamingToken(this.token, this.path, this.volume, this.pitch, this.isLooping, this.usesPause)) {
-                        this.initialized = true;
-                        this.relay.startStreaming(this.token, this.fadeInTime);
+                    if (relay.setupStreamingToken(token, path, volume, pitch, isLooping, usesPause)) {
+                        initialized = true;
+                        relay.startStreaming(token, fadeInTime);
                     }
                 } else {
-                    this.relay.startStreaming(this.token, this.fadeInTime);
+                    relay.startStreaming(token, fadeInTime);
                 }
             }
-        } else if (!this.isActive && this.isPlaying) {
-            if (this.time.getMilliseconds() > this.stopTime) {
-                this.isPlaying = false;
-                this.relay.stopStreaming(this.token, this.fadeOutTime);
+        } else if (!isActive && isPlaying) {
+            if (time.getMilliseconds() > stopTime) {
+                isPlaying = false;
+                relay.stopStreaming(token, fadeOutTime);
             }
         }
     }

@@ -1,14 +1,25 @@
 package eu.ha3.matmos.editor;
 
-import eu.ha3.matmos.editor.interfaces.ILister;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.Map;
 
-@SuppressWarnings("serial")
+import javax.swing.AbstractListModel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+
+import eu.ha3.matmos.editor.interfaces.ILister;
+
 public abstract class ListerPanel extends JPanel implements ILister {
+    private static final long serialVersionUID = 1L;
+    
     private JLabel titleLabel;
     private JList<String> list;
     private JPanel panel;
@@ -22,45 +33,49 @@ public abstract class ListerPanel extends JPanel implements ILister {
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         add(scrollPane, BorderLayout.CENTER);
 
-        this.list = new JList<String>();
-        this.list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        this.list.setModel(new AbstractListModel<String>() {
+        list = new JList<>();
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.setModel(new AbstractListModel<String>() {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
             String[] values = new String[] {};
 
             @Override
             public int getSize() {
-                return this.values.length;
+                return values.length;
             }
 
             @Override
             public String getElementAt(int index) {
-                return this.values[index];
+                return values[index];
             }
         });
-        scrollPane.setViewportView(this.list);
+        scrollPane.setViewportView(list);
 
-        this.panel = new JPanel();
-        add(this.panel, BorderLayout.SOUTH);
-        this.panel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+        panel = new JPanel();
+        add(panel, BorderLayout.SOUTH);
+        panel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 
-        this.create = new JButton("Create new");
-        this.panel.add(this.create);
+        create = new JButton("Create new");
+        panel.add(create);
 
-        this.panel_1 = new JPanel();
-        add(this.panel_1, BorderLayout.NORTH);
+        panel_1 = new JPanel();
+        add(panel_1, BorderLayout.NORTH);
 
-        this.titleLabel = new JLabel("no label");
-        this.panel_1.add(this.titleLabel);
-        this.titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel = new JLabel("no label");
+        panel_1.add(titleLabel);
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
     }
 
     @Override
     public void setTitle(String title) {
-        this.titleLabel.setText(title);
+        titleLabel.setText(title);
     }
 
     protected void updateWith(Map<String, ?> listing) {
-        this.list.removeAll();
-        this.list.setListData(new ArrayList<String>(listing.keySet()).toArray(new String[listing.keySet().size()]));
+        list.removeAll();
+        list.setListData(new ArrayList<>(listing.keySet()).toArray(new String[listing.keySet().size()]));
     }
 }

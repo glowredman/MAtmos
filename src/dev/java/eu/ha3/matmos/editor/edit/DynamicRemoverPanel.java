@@ -1,16 +1,21 @@
 package eu.ha3.matmos.editor.edit;
 
-import eu.ha3.matmos.editor.interfaces.IFlaggable;
-import eu.ha3.matmos.serialisation.expansion.*;
-
-import javax.swing.*;
-
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("serial")
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import eu.ha3.matmos.editor.interfaces.IFlaggable;
+import eu.ha3.matmos.serialisation.expansion.SerialDynamic;
+import eu.ha3.matmos.serialisation.expansion.SerialDynamicSheetIndex;
+
 public class DynamicRemoverPanel extends JPanel {
+    private static final long serialVersionUID = 1L;
+    
     private final IFlaggable parent;
     private final SerialDynamic dynamic;
     private JList<String> list;
@@ -19,7 +24,7 @@ public class DynamicRemoverPanel extends JPanel {
 
     public DynamicRemoverPanel(IFlaggable parent, SerialDynamic original) {
         this.parent = parent;
-        this.dynamic = original;
+        dynamic = original;
 
         setLayout(new BorderLayout(0, 0));
 
@@ -30,9 +35,9 @@ public class DynamicRemoverPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane();
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        this.list = new JList<String>();
-        this.list.setVisibleRowCount(4);
-        scrollPane.setViewportView(this.list);
+        list = new JList<>();
+        list.setVisibleRowCount(4);
+        scrollPane.setViewportView(list);
 
         JPanel panel_1 = new JPanel();
         panel.add(panel_1, BorderLayout.EAST);
@@ -44,36 +49,38 @@ public class DynamicRemoverPanel extends JPanel {
     }
 
     protected void removeSelected() {
-        List<String> values = this.list.getSelectedValuesList();
-        if (values.size() == 0) return;
+        List<String> values = list.getSelectedValuesList();
+        if (values.size() == 0) {
+            return;
+        }
 
         int removedCount = 0;
         for (Object o : values) {
             String value = (String)o;
-            if (this.things.contains(value)) {
-                this.dynamic.entries.remove(this.things.indexOf(value));
+            if (things.contains(value)) {
+                dynamic.entries.remove(things.indexOf(value));
                 removedCount = removedCount + 1;
             }
         }
 
         if (removedCount > 0) {
-            this.parent.flagChange();
+            parent.flagChange();
             // Flagging should cause a call to fillWithValues
         }
     }
 
     public void fillWithValues() {
-        this.list.removeAll();
+        list.removeAll();
 
-        this.things = new ArrayList<String>();
-        for (SerialDynamicSheetIndex si : this.dynamic.entries) {
-            this.things.add(si.sheet + "@" + si.index);
+        things = new ArrayList<>();
+        for (SerialDynamicSheetIndex si : dynamic.entries) {
+            things.add(si.sheet + "@" + si.index);
         }
 
-        this.list.setListData(this.things.toArray(new String[this.things.size()]));
+        list.setListData(things.toArray(new String[things.size()]));
     }
 
     public JList<String> getList() {
-        return this.list;
+        return list;
     }
 }

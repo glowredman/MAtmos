@@ -8,5 +8,5 @@ public interface VirtualSheet extends Sheet {
     /**
      * Commits this virtual sheet.
      */
-    public void apply();
+    void apply();
 }

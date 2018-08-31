@@ -4,10 +4,9 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import eu.ha3.matmos.core.sheet.DataPackage;
-
-import java.util.Set;
 
 /*
  * --filenotes-placeholder
@@ -15,14 +14,14 @@ import java.util.Set;
 
 /**
  * An abstract module that specializes in counting things in one pass.
- * 
+ *
  * @author Hurry
  */
 public abstract class AbstractStringCountModule extends ModuleProcessor implements Module {
-    private Set<String> oldThings = new LinkedHashSet<String>();
-    private Set<String> newThings = new LinkedHashSet<String>();
+    private Set<String> oldThings = new LinkedHashSet<>();
+    private Set<String> newThings = new LinkedHashSet<>();
 
-    protected Map<String, Integer> things = new HashMap<String, Integer>();
+    protected Map<String, Integer> things = new HashMap<>();
 
     public AbstractStringCountModule(DataPackage data, String name) {
         this(data, name, false);
@@ -44,32 +43,32 @@ public abstract class AbstractStringCountModule extends ModuleProcessor implemen
     }
 
     public void increment(String thing) {
-        this.things.put(thing, this.things.containsKey(thing) ? this.things.get(thing) + 1 : 1);
+        things.put(thing, things.containsKey(thing) ? things.get(thing) + 1 : 1);
     }
 
     protected abstract void count();
 
     public void apply() {
-        for (Entry<String, Integer> entry : this.things.entrySet()) {
+        for (Entry<String, Integer> entry : things.entrySet()) {
             this.setValue(entry.getKey(), entry.getValue());
         }
 
-        this.newThings.addAll(this.things.keySet()); // add all new string
-        this.things.clear();
+        newThings.addAll(things.keySet()); // add all new string
+        things.clear();
 
         // Reset all missing string to zero
-        this.oldThings.removeAll(this.newThings);
-        for (String missing : this.oldThings) {
+        oldThings.removeAll(newThings);
+        for (String missing : oldThings) {
             setValue(missing, 0);
         }
-        this.oldThings.clear();
+        oldThings.clear();
 
         // The following code means
         // oldThings <- newThings
         // newThings <- (empty set)
-        Set<String> anEmptySet = this.oldThings;
-        this.oldThings = this.newThings;
-        this.newThings = anEmptySet;
+        Set<String> anEmptySet = oldThings;
+        oldThings = newThings;
+        newThings = anEmptySet;
     }
 
 }

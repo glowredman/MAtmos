@@ -8,5 +8,5 @@ import java.util.List;
  */
 
 public class SerialDynamic {
-    public List<SerialDynamicSheetIndex> entries = new ArrayList<SerialDynamicSheetIndex>();
+    public List<SerialDynamicSheetIndex> entries = new ArrayList<>();
 }

@@ -19,26 +19,26 @@ public class DeltaSheet extends GenericSheet implements VirtualSheet {
 
     @Override
     public void apply() {
-        for (String key : this.values.keySet()) {
-            String newValue = this.values.get(key);
+        for (String key : values.keySet()) {
+            String newValue = values.get(key);
             Long newLong = LongFloatSimplificator.longOf(newValue);
 
-            String previousValue = this.data.getSheet(this.actualSheet).exists(key) ? this.data.getSheet(this.actualSheet).get(key) : "0";
+            String previousValue = data.getSheet(actualSheet).exists(key) ? data.getSheet(actualSheet).get(key) : "0";
 
             if (newLong != null) {
                 Long previousLong = LongFloatSimplificator.longOf(previousValue);
 
                 // Set it here, we needed to retreive previous value first
-                this.data.getSheet(this.actualSheet).set(key, newValue);
+                data.getSheet(actualSheet).set(key, newValue);
                 if (previousLong != null) {
-                    this.data.getSheet(this.deltaSheet).set(key, Long.toString(newLong - previousLong));
+                    data.getSheet(deltaSheet).set(key, Long.toString(newLong - previousLong));
                 } else {
-                    this.data.getSheet(this.deltaSheet).set(
+                    data.getSheet(deltaSheet).set(
                             key, newValue.equals(previousValue) ? "NOT_MODIFIED" : "MODIFIED");
                 }
             } else {
-                this.data.getSheet(this.actualSheet).set(key, newValue);
-                this.data.getSheet(this.deltaSheet).set(
+                data.getSheet(actualSheet).set(key, newValue);
+                data.getSheet(deltaSheet).set(
                         key, newValue.equals(previousValue) ? "NOT_MODIFIED" : "MODIFIED");
             }
         }

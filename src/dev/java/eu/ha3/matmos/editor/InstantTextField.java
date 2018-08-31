@@ -1,11 +1,12 @@
 package eu.ha3.matmos.editor;
 
-import javax.swing.*;
+import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-@SuppressWarnings("serial")
 public class InstantTextField extends JTextField {
+    private static final long serialVersionUID = 1L;
+
     public InstantTextField() {
         super();
 

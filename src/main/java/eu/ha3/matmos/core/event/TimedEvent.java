@@ -1,10 +1,10 @@
 package eu.ha3.matmos.core.event;
 
+import java.util.Random;
+
 import eu.ha3.matmos.core.Provider;
 import eu.ha3.matmos.core.ReferenceTime;
 import eu.ha3.matmos.serialisation.expansion.SerialMachineEvent;
-
-import java.util.Random;
 
 /* x-placeholder */
 
@@ -41,28 +41,30 @@ public class TimedEvent implements TimedEventInterface {
 
     @Override
     public void restart(ReferenceTime time) {
-        if (this.delayStart == 0) {
-            this.nextPlayTime = time.getMilliseconds() + (long)(random.nextFloat() * this.delayMax * 1000);
+        if (delayStart == 0) {
+            nextPlayTime = time.getMilliseconds() + (long)(random.nextFloat() * delayMax * 1000);
         } else {
-            this.nextPlayTime = time.getMilliseconds() + (long)(this.delayStart * 1000);
+            nextPlayTime = time.getMilliseconds() + (long)(delayStart * 1000);
         }
     }
 
     @Override
     public void play(ReferenceTime time, float fadeFactor) {
-        if (time.getMilliseconds() < this.nextPlayTime) return;
-
-        if (this.provider.exists(this.event)) {
-            this.provider.get(this.event).playSound(this.volMod * fadeFactor, this.pitchMod);
+        if (time.getMilliseconds() < nextPlayTime) {
+            return;
         }
 
-        if (this.delayMin == this.delayMax && this.delayMin > 0) {
-            while (this.nextPlayTime < time.getMilliseconds()) {
-                this.nextPlayTime = this.nextPlayTime + (long)(this.delayMin * 1000);
+        if (provider.exists(event)) {
+            provider.get(event).playSound(volMod * fadeFactor, pitchMod);
+        }
+
+        if (delayMin == delayMax && delayMin > 0) {
+            while (nextPlayTime < time.getMilliseconds()) {
+                nextPlayTime = nextPlayTime + (long)(delayMin * 1000);
             }
         } else {
-            this.nextPlayTime = time.getMilliseconds()
-                    + (long)((this.delayMin + random.nextFloat() * (this.delayMax - this.delayMin)) * 1000);
+            nextPlayTime = time.getMilliseconds()
+                    + (long)((delayMin + random.nextFloat() * (delayMax - delayMin)) * 1000);
         }
     }
 }

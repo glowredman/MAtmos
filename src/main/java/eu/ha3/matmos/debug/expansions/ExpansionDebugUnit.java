@@ -8,7 +8,7 @@ import eu.ha3.matmos.core.sheet.DataPackage;
  */
 
 public interface ExpansionDebugUnit {
-    public Knowledge obtainKnowledge();
+    Knowledge obtainKnowledge();
 
-    public DataPackage obtainData();
+    DataPackage obtainData();
 }

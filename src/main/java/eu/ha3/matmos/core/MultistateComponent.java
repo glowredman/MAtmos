@@ -11,6 +11,6 @@ public abstract class MultistateComponent extends Component implements Stated, E
 
     @Override
     public boolean isActive() {
-        return this.isActive;
+        return isActive;
     }
 }

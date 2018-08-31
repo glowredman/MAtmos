@@ -10,7 +10,7 @@ import eu.ha3.matmos.data.Processor;
  * A processor that contains a sheet, or a virtual delta sheet if the deltaName is not null. Calling
  * doProcess() will set the values of the sheet, and automatically apply them at the end of the call
  * if the sheet provided by the Data is a virtual sheet, or if the sheet is a delta sheet.
- * 
+ *
  * @author Hurry
  */
 public abstract class ProcessorModel implements Processor {
@@ -21,13 +21,13 @@ public abstract class ProcessorModel implements Processor {
 
     public ProcessorModel(DataPackage data, String normalName, String deltaName) {
         if (deltaName == null) {
-            this.sheet = data.getSheet(normalName);
+            sheet = data.getSheet(normalName);
         } else {
-            this.sheet = new DeltaSheet(data, normalName, deltaName);
+            sheet = new DeltaSheet(data, normalName, deltaName);
         }
 
-        this.interval = 1;
-        this.callsRemaining = 0;
+        interval = 1;
+        callsRemaining = 0;
     }
 
     /**
@@ -37,25 +37,25 @@ public abstract class ProcessorModel implements Processor {
 
     @Override
     public void process() {
-        if (this.callsRemaining <= 0) {
+        if (callsRemaining <= 0) {
             doProcess();
 
-            if (this.sheet instanceof VirtualSheet) {
-                ((VirtualSheet)this.sheet).apply();
+            if (sheet instanceof VirtualSheet) {
+                ((VirtualSheet)sheet).apply();
             }
 
-            if (this.interval != 0) {
-                this.callsRemaining = this.interval;
+            if (interval != 0) {
+                callsRemaining = interval;
             }
         } else {
-            this.callsRemaining = this.callsRemaining - 1;
+            callsRemaining = callsRemaining - 1;
         }
     }
 
     /**
      * Sets the number of calls where nothing happens before the process is executed again. Defaults to
      * 0 (call every time).
-     * 
+     *
      * @param value
      */
     public void setInterval(int value) {

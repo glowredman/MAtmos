@@ -1,14 +1,20 @@
 package eu.ha3.matmos.editor.tree;
 
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
+
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import eu.ha3.matmos.editor.KnowledgeItemType;
 import eu.ha3.matmos.editor.interfaces.ISerialUpdate;
 import eu.ha3.matmos.serialisation.expansion.SerialRoot;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import java.util.*;
-
 @SuppressWarnings("serial")
 public class ItemTreeRoot extends DefaultMutableTreeNode implements ISerialUpdate {
+    
     private ItemTreeNode condition = new ItemTreeBranch("Conditions", Selector.CONDITION);
     private ItemTreeNode set = new ItemTreeBranch("Sets", Selector.SET);
     private ItemTreeNode machine = new ItemTreeBranch("Machines", Selector.MACHINE);
@@ -25,39 +31,39 @@ public class ItemTreeRoot extends DefaultMutableTreeNode implements ISerialUpdat
         add(logic);
         add(support);
 
-        logic.add(this.condition);
-        logic.add(this.set);
-        logic.add(this.machine);
+        logic.add(condition);
+        logic.add(set);
+        logic.add(machine);
 
-        support.add(this.list);
-        support.add(this.dynamic);
-        support.add(this.event);
+        support.add(list);
+        support.add(dynamic);
+        support.add(event);
     }
 
     @Override
     public void updateSerial(SerialRoot root) {
-        updateSubSerial(root.condition.keySet(), this.condition);
-        updateSubSerial(root.set.keySet(), this.set);
-        updateSubSerial(root.machine.keySet(), this.machine);
-        updateSubSerial(root.list.keySet(), this.list);
-        updateSubSerial(root.dynamic.keySet(), this.dynamic);
-        updateSubSerial(root.event.keySet(), this.event);
+        updateSubSerial(root.condition.keySet(), condition);
+        updateSubSerial(root.set.keySet(), set);
+        updateSubSerial(root.machine.keySet(), machine);
+        updateSubSerial(root.list.keySet(), list);
+        updateSubSerial(root.dynamic.keySet(), dynamic);
+        updateSubSerial(root.event.keySet(), event);
     }
 
     public ItemTreeNode getKnowledgeNode(KnowledgeItemType item) {
         switch (item) {
             case CONDITION:
-                return this.condition;
+                return condition;
             case DYNAMIC:
-                return this.dynamic;
+                return dynamic;
             case EVENT:
-                return this.event;
+                return event;
             case LIST:
-                return this.list;
+                return list;
             case MACHINE:
-                return this.machine;
+                return machine;
             case SET:
-                return this.set;
+                return set;
             default:
                 return null;
 
@@ -65,8 +71,8 @@ public class ItemTreeRoot extends DefaultMutableTreeNode implements ISerialUpdat
     }
 
     private void updateSubSerial(Collection<String> keys, ItemTreeNode treeNode) {
-        Set<String> names = new HashSet<String>();
-        Set<String> keysCopy = new HashSet<String>(keys);
+        Set<String> names = new HashSet<>();
+        Set<String> keysCopy = new HashSet<>(keys);
 
         @SuppressWarnings("unchecked")
         Enumeration<? extends ItemTreeNode> nenum = treeNode.children();
@@ -89,7 +95,7 @@ public class ItemTreeRoot extends DefaultMutableTreeNode implements ISerialUpdat
 
     private void replaceSubSerial(Collection<String> keys, ItemTreeNode treeNode) {
         treeNode.removeAllChildren();
-        TreeSet<String> treeSet = new TreeSet<String>(keys);
+        TreeSet<String> treeSet = new TreeSet<>(keys);
 
         for (String name : treeSet) {
             treeNode.add(new ItemTreeNode(name));

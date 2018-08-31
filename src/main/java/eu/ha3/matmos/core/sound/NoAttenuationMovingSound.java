@@ -24,12 +24,12 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
         super(SoundEvents.AMBIENT_CAVE, SoundCategory.MASTER);
 
         positionedSoundLocation = myResource;
-        this.attenuationType = ISound.AttenuationType.NONE;
-        this.repeat = isLooping;
-        this.repeatDelay = 0;
+        attenuationType = ISound.AttenuationType.NONE;
+        repeat = isLooping;
+        repeatDelay = 0;
 
-        this.desiredVolume = volume;
-        this.desiredPitch = pitch;
+        desiredVolume = volume;
+        desiredPitch = pitch;
         this.volume = volume;
         this.pitch = pitch;
 
@@ -37,18 +37,18 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
     }
 
     public NoAttenuationMovingSound copy() {
-        return new NoAttenuationMovingSound(this.getSoundLocation(), desiredVolume, desiredPitch, repeat, usesPause);
+        return new NoAttenuationMovingSound(getSoundLocation(), desiredVolume, desiredPitch, repeat, usesPause);
     }
 
     @Override
     public void update() {
         Entity e = Minecraft.getMinecraft().player;
 
-        this.xPosF = (float)e.posX;
-        this.yPosF = (float)e.posY;
-        this.zPosF = (float)e.posZ;
+        xPosF = (float)e.posX;
+        yPosF = (float)e.posY;
+        zPosF = (float)e.posZ;
 
-        this.volume = helper.calculateFadeFactor() * desiredVolume;
+        volume = helper.calculateFadeFactor() * desiredVolume;
 
         if (volume < 0.01f && usesPause) {
             pitch = 0f;
@@ -58,33 +58,33 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
             pitch = desiredPitch;
         }
 
-        if (helper.isDoneFadingOut() && this.repeat && !this.isDonePlaying()) {
+        if (helper.isDoneFadingOut() && repeat && !isDonePlaying()) {
             dispose();
         }
     }
 
     @Override
     public void play(float fadeIn) {
-        this.helper.fadeIn((long)(fadeIn * 1000));
+        helper.fadeIn((long)(fadeIn * 1000));
     }
 
     @Override
     public void stop(float fadeOut) {
-        this.helper.fadeOut((long)(fadeOut * 1000));
+        helper.fadeOut((long)(fadeOut * 1000));
     }
 
     @Override
     public void applyVolume(float volumeMod) {
-        this.volume = volumeMod;
+        volume = volumeMod;
     }
 
     @Override
     public void dispose() {
-        this.donePlaying = true;
+        donePlaying = true;
     }
 
     @Override
     public void interrupt() {
-        this.donePlaying = true;
+        donePlaying = true;
     }
 }

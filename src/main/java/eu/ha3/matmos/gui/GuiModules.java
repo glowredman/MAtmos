@@ -1,14 +1,14 @@
 package eu.ha3.matmos.gui;
 
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
+
 import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
 
 public class GuiModules extends GuiScreen {
     private final MAtMod mod;
@@ -19,11 +19,11 @@ public class GuiModules extends GuiScreen {
 
     public GuiModules(GuiScreen par1GuiScreen, MAtMod mod) {
         this.mod = mod;
-        this.buttonId = -1;
-        this.parentScreen = par1GuiScreen;
+        buttonId = -1;
+        parentScreen = par1GuiScreen;
 
-        this.val = mod.getVisualDebugger().obtainSheetNamesCopy();
-        Iterator<String> iter = this.val.iterator();
+        val = mod.getVisualDebugger().obtainSheetNamesCopy();
+        Iterator<String> iter = val.iterator();
         while (iter.hasNext()) {
             if (iter.next().endsWith(ModuleProcessor.DELTA_SUFFIX)) {
                 iter.remove();
@@ -39,37 +39,37 @@ public class GuiModules extends GuiScreen {
 
         final int _MIX = _GAP + _UNIT;
 
-        final int _LEFT = this.width / 2 - _WIDTH / 2;
+        final int _LEFT = width / 2 - _WIDTH / 2;
 
         final int _SEPARATOR = 10;
         final int _TURNOFFWIDTH = _WIDTH / 5;
 
-        this.buttonList.add(new GuiButton(201, _LEFT + _MIX + _WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH + _GAP, _SEPARATOR + _MIX * (5 + 4), _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.discard")));
-        this.buttonList.add(new GuiButton(202, _LEFT + _MIX + _WIDTH - _MIX * 2 + _GAP, _SEPARATOR + _MIX * (5 + 4), _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.deltas")));
+        buttonList.add(new GuiButton(201, _LEFT + _MIX + _WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH + _GAP, _SEPARATOR + _MIX * (5 + 4), _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.discard")));
+        buttonList.add(new GuiButton(202, _LEFT + _MIX + _WIDTH - _MIX * 2 + _GAP, _SEPARATOR + _MIX * (5 + 4), _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.deltas")));
 
-        for (int id = 0; id < this.val.size(); id++) {
+        for (int id = 0; id < val.size(); id++) {
             int flid = id / 18;
-            this.buttonList.add(new GuiButton(id, _LEFT + flid * _WIDTH / 3, _SEPARATOR + _MIX / 2 * (id % 18), _WIDTH / 3, _UNIT / 2, this.val.get(id)));
+            buttonList.add(new GuiButton(id, _LEFT + flid * _WIDTH / 3, _SEPARATOR + _MIX / 2 * (id % 18), _WIDTH / 3, _UNIT / 2, val.get(id)));
         }
 
-        this.buttonList.add(new GuiButton(200, _LEFT + _MIX, _SEPARATOR + _MIX * (5 + 4), _WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.done")));
+        buttonList.add(new GuiButton(200, _LEFT + _MIX, _SEPARATOR + _MIX * (5 + 4), _WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.done")));
     }
 
     @Override
     protected void actionPerformed(GuiButton par1GuiButton) {
         if (par1GuiButton.id == 200) {
-            this.mc.displayGuiScreen(this.parentScreen);
+            mc.displayGuiScreen(parentScreen);
         } else if (par1GuiButton.id == 201) {
-            this.mod.getVisualDebugger().noDebug();
+            mod.getVisualDebugger().noDebug();
         } else if (par1GuiButton.id == 202) {
-            this.mod.getVisualDebugger().toggleDeltas();
-        } else if (par1GuiButton.id < this.val.size()) {
-            this.mod.getVisualDebugger().debugModeScan(this.val.get(par1GuiButton.id));
+            mod.getVisualDebugger().toggleDeltas();
+        } else if (par1GuiButton.id < val.size()) {
+            mod.getVisualDebugger().debugModeScan(val.get(par1GuiButton.id));
         }
     }
 
     private void aboutToClose() {
-        this.mod.saveConfig();
+        mod.saveConfig();
     }
 
     @Override

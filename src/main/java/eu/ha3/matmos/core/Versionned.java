@@ -7,20 +7,20 @@ package eu.ha3.matmos.core;
 public interface Versionned {
     /**
      * Gets the version of this. Starts at -1.
-     * 
+     *
      * @return
      */
-    public int version();
+    int version();
 
     /**
      * Increments the version.
      */
-    public void incrementVersion();
+    void incrementVersion();
 
     /**
      * Registers a version listener that is called after incrementation.
-     * 
+     *
      * @param listener
      */
-    public void registerVersionListener(VersionListener listener);
+    void registerVersionListener(VersionListener listener);
 }

@@ -1,24 +1,37 @@
 package eu.ha3.matmos.editor.edit;
 
-import eu.ha3.matmos.editor.InstantTextField;
-import eu.ha3.matmos.editor.filechooser.OggFileChooser;
-import eu.ha3.matmos.editor.interfaces.IFlaggable;
-import eu.ha3.matmos.serialisation.expansion.*;
-
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
+
+import eu.ha3.matmos.editor.InstantTextField;
+import eu.ha3.matmos.editor.filechooser.OggFileChooser;
+import eu.ha3.matmos.editor.interfaces.IFlaggable;
+import eu.ha3.matmos.serialisation.expansion.SerialMachine;
+import eu.ha3.matmos.serialisation.expansion.SerialMachineEvent;
+import eu.ha3.matmos.serialisation.expansion.SerialMachineStream;
 
 @SuppressWarnings("serial")
 public class EditMachine extends JPanel implements IFlaggable {
@@ -48,8 +61,8 @@ public class EditMachine extends JPanel implements IFlaggable {
     private JSpinner volMod;
 
     public EditMachine(EditPanel parentConstruct, final SerialMachine machineConstruct) {
-        this.edit = parentConstruct;
-        this.machine = machineConstruct;
+        edit = parentConstruct;
+        machine = machineConstruct;
         setLayout(new BorderLayout(0, 0));
 
         JPanel options = new JPanel();
@@ -80,41 +93,39 @@ public class EditMachine extends JPanel implements IFlaggable {
         gbc_lblDelay.gridy = 0;
         internalOptions.add(lblDelay, gbc_lblDelay);
 
-        this.delayIn = new JSpinner();
-        this.delayIn.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent arg0) {
-                if (EditMachine.this.init) return;
-
-                EditMachine.this.machine.delay_fadein = (Float)EditMachine.this.delayIn.getValue();
-                EditMachine.this.edit.flagChange();
+        delayIn = new JSpinner();
+        delayIn.addChangeListener(arg0 -> {
+            if (init) {
+                return;
             }
+
+            machine.delay_fadein = (Float)delayIn.getValue();
+            edit.flagChange();
         });
-        this.delayIn.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
+        delayIn.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
         GridBagConstraints gbc_delayIn = new GridBagConstraints();
         gbc_delayIn.fill = GridBagConstraints.HORIZONTAL;
         gbc_delayIn.insets = new Insets(0, 0, 5, 5);
         gbc_delayIn.gridx = 1;
         gbc_delayIn.gridy = 0;
-        internalOptions.add(this.delayIn, gbc_delayIn);
+        internalOptions.add(delayIn, gbc_delayIn);
 
-        this.delayOut = new JSpinner();
-        this.delayOut.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent arg0) {
-                if (EditMachine.this.init) return;
-
-                EditMachine.this.machine.delay_fadeout = (Float)EditMachine.this.delayOut.getValue();
-                EditMachine.this.edit.flagChange();
+        delayOut = new JSpinner();
+        delayOut.addChangeListener(arg0 -> {
+            if (init) {
+                return;
             }
+
+            machine.delay_fadeout = (Float)delayOut.getValue();
+            edit.flagChange();
         });
-        this.delayOut.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
+        delayOut.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
         GridBagConstraints gbc_delayOut = new GridBagConstraints();
         gbc_delayOut.fill = GridBagConstraints.HORIZONTAL;
         gbc_delayOut.insets = new Insets(0, 0, 5, 0);
         gbc_delayOut.gridx = 2;
         gbc_delayOut.gridy = 0;
-        internalOptions.add(this.delayOut, gbc_delayOut);
+        internalOptions.add(delayOut, gbc_delayOut);
 
         JLabel lblFade = new JLabel("Fade time (in/out)");
         GridBagConstraints gbc_lblFade = new GridBagConstraints();
@@ -124,40 +135,38 @@ public class EditMachine extends JPanel implements IFlaggable {
         gbc_lblFade.gridy = 1;
         internalOptions.add(lblFade, gbc_lblFade);
 
-        this.fadeIn = new JSpinner();
-        this.fadeIn.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent arg0) {
-                if (EditMachine.this.init) return;
-
-                EditMachine.this.machine.fadein = (Float)EditMachine.this.fadeIn.getValue();
-                EditMachine.this.edit.flagChange();
+        fadeIn = new JSpinner();
+        fadeIn.addChangeListener(arg0 -> {
+            if (init) {
+                return;
             }
+
+            machine.fadein = (Float)fadeIn.getValue();
+            edit.flagChange();
         });
-        this.fadeIn.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
+        fadeIn.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
         GridBagConstraints gbc_fadeIn = new GridBagConstraints();
         gbc_fadeIn.fill = GridBagConstraints.HORIZONTAL;
         gbc_fadeIn.insets = new Insets(0, 0, 0, 5);
         gbc_fadeIn.gridx = 1;
         gbc_fadeIn.gridy = 1;
-        internalOptions.add(this.fadeIn, gbc_fadeIn);
+        internalOptions.add(fadeIn, gbc_fadeIn);
 
-        this.fadeOut = new JSpinner();
-        this.fadeOut.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent arg0) {
-                if (EditMachine.this.init) return;
-
-                EditMachine.this.machine.fadeout = (Float)EditMachine.this.fadeOut.getValue();
-                EditMachine.this.edit.flagChange();
+        fadeOut = new JSpinner();
+        fadeOut.addChangeListener(arg0 -> {
+            if (init) {
+                return;
             }
+
+            machine.fadeout = (Float)fadeOut.getValue();
+            edit.flagChange();
         });
-        this.fadeOut.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
+        fadeOut.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
         GridBagConstraints gbc_fadeOut = new GridBagConstraints();
         gbc_fadeOut.fill = GridBagConstraints.HORIZONTAL;
         gbc_fadeOut.gridx = 2;
         gbc_fadeOut.gridy = 1;
-        internalOptions.add(this.fadeOut, gbc_fadeOut);
+        internalOptions.add(fadeOut, gbc_fadeOut);
 
         JPanel otherGroup = new JPanel();
         internal.add(otherGroup, BorderLayout.CENTER);
@@ -179,30 +188,24 @@ public class EditMachine extends JPanel implements IFlaggable {
         JScrollPane scrollPane_1 = new JScrollPane();
         panel_3.add(scrollPane_1, BorderLayout.CENTER);
 
-        this.timedEvents = new JList<String>();
-        this.timedEvents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        this.timedEvents.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent arg0) {
-                if (EditMachine.this.eventBeingModified) return;
+        timedEvents = new JList<>();
+        timedEvents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        timedEvents.addListSelectionListener(arg0 -> {
+            if (eventBeingModified) {
+                return;
+            }
 
-                if (EditMachine.this.timedEvents.getSelectedIndex() != -1
-                        && EditMachine.this.timedEvents.getSelectedIndex() < EditMachine.this.machine.event.size()) {
-                    changeToEvent(EditMachine.this.timedEvents.getSelectedIndex());
+            if (timedEvents.getSelectedIndex() != -1
+                    && timedEvents.getSelectedIndex() < machine.event.size()) {
+                changeToEvent(timedEvents.getSelectedIndex());
 
-                }
             }
         });
-        this.timedEvents.setVisibleRowCount(3);
-        scrollPane_1.setViewportView(this.timedEvents);
+        timedEvents.setVisibleRowCount(3);
+        scrollPane_1.setViewportView(timedEvents);
 
         JButton btnAdd = new JButton("+");
-        btnAdd.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addEvent();
-            }
-        });
+        btnAdd.addActionListener(e -> addEvent());
         panel_3.add(btnAdd, BorderLayout.EAST);
 
         JPanel panel_4 = new JPanel();
@@ -222,13 +225,20 @@ public class EditMachine extends JPanel implements IFlaggable {
         gbc_lblEvent.gridy = 0;
         panel_4.add(lblEvent, gbc_lblEvent);
 
-        this.instantEvent = new InstantTextField() {
+        instantEvent = new InstantTextField() {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
+
             @Override
             protected void editEvent() {
-                if (EditMachine.this.eventBeingModified) return;
+                if (eventBeingModified) {
+                    return;
+                }
 
-                EditMachine.this.event.event = EditMachine.this.instantEvent.getText();
-                EditMachine.this.edit.flagChange();
+                event.event = instantEvent.getText();
+                edit.flagChange();
             }
         };
         GridBagConstraints gbc_instantEvent = new GridBagConstraints();
@@ -237,7 +247,7 @@ public class EditMachine extends JPanel implements IFlaggable {
         gbc_instantEvent.fill = GridBagConstraints.HORIZONTAL;
         gbc_instantEvent.gridx = 1;
         gbc_instantEvent.gridy = 0;
-        panel_4.add(this.instantEvent, gbc_instantEvent);
+        panel_4.add(instantEvent, gbc_instantEvent);
 
         JLabel lblDelayMin = new JLabel("Delay (min/max)");
         GridBagConstraints gbc_lblDelayMin = new GridBagConstraints();
@@ -247,43 +257,45 @@ public class EditMachine extends JPanel implements IFlaggable {
         gbc_lblDelayMin.gridy = 1;
         panel_4.add(lblDelayMin, gbc_lblDelayMin);
 
-        this.delayMin = new JSpinner();
-        this.delayMin.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent arg0) {
-                if (EditMachine.this.init) return;
-                if (EditMachine.this.eventBeingModified) return;
-
-                EditMachine.this.event.delay_min = (Float)EditMachine.this.delayMin.getValue();
-                EditMachine.this.edit.flagChange();
+        delayMin = new JSpinner();
+        delayMin.addChangeListener(arg0 -> {
+            if (init) {
+                return;
             }
+            if (eventBeingModified) {
+                return;
+            }
+
+            event.delay_min = (Float)delayMin.getValue();
+            edit.flagChange();
         });
-        this.delayMin.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
+        delayMin.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
         GridBagConstraints gbc_delayMin = new GridBagConstraints();
         gbc_delayMin.fill = GridBagConstraints.HORIZONTAL;
         gbc_delayMin.insets = new Insets(0, 0, 5, 5);
         gbc_delayMin.gridx = 1;
         gbc_delayMin.gridy = 1;
-        panel_4.add(this.delayMin, gbc_delayMin);
+        panel_4.add(delayMin, gbc_delayMin);
 
-        this.delayMax = new JSpinner();
-        this.delayMax.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent arg0) {
-                if (EditMachine.this.init) return;
-                if (EditMachine.this.eventBeingModified) return;
-
-                EditMachine.this.event.delay_max = (Float)EditMachine.this.delayMax.getValue();
-                EditMachine.this.edit.flagChange();
+        delayMax = new JSpinner();
+        delayMax.addChangeListener(arg0 -> {
+            if (init) {
+                return;
             }
+            if (eventBeingModified) {
+                return;
+            }
+
+            event.delay_max = (Float)delayMax.getValue();
+            edit.flagChange();
         });
-        this.delayMax.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
+        delayMax.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
         GridBagConstraints gbc_delayMax = new GridBagConstraints();
         gbc_delayMax.fill = GridBagConstraints.HORIZONTAL;
         gbc_delayMax.insets = new Insets(0, 0, 5, 0);
         gbc_delayMax.gridx = 2;
         gbc_delayMax.gridy = 1;
-        panel_4.add(this.delayMax, gbc_delayMax);
+        panel_4.add(delayMax, gbc_delayMax);
 
         JLabel lblStartDelay = new JLabel("Start delay");
         GridBagConstraints gbc_lblStartDelay = new GridBagConstraints();
@@ -293,24 +305,25 @@ public class EditMachine extends JPanel implements IFlaggable {
         gbc_lblStartDelay.gridy = 2;
         panel_4.add(lblStartDelay, gbc_lblStartDelay);
 
-        this.startDelay = new JSpinner();
-        this.startDelay.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent arg0) {
-                if (EditMachine.this.init) return;
-                if (EditMachine.this.eventBeingModified) return;
-
-                EditMachine.this.event.delay_start = (Float)EditMachine.this.startDelay.getValue();
-                EditMachine.this.edit.flagChange();
+        startDelay = new JSpinner();
+        startDelay.addChangeListener(arg0 -> {
+            if (init) {
+                return;
             }
+            if (eventBeingModified) {
+                return;
+            }
+
+            event.delay_start = (Float)startDelay.getValue();
+            edit.flagChange();
         });
-        this.startDelay.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
+        startDelay.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
         GridBagConstraints gbc_startDelay = new GridBagConstraints();
         gbc_startDelay.fill = GridBagConstraints.HORIZONTAL;
         gbc_startDelay.insets = new Insets(0, 0, 5, 5);
         gbc_startDelay.gridx = 1;
         gbc_startDelay.gridy = 2;
-        panel_4.add(this.startDelay, gbc_startDelay);
+        panel_4.add(startDelay, gbc_startDelay);
 
         JLabel lblMultipliervolpitch = new JLabel("Multiplier (vol/pitch)");
         GridBagConstraints gbc_lblMultipliervolpitch = new GridBagConstraints();
@@ -320,51 +333,48 @@ public class EditMachine extends JPanel implements IFlaggable {
         gbc_lblMultipliervolpitch.gridy = 3;
         panel_4.add(lblMultipliervolpitch, gbc_lblMultipliervolpitch);
 
-        this.volMod = new JSpinner();
-        this.volMod.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent arg0) {
-                if (EditMachine.this.init) return;
-                if (EditMachine.this.eventBeingModified) return;
-
-                EditMachine.this.event.vol_mod = (Float)EditMachine.this.volMod.getValue();
-                EditMachine.this.edit.flagChange();
+        volMod = new JSpinner();
+        volMod.addChangeListener(arg0 -> {
+            if (init) {
+                return;
             }
+            if (eventBeingModified) {
+                return;
+            }
+
+            event.vol_mod = (Float)volMod.getValue();
+            edit.flagChange();
         });
-        this.volMod.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
+        volMod.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
         GridBagConstraints gbc_volMod = new GridBagConstraints();
         gbc_volMod.fill = GridBagConstraints.HORIZONTAL;
         gbc_volMod.insets = new Insets(0, 0, 5, 5);
         gbc_volMod.gridx = 1;
         gbc_volMod.gridy = 3;
-        panel_4.add(this.volMod, gbc_volMod);
+        panel_4.add(volMod, gbc_volMod);
 
-        this.pitchMod = new JSpinner();
-        this.pitchMod.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent arg0) {
-                if (EditMachine.this.init) return;
-                if (EditMachine.this.eventBeingModified) return;
-
-                EditMachine.this.event.pitch_mod = (Float)EditMachine.this.pitchMod.getValue();
-                EditMachine.this.edit.flagChange();
+        pitchMod = new JSpinner();
+        pitchMod.addChangeListener(arg0 -> {
+            if (init) {
+                return;
             }
+            if (eventBeingModified) {
+                return;
+            }
+
+            event.pitch_mod = (Float)pitchMod.getValue();
+            edit.flagChange();
         });
-        this.pitchMod.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
+        pitchMod.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(0.1)));
         GridBagConstraints gbc_pitchMod = new GridBagConstraints();
         gbc_pitchMod.insets = new Insets(0, 0, 5, 0);
         gbc_pitchMod.fill = GridBagConstraints.HORIZONTAL;
         gbc_pitchMod.gridx = 2;
         gbc_pitchMod.gridy = 3;
-        panel_4.add(this.pitchMod, gbc_pitchMod);
+        panel_4.add(pitchMod, gbc_pitchMod);
 
         JButton btnRemove = new JButton("REMOVE");
-        btnRemove.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                removeEvent();
-            }
-        });
+        btnRemove.addActionListener(arg0 -> removeEvent());
         GridBagConstraints gbc_btnRemove = new GridBagConstraints();
         gbc_btnRemove.insets = new Insets(0, 0, 0, 5);
         gbc_btnRemove.gridx = 0;
@@ -392,20 +402,15 @@ public class EditMachine extends JPanel implements IFlaggable {
         filePanel.setLayout(new BorderLayout(0, 0));
 
         // dag edit
-        this.fileField = new JTextField();
-        this.fileField.setText(this.machine.stream != null ? this.machine.stream.path : "");
-        this.fileField.setEditable(false);
-        this.fileField.setEnabled(true);
-        filePanel.add(this.fileField);
-        this.fileField.setColumns(10);
+        fileField = new JTextField();
+        fileField.setText(machine.stream != null ? machine.stream.path : "");
+        fileField.setEditable(false);
+        fileField.setEnabled(true);
+        filePanel.add(fileField);
+        fileField.setColumns(10);
 
         JButton btnOpen = new JButton("Open...");
-        btnOpen.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addStreamDialog();
-            }
-        });
+        btnOpen.addActionListener(e -> addStreamDialog());
         filePanel.add(btnOpen, BorderLayout.EAST);
 
         JPanel otherPanel = new JPanel();
@@ -429,26 +434,27 @@ public class EditMachine extends JPanel implements IFlaggable {
         gbc_lblVolumeMultiplier.gridy = 0;
         otherPanel.add(lblVolumeMultiplier, gbc_lblVolumeMultiplier);
 
-        this.streamVol = new JSpinner();
-        this.streamVol.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent arg0) {
-                if (EditMachine.this.init) return;
-                if (EditMachine.this.eventBeingModified) return;
-                if (machine.stream != null) {
-                    machine.stream.vol = (Float)EditMachine.this.streamVol.getValue();
-                    EditMachine.this.edit.flagChange();
-                }
+        streamVol = new JSpinner();
+        streamVol.addChangeListener(arg0 -> {
+            if (init) {
+                return;
+            }
+            if (eventBeingModified) {
+                return;
+            }
+            if (machine.stream != null) {
+                machine.stream.vol = (Float)streamVol.getValue();
+                edit.flagChange();
             }
         });
-        this.streamVol.setEnabled(true);
-        this.streamVol.setModel(new SpinnerNumberModel(machine.stream != null ? machine.stream.vol : 0.0F, null, null, 0.1F));
+        streamVol.setEnabled(true);
+        streamVol.setModel(new SpinnerNumberModel(machine.stream != null ? machine.stream.vol : 0.0F, null, null, 0.1F));
         GridBagConstraints gbc_spinner = new GridBagConstraints();
         gbc_spinner.fill = GridBagConstraints.HORIZONTAL;
         gbc_spinner.insets = new Insets(0, 0, 5, 0);
         gbc_spinner.gridx = 1;
         gbc_spinner.gridy = 0;
-        otherPanel.add(this.streamVol, gbc_spinner);
+        otherPanel.add(streamVol, gbc_spinner);
 
         JLabel lblPitchMultiplier = new JLabel("Pitch multiplier");
         GridBagConstraints gbc_lblPitchMultiplier = new GridBagConstraints();
@@ -458,44 +464,42 @@ public class EditMachine extends JPanel implements IFlaggable {
         gbc_lblPitchMultiplier.gridy = 1;
         otherPanel.add(lblPitchMultiplier, gbc_lblPitchMultiplier);
 
-        this.streamPitch = new JSpinner();
-        this.streamPitch.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent arg0) {
-                if (EditMachine.this.init) return;
-                if (EditMachine.this.eventBeingModified) return;
-                if (machine.stream != null) {
-                    machine.stream.pitch = (Float)EditMachine.this.streamPitch.getValue();
-                    EditMachine.this.edit.flagChange();
-                }
+        streamPitch = new JSpinner();
+        streamPitch.addChangeListener(arg0 -> {
+            if (init) {
+                return;
+            }
+            if (eventBeingModified) {
+                return;
+            }
+            if (machine.stream != null) {
+                machine.stream.pitch = (Float)streamPitch.getValue();
+                edit.flagChange();
             }
         });
-        this.streamPitch.setEnabled(true);
-        this.streamPitch.setModel(new SpinnerNumberModel(machine.stream != null ? machine.stream.pitch : 0F, null, null, 0.1F));
+        streamPitch.setEnabled(true);
+        streamPitch.setModel(new SpinnerNumberModel(machine.stream != null ? machine.stream.pitch : 0F, null, null, 0.1F));
         GridBagConstraints gbc_spinner_2 = new GridBagConstraints();
         gbc_spinner_2.fill = GridBagConstraints.HORIZONTAL;
         gbc_spinner_2.insets = new Insets(0, 0, 5, 0);
         gbc_spinner_2.gridx = 1;
         gbc_spinner_2.gridy = 1;
-        otherPanel.add(this.streamPitch, gbc_spinner_2);
+        otherPanel.add(streamPitch, gbc_spinner_2);
 
-        this.chckbxIsLooping = new JCheckBox("Is looping");
-        this.chckbxIsLooping.setEnabled(true);
-        this.chckbxIsLooping.setSelected(machine.stream != null ? machine.stream.looping : false);
-        this.chckbxIsLooping.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (machine.stream != null) {
-                    machine.stream.looping = chckbxIsLooping.isSelected();
-                    EditMachine.this.edit.flagChange();
-                }
+        chckbxIsLooping = new JCheckBox("Is looping");
+        chckbxIsLooping.setEnabled(true);
+        chckbxIsLooping.setSelected(machine.stream != null ? machine.stream.looping : false);
+        chckbxIsLooping.addChangeListener(e -> {
+            if (machine.stream != null) {
+                machine.stream.looping = chckbxIsLooping.isSelected();
+                edit.flagChange();
             }
         });
         GridBagConstraints gbc_chckbxIsLooping = new GridBagConstraints();
         gbc_chckbxIsLooping.anchor = GridBagConstraints.WEST;
         gbc_chckbxIsLooping.gridx = 1;
         gbc_chckbxIsLooping.gridy = 2;
-        otherPanel.add(this.chckbxIsLooping, gbc_chckbxIsLooping);
+        otherPanel.add(chckbxIsLooping, gbc_chckbxIsLooping);
 
         JPanel activationPanel = new JPanel();
         activationPanel.setBorder(new TitledBorder(
@@ -517,13 +521,13 @@ public class EditMachine extends JPanel implements IFlaggable {
         gbc_lblMustBeActive.gridy = 0;
         activationPanel.add(lblMustBeActive, gbc_lblMustBeActive);
 
-        this.activeSet = new SetRemoverPanel(this, this.machine.allow);
+        activeSet = new SetRemoverPanel(this, machine.allow);
         GridBagConstraints gbc_activeSet = new GridBagConstraints();
         gbc_activeSet.fill = GridBagConstraints.HORIZONTAL;
         gbc_activeSet.insets = new Insets(0, 0, 5, 0);
         gbc_activeSet.gridx = 0;
         gbc_activeSet.gridy = 1;
-        activationPanel.add(this.activeSet, gbc_activeSet);
+        activationPanel.add(activeSet, gbc_activeSet);
 
         JLabel lblMustBeInactive = new JLabel("None must be active (Jammers):");
         GridBagConstraints gbc_lblMustBeInactive = new GridBagConstraints();
@@ -533,13 +537,13 @@ public class EditMachine extends JPanel implements IFlaggable {
         gbc_lblMustBeInactive.gridy = 2;
         activationPanel.add(lblMustBeInactive, gbc_lblMustBeInactive);
 
-        this.inactiveSet = new SetRemoverPanel(this, this.machine.restrict);
+        inactiveSet = new SetRemoverPanel(this, machine.restrict);
         GridBagConstraints gbc_inactiveSet = new GridBagConstraints();
         gbc_inactiveSet.fill = GridBagConstraints.HORIZONTAL;
         gbc_inactiveSet.insets = new Insets(0, 0, 5, 0);
         gbc_inactiveSet.gridx = 0;
         gbc_inactiveSet.gridy = 3;
-        activationPanel.add(this.inactiveSet, gbc_inactiveSet);
+        activationPanel.add(inactiveSet, gbc_inactiveSet);
 
         JPanel panel = new JPanel();
         GridBagConstraints gbc_panel = new GridBagConstraints();
@@ -554,110 +558,104 @@ public class EditMachine extends JPanel implements IFlaggable {
         JScrollPane scrollPane = new JScrollPane();
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        this.list = new JList<String>();
-        this.list.setVisibleRowCount(4);
-        scrollPane.setViewportView(this.list);
+        list = new JList<>();
+        list.setVisibleRowCount(4);
+        scrollPane.setViewportView(list);
 
         JPanel panel_1 = new JPanel();
         panel.add(panel_1, BorderLayout.EAST);
         panel_1.setLayout(new GridLayout(0, 1, 0, 0));
 
         JButton btnActive = new JButton("Active");
-        btnActive.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                addToAllow();
-            }
-        });
+        btnActive.addActionListener(arg0 -> addToAllow());
         panel_1.add(btnActive);
 
         JButton btnInactive = new JButton("Inactive");
-        btnInactive.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                addToRestrict();
-            }
-        });
+        btnInactive.addActionListener(arg0 -> addToRestrict());
         panel_1.add(btnInactive);
 
         updateValues();
-        this.eventBeingModified = false;
-        this.init = false;
+        eventBeingModified = false;
+        init = false;
     }
 
     protected void addEvent() {
-        this.eventBeingModified = true;
+        eventBeingModified = true;
         SerialMachineEvent sme = new SerialMachineEvent();
-        this.machine.event.add(sme);
-        this.event = sme;
+        machine.event.add(sme);
+        event = sme;
         updateValues();
-        changeToEvent(this.machine.event.size() - 1);
+        changeToEvent(machine.event.size() - 1);
     }
 
     protected void removeEvent() {
-        this.machine.event.remove(this.event);
-        this.edit.flagChange();
+        machine.event.remove(event);
+        edit.flagChange();
         updateValues();
     }
 
     protected void changeToEvent(int selectedIndex) {
-        this.eventBeingModified = true;
-        this.timedEvents.setSelectedIndex(selectedIndex);
-        this.event = this.machine.event.get(selectedIndex);
+        eventBeingModified = true;
+        timedEvents.setSelectedIndex(selectedIndex);
+        event = machine.event.get(selectedIndex);
         fillEvents();
-        this.eventBeingModified = false;
+        eventBeingModified = false;
     }
 
     private void fillEvents() {
-        if (this.machine.event == null) return;
+        if (machine.event == null) {
+            return;
+        }
 
-        this.delayMin.setValue(this.event.delay_min);
-        this.delayMax.setValue(this.event.delay_max);
-        this.startDelay.setValue(this.event.delay_start);
-        this.instantEvent.setText(this.event.event);
+        delayMin.setValue(event.delay_min);
+        delayMax.setValue(event.delay_max);
+        startDelay.setValue(event.delay_start);
+        instantEvent.setText(event.event);
 
-        this.volMod.setValue(this.event.vol_mod);
-        this.pitchMod.setValue(this.event.pitch_mod);
+        volMod.setValue(event.vol_mod);
+        pitchMod.setValue(event.pitch_mod);
     }
 
     private void updateValues() {
-        this.delayIn.setValue(this.machine.delay_fadein);
-        this.delayOut.setValue(this.machine.delay_fadeout);
-        this.fadeIn.setValue(this.machine.fadein);
-        this.fadeOut.setValue(this.machine.fadeout);
+        delayIn.setValue(machine.delay_fadein);
+        delayOut.setValue(machine.delay_fadeout);
+        fadeIn.setValue(machine.fadein);
+        fadeOut.setValue(machine.fadeout);
 
-        if (this.machine.event != null) {
-            List<String> data = new ArrayList<String>();
+        if (machine.event != null) {
+            List<String> data = new ArrayList<>();
             int acc = 1;
-            for (SerialMachineEvent e : this.machine.event) {
+            for (SerialMachineEvent e : machine.event) {
                 data.add("(" + acc + ") " + e.event);
                 acc = acc + 1;
             }
 
-            this.timedEvents.setListData(data.toArray(new String[data.size()]));
+            timedEvents.setListData(data.toArray(new String[data.size()]));
         }
 
-        if (this.machine.stream != null) {
-            this.machine.stream.vol = (Float)streamVol.getValue();
-            this.machine.stream.pitch = (Float)streamPitch.getValue();
-            this.machine.stream.looping = chckbxIsLooping.isSelected();
+        if (machine.stream != null) {
+            machine.stream.vol = (Float)streamVol.getValue();
+            machine.stream.pitch = (Float)streamPitch.getValue();
+            machine.stream.looping = chckbxIsLooping.isSelected();
         }
 
         fillWithValues();
-        this.activeSet.fillWithValues();
-        this.inactiveSet.fillWithValues();
+        activeSet.fillWithValues();
+        inactiveSet.fillWithValues();
 
     }
 
     protected void addToAllow() {
-        List<String> values = this.list.getSelectedValuesList();
-        if (values.size() == 0) return;
+        List<String> values = list.getSelectedValuesList();
+        if (values.size() == 0) {
+            return;
+        }
 
         int addedCount = 0;
         for (Object o : values) {
             String value = (String)o;
-            if (!this.machine.allow.contains(value)) {
-                this.machine.allow.add(value);
+            if (!machine.allow.contains(value)) {
+                machine.allow.add(value);
                 addedCount = addedCount + 1;
             }
         }
@@ -668,14 +666,16 @@ public class EditMachine extends JPanel implements IFlaggable {
     }
 
     protected void addToRestrict() {
-        List<String> values = this.list.getSelectedValuesList();
-        if (values.size() == 0) return;
+        List<String> values = list.getSelectedValuesList();
+        if (values.size() == 0) {
+            return;
+        }
 
         int addedCount = 0;
         for (Object o : values) {
             String value = (String)o;
-            if (!this.machine.restrict.contains(value)) {
-                this.machine.restrict.add(value);
+            if (!machine.restrict.contains(value)) {
+                machine.restrict.add(value);
                 addedCount = addedCount + 1;
             }
         }
@@ -687,38 +687,42 @@ public class EditMachine extends JPanel implements IFlaggable {
 
     // dag edit
     private void addStreamDialog() {
-        OggFileChooser fc = new OggFileChooser(this.edit.getSoundDirectory());
+        OggFileChooser fc = new OggFileChooser(edit.getSoundDirectory());
         fc.setMultiSelectionEnabled(true);
         int returnValue = fc.showOpenDialog(this);
-        if (returnValue != JFileChooser.APPROVE_OPTION) return;
+        if (returnValue != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
 
         File[] files = fc.getSelectedFiles();
-        if (files.length == 0) return;
+        if (files.length == 0) {
+            return;
+        }
 
         for (File file : files) {
             if (file != null && file.isFile() && file.exists()) {
-                String path = new File(this.edit.getSoundDirectory().getAbsolutePath()).toURI().relativize(new File(file.getAbsolutePath()).toURI()).getPath();
-                this.machine.stream = new SerialMachineStream();
-                this.machine.stream.path = path;
-                this.fileField.setText(path);
+                String path = new File(edit.getSoundDirectory().getAbsolutePath()).toURI().relativize(new File(file.getAbsolutePath()).toURI()).getPath();
+                machine.stream = new SerialMachineStream();
+                machine.stream.path = path;
+                fileField.setText(path);
             }
         }
-        this.edit.flagChange();
+        edit.flagChange();
         updateValues();
     }
 
     private void fillWithValues() {
-        Set<String> unused = new TreeSet<String>(this.edit.getSerialRoot().set.keySet());
-        unused.removeAll(this.machine.allow);
-        unused.removeAll(this.machine.restrict);
+        Set<String> unused = new TreeSet<>(edit.getSerialRoot().set.keySet());
+        unused.removeAll(machine.allow);
+        unused.removeAll(machine.restrict);
 
-        this.list.removeAll();
-        this.list.setListData(unused.toArray(new String[unused.size()]));
+        list.removeAll();
+        list.setListData(unused.toArray(new String[unused.size()]));
     }
 
     @Override
     public void flagChange() {
-        this.edit.flagChange();
+        edit.flagChange();
         updateValues();
     }
 }

@@ -7,5 +7,5 @@ import java.util.Collection;
  */
 
 public interface Dependable {
-    public Collection<String> getDependencies();
+    Collection<String> getDependencies();
 }

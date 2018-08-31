@@ -20,19 +20,19 @@ public final class ExpansionIdentity {
         this.location = location;
     }
 
-    public final String getUniqueName() {
-        return this.uniqueName;
+    public String getUniqueName() {
+        return uniqueName;
     }
 
-    public final String getFriendlyName() {
-        return this.friendlyName;
+    public String getFriendlyName() {
+        return friendlyName;
     }
 
-    public final IResourcePack getPack() {
-        return this.pack;
+    public IResourcePack getPack() {
+        return pack;
     }
 
-    public final ResourceLocation getLocation() {
-        return this.location;
+    public ResourceLocation getLocation() {
+        return location;
     }
 }

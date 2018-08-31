@@ -1,15 +1,19 @@
 package eu.ha3.matmos.editor.edit;
 
-import eu.ha3.matmos.editor.interfaces.IFlaggable;
-import eu.ha3.matmos.serialisation.expansion.*;
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import eu.ha3.matmos.editor.interfaces.IFlaggable;
+import eu.ha3.matmos.serialisation.expansion.SerialDynamic;
+import eu.ha3.matmos.serialisation.expansion.SerialDynamicSheetIndex;
 
 @SuppressWarnings("serial")
 public class EditDynamic extends JPanel implements IFlaggable {
@@ -20,8 +24,8 @@ public class EditDynamic extends JPanel implements IFlaggable {
     private JTextField textFieldIndex;
 
     public EditDynamic(EditPanel parentConstruct, SerialDynamic serialDynamicConstruct) {
-        this.edit = parentConstruct;
-        this.serialDynamic = serialDynamicConstruct;
+        edit = parentConstruct;
+        serialDynamic = serialDynamicConstruct;
         setLayout(new BorderLayout(0, 0));
 
         JPanel panel = new JPanel();
@@ -42,12 +46,12 @@ public class EditDynamic extends JPanel implements IFlaggable {
         gbc_lblMustBeActive.gridy = 0;
         panel.add(lblMustBeActive, gbc_lblMustBeActive);
 
-        this.listRemover = new DynamicRemoverPanel(this, this.serialDynamic);
+        listRemover = new DynamicRemoverPanel(this, serialDynamic);
         GridBagConstraints gbc_listRemover = new GridBagConstraints();
         gbc_listRemover.fill = GridBagConstraints.BOTH;
         gbc_listRemover.gridx = 0;
         gbc_listRemover.gridy = 1;
-        panel.add(this.listRemover, gbc_listRemover);
+        panel.add(listRemover, gbc_listRemover);
 
         JPanel panel_1 = new JPanel();
         panel_1.setBorder(new TitledBorder(null, "Add", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -63,76 +67,66 @@ public class EditDynamic extends JPanel implements IFlaggable {
         gbl_panel_2.rowWeights = new double[] {0.0, Double.MIN_VALUE};
         panel_2.setLayout(gbl_panel_2);
 
-        this.textFieldSheet = new JTextField();
+        textFieldSheet = new JTextField();
         GridBagConstraints gbc_textField = new GridBagConstraints();
         gbc_textField.fill = GridBagConstraints.BOTH;
         gbc_textField.insets = new Insets(0, 0, 0, 5);
         gbc_textField.gridx = 0;
         gbc_textField.gridy = 0;
-        panel_2.add(this.textFieldSheet, gbc_textField);
-        this.textFieldSheet.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                addLine();
-            }
-        });
-        this.textFieldSheet.setColumns(10);
+        panel_2.add(textFieldSheet, gbc_textField);
+        textFieldSheet.addActionListener(arg0 -> addLine());
+        textFieldSheet.setColumns(10);
 
-        this.textFieldIndex = new JTextField();
+        textFieldIndex = new JTextField();
         GridBagConstraints gbc_textField_1 = new GridBagConstraints();
         gbc_textField_1.fill = GridBagConstraints.BOTH;
         gbc_textField_1.gridx = 1;
         gbc_textField_1.gridy = 0;
-        panel_2.add(this.textFieldIndex, gbc_textField_1);
-        this.textFieldIndex.setColumns(10);
+        panel_2.add(textFieldIndex, gbc_textField_1);
+        textFieldIndex.setColumns(10);
 
         JButton btnAddenter = new JButton("Add (ENTER)");
-        btnAddenter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addLine();
-            }
-        });
+        btnAddenter.addActionListener(e -> addLine());
         panel_1.add(btnAddenter, BorderLayout.EAST);
 
-        this.listRemover.getList().addListSelectionListener(new ListSelectionListener() {
-
-            @Override
-            public void valueChanged(ListSelectionEvent arg0) {
-                pickupSelection();
-            }
-        });
+        listRemover.getList().addListSelectionListener(arg0 -> pickupSelection());
 
         updateValues();
     }
 
     private void pickupSelection() {
-        int value = this.listRemover.getList().getSelectedIndex();
-        if (value == -1 || value >= this.serialDynamic.entries.size()) return;
+        int value = listRemover.getList().getSelectedIndex();
+        if (value == -1 || value >= serialDynamic.entries.size()) {
+            return;
+        }
 
-        this.textFieldSheet.setText(this.serialDynamic.entries.get(value).sheet);
-        this.textFieldIndex.setText(this.serialDynamic.entries.get(value).index);
+        textFieldSheet.setText(serialDynamic.entries.get(value).sheet);
+        textFieldIndex.setText(serialDynamic.entries.get(value).index);
     }
 
     private void addLine() {
-        String ctsOfSheet = this.textFieldSheet.getText();
-        if (ctsOfSheet.equals("")) return;
+        String ctsOfSheet = textFieldSheet.getText();
+        if (ctsOfSheet.equals("")) {
+            return;
+        }
 
-        String ctsOfIndex = this.textFieldIndex.getText();
-        if (ctsOfIndex.equals("")) return;
+        String ctsOfIndex = textFieldIndex.getText();
+        if (ctsOfIndex.equals("")) {
+            return;
+        }
 
-        this.serialDynamic.entries.add(new SerialDynamicSheetIndex(ctsOfSheet, ctsOfIndex));
+        serialDynamic.entries.add(new SerialDynamicSheetIndex(ctsOfSheet, ctsOfIndex));
         flagChange();
-        this.listRemover.getList().setSelectedValue(ctsOfSheet + "@" + ctsOfIndex, true);
+        listRemover.getList().setSelectedValue(ctsOfSheet + "@" + ctsOfIndex, true);
     }
 
     @Override
     public void flagChange() {
-        this.edit.flagChange();
+        edit.flagChange();
         updateValues();
     }
 
     private void updateValues() {
-        this.listRemover.fillWithValues();
+        listRemover.fillWithValues();
     }
 }

@@ -11,19 +11,19 @@ import eu.ha3.matmos.core.sheet.SheetCommander;
  */
 
 public interface ProviderCollection {
-    public ReferenceTime getReferenceTime();
+    ReferenceTime getReferenceTime();
 
-    public SoundRelay getSoundRelay();
+    SoundRelay getSoundRelay();
 
-    public SheetCommander<String> getSheetCommander();
+    SheetCommander<String> getSheetCommander();
 
-    public Provider<Condition> getCondition();
+    Provider<Condition> getCondition();
 
-    public Provider<Junction> getJunction();
+    Provider<Junction> getJunction();
 
-    public Provider<Machine> getMachine();
+    Provider<Machine> getMachine();
 
-    public Provider<Event> getEvent();
+    Provider<Event> getEvent();
 
-    public Provider<Dynamic> getDynamic();
+    Provider<Dynamic> getDynamic();
 }

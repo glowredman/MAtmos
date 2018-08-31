@@ -9,8 +9,8 @@ import java.util.Set;
 public interface PassOnceModule extends Module {
     /**
      * Returns a set of modules this pass-once module is capable to handle.
-     * 
+     *
      * @return
      */
-    public Set<String> getSubModules();
+    Set<String> getSubModules();
 }

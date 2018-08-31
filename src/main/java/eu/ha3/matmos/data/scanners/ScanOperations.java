@@ -3,9 +3,9 @@ package eu.ha3.matmos.data.scanners;
 /* x-placeholder */
 
 public interface ScanOperations {
-    public void begin();
+    void begin();
 
-    public void finish();
+    void finish();
 
-    public void input(int x, int y, int z);
+    void input(int x, int y, int z);
 }

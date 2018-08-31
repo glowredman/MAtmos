@@ -1,25 +1,26 @@
 package eu.ha3.matmos.core.expansion.agents;
 
-import eu.ha3.matmos.core.Knowledge;
-import eu.ha3.matmos.core.expansion.ExpansionIdentity;
-import eu.ha3.matmos.serialisation.JsonExpansions_EngineDeserializer;
-import eu.ha3.matmos.serialisation.LegacyXMLExpansions_Engine1;
-import eu.ha3.matmos.serialisation.expansion.SerialRoot;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import eu.ha3.matmos.core.Knowledge;
+import eu.ha3.matmos.core.expansion.ExpansionIdentity;
+import eu.ha3.matmos.serialisation.JsonExpansions_EngineDeserializer;
+import eu.ha3.matmos.serialisation.LegacyXMLExpansions_Engine1;
+import eu.ha3.matmos.serialisation.expansion.SerialRoot;
 
 public class LegacyXMLLoadingAgent implements LoadingAgent {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    
+
     private final File jsonOutput;
 
     public LegacyXMLLoadingAgent() {
@@ -40,11 +41,11 @@ public class LegacyXMLLoadingAgent implements LoadingAgent {
 
             SerialRoot root = new LegacyXMLExpansions_Engine1().loadXMLtoSerial(document);
             try {
-                if (!this.jsonOutput.exists()) {
-                    this.jsonOutput.createNewFile();
+                if (!jsonOutput.exists()) {
+                    jsonOutput.createNewFile();
                 }
 
-                FileWriter write = new FileWriter(this.jsonOutput);
+                FileWriter write = new FileWriter(jsonOutput);
                 write.append(gson.toJson(root));
                 write.close();
             } catch (IOException e) {

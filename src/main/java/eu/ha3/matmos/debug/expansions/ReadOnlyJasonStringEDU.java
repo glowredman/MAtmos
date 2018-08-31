@@ -5,5 +5,5 @@ package eu.ha3.matmos.debug.expansions;
  */
 
 public interface ReadOnlyJasonStringEDU extends ExpansionDebugUnit {
-    public String obtainJasonString();
+    String obtainJasonString();
 }

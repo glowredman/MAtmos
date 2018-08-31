@@ -1,9 +1,14 @@
 package eu.ha3.matmos.editor;
 
-import eu.ha3.matmos.serialisation.expansion.*;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import eu.ha3.matmos.serialisation.expansion.SerialCondition;
+import eu.ha3.matmos.serialisation.expansion.SerialDynamic;
+import eu.ha3.matmos.serialisation.expansion.SerialEvent;
+import eu.ha3.matmos.serialisation.expansion.SerialList;
+import eu.ha3.matmos.serialisation.expansion.SerialMachine;
+import eu.ha3.matmos.serialisation.expansion.SerialSet;
 
 public enum KnowledgeItemType {
     CONDITION("Condition", SerialCondition.class),
@@ -16,7 +21,7 @@ public enum KnowledgeItemType {
     private String name;
     private Class<?> serialClass;
 
-    private static final Map<Class<?>, KnowledgeItemType> fromSerialClass = new HashMap<Class<?>, KnowledgeItemType>();
+    private static final Map<Class<?>, KnowledgeItemType> fromSerialClass = new HashMap<>();
 
     static {
         for (KnowledgeItemType kit : KnowledgeItemType.values()) {
@@ -25,7 +30,9 @@ public enum KnowledgeItemType {
     }
 
     public static KnowledgeItemType fromSerialClass(Class<?> klass) {
-        if (!fromSerialClass.containsKey(klass)) return null;
+        if (!fromSerialClass.containsKey(klass)) {
+            return null;
+        }
 
         return fromSerialClass.get(klass);
     }
@@ -36,11 +43,11 @@ public enum KnowledgeItemType {
     }
 
     public Class<?> getSerialClass() {
-        return this.serialClass;
+        return serialClass;
     }
 
     @Override
     public String toString() {
-        return this.name;
+        return name;
     }
 }

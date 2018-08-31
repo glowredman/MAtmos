@@ -1,5 +1,14 @@
 package eu.ha3.matmos.core.expansion;
 
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -15,15 +24,8 @@ import eu.ha3.matmos.data.Collector;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import net.minecraft.client.resources.ResourcePackRepository;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.io.IOUtils;
 
 /* x-placeholder */
 
@@ -32,7 +34,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     private final File userconfigFolder;
 
     private final MAtResourcePackDealer dealer = new MAtResourcePackDealer();
-    private final Map<String, Expansion> expansions = new HashMap<String, Expansion>();
+    private final Map<String, Expansion> expansions = new HashMap<>();
     //private final Map<String, IResourcePack> confirmedResourcePacks = new LinkedHashMap<String, IResourcePack>();
 
     private DataPackage data;
@@ -52,7 +54,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     public void loadExpansions() {
         dispose();
 
-        List<ExpansionIdentity> identities = new ArrayList<ExpansionIdentity>();
+        List<ExpansionIdentity> identities = new ArrayList<>();
         findExpansions(identities);
         for (ExpansionIdentity identity : identities) {
             addExpansion(identity);
@@ -60,10 +62,10 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     }
 
     private void findExpansions(List<ExpansionIdentity> identities) {
-        List<ResourcePackRepository.Entry> resourcePacks = this.dealer.findResourcePacks();
+        List<ResourcePackRepository.Entry> resourcePacks = dealer.findResourcePacks();
         for (ResourcePackRepository.Entry pack : resourcePacks) {
             try {
-                InputStream is = this.dealer.openExpansionsPointerFile(pack.getResourcePack());
+                InputStream is = dealer.openExpansionsPointerFile(pack.getResourcePack());
                 String jasonString = IOUtils.toString(is, "UTF-8");
 
                 JsonObject jason = new JsonParser().parse(jasonString).getAsJsonObject();
@@ -88,12 +90,12 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     }
 
     private void addExpansion(ExpansionIdentity identity) {
-        Expansion expansion = new Expansion(identity, this.data, this.collector, this.accessor, this, new File(
-                this.userconfigFolder, identity.getUniqueName() + ".cfg"));
-        this.expansions.put(identity.getUniqueName(), expansion);
+        Expansion expansion = new Expansion(identity, data, collector, accessor, this, new File(
+                userconfigFolder, identity.getUniqueName() + ".cfg"));
+        expansions.put(identity.getUniqueName(), expansion);
 
         if (identity.getLocation().getPath().endsWith(".xml")) {
-            File folder = new File(this.userconfigFolder, "DO NOT EDIT UNLESS COPIED/");
+            File folder = new File(userconfigFolder, "DO NOT EDIT UNLESS COPIED/");
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -111,11 +113,13 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     }
 
     public Map<String, Expansion> getExpansions() {
-        return this.expansions;
+        return expansions;
     }
 
     private void synchronizeStable(Expansion expansion) {
-        if (expansion == null) return;
+        if (expansion == null) {
+            return;
+        }
 
         if (expansion.isActivated()) {
             if (expansion.getVolume() <= 0f) {
@@ -129,21 +133,21 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     }
 
     public void synchronize() {
-        for (Expansion expansion : this.expansions.values()) {
+        for (Expansion expansion : expansions.values()) {
             synchronizeStable(expansion);
         }
     }
 
     @Override
     public void onFrame(float f) {
-        for (Expansion expansion : this.expansions.values()) {
+        for (Expansion expansion : expansions.values()) {
             expansion.simulate();
         }
     }
 
     @Override
     public void onTick() {
-        for (Expansion expansion : this.expansions.values()) {
+        for (Expansion expansion : expansions.values()) {
             expansion.evaluate();
         }
     }
@@ -158,7 +162,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
 
     @Override
     public float getVolume() {
-        return this.volume;
+        return volume;
     }
 
     @Override
@@ -169,25 +173,25 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
 
     @Override
     public void updateVolume() {
-        for (Expansion e : this.expansions.values()) {
+        for (Expansion e : expansions.values()) {
             e.updateVolume();
         }
     }
 
     public void interrupt() {
-        for (Expansion exp : this.expansions.values()) {
+        for (Expansion exp : expansions.values()) {
             exp.interrupt();
         }
     }
 
     public void dispose() {
-        for (Expansion expansion : this.expansions.values()) {
+        for (Expansion expansion : expansions.values()) {
             expansion.dispose();
         }
     }
 
     public void saveConfig() {
-        for (Expansion expansion : this.expansions.values()) {
+        for (Expansion expansion : expansions.values()) {
             expansion.saveConfig();
         }
     }

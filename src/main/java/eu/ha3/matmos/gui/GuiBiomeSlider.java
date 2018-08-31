@@ -1,5 +1,10 @@
 package eu.ha3.matmos.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import eu.ha3.matmos.MAtMod;
 import eu.ha3.mc.gui.HDisplayStringProvider;
 import eu.ha3.mc.gui.HGuiSliderControl;
@@ -8,22 +13,17 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.biome.Biome;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
     final protected MAtMod mod;
 
     final protected int maxBiomes = calculateMaxBiomes();
     protected int definedBiomeID;
 
-    private List<Integer> validBiomes = new ArrayList<Integer>();
+    private List<Integer> validBiomes = new ArrayList<>();
 
     public GuiBiomeSlider(MAtMod mod, int define) {
         this.mod = mod;
-        this.definedBiomeID = define;
+        definedBiomeID = define;
 
         computeBiomes();
     }
@@ -37,8 +37,8 @@ public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
     @Override
     public void sliderValueChanged(HGuiSliderControl slider, float value) {
         int biomeID = (int)(Math.floor(value * validBiomes.size()) - 1);
-        
-        this.definedBiomeID = biomeID >= 0 && biomeID < this.validBiomes.size() ? validBiomes.get(biomeID) : biomeID;
+
+        definedBiomeID = biomeID >= 0 && biomeID < validBiomes.size() ? validBiomes.get(biomeID) : biomeID;
 
         slider.updateDisplayString();
     }
@@ -52,30 +52,30 @@ public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
     @Override
     public String provideDisplayString() {
         String desc = getDescriptorString();
-        
+
         if (desc == null) {
             return "";
         }
-        
+
         return I18n.format("mat.biome.override", desc);
     }
-    
+
     @Nullable
     protected String getDescriptorString() {
         if (definedBiomeID >= 0 && definedBiomeID <= maxBiomes) {
             Biome biome = Biome.getBiomeForId(definedBiomeID);
-            
+
             if (biome == null) {
                 return I18n.format("mat.biome.undef", definedBiomeID);
             }
-            
+
             if (StringUtils.isNullOrEmpty(biome.getBiomeName())) {
                 return I18n.format("mat.biome.unamed", definedBiomeID);
             }
 
             return I18n.format("mat.biome.biome", biome.getBiomeName(), definedBiomeID);
         }
-        
+
         if (definedBiomeID == -1) {
             return I18n.format("mat.biome.disabled");
         }
@@ -84,15 +84,15 @@ public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
     }
 
     public float calculateSliderLocation(int biomeID) {
-        
+
         if (biomeID == -1) {
             return 0;
         }
-        
+
         if (validBiomes.contains(biomeID)) {
             return (validBiomes.indexOf(biomeID) + 1) / validBiomes.size();
         }
-        
+
         return 1;
     }
 
@@ -101,12 +101,12 @@ public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
 
         for (Biome i : Biome.REGISTRY) {
             int id = Biome.REGISTRY.getIDForObject(i);
-            
+
             if (id > max) {
                 max = id;
             }
         }
-        
+
         return max;
     }
 

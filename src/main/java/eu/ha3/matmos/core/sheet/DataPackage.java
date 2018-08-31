@@ -5,17 +5,17 @@ import java.util.Set;
 /* x-placeholder */
 
 public interface DataPackage {
-    public Sheet getSheet(String name);
+    Sheet getSheet(String name);
 
-    public Set<String> getSheetNames();
+    Set<String> getSheetNames();
 
     /**
      * Empties the data overall
      */
-    public void clear();
+    void clear();
 
     /**
      * Empties the individual sheets
      */
-    public void clearContents();
+    void clearContents();
 }

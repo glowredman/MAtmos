@@ -8,5 +8,5 @@ import java.util.TreeSet;
  */
 
 public class SerialList {
-    public Set<String> entries = new TreeSet<String>();
+    public Set<String> entries = new TreeSet<>();
 }

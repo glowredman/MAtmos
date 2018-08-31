@@ -18,7 +18,7 @@ public class RawJasonLoadingAgent implements LoadingAgent {
     @Override
     public boolean load(ExpansionIdentity identity, Knowledge knowledge) {
         try {
-            return new JsonExpansions_EngineDeserializer().loadJson(this.jasonString, identity, knowledge);
+            return new JsonExpansions_EngineDeserializer().loadJson(jasonString, identity, knowledge);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

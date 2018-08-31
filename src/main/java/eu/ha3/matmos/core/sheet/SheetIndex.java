@@ -5,7 +5,7 @@ package eu.ha3.matmos.core.sheet;
  */
 
 public interface SheetIndex {
-    public String getSheet();
+    String getSheet();
 
-    public String getIndex();
+    String getIndex();
 }

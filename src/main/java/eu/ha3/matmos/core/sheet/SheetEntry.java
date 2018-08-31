@@ -15,11 +15,11 @@ public class SheetEntry implements SheetIndex {
 
     @Override
     public String getSheet() {
-        return this.sheet;
+        return sheet;
     }
 
     @Override
     public String getIndex() {
-        return this.index;
+        return index;
     }
 }

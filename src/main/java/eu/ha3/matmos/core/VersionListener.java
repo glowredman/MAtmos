@@ -5,5 +5,5 @@ package eu.ha3.matmos.core;
  */
 
 public interface VersionListener {
-    public void onIncrement(Versionned versionned);
+    void onIncrement(Versionned versionned);
 }

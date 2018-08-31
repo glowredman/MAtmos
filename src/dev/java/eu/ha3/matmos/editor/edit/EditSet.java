@@ -1,21 +1,24 @@
 package eu.ha3.matmos.editor.edit;
 
-import eu.ha3.matmos.editor.interfaces.IFlaggable;
-import eu.ha3.matmos.serialisation.expansion.SerialSet;
-
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
+
+import eu.ha3.matmos.editor.interfaces.IFlaggable;
+import eu.ha3.matmos.serialisation.expansion.SerialSet;
 
 @SuppressWarnings("serial")
 public class EditSet extends JPanel implements IFlaggable {
@@ -26,8 +29,8 @@ public class EditSet extends JPanel implements IFlaggable {
     private JList<String> list;
 
     public EditSet(EditPanel parentConstruct, SerialSet setConstruct) {
-        this.edit = parentConstruct;
-        this.set = setConstruct;
+        edit = parentConstruct;
+        set = setConstruct;
         setLayout(new BorderLayout(0, 0));
 
         JPanel activationPanel = new JPanel();
@@ -50,13 +53,13 @@ public class EditSet extends JPanel implements IFlaggable {
         gbc_lblMustBeActive.gridy = 0;
         activationPanel.add(lblMustBeActive, gbc_lblMustBeActive);
 
-        this.activeSet = new SetRemoverPanel(this, this.set.yes);
+        activeSet = new SetRemoverPanel(this, set.yes);
         GridBagConstraints gbc_activeSet = new GridBagConstraints();
         gbc_activeSet.fill = GridBagConstraints.BOTH;
         gbc_activeSet.insets = new Insets(0, 0, 5, 0);
         gbc_activeSet.gridx = 0;
         gbc_activeSet.gridy = 1;
-        activationPanel.add(this.activeSet, gbc_activeSet);
+        activationPanel.add(activeSet, gbc_activeSet);
 
         JLabel lblMustBeInactive = new JLabel("Must be inactive:");
         GridBagConstraints gbc_lblMustBeInactive = new GridBagConstraints();
@@ -66,13 +69,13 @@ public class EditSet extends JPanel implements IFlaggable {
         gbc_lblMustBeInactive.gridy = 2;
         activationPanel.add(lblMustBeInactive, gbc_lblMustBeInactive);
 
-        this.inactiveSet = new SetRemoverPanel(this, this.set.no);
+        inactiveSet = new SetRemoverPanel(this, set.no);
         GridBagConstraints gbc_inactiveSet = new GridBagConstraints();
         gbc_inactiveSet.fill = GridBagConstraints.BOTH;
         gbc_inactiveSet.insets = new Insets(0, 0, 5, 0);
         gbc_inactiveSet.gridx = 0;
         gbc_inactiveSet.gridy = 3;
-        activationPanel.add(this.inactiveSet, gbc_inactiveSet);
+        activationPanel.add(inactiveSet, gbc_inactiveSet);
 
         JPanel panel = new JPanel();
         GridBagConstraints gbc_panel = new GridBagConstraints();
@@ -86,43 +89,35 @@ public class EditSet extends JPanel implements IFlaggable {
         JScrollPane scrollPane = new JScrollPane();
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        this.list = new JList<String>();
-        scrollPane.setViewportView(this.list);
+        list = new JList<>();
+        scrollPane.setViewportView(list);
 
         JPanel panel_1 = new JPanel();
         panel.add(panel_1, BorderLayout.EAST);
         panel_1.setLayout(new GridLayout(0, 1, 0, 0));
 
         JButton btnActive = new JButton("Active");
-        btnActive.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                addToActive();
-            }
-        });
+        btnActive.addActionListener(arg0 -> addToActive());
         panel_1.add(btnActive);
 
         JButton btnInactive = new JButton("Inactive");
-        btnInactive.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                addToInactive();
-            }
-        });
+        btnInactive.addActionListener(arg0 -> addToInactive());
         panel_1.add(btnInactive);
 
         updateValues();
     }
 
     protected void addToActive() {
-        List<String> values = this.list.getSelectedValuesList();
-        if (values.size() == 0) return;
+        List<String> values = list.getSelectedValuesList();
+        if (values.size() == 0) {
+            return;
+        }
 
         int addedCount = 0;
         for (Object o : values) {
             String value = (String)o;
-            if (!this.set.yes.contains(value)) {
-                this.set.yes.add(value);
+            if (!set.yes.contains(value)) {
+                set.yes.add(value);
                 addedCount = addedCount + 1;
             }
         }
@@ -133,14 +128,16 @@ public class EditSet extends JPanel implements IFlaggable {
     }
 
     protected void addToInactive() {
-        List<String> values = this.list.getSelectedValuesList();
-        if (values.size() == 0) return;
+        List<String> values = list.getSelectedValuesList();
+        if (values.size() == 0) {
+            return;
+        }
 
         int addedCount = 0;
         for (Object o : values) {
             String value = (String)o;
-            if (!this.set.no.contains(value)) {
-                this.set.no.add(value);
+            if (!set.no.contains(value)) {
+                set.no.add(value);
                 addedCount = addedCount + 1;
             }
         }
@@ -151,24 +148,24 @@ public class EditSet extends JPanel implements IFlaggable {
     }
 
     private void fillWithValues() {
-        Set<String> unused = new TreeSet<String>(this.edit.getSerialRoot().condition.keySet());
-        unused.removeAll(this.set.yes);
-        unused.removeAll(this.set.no);
+        Set<String> unused = new TreeSet<>(edit.getSerialRoot().condition.keySet());
+        unused.removeAll(set.yes);
+        unused.removeAll(set.no);
 
-        this.list.removeAll();
-        this.list.setListData(unused.toArray(new String[unused.size()]));
+        list.removeAll();
+        list.setListData(unused.toArray(new String[unused.size()]));
     }
 
     @Override
     public void flagChange() {
-        this.edit.flagChange();
+        edit.flagChange();
         updateValues();
     }
 
     private void updateValues() {
 
         fillWithValues();
-        this.activeSet.fillWithValues();
-        this.inactiveSet.fillWithValues();
+        activeSet.fillWithValues();
+        inactiveSet.fillWithValues();
     }
 }

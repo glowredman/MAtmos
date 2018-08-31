@@ -3,15 +3,15 @@ package eu.ha3.matmos.debug;
 import java.io.File;
 
 public interface PluggableIntoMinecraft {
-    public boolean isReadOnly();
+    boolean isReadOnly();
 
-    public File getFileIfAvailable();
+    File getFileIfAvailable();
 
-    public File getWorkingDirectoryIfAvailable();
+    File getWorkingDirectoryIfAvailable();
 
-    public void pushJason(String jason);
+    void pushJason(String jason);
 
-    public void reloadFromDisk();
+    void reloadFromDisk();
 
-    public void onEditorClosed();
+    void onEditorClosed();
 }

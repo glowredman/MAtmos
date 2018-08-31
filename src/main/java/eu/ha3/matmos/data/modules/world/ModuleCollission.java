@@ -9,16 +9,16 @@ public class ModuleCollission extends AbstractStringCountModule {
     private final BlockPos[] blocks = {
             new BlockPos(0, -1, 0), // bottom
             BlockPos.ORIGIN,
-            new BlockPos( 0, 1,  0), // body
-            new BlockPos( 0, 2,  0), // column
-            new BlockPos(-1, 0,  0),
-            new BlockPos( 1, 0,  0), // x -- 0
-            new BlockPos( 0, 0, -1),
-            new BlockPos( 0, 0,  1), // z -- 0
-            new BlockPos(-1, 1,  0),
-            new BlockPos( 1, 1,  0), // x -- 1
-            new BlockPos( 0, 1, -1),
-            new BlockPos( 0, 1,  1), // z -- 1 
+            new BlockPos(0, 1, 0), // body
+            new BlockPos(0, 2, 0), // column
+            new BlockPos(-1, 0, 0),
+            new BlockPos(1, 0, 0), // x -- 0
+            new BlockPos(0, 0, -1),
+            new BlockPos(0, 0, 1), // z -- 0
+            new BlockPos(-1, 1, 0),
+            new BlockPos(1, 1, 0), // x -- 1
+            new BlockPos(0, 1, -1),
+            new BlockPos(0, 1, 1), // z -- 1 
     };
 
     public ModuleCollission(DataPackage dataIn) {

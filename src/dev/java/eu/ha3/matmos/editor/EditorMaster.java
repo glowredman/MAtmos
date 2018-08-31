@@ -1,5 +1,15 @@
 package eu.ha3.matmos.editor;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Scanner;
+
+import javax.swing.UIManager;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.MalformedJsonException;
@@ -10,17 +20,9 @@ import eu.ha3.matmos.editor.interfaces.Editor;
 import eu.ha3.matmos.editor.interfaces.Window;
 import eu.ha3.matmos.editor.tree.Selector;
 import eu.ha3.matmos.serialisation.JsonExpansions_EngineDeserializer;
-import eu.ha3.matmos.serialisation.expansion.*;
+import eu.ha3.matmos.serialisation.expansion.SerialEvent;
+import eu.ha3.matmos.serialisation.expansion.SerialRoot;
 import eu.ha3.matmos.util.Json;
-
-import javax.swing.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Scanner;
 
 public class EditorMaster implements Runnable, Editor {
 
@@ -50,7 +52,7 @@ public class EditorMaster implements Runnable, Editor {
             File workingDirectoryIF = minecraft.getWorkingDirectoryIfAvailable();
             if (fileIF != null && workingDirectoryIF != null) {
                 potentialFile = fileIF;
-                this.workingDirectory = workingDirectoryIF;
+                workingDirectory = workingDirectoryIF;
             }
         }
 
@@ -60,36 +62,31 @@ public class EditorMaster implements Runnable, Editor {
             e.printStackTrace();
         }
 
-        this.root = new SerialRoot();
-        this.hasModifiedContents = false;
-        this.file = potentialFile;
+        root = new SerialRoot();
+        hasModifiedContents = false;
+        file = potentialFile;
     }
 
     @Override
     public void run() {
         System.out.println("Loading designer...");
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                initializedWindow(new EditorWindow(EditorMaster.this));
-            }
-        });
+        java.awt.EventQueue.invokeLater(() -> initializedWindow(new EditorWindow(EditorMaster.this)));
     }
 
     private void initializedWindow(EditorWindow editorWindow) {
         //this.__WINDOW = editorWindow;
-        this.window__EventQueue = new WindowEventQueue(editorWindow);
-        this.window__EventQueue.display();
+        window__EventQueue = new WindowEventQueue(editorWindow);
+        window__EventQueue.display();
 
         System.out.println("Loaded.");
 
-        if (this.file != null) {
-            trySetAndLoadFile(this.file);
+        if (file != null) {
+            trySetAndLoadFile(file);
         }
 
-        if (this.minecraft instanceof ReadOnlyJasonStringEDU) {
+        if (minecraft instanceof ReadOnlyJasonStringEDU) {
             flushFileAndSerial();
-            this.root = new JsonExpansions_EngineDeserializer().jsonToSerial(((ReadOnlyJasonStringEDU)this.minecraft)
+            root = new JsonExpansions_EngineDeserializer().jsonToSerial(((ReadOnlyJasonStringEDU)minecraft)
                     .obtainJasonString());
             updateFileAndContentsState();
         }
@@ -101,7 +98,7 @@ public class EditorMaster implements Runnable, Editor {
 
     @Override
     public boolean isMinecraftControlled() {
-        return this.minecraft != null;
+        return minecraft != null;
     }
 
     @Override
@@ -123,9 +120,9 @@ public class EditorMaster implements Runnable, Editor {
 
         try {
             loadFile(potentialFile);
-            this.file = potentialFile;
+            file = potentialFile;
         } catch (Exception e) {
-            this.file = null;
+            file = null;
 
             showErrorPopup("File could not be loaded:\n" + e.getLocalizedMessage());
             reset();
@@ -139,18 +136,14 @@ public class EditorMaster implements Runnable, Editor {
     }
 
     private void flushFileAndSerial() {
-        this.file = null;
-        this.root = new SerialRoot();
-        this.hasModifiedContents = false;
-        this.window__EventQueue.setEditFocus(null, null, false);
+        file = null;
+        root = new SerialRoot();
+        hasModifiedContents = false;
+        window__EventQueue.setEditFocus(null, null, false);
     }
 
     private void modelize() {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-            }
-        });
+        java.awt.EventQueue.invokeLater(() -> {});
     }
 
     private void loadFile(File potentialFile) throws IOException, MalformedJsonException {
@@ -161,11 +154,13 @@ public class EditorMaster implements Runnable, Editor {
             sc = new Scanner(new FileInputStream(potentialFile));
             String jasonString = sc.useDelimiter("\\Z").next();
             System.out.println(jasonString);
-            this.root = new JsonExpansions_EngineDeserializer().jsonToSerial(jasonString);
-            this.hasModifiedContents = false;
+            root = new JsonExpansions_EngineDeserializer().jsonToSerial(jasonString);
+            hasModifiedContents = false;
             updateFileAndContentsState();
         } finally {
-            if (sc != null) sc.close();
+            if (sc != null) {
+                sc.close();
+            }
         }
     }
 
@@ -178,76 +173,78 @@ public class EditorMaster implements Runnable, Editor {
             System.out.println(jasonString);
             SerialRoot mergeFrom = new JsonExpansions_EngineDeserializer().jsonToSerial(jasonString);
 
-            if (Collections.disjoint(this.root.condition.keySet(), mergeFrom.condition.keySet())
-                    && Collections.disjoint(this.root.dynamic.keySet(), mergeFrom.dynamic.keySet())
-                    && Collections.disjoint(this.root.event.keySet(), mergeFrom.event.keySet())
-                    && Collections.disjoint(this.root.list.keySet(), mergeFrom.list.keySet())
-                    && Collections.disjoint(this.root.machine.keySet(), mergeFrom.machine.keySet())
-                    && Collections.disjoint(this.root.set.keySet(), mergeFrom.set.keySet())) {} else {
+            if (Collections.disjoint(root.condition.keySet(), mergeFrom.condition.keySet())
+                    && Collections.disjoint(root.dynamic.keySet(), mergeFrom.dynamic.keySet())
+                    && Collections.disjoint(root.event.keySet(), mergeFrom.event.keySet())
+                    && Collections.disjoint(root.list.keySet(), mergeFrom.list.keySet())
+                    && Collections.disjoint(root.machine.keySet(), mergeFrom.machine.keySet())
+                    && Collections.disjoint(root.set.keySet(), mergeFrom.set.keySet())) {} else {
                 showErrorPopup("The two expansions have elements in common.\n"
                         + "The elements in common will be overriden by the file you are currently importing for the merge.");
             }
 
-            this.root.condition.putAll(mergeFrom.condition);
-            this.root.dynamic.putAll(mergeFrom.dynamic);
-            this.root.event.putAll(mergeFrom.event);
-            this.root.list.putAll(mergeFrom.list);
-            this.root.machine.putAll(mergeFrom.machine);
-            this.root.set.putAll(mergeFrom.set);
+            root.condition.putAll(mergeFrom.condition);
+            root.dynamic.putAll(mergeFrom.dynamic);
+            root.event.putAll(mergeFrom.event);
+            root.list.putAll(mergeFrom.list);
+            root.machine.putAll(mergeFrom.machine);
+            root.set.putAll(mergeFrom.set);
 
-            this.hasModifiedContents = true;
+            hasModifiedContents = true;
             updateFileAndContentsState();
         } finally {
-            if (sc != null) sc.close();
+            if (sc != null) {
+                sc.close();
+            }
         }
     }
 
     private void updateFileAndContentsState() {
-        this.window__EventQueue.refreshFileState();
-        this.window__EventQueue.updateSerial(EditorMaster.this.root);
+        window__EventQueue.refreshFileState();
+        window__EventQueue.updateSerial(EditorMaster.this.root);
     }
 
     private void updateFileState() {
-        this.window__EventQueue.refreshFileState();
+        window__EventQueue.refreshFileState();
     }
 
     private void showErrorPopup(String error) {
-        this.window__EventQueue.showErrorPopup(error);
+        window__EventQueue.showErrorPopup(error);
     }
 
     @Override
     public void minecraftReloadFromDisk() {
-        this.minecraft.reloadFromDisk();
+        minecraft.reloadFromDisk();
     }
 
     @Override
     public boolean hasValidFile() {
-        return this.file != null;
+        return file != null;
     }
 
     @Override
     public File getWorkingDirectory() {
-        return this.workingDirectory;
+        return workingDirectory;
     }
 
     @Override
     public boolean hasUnsavedChanges() {
-        return this.hasModifiedContents;
+        return hasModifiedContents;
     }
 
     @Override
     public File getFile() {
-        return this.file;
+        return file;
     }
 
     @Override
     public String generateJson(boolean pretty) {
-        return pretty ? Json.toJsonPretty(this.root) : Json.toJson(this.root);
+        return pretty ? Json.toJsonPretty(root) : Json.toJson(root);
     }
 
     @Override
     public void minecraftPushCurrentState() {
-        this.minecraft.pushJason(Json.toJson(this.root));
+        minecraft.pushJason(Json.toJson(root));
     }
 
     @Override
@@ -255,8 +252,8 @@ public class EditorMaster implements Runnable, Editor {
         boolean success = writeToFile(location);
 
         if (success && setAsNewPointer) {
-            this.file = location;
-            this.hasModifiedContents = false;
+            file = location;
+            hasModifiedContents = false;
             updateFileState();
         }
 
@@ -265,11 +262,13 @@ public class EditorMaster implements Runnable, Editor {
 
     @Override
     public boolean quickSave() {
-        if (!hasValidFile()) return false;
+        if (!hasValidFile()) {
+            return false;
+        }
 
-        boolean success = writeToFile(this.file);
+        boolean success = writeToFile(file);
         if (success) {
-            this.hasModifiedContents = false;
+            hasModifiedContents = false;
             updateFileState();
         }
         return success;
@@ -282,12 +281,12 @@ public class EditorMaster implements Runnable, Editor {
             }
 
             FileWriter write = new FileWriter(fileToWrite);
-            write.append(Json.toJsonPretty(this.root));
+            write.append(Json.toJsonPretty(root));
             write.close();
         } catch (Exception e) {
             e.printStackTrace();
 
-            this.window__EventQueue.showErrorPopup("Writing to disk resulted in an error: " + e.getLocalizedMessage());
+            window__EventQueue.showErrorPopup("Writing to disk resulted in an error: " + e.getLocalizedMessage());
             return false;
         }
 
@@ -296,14 +295,14 @@ public class EditorMaster implements Runnable, Editor {
 
     @Override
     public File getExpansionDirectory() {
-        return new File(this.workingDirectory, "assets/matmos/expansions").exists() ? new File(
-                this.workingDirectory, "assets/matmos/expansions") : this.workingDirectory;
+        return new File(workingDirectory, "assets/matmos/expansions").exists() ? new File(
+                workingDirectory, "assets/matmos/expansions") : workingDirectory;
     }
 
     @Override
     public File getSoundDirectory() {
-        return new File(this.workingDirectory, "assets/minecraft/sounds").exists() ? new File(
-                this.workingDirectory, "assets/minecraft/sounds") : this.workingDirectory;
+        return new File(workingDirectory, "assets/minecraft/sounds").exists() ? new File(
+                workingDirectory, "assets/minecraft/sounds") : workingDirectory;
     }
 
     @Override
@@ -312,22 +311,22 @@ public class EditorMaster implements Runnable, Editor {
 
         switch (selector) {
             case CONDITION:
-                map = this.root.condition;
+                map = root.condition;
                 break;
             case SET:
-                map = this.root.set;
+                map = root.set;
                 break;
             case MACHINE:
-                map = this.root.machine;
+                map = root.machine;
                 break;
             case LIST:
-                map = this.root.list;
+                map = root.list;
                 break;
             case DYNAMIC:
-                map = this.root.dynamic;
+                map = root.dynamic;
                 break;
             case EVENT:
-                map = this.root.event;
+                map = root.event;
                 break;
             case LOGIC:
                 break;
@@ -338,13 +337,15 @@ public class EditorMaster implements Runnable, Editor {
         }
 
         if (map != null && map.containsKey(itemName)) {
-            this.window__EventQueue.setEditFocus(itemName, map.get(itemName), false);
+            window__EventQueue.setEditFocus(itemName, map.get(itemName), false);
         }
     }
 
     @Override
     public void renameItem(String oldName, Object editFocus, String newName) {
-        if (oldName.equals(newName)) return;
+        if (oldName.equals(newName)) {
+            return;
+        }
 
         if (newName == null || newName.equals("") || newName.contains("\"") || newName.contains("\\")) {
             showErrorPopup("Name must not be empty or include the characters \" and \\");
@@ -352,9 +353,9 @@ public class EditorMaster implements Runnable, Editor {
         }
 
         try {
-            SerialManipulator.rename(this.root, editFocus, oldName, newName);
+            SerialManipulator.rename(root, editFocus, oldName, newName);
             flagChange(true);
-            this.window__EventQueue.setEditFocus(newName, editFocus, true);
+            window__EventQueue.setEditFocus(newName, editFocus, true);
         } catch (ItemNamingException e) {
             showErrorPopup(e.getMessage());
         }
@@ -363,17 +364,17 @@ public class EditorMaster implements Runnable, Editor {
     @Override
     public void deleteItem(String nameOfItem, Object editFocus) {
         try {
-            SerialManipulator.delete(this.root, editFocus, nameOfItem);
+            SerialManipulator.delete(root, editFocus, nameOfItem);
             flagChange(true);
-            this.window__EventQueue.setEditFocus(null, null, false);
+            window__EventQueue.setEditFocus(null, null, false);
         } catch (ItemNamingException e) {
             showErrorPopup(e.getMessage());
         }
     }
 
     private void flagChange(boolean treeWasDeeplyModified) {
-        boolean previousStateIsFalse = !this.hasModifiedContents;
-        this.hasModifiedContents = true;
+        boolean previousStateIsFalse = !hasModifiedContents;
+        hasModifiedContents = true;
 
         if (treeWasDeeplyModified) {
             updateFileAndContentsState();
@@ -387,9 +388,9 @@ public class EditorMaster implements Runnable, Editor {
     @Override
     public boolean createItem(KnowledgeItemType choice, String name) {
         try {
-            Object o = SerialManipulator.createNew(this.root, choice, name);
+            Object o = SerialManipulator.createNew(root, choice, name);
             flagChange(true);
-            this.window__EventQueue.setEditFocus(name, o, true);
+            window__EventQueue.setEditFocus(name, o, true);
             return true;
         } catch (ItemNamingException e) {
             showErrorPopup(e.getMessage());
@@ -405,29 +406,29 @@ public class EditorMaster implements Runnable, Editor {
 
     @Override
     public SerialRoot getRootForCopyPurposes() {
-        return this.root;
+        return root;
     }
 
     @Override
     public void duplicateItem(Selector selector, String name) {
         switch (selector) {
             case CONDITION:
-                doDuplicateItem(selector, name, this.root.condition);
+                doDuplicateItem(selector, name, root.condition);
                 break;
             case SET:
-                doDuplicateItem(selector, name, this.root.set);
+                doDuplicateItem(selector, name, root.set);
                 break;
             case MACHINE:
-                doDuplicateItem(selector, name, this.root.machine);
+                doDuplicateItem(selector, name, root.machine);
                 break;
             case LIST:
-                doDuplicateItem(selector, name, this.root.list);
+                doDuplicateItem(selector, name, root.list);
                 break;
             case DYNAMIC:
-                doDuplicateItem(selector, name, this.root.dynamic);
+                doDuplicateItem(selector, name, root.dynamic);
                 break;
             case EVENT:
-                doDuplicateItem(selector, name, this.root.event);
+                doDuplicateItem(selector, name, root.event);
                 break;
             case LOGIC:
                 break;
@@ -439,9 +440,13 @@ public class EditorMaster implements Runnable, Editor {
     }
 
     private <T> void doDuplicateItem(Selector selector, String name, Map<String, T> map) {
-        if (map == null) return;
+        if (map == null) {
+            return;
+        }
 
-        if (!map.containsKey(name)) return;
+        if (!map.containsKey(name)) {
+            return;
+        }
 
         Class<? extends Object> serialClass = map.get(name).getClass();
         @SuppressWarnings("unchecked")
@@ -454,21 +459,21 @@ public class EditorMaster implements Runnable, Editor {
         map.put(name + " (" + add + ")", duplicate);
 
         flagChange(true);
-        this.window__EventQueue.setEditFocus(name + " (" + add + ")", duplicate, true);
+        window__EventQueue.setEditFocus(name + " (" + add + ")", duplicate, true);
     }
 
     @Override
     public void purgeLogic() {
-        new PurgeOperator().purgeLogic(this.root);
+        new PurgeOperator().purgeLogic(root);
         flagChange(true);
-        this.window__EventQueue.setEditFocus(null, null, false);
+        window__EventQueue.setEditFocus(null, null, false);
     }
 
     @Override
     public void purgeSupports() {
-        new PurgeOperator().purgeEvents(this.root);
+        new PurgeOperator().purgeEvents(root);
         flagChange(true);
-        this.window__EventQueue.setEditFocus(null, null, false);
+        window__EventQueue.setEditFocus(null, null, false);
     }
 
     @Override

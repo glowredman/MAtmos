@@ -1,14 +1,14 @@
 package eu.ha3.matmos.data.modules.legacy;
 
+import java.io.File;
+import java.io.IOException;
+
 import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
 import eu.ha3.util.property.simple.ConfigProperty;
-
-import java.io.File;
-import java.io.IOException;
 
 /*
  * --filenotes-placeholder
@@ -25,17 +25,17 @@ public class ModuleConfigVars extends ModuleProcessor implements Module {
         super(data, "legacy_configvars", true);
         this.mod = mod;
 
-        this.defaultsConfig = new File(mod.util().getModsFolder(), "matmos/dataconfigvars_defaults.cfg");
-        this.userConfig = new File(mod.util().getModsFolder(), "matmos/dataconfigvars.cfg");
+        defaultsConfig = new File(mod.util().getModsFolder(), "matmos/dataconfigvars_defaults.cfg");
+        userConfig = new File(mod.util().getModsFolder(), "matmos/dataconfigvars.cfg");
 
-        this.config = new ConfigProperty();
-        this.config.setSource(this.defaultsConfig.getAbsolutePath());
-        this.config.load();
+        config = new ConfigProperty();
+        config.setSource(defaultsConfig.getAbsolutePath());
+        config.load();
 
-        this.config.setSource(this.userConfig.getAbsolutePath());
-        if (!this.userConfig.exists()) {
+        config.setSource(userConfig.getAbsolutePath());
+        if (!userConfig.exists()) {
             try {
-                this.userConfig.createNewFile();
+                userConfig.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -44,11 +44,11 @@ public class ModuleConfigVars extends ModuleProcessor implements Module {
 
     @Override
     protected void doProcess() {
-        for (String key : this.config.getAllProperties().keySet()) {
+        for (String key : config.getAllProperties().keySet()) {
             try {
-                setValue(key, this.config.getInteger(key));
+                setValue(key, config.getInteger(key));
             } catch (Exception e) {
-                IDontKnowHowToCode.whoops__printExceptionToChat(this.mod.getChatter(), e, this);
+                IDontKnowHowToCode.whoops__printExceptionToChat(mod.getChatter(), e, this);
             }
         }
     }

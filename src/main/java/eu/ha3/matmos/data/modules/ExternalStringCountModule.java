@@ -5,7 +5,7 @@ import eu.ha3.matmos.core.sheet.VirtualSheet;
 
 /**
  * Call commit() to apply the changes.
- * 
+ *
  * @author Hurry
  */
 public class ExternalStringCountModule extends AbstractStringCountModule {
@@ -34,8 +34,8 @@ public class ExternalStringCountModule extends AbstractStringCountModule {
 
     protected void commit() {
         apply();
-        if (this.sheet instanceof VirtualSheet) {
-            ((VirtualSheet)this.sheet).apply();
+        if (sheet instanceof VirtualSheet) {
+            ((VirtualSheet)sheet).apply();
         }
     }
 }

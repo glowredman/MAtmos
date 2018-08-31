@@ -7,7 +7,7 @@ import java.io.File;
  */
 
 public interface FolderResourcePackEditableEDU extends ExpansionDebugUnit {
-    public File obtainExpansionFile();
+    File obtainExpansionFile();
 
-    public File obtainExpansionFolder();
+    File obtainExpansionFolder();
 }

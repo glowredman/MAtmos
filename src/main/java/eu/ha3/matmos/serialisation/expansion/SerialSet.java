@@ -8,6 +8,6 @@ import java.util.TreeSet;
  */
 
 public class SerialSet {
-    public Set<String> yes = new TreeSet<String>();
-    public Set<String> no = new TreeSet<String>();
+    public Set<String> yes = new TreeSet<>();
+    public Set<String> no = new TreeSet<>();
 }

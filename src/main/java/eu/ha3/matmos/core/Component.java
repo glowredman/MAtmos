@@ -12,36 +12,36 @@ public abstract class Component implements Named, Versionned {
 
     public Component(String name) {
         this.name = name;
-        this.listeners = new HashSet<VersionListener>();
-        this.version = -1;
+        listeners = new HashSet<>();
+        version = -1;
     }
 
     @Override
     public String getName() {
-        return this.name;
+        return name;
     }
 
     @Override
     public String toString() {
-        return "[(" + this.getClass().toString() + ") " + this.name + "]";
+        return "[(" + this.getClass().toString() + ") " + name + "]";
     }
 
     @Override
     public int version() {
-        return this.version;
+        return version;
     }
 
     @Override
     public void incrementVersion() {
-        this.version = this.version + 1;
+        version = version + 1;
 
-        for (VersionListener listener : this.listeners) {
+        for (VersionListener listener : listeners) {
             listener.onIncrement(this);
         }
     }
 
     @Override
     public void registerVersionListener(VersionListener listener) {
-        this.listeners.add(listener);
+        listeners.add(listener);
     }
 }

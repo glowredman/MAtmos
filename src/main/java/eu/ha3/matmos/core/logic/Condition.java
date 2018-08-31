@@ -1,5 +1,8 @@
 package eu.ha3.matmos.core.logic;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import eu.ha3.matmos.MAtLog;
 import eu.ha3.matmos.core.Dependable;
 import eu.ha3.matmos.core.MultistateComponent;
@@ -7,9 +10,6 @@ import eu.ha3.matmos.core.Operator;
 import eu.ha3.matmos.core.sheet.SheetCommander;
 import eu.ha3.matmos.core.sheet.SheetIndex;
 import eu.ha3.matmos.util.math.LongFloatSimplificator;
-
-import java.util.Collection;
-import java.util.HashSet;
 
 /* x-placeholder */
 
@@ -33,15 +33,15 @@ public class Condition extends MultistateComponent implements Dependable, Visual
         super(name);
         this.sheetCommander = sheetCommander;
 
-        this.indexX = index;
-        this.operatorX = operator;
-        this.constantX = constant;
+        indexX = index;
+        operatorX = operator;
+        constantX = constant;
 
-        this.constantLongX = LongFloatSimplificator.longOf(constant);
+        constantLongX = LongFloatSimplificator.longOf(constant);
         //this.constantFloatX = LongFloatSimplificator.floatOf(constant);
 
-        this.dependencies = new HashSet<String>();
-        this.dependencies.add(index.getSheet());
+        dependencies = new HashSet<>();
+        dependencies.add(index.getSheet());
     }
 
     @Override
@@ -54,15 +54,17 @@ public class Condition extends MultistateComponent implements Dependable, Visual
         //	+ " -> " + this.indexX.getSheet() + " " + this.indexX.getIndex() + ": "
         //	+ this.sheetCommander.get(this.indexX));
 
-        if (this.sheetCommander.version(this.indexX) == this.siVersion) return;
+        if (sheetCommander.version(indexX) == siVersion) {
+            return;
+        }
 
-        boolean pre = this.isActive;
-        this.isActive = testIfTrue();
+        boolean pre = isActive;
+        isActive = testIfTrue();
 
-        if (pre != this.isActive) {
+        if (pre != isActive) {
             incrementVersion();
 
-            MAtLog.fine("C: " + getName() + " -> " + this.isActive);
+            MAtLog.fine("C: " + getName() + " -> " + isActive);
         }
     }
 
@@ -94,14 +96,14 @@ public class Condition extends MultistateComponent implements Dependable, Visual
      */
     @Override
     public Collection<String> getDependencies() {
-        return this.dependencies;
+        return dependencies;
     }
 
     @Override
     public String getFeed() {
-        String value = sheetCommander.get(this.indexX);
+        String value = sheetCommander.get(indexX);
         String op = operatorX.getSymbol();
 
-        return this.indexX.getSheet() + ">" + this.indexX.getIndex() + ":[" + value + "] " + op + " " + this.constantX;
+        return indexX.getSheet() + ">" + indexX.getIndex() + ":[" + value + "] " + op + " " + constantX;
     }
 }

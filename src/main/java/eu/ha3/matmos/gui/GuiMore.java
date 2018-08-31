@@ -1,5 +1,7 @@
 package eu.ha3.matmos.gui;
 
+import java.io.IOException;
+
 import eu.ha3.matmos.MAtMod;
 import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
@@ -9,8 +11,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
-
-import java.io.IOException;
 
 public class GuiMore extends GuiScreen {
     private final int IDS_PER_PAGE = 5;
@@ -81,7 +81,7 @@ public class GuiMore extends GuiScreen {
     protected void actionPerformed(GuiButton button) {
         if (button.id == 200) {
             mc.displayGuiScreen(parentScreen);
-        } else if (button.id == 211) {            
+        } else if (button.id == 211) {
             mod.getConfig().setProperty("reversed.controls", !mod.getConfig().getBoolean("reversed.controls"));
             button.displayString = mod.getConfig().getBoolean("reversed.controls") ? "Menu: Hold Down Key to open" : "Menu: Press Key to open";
             mod.saveConfig();
@@ -97,14 +97,14 @@ public class GuiMore extends GuiScreen {
         }
 
     }
-    
+
     private void toggleOption(String key, String name, GuiButton button) {
         mod.getConfig().setProperty(key, !mod.getConfig().getBoolean(key));
         mod.saveConfig();
-        
+
         button.displayString = formatOpt(name, mod.getConfig().getBoolean(key));
     }
-    
+
     private String formatOpt(String key, boolean value) {
         return I18n.format(key) + ": " + I18n.format("mat." + value);
     }

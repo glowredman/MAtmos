@@ -31,18 +31,20 @@ public class ModulePlayerStats extends ModuleProcessor implements Module {
         setValue("on_ground", player.onGround);
         setValue("burning", player.isBurning());
         setValue("jumping", player.movementInput.jump);
-        
+
         try {
-            setValue("in_web", (Boolean)this.util.getPrivate(player, "isInWeb"));
+            setValue("in_web", (Boolean)util.getPrivate(player, "isInWeb"));
         } catch (PrivateAccessException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        
+
         setValue("on_ladder", player.isOnLadder());
 
         ItemStack held = player.getHeldItemMainhand();
-        if (held == null) held = player.getHeldItemOffhand();
+        if (held == null) {
+            held = player.getHeldItemOffhand();
+        }
 
         setValue("blocking", player.isHandActive() && held != null && held.getItem() instanceof ItemShield);
         setValue("sprinting", player.isSprinting());

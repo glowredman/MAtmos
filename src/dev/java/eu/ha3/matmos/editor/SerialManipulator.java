@@ -5,7 +5,14 @@ import java.util.Map;
 
 import eu.ha3.matmos.core.Dynamic;
 import eu.ha3.matmos.core.Operator;
-import eu.ha3.matmos.serialisation.expansion.*;
+import eu.ha3.matmos.serialisation.expansion.SerialCondition;
+import eu.ha3.matmos.serialisation.expansion.SerialDynamic;
+import eu.ha3.matmos.serialisation.expansion.SerialEvent;
+import eu.ha3.matmos.serialisation.expansion.SerialList;
+import eu.ha3.matmos.serialisation.expansion.SerialMachine;
+import eu.ha3.matmos.serialisation.expansion.SerialMachineEvent;
+import eu.ha3.matmos.serialisation.expansion.SerialRoot;
+import eu.ha3.matmos.serialisation.expansion.SerialSet;
 
 public class SerialManipulator {
     public static void delete(SerialRoot root, Object editFocus, String itemName) throws ItemNamingException {
@@ -14,7 +21,7 @@ public class SerialManipulator {
 
     /**
      * If newName is null, this deletes the item.
-     * 
+     *
      * @param  root
      * @param  editFocus
      * @param  oldName
@@ -163,15 +170,21 @@ public class SerialManipulator {
     }
 
     private static <T> void replaceInMap(Map<String, T> map, String oldName, String newName) throws ItemNamingException {
-        if (!map.containsKey(oldName)) throw new ItemNamingException("Invalid operation: This element doesn't exist.");
+        if (!map.containsKey(oldName)) {
+            throw new ItemNamingException("Invalid operation: This element doesn't exist.");
+        }
 
-        if (map.containsKey(newName)) throw new ItemNamingException("This name is already in use.");
+        if (map.containsKey(newName)) {
+            throw new ItemNamingException("This name is already in use.");
+        }
 
         map.put(newName, map.remove(oldName));
     }
 
     private static <T> void deleteInMap(Map<String, T> map, String oldName) throws ItemNamingException {
-        if (!map.containsKey(oldName)) throw new ItemNamingException("Invalid operation: This element doesn't exist.");
+        if (!map.containsKey(oldName)) {
+            throw new ItemNamingException("Invalid operation: This element doesn't exist.");
+        }
 
         map.remove(oldName);
     }
@@ -205,7 +218,9 @@ public class SerialManipulator {
     }
 
     private static <T> Object instanciate(Map<String, T> map, Class<T> klass, String name) throws ItemNamingException {
-        if (map.containsKey(name)) throw new ItemNamingException("This name is already in use.");
+        if (map.containsKey(name)) {
+            throw new ItemNamingException("This name is already in use.");
+        }
 
         try {
             map.put(name, klass.newInstance());

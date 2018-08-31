@@ -1,6 +1,15 @@
 package eu.ha3.matmos;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import com.google.common.base.Optional;
+
 import eu.ha3.easy.StopWatchStatistic;
 import eu.ha3.easy.TimeStatistic;
 import eu.ha3.matmos.core.expansion.Expansion;
@@ -24,19 +33,15 @@ import eu.ha3.mc.quick.update.NotifiableHaddon;
 import eu.ha3.mc.quick.update.UpdateNotifier;
 import eu.ha3.util.property.simple.ConfigProperty;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import paulscode.sound.SoundSystem;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
 
 /* x-placeholder */
 
@@ -71,7 +76,7 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     // Debug queue
     private Object queueLock = new Object();
-    private List<Runnable> queue = new ArrayList<Runnable>();
+    private List<Runnable> queue = new ArrayList<>();
     private boolean hasResourcePacks_FixMe;
 
     public MAtMod() {
@@ -126,7 +131,9 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
         userControl.load();
 
         MAtLog.info("Took " + timeMeasure.getSecondsAsString(3) + " seconds to setup MAtmos base.");
-        if (config.getBoolean("start.enabled")) start();
+        if (config.getBoolean("start.enabled")) {
+            start();
+        }
     }
 
     private void resetAmbientVolume() {
@@ -134,7 +141,9 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
     }
 
     private void overrideAmbientVolume() {
-        if (config.getFloat("minecraftsound.ambient.volume") <= 0) return;
+        if (config.getFloat("minecraftsound.ambient.volume") <= 0) {
+            return;
+        }
         setSoundLevelAmbient(0.01f);
     }
 
@@ -158,13 +167,16 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
         activate();
     }
 
+    @Override
     public boolean isActivated() {
         return simulacrum.isPresent();
     }
 
     @Override
     public void activate() {
-        if (isActivated()) return;
+        if (isActivated()) {
+            return;
+        }
         MAtLog.fine("Loading...");
         simulacrum = Optional.of(new Simulacrum(this));
         MAtLog.fine("Loaded.");
@@ -172,7 +184,9 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void deactivate() {
-        if (!isActivated()) return;
+        if (!isActivated()) {
+            return;
+        }
         MAtLog.fine("Stopping...");
         simulacrum.get().dispose();
         simulacrum = Optional.absent();
@@ -184,7 +198,9 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
     @Override
     public void onFrame(float semi) {
         //Solly edit - only play sounds whilst the game is running (and not paused)
-        if (!isActivated() || util().isGamePaused()) return;
+        if (!isActivated() || util().isGamePaused()) {
+            return;
+        }
         simulacrum.get().onFrame(semi);
         userControl.onFrame(semi);
     }
@@ -195,8 +211,9 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
         if (isActivated()) {
             if (!queue.isEmpty()) {
                 synchronized (queueLock) {
-                    while (!queue.isEmpty())
+                    while (!queue.isEmpty()) {
                         queue.remove(0).run();
+                    }
                 }
             }
 
@@ -236,9 +253,13 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
                     getChatter().printChatShort("By using this version, you understand that this mod isn't intended for " +
                             "actual game sessions, MAtmos may not work, might crash, the sound ambience is incomplete, etc. Use at your own risk. ");
                     getChatter().printChatShort("Please check regularly for updates and resource pack updates.");
-                    if (warns > 0) getChatter().printChatShort("This message will appear ", TextFormatting.YELLOW, warns, " more times.");
+                    if (warns > 0) {
+                        getChatter().printChatShort("This message will appear ", TextFormatting.YELLOW, warns, " more times.");
+                    }
                 }
-                if (config.commit()) config.save();
+                if (config.commit()) {
+                    config.save();
+                }
             }
 
             if (isDebugMode()) {
@@ -266,12 +287,16 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void dispose() {
-        if (isActivated()) simulacrum.get().dispose();
+        if (isActivated()) {
+            simulacrum.get().dispose();
+        }
     }
 
     @Override
     public void interrupt() {
-        if (isActivated()) simulacrum.get().interruptBrutally();
+        if (isActivated()) {
+            simulacrum.get().interruptBrutally();
+        }
     }
 
     @Override
@@ -288,8 +313,10 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @SuppressWarnings("unchecked")
     public Map<String, Expansion> getExpansionList() {
-        if (isActivated()) return simulacrum.get().getExpansions();
-        return (Map<String, Expansion>)Collections.EMPTY_MAP;
+        if (isActivated()) {
+            return simulacrum.get().getExpansions();
+        }
+        return Collections.EMPTY_MAP;
     }
 
     public boolean isInitialized() {
@@ -352,11 +379,15 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
     }
 
     public void synchronize() {
-        if (isActivated()) simulacrum.get().synchronize();
+        if (isActivated()) {
+            simulacrum.get().synchronize();
+        }
     }
 
     public void saveExpansions() {
-        if (isActivated()) simulacrum.get().saveConfig();
+        if (isActivated()) {
+            simulacrum.get().saveConfig();
+        }
     }
 
     public VisualDebugger getVisualDebugger() {
@@ -397,7 +428,9 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
     }
 
     public Optional<Expansion> getExpansionEffort(String expansionName) {
-        if (!isActivated() || !simulacrum.get().getExpansions().containsKey(expansionName)) return Optional.absent();
+        if (!isActivated() || !simulacrum.get().getExpansions().containsKey(expansionName)) {
+            return Optional.absent();
+        }
         return Optional.of(simulacrum.get().getExpansions().get(expansionName));
     }
 }

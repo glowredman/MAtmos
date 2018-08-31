@@ -5,5 +5,5 @@ package eu.ha3.matmos.core;
  */
 
 public interface Simulated {
-    public void simulate();
+    void simulate();
 }

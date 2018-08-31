@@ -11,13 +11,13 @@ import net.minecraft.util.text.TextFormatting;
 
 public class GuiExpansionInfo extends GuiScreen {
     private final GuiMatMenu parentScreen;
-    
+
     private final Expansion expansion;
 
     private final String[] info;
 
     public GuiExpansionInfo(GuiMatMenu menu, MAtMod mod, Expansion expansion) {
-        this.parentScreen = menu;
+        parentScreen = menu;
         this.expansion = expansion;
 
         String info = expansion.hasMoreInfo() ? expansion.getInfo() : I18n.format("mat.expansion.noinfo");
@@ -26,13 +26,13 @@ public class GuiExpansionInfo extends GuiScreen {
 
     @Override
     public void drawScreen(int par1, int par2, float par3) {
-        drawGradientRect(0, 0, this.width, this.height, 0xF0000000, 0x90000000);
+        drawGradientRect(0, 0, width, height, 0xF0000000, 0x90000000);
 
-        drawCenteredString(this.fontRenderer, "About " + TextFormatting.YELLOW + TextFormatting.ITALIC + this.expansion.getFriendlyName() + TextFormatting.RESET + "...", this.width / 2, 4, 0xffffff);
+        drawCenteredString(fontRenderer, "About " + TextFormatting.YELLOW + TextFormatting.ITALIC + expansion.getFriendlyName() + TextFormatting.RESET + "...", width / 2, 4, 0xffffff);
 
         int lc = 0;
-        for (String line : this.info) {
-            this.fontRenderer.drawString(line, this.width / 2 - 200, 16 + 8 * lc, 0xFFFFFF);
+        for (String line : info) {
+            fontRenderer.drawString(line, width / 2 - 200, 16 + 8 * lc, 0xFFFFFF);
             lc++;
         }
 
@@ -46,7 +46,7 @@ public class GuiExpansionInfo extends GuiScreen {
 
     @Override
     public void initGui() {
-        int h = new ScaledResolution(this.mc).getScaledHeight() - 22;
+        int h = new ScaledResolution(mc).getScaledHeight() - 22;
 
         buttonList.add(new GuiButton(200, 2, h, 70, 20, I18n.format("mat.options.close")));
     }
@@ -56,7 +56,7 @@ public class GuiExpansionInfo extends GuiScreen {
         Minecraft mc = Minecraft.getMinecraft();
 
         if (button.id == 200) {
-            mc.displayGuiScreen(this.parentScreen);
+            mc.displayGuiScreen(parentScreen);
         }
     }
 }

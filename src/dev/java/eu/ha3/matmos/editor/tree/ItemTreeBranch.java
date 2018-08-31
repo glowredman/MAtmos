@@ -10,7 +10,7 @@ public class ItemTreeBranch extends ItemTreeNode {
     }
 
     public Selector getSelector() {
-        return this.rootSelector;
+        return rootSelector;
     }
 
     @Override

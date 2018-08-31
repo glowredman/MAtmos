@@ -10,14 +10,14 @@ public class EI {
 
     public EI(String name, String description) {
         this.name = name;
-        this.desc = description;
+        desc = description;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public String getDescription() {
-        return this.desc;
+        return desc;
     }
 }

@@ -1,8 +1,5 @@
 package eu.ha3.matmos.debug.game;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,12 +8,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 /*
  * --filenotes-placeholder
  */
 
 public class SoundsJsonGenerator implements Runnable {
-    private List<String> filenames = new ArrayList<String>();
+    private List<String> filenames = new ArrayList<>();
 
     private boolean OVERWRITE_FILE = true;
 
@@ -33,14 +33,14 @@ public class SoundsJsonGenerator implements Runnable {
     public void run() {
         listAllFiles();
 
-        List<String> workingNames = new ArrayList<String>();
-        for (String name : this.filenames) {
+        List<String> workingNames = new ArrayList<>();
+        for (String name : filenames) {
             if (name.endsWith(".ogg")) {
                 workingNames.add(name.substring(0, name.indexOf(".")));
             }
         }
 
-        Map<String, List> catNames = new LinkedHashMap<String, List>();
+        Map<String, List> catNames = new LinkedHashMap<>();
         for (String name : workingNames) {
             String newName = name.replace('/', '.').replaceAll("[0-9]", "");
             if (!catNames.containsKey(newName)) {
@@ -50,16 +50,16 @@ public class SoundsJsonGenerator implements Runnable {
             if (!name.contains("stream")) {
                 catNames.get(newName).add(name);
             } else {
-                Map<String, Object> streaming = new LinkedHashMap<String, Object>();
+                Map<String, Object> streaming = new LinkedHashMap<>();
                 streaming.put("name", name);
                 streaming.put("stream", true);
                 catNames.get(newName).add(streaming);
             }
         }
 
-        Map<String, Object> toJsonify = new LinkedHashMap<String, Object>();
+        Map<String, Object> toJsonify = new LinkedHashMap<>();
         for (String catName : catNames.keySet()) {
-            Map<String, Object> blob = new LinkedHashMap<String, Object>();
+            Map<String, Object> blob = new LinkedHashMap<>();
             blob.put("category", catName.contains("underwater") ? "weather" : "ambient");
             blob.put("sounds", catNames.get(catName));
 
@@ -71,14 +71,14 @@ public class SoundsJsonGenerator implements Runnable {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String jason = gson.toJson(toJsonify);
 
-        if (!this.OVERWRITE_FILE) {
+        if (!OVERWRITE_FILE) {
             System.out.println(jason);
             return;
         }
 
         FileWriter writer;
         try {
-            writer = new FileWriter(this.jsonFile);
+            writer = new FileWriter(jsonFile);
             writer.append(jason);
             writer.close();
         } catch (IOException e) {
@@ -87,7 +87,7 @@ public class SoundsJsonGenerator implements Runnable {
     }
 
     private void listAllFiles() {
-        listFiles(this.soundsFolder, this.soundsFolder);
+        listFiles(soundsFolder, soundsFolder);
     }
 
     private void listFiles(File root, File subdir) {
@@ -95,7 +95,7 @@ public class SoundsJsonGenerator implements Runnable {
             if (file.isDirectory()) {
                 listFiles(root, file);
             } else {
-                this.filenames.add(root.toURI().relativize(file.toURI()).getPath().toLowerCase().toString());
+                filenames.add(root.toURI().relativize(file.toURI()).getPath().toLowerCase().toString());
             }
         }
     }

@@ -5,5 +5,5 @@ package eu.ha3.matmos.data.modules;
  */
 
 public interface RegistryBasedModule extends Module {
-    public String getRegistryName();
+    String getRegistryName();
 }
