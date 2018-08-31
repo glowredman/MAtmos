@@ -3,7 +3,6 @@ package eu.ha3.matmos.gui;
 import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.VolumeUpdatable;
-import eu.ha3.mc.gui.HDisplayStringProvider;
 import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
 import net.minecraft.client.Minecraft;
@@ -72,18 +71,14 @@ public class MAtGuiMenu extends GuiScreen {
         {
             final VolumeUpdatable globalVolumeControl = this.mod.getGlobalVolumeControl();
 
-            HGuiSliderControl sliderControl = new HGuiSliderControl(
-                    id, _LEFT, _MIX, _ELEMENT_WIDTH, _UNIT, "", globalVolumeControl.getVolume() * 0.5f);
+            HGuiSliderControl sliderControl = new HGuiSliderControl(id, _LEFT, _MIX, _ELEMENT_WIDTH, _UNIT, "", globalVolumeControl.getVolume() * 0.5f);
             sliderControl.setListener((slider, value) -> {
                 globalVolumeControl.setVolumeAndUpdate(value * 2);
                 slider.updateDisplayString();
                 MAtGuiMenu.this.mod.getConfig().setProperty("globalvolume.scale", globalVolumeControl.getVolume());
             });
-            sliderControl.setDisplayStringProvider(new HDisplayStringProvider() {
-                @Override
-                public String provideDisplayString() {
-                    return "Global Volume Control: " + (int)Math.floor(globalVolumeControl.getVolume() * 100) + "%";
-                }
+            sliderControl.setDisplayStringProvider(() -> {
+                return "Global Volume Control: " + (int)Math.floor(globalVolumeControl.getVolume() * 100) + "%";
             });
             sliderControl.updateDisplayString();
 
@@ -116,10 +111,6 @@ public class MAtGuiMenu extends GuiScreen {
                 }
 
                 @Override
-                public void sliderPressed(HGuiSliderControl hGuiSliderControl) {
-                }
-
-                @Override
                 public void sliderReleased(HGuiSliderControl hGuiSliderControl) {
                     if (MAtGuiMenu.this.isAutopreviewEnabled()) {
                         expansion.playSample();
@@ -127,22 +118,19 @@ public class MAtGuiMenu extends GuiScreen {
                 }
             });
 
-            sliderControl.setDisplayStringProvider(new HDisplayStringProvider() {
-                @Override
-                public String provideDisplayString() {
-                    String display = expansion.getFriendlyName() + ": ";
-                    if (expansion.getVolume() == 0f) {
-                        if (expansion.isActivated()) {
-                            display = display + "Will be disabled";
-                        } else {
-                            display = display + "Disabled";
-                        }
+            sliderControl.setDisplayStringProvider(() -> {
+                String display = expansion.getFriendlyName() + ": ";
+                if (expansion.getVolume() == 0f) {
+                    if (expansion.isActivated()) {
+                        display = display + "Will be disabled";
                     } else {
-                        display = display + (int)Math.floor(expansion.getVolume() * 100) + "%";
+                        display = display + "Disabled";
                     }
-
-                    return TextFormatting.ITALIC + display;
+                } else {
+                    display = display + (int)Math.floor(expansion.getVolume() * 100) + "%";
                 }
+
+                return TextFormatting.ITALIC + display;
             });
             sliderControl.updateDisplayString();
 
@@ -216,12 +204,8 @@ public class MAtGuiMenu extends GuiScreen {
         this.buttonList.add(new GuiButton(212, _RIGHT - _TURNOFFWIDTH - _MIX, _SEPARATOR
                 + _MIX * (this.IDS_PER_PAGE + 4), _TURNOFFWIDTH, _UNIT, "Turn Off"));
 
-        //this.screenTitle = stringtranslate.translateKey("controls.title");
-
         if (!this.mod.hasResourcePacksLoaded()) {
-            this.buttonList.add(new GuiButton(
-                    199, _LEFT + _MIX, _SEPARATOR + _MIX * (this.IDS_PER_PAGE + 1), _ELEMENT_WIDTH - _MIX * 2, _UNIT,
-                    (this.mod.hasNonethelessResourcePacksInstalled() ? "Enable" : "Install") + " MAtmos Resource Pack"));
+            this.buttonList.add(new GuiButton(199, _LEFT + _MIX, _SEPARATOR + _MIX * (this.IDS_PER_PAGE + 1), _ELEMENT_WIDTH - _MIX * 2, _UNIT, (this.mod.hasNonethelessResourcePacksInstalled() ? "Enable" : "Install") + " MAtmos Resource Pack"));
         }
     }
 
@@ -258,16 +242,6 @@ public class MAtGuiMenu extends GuiScreen {
         } else {
             Make.perform(par1GuiButton.id);
         }
-        /*else if (par1GuiButton.id >= 400)
-        {
-        	int id = par1GuiButton.id - 400;
-        	Expansion expansion = this.expansionList.get(id);
-        	
-        	if (expansion.isActivated())
-        	{
-        		expansion.playSample();
-        	}
-        }*/
 
     }
 
@@ -286,11 +260,10 @@ public class MAtGuiMenu extends GuiScreen {
         aboutToClose();
     }
 
-    // dag edit + throws IOException
     @Override
-    protected void mouseClicked(int par1, int par2, int par3) throws IOException {
-        if (this.buttonId >= 0) {} else {
-            super.mouseClicked(par1, par2, par3);
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if (this.buttonId < 0) {
+            super.mouseClicked(mouseX, mouseY, mouseButton);
         }
     }
 
@@ -306,12 +279,9 @@ public class MAtGuiMenu extends GuiScreen {
             drawCenteredString(this.fontRenderer, "MAtmos Expansions", this.width / 2, 8, 0xffffff);
         } else {
             drawGradientRect(0, 0, this.width, this.height, 0xC0C06000, 0x60C06000);
-            drawCenteredString(this.fontRenderer, "MAtmos Expansions " + TextFormatting.GOLD + "(Dev mode)",
-                    this.width / 2, 8, 0xffffff);
+            drawCenteredString(this.fontRenderer, "MAtmos Expansions " + TextFormatting.GOLD + "(Dev mode)", this.width / 2, 8, 0xffffff);
 
-            drawCenteredString(this.fontRenderer, TextFormatting.YELLOW
-                    + "Dev mode is enabled. This may cause Minecraft to run slower.", this.width / 2, _SEPARATOR
-                            + _MIX * (this.IDS_PER_PAGE + 3) - 9, 0xffffff);
+            drawCenteredString(this.fontRenderer, TextFormatting.YELLOW + "Dev mode is enabled. This may cause Minecraft to run slower.", this.width / 2, _SEPARATOR + _MIX * (this.IDS_PER_PAGE + 3) - 9, 0xffffff);
         }
 
         this.mod.util().prepareDrawString();
@@ -319,19 +289,11 @@ public class MAtGuiMenu extends GuiScreen {
 
         if (!this.mod.hasResourcePacksLoaded()) {
             if (this.mod.hasNonethelessResourcePacksInstalled()) {
-                drawCenteredString(
-                        this.fontRenderer, "Your MAtmos Resource Pack isn't enabled yet!", this.width / 2, 10
-                                + 22 * 6 - 40 + 20, 0xff0000);
-                drawCenteredString(
-                        this.fontRenderer, "Activate it in the Minecraft Options menu for it to run.", this.width / 2,
-                        10 + 22 * 6 - 40 + 28, 0xff0000);
+                drawCenteredString(this.fontRenderer, "Your MAtmos Resource Pack isn't enabled yet!", this.width / 2, 10 + 22 * 6 - 40 + 20, 0xff0000);
+                drawCenteredString(this.fontRenderer, "Activate it in the Minecraft Options menu for it to run.", this.width / 2, 10 + 22 * 6 - 40 + 28, 0xff0000);
             } else {
-                drawCenteredString(
-                        this.fontRenderer, "You don't have any MAtmos Resource Pack installed!", this.width / 2, 10
-                                + 22 * 6 - 40 + 20, 0xff0000);
-                drawCenteredString(
-                        this.fontRenderer, "Put the Resource Pack in the resourcepacks/ folder.", this.width / 2, 10
-                                + 22 * 6 - 40 + 28, 0xff0000);
+                drawCenteredString(this.fontRenderer, "You don't have any MAtmos Resource Pack installed!", this.width / 2, 10 + 22 * 6 - 40 + 20, 0xff0000);
+                drawCenteredString(this.fontRenderer, "Put the Resource Pack in the resourcepacks/ folder.", this.width / 2, 10 + 22 * 6 - 40 + 28, 0xff0000);
             }
         }
 
