@@ -1,20 +1,15 @@
 package eu.ha3.matmos.editor.interfaces;
 
-import java.awt.*;
+import java.awt.Component;
 
-/*
---filenotes-placeholder
-*/
+public interface Window extends ISerialUpdate, NamedSerialEditor {
+    Component asComponent();
 
-public interface Window extends ISerialUpdate, NamedSerialEditor
-{
-	public Component asComponent();
-	
-	public void display();
-	
-	public void refreshFileState();
-	
-	public void showErrorPopup(String error);
-	
-	public void disableMinecraftCapabilitites();
+    void display();
+
+    void refreshFileState();
+
+    void showErrorPopup(String error);
+
+    void disableMinecraftCapabilitites();
 }

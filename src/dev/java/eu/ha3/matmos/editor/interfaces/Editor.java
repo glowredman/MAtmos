@@ -7,53 +7,52 @@ import eu.ha3.matmos.serialisation.expansion.SerialRoot;
 
 import java.io.File;
 
-public interface Editor
-{
-	public File getExpansionDirectory();
-	
-	public File getSoundDirectory();
-	
-	public File getWorkingDirectory();
-	
-	public void minecraftReloadFromDisk();
-	
-	public void minecraftPushCurrentState();
-	
-	public boolean isMinecraftControlled();
-	
-	public boolean hasValidFile();
-	
-	public boolean hasUnsavedChanges();
-	
-	public File getFile();
-	
-	public String generateJson(boolean pretty);
-	
-	public void trySetAndLoadFile(File file);
-	
-	public boolean quickSave();
-	
-	public boolean longSave(File location, boolean setAsNewPointer);
-	
-	public void switchEditItem(Selector selector, String itemName);
-	
-	public void renameItem(String nameOfItem, Object editFocus, String text);
-	
-	public void deleteItem(String nameOfItem, Object editFocus);
-	
-	public boolean createItem(KnowledgeItemType choice, String name);
-	
-	public void informInnerChange();
-	
-	public SerialRoot getRootForCopyPurposes();
-	
-	public void duplicateItem(Selector selector, String name);
-	
-	public void purgeLogic();
-	
-	public void purgeSupports();
-	
-	public void pushSound(SerialEvent event);
-	
-	public void mergeFrom(File file);
+public interface Editor {
+    File getExpansionDirectory();
+
+    File getSoundDirectory();
+
+    File getWorkingDirectory();
+
+    void minecraftReloadFromDisk();
+
+    void minecraftPushCurrentState();
+
+    boolean isMinecraftControlled();
+
+    boolean hasValidFile();
+
+    boolean hasUnsavedChanges();
+
+    File getFile();
+
+    String generateJson(boolean pretty);
+
+    void trySetAndLoadFile(File file);
+
+    boolean quickSave();
+
+    boolean longSave(File location, boolean setAsNewPointer);
+
+    void switchEditItem(Selector selector, String itemName);
+
+    void renameItem(String nameOfItem, Object editFocus, String text);
+
+    void deleteItem(String nameOfItem, Object editFocus);
+
+    boolean createItem(KnowledgeItemType choice, String name);
+
+    void informInnerChange();
+
+    SerialRoot getRootForCopyPurposes();
+
+    void duplicateItem(Selector selector, String name);
+
+    void purgeLogic();
+
+    void purgeSupports();
+
+    void pushSound(SerialEvent event);
+
+    void mergeFrom(File file);
 }

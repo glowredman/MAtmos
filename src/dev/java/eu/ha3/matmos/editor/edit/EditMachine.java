@@ -20,13 +20,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-/*
---filenotes-placeholder
-*/
-
 @SuppressWarnings("serial")
-public class EditMachine extends JPanel implements IFlaggable
-{
+public class EditMachine extends JPanel implements IFlaggable {
     private boolean init = true;
     private final EditPanel edit;
     private final SerialMachine machine;
@@ -52,8 +47,7 @@ public class EditMachine extends JPanel implements IFlaggable
     private JSpinner pitchMod;
     private JSpinner volMod;
 
-    public EditMachine(EditPanel parentConstruct, final SerialMachine machineConstruct)
-    {
+    public EditMachine(EditPanel parentConstruct, final SerialMachine machineConstruct) {
         this.edit = parentConstruct;
         this.machine = machineConstruct;
         setLayout(new BorderLayout(0, 0));
@@ -72,10 +66,10 @@ public class EditMachine extends JPanel implements IFlaggable
         JPanel internalOptions = new JPanel();
         internal.add(internalOptions, BorderLayout.NORTH);
         GridBagLayout gbl_internalOptions = new GridBagLayout();
-        gbl_internalOptions.columnWidths = new int[]{50, 100, 100, 0};
-        gbl_internalOptions.rowHeights = new int[]{0, 0, 0};
-        gbl_internalOptions.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-        gbl_internalOptions.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+        gbl_internalOptions.columnWidths = new int[] {50, 100, 100, 0};
+        gbl_internalOptions.rowHeights = new int[] {0, 0, 0};
+        gbl_internalOptions.columnWeights = new double[] {0.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_internalOptions.rowWeights = new double[] {0.0, 0.0, Double.MIN_VALUE};
         internalOptions.setLayout(gbl_internalOptions);
 
         JLabel lblDelay = new JLabel("Delay before fade (in/out)");
@@ -87,15 +81,12 @@ public class EditMachine extends JPanel implements IFlaggable
         internalOptions.add(lblDelay, gbc_lblDelay);
 
         this.delayIn = new JSpinner();
-        this.delayIn.addChangeListener(new ChangeListener()
-        {
+        this.delayIn.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(ChangeEvent arg0)
-            {
-                if (EditMachine.this.init)
-                    return;
+            public void stateChanged(ChangeEvent arg0) {
+                if (EditMachine.this.init) return;
 
-                EditMachine.this.machine.delay_fadein = (Float) EditMachine.this.delayIn.getValue();
+                EditMachine.this.machine.delay_fadein = (Float)EditMachine.this.delayIn.getValue();
                 EditMachine.this.edit.flagChange();
             }
         });
@@ -108,15 +99,12 @@ public class EditMachine extends JPanel implements IFlaggable
         internalOptions.add(this.delayIn, gbc_delayIn);
 
         this.delayOut = new JSpinner();
-        this.delayOut.addChangeListener(new ChangeListener()
-        {
+        this.delayOut.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(ChangeEvent arg0)
-            {
-                if (EditMachine.this.init)
-                    return;
+            public void stateChanged(ChangeEvent arg0) {
+                if (EditMachine.this.init) return;
 
-                EditMachine.this.machine.delay_fadeout = (Float) EditMachine.this.delayOut.getValue();
+                EditMachine.this.machine.delay_fadeout = (Float)EditMachine.this.delayOut.getValue();
                 EditMachine.this.edit.flagChange();
             }
         });
@@ -137,15 +125,12 @@ public class EditMachine extends JPanel implements IFlaggable
         internalOptions.add(lblFade, gbc_lblFade);
 
         this.fadeIn = new JSpinner();
-        this.fadeIn.addChangeListener(new ChangeListener()
-        {
+        this.fadeIn.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(ChangeEvent arg0)
-            {
-                if (EditMachine.this.init)
-                    return;
+            public void stateChanged(ChangeEvent arg0) {
+                if (EditMachine.this.init) return;
 
-                EditMachine.this.machine.fadein = (Float) EditMachine.this.fadeIn.getValue();
+                EditMachine.this.machine.fadein = (Float)EditMachine.this.fadeIn.getValue();
                 EditMachine.this.edit.flagChange();
             }
         });
@@ -158,15 +143,12 @@ public class EditMachine extends JPanel implements IFlaggable
         internalOptions.add(this.fadeIn, gbc_fadeIn);
 
         this.fadeOut = new JSpinner();
-        this.fadeOut.addChangeListener(new ChangeListener()
-        {
+        this.fadeOut.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(ChangeEvent arg0)
-            {
-                if (EditMachine.this.init)
-                    return;
+            public void stateChanged(ChangeEvent arg0) {
+                if (EditMachine.this.init) return;
 
-                EditMachine.this.machine.fadeout = (Float) EditMachine.this.fadeOut.getValue();
+                EditMachine.this.machine.fadeout = (Float)EditMachine.this.fadeOut.getValue();
                 EditMachine.this.edit.flagChange();
             }
         });
@@ -199,17 +181,13 @@ public class EditMachine extends JPanel implements IFlaggable
 
         this.timedEvents = new JList<String>();
         this.timedEvents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        this.timedEvents.addListSelectionListener(new ListSelectionListener()
-        {
+        this.timedEvents.addListSelectionListener(new ListSelectionListener() {
             @Override
-            public void valueChanged(ListSelectionEvent arg0)
-            {
-                if (EditMachine.this.eventBeingModified)
-                    return;
+            public void valueChanged(ListSelectionEvent arg0) {
+                if (EditMachine.this.eventBeingModified) return;
 
                 if (EditMachine.this.timedEvents.getSelectedIndex() != -1
-                        && EditMachine.this.timedEvents.getSelectedIndex() < EditMachine.this.machine.event.size())
-                {
+                        && EditMachine.this.timedEvents.getSelectedIndex() < EditMachine.this.machine.event.size()) {
                     changeToEvent(EditMachine.this.timedEvents.getSelectedIndex());
 
                 }
@@ -219,11 +197,9 @@ public class EditMachine extends JPanel implements IFlaggable
         scrollPane_1.setViewportView(this.timedEvents);
 
         JButton btnAdd = new JButton("+");
-        btnAdd.addActionListener(new ActionListener()
-        {
+        btnAdd.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
+            public void actionPerformed(ActionEvent e) {
                 addEvent();
             }
         });
@@ -232,10 +208,10 @@ public class EditMachine extends JPanel implements IFlaggable
         JPanel panel_4 = new JPanel();
         panel_2.add(panel_4, BorderLayout.CENTER);
         GridBagLayout gbl_panel_4 = new GridBagLayout();
-        gbl_panel_4.columnWidths = new int[]{0, 100, 100, 0};
-        gbl_panel_4.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
-        gbl_panel_4.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-        gbl_panel_4.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_panel_4.columnWidths = new int[] {0, 100, 100, 0};
+        gbl_panel_4.rowHeights = new int[] {0, 0, 0, 0, 0, 0};
+        gbl_panel_4.columnWeights = new double[] {0.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_panel_4.rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         panel_4.setLayout(gbl_panel_4);
 
         JLabel lblEvent = new JLabel("Event");
@@ -246,13 +222,10 @@ public class EditMachine extends JPanel implements IFlaggable
         gbc_lblEvent.gridy = 0;
         panel_4.add(lblEvent, gbc_lblEvent);
 
-        this.instantEvent = new InstantTextField()
-        {
+        this.instantEvent = new InstantTextField() {
             @Override
-            protected void editEvent()
-            {
-                if (EditMachine.this.eventBeingModified)
-                    return;
+            protected void editEvent() {
+                if (EditMachine.this.eventBeingModified) return;
 
                 EditMachine.this.event.event = EditMachine.this.instantEvent.getText();
                 EditMachine.this.edit.flagChange();
@@ -275,17 +248,13 @@ public class EditMachine extends JPanel implements IFlaggable
         panel_4.add(lblDelayMin, gbc_lblDelayMin);
 
         this.delayMin = new JSpinner();
-        this.delayMin.addChangeListener(new ChangeListener()
-        {
+        this.delayMin.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(ChangeEvent arg0)
-            {
-                if (EditMachine.this.init)
-                    return;
-                if (EditMachine.this.eventBeingModified)
-                    return;
+            public void stateChanged(ChangeEvent arg0) {
+                if (EditMachine.this.init) return;
+                if (EditMachine.this.eventBeingModified) return;
 
-                EditMachine.this.event.delay_min = (Float) EditMachine.this.delayMin.getValue();
+                EditMachine.this.event.delay_min = (Float)EditMachine.this.delayMin.getValue();
                 EditMachine.this.edit.flagChange();
             }
         });
@@ -298,17 +267,13 @@ public class EditMachine extends JPanel implements IFlaggable
         panel_4.add(this.delayMin, gbc_delayMin);
 
         this.delayMax = new JSpinner();
-        this.delayMax.addChangeListener(new ChangeListener()
-        {
+        this.delayMax.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(ChangeEvent arg0)
-            {
-                if (EditMachine.this.init)
-                    return;
-                if (EditMachine.this.eventBeingModified)
-                    return;
+            public void stateChanged(ChangeEvent arg0) {
+                if (EditMachine.this.init) return;
+                if (EditMachine.this.eventBeingModified) return;
 
-                EditMachine.this.event.delay_max = (Float) EditMachine.this.delayMax.getValue();
+                EditMachine.this.event.delay_max = (Float)EditMachine.this.delayMax.getValue();
                 EditMachine.this.edit.flagChange();
             }
         });
@@ -329,17 +294,13 @@ public class EditMachine extends JPanel implements IFlaggable
         panel_4.add(lblStartDelay, gbc_lblStartDelay);
 
         this.startDelay = new JSpinner();
-        this.startDelay.addChangeListener(new ChangeListener()
-        {
+        this.startDelay.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(ChangeEvent arg0)
-            {
-                if (EditMachine.this.init)
-                    return;
-                if (EditMachine.this.eventBeingModified)
-                    return;
+            public void stateChanged(ChangeEvent arg0) {
+                if (EditMachine.this.init) return;
+                if (EditMachine.this.eventBeingModified) return;
 
-                EditMachine.this.event.delay_start = (Float) EditMachine.this.startDelay.getValue();
+                EditMachine.this.event.delay_start = (Float)EditMachine.this.startDelay.getValue();
                 EditMachine.this.edit.flagChange();
             }
         });
@@ -360,17 +321,13 @@ public class EditMachine extends JPanel implements IFlaggable
         panel_4.add(lblMultipliervolpitch, gbc_lblMultipliervolpitch);
 
         this.volMod = new JSpinner();
-        this.volMod.addChangeListener(new ChangeListener()
-        {
+        this.volMod.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(ChangeEvent arg0)
-            {
-                if (EditMachine.this.init)
-                    return;
-                if (EditMachine.this.eventBeingModified)
-                    return;
+            public void stateChanged(ChangeEvent arg0) {
+                if (EditMachine.this.init) return;
+                if (EditMachine.this.eventBeingModified) return;
 
-                EditMachine.this.event.vol_mod = (Float) EditMachine.this.volMod.getValue();
+                EditMachine.this.event.vol_mod = (Float)EditMachine.this.volMod.getValue();
                 EditMachine.this.edit.flagChange();
             }
         });
@@ -383,17 +340,13 @@ public class EditMachine extends JPanel implements IFlaggable
         panel_4.add(this.volMod, gbc_volMod);
 
         this.pitchMod = new JSpinner();
-        this.pitchMod.addChangeListener(new ChangeListener()
-        {
+        this.pitchMod.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(ChangeEvent arg0)
-            {
-                if (EditMachine.this.init)
-                    return;
-                if (EditMachine.this.eventBeingModified)
-                    return;
+            public void stateChanged(ChangeEvent arg0) {
+                if (EditMachine.this.init) return;
+                if (EditMachine.this.eventBeingModified) return;
 
-                EditMachine.this.event.pitch_mod = (Float) EditMachine.this.pitchMod.getValue();
+                EditMachine.this.event.pitch_mod = (Float)EditMachine.this.pitchMod.getValue();
                 EditMachine.this.edit.flagChange();
             }
         });
@@ -406,11 +359,9 @@ public class EditMachine extends JPanel implements IFlaggable
         panel_4.add(this.pitchMod, gbc_pitchMod);
 
         JButton btnRemove = new JButton("REMOVE");
-        btnRemove.addActionListener(new ActionListener()
-        {
+        btnRemove.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0)
-            {
+            public void actionPerformed(ActionEvent arg0) {
                 removeEvent();
             }
         });
@@ -424,10 +375,10 @@ public class EditMachine extends JPanel implements IFlaggable
         stream.setBorder(new TitledBorder(null, "Streaming Sound", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         otherGroup.add(stream, BorderLayout.SOUTH);
         GridBagLayout gbl_stream = new GridBagLayout();
-        gbl_stream.columnWidths = new int[]{426, 0};
-        gbl_stream.rowHeights = new int[]{20, 73, 0};
-        gbl_stream.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-        gbl_stream.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+        gbl_stream.columnWidths = new int[] {426, 0};
+        gbl_stream.rowHeights = new int[] {20, 73, 0};
+        gbl_stream.columnWeights = new double[] {0.0, Double.MIN_VALUE};
+        gbl_stream.rowWeights = new double[] {0.0, 0.0, Double.MIN_VALUE};
         stream.setLayout(gbl_stream);
 
         JPanel filePanel = new JPanel();
@@ -449,11 +400,9 @@ public class EditMachine extends JPanel implements IFlaggable
         this.fileField.setColumns(10);
 
         JButton btnOpen = new JButton("Open...");
-        btnOpen.addActionListener(new ActionListener()
-        {
+        btnOpen.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
+            public void actionPerformed(ActionEvent e) {
                 addStreamDialog();
             }
         });
@@ -466,10 +415,10 @@ public class EditMachine extends JPanel implements IFlaggable
         gbc_otherPanel.gridy = 1;
         stream.add(otherPanel, gbc_otherPanel);
         GridBagLayout gbl_otherPanel = new GridBagLayout();
-        gbl_otherPanel.columnWidths = new int[]{50, 100, 0};
-        gbl_otherPanel.rowHeights = new int[]{0, 0, 0, 0};
-        gbl_otherPanel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-        gbl_otherPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_otherPanel.columnWidths = new int[] {50, 100, 0};
+        gbl_otherPanel.rowHeights = new int[] {0, 0, 0, 0};
+        gbl_otherPanel.columnWeights = new double[] {0.0, 0.0, Double.MIN_VALUE};
+        gbl_otherPanel.rowWeights = new double[] {0.0, 0.0, 0.0, Double.MIN_VALUE};
         otherPanel.setLayout(gbl_otherPanel);
 
         JLabel lblVolumeMultiplier = new JLabel("Volume multiplier");
@@ -481,18 +430,13 @@ public class EditMachine extends JPanel implements IFlaggable
         otherPanel.add(lblVolumeMultiplier, gbc_lblVolumeMultiplier);
 
         this.streamVol = new JSpinner();
-        this.streamVol.addChangeListener(new ChangeListener()
-        {
+        this.streamVol.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(ChangeEvent arg0)
-            {
-                if (EditMachine.this.init)
-                    return;
-                if (EditMachine.this.eventBeingModified)
-                    return;
-                if (machine.stream != null)
-                {
-                    machine.stream.vol = (Float) EditMachine.this.streamVol.getValue();
+            public void stateChanged(ChangeEvent arg0) {
+                if (EditMachine.this.init) return;
+                if (EditMachine.this.eventBeingModified) return;
+                if (machine.stream != null) {
+                    machine.stream.vol = (Float)EditMachine.this.streamVol.getValue();
                     EditMachine.this.edit.flagChange();
                 }
             }
@@ -515,18 +459,13 @@ public class EditMachine extends JPanel implements IFlaggable
         otherPanel.add(lblPitchMultiplier, gbc_lblPitchMultiplier);
 
         this.streamPitch = new JSpinner();
-        this.streamPitch.addChangeListener(new ChangeListener()
-        {
+        this.streamPitch.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(ChangeEvent arg0)
-            {
-                if (EditMachine.this.init)
-                    return;
-                if (EditMachine.this.eventBeingModified)
-                    return;
-                if (machine.stream != null)
-                {
-                    machine.stream.pitch = (Float) EditMachine.this.streamPitch.getValue();
+            public void stateChanged(ChangeEvent arg0) {
+                if (EditMachine.this.init) return;
+                if (EditMachine.this.eventBeingModified) return;
+                if (machine.stream != null) {
+                    machine.stream.pitch = (Float)EditMachine.this.streamPitch.getValue();
                     EditMachine.this.edit.flagChange();
                 }
             }
@@ -543,13 +482,10 @@ public class EditMachine extends JPanel implements IFlaggable
         this.chckbxIsLooping = new JCheckBox("Is looping");
         this.chckbxIsLooping.setEnabled(true);
         this.chckbxIsLooping.setSelected(machine.stream != null ? machine.stream.looping : false);
-        this.chckbxIsLooping.addChangeListener(new ChangeListener()
-        {
+        this.chckbxIsLooping.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(ChangeEvent e)
-            {
-                if (machine.stream != null)
-                {
+            public void stateChanged(ChangeEvent e) {
+                if (machine.stream != null) {
                     machine.stream.looping = chckbxIsLooping.isSelected();
                     EditMachine.this.edit.flagChange();
                 }
@@ -567,10 +503,10 @@ public class EditMachine extends JPanel implements IFlaggable
                 null));
         add(activationPanel, BorderLayout.NORTH);
         GridBagLayout gbl_activationPanel = new GridBagLayout();
-        gbl_activationPanel.columnWidths = new int[]{438, 0};
-        gbl_activationPanel.rowHeights = new int[]{14, 10, 14, 10, 89, 0};
-        gbl_activationPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-        gbl_activationPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_activationPanel.columnWidths = new int[] {438, 0};
+        gbl_activationPanel.rowHeights = new int[] {14, 10, 14, 10, 89, 0};
+        gbl_activationPanel.columnWeights = new double[] {1.0, Double.MIN_VALUE};
+        gbl_activationPanel.rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         activationPanel.setLayout(gbl_activationPanel);
 
         JLabel lblMustBeActive = new JLabel("Any can be active (Power sources):");
@@ -627,22 +563,18 @@ public class EditMachine extends JPanel implements IFlaggable
         panel_1.setLayout(new GridLayout(0, 1, 0, 0));
 
         JButton btnActive = new JButton("Active");
-        btnActive.addActionListener(new ActionListener()
-        {
+        btnActive.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0)
-            {
+            public void actionPerformed(ActionEvent arg0) {
                 addToAllow();
             }
         });
         panel_1.add(btnActive);
 
         JButton btnInactive = new JButton("Inactive");
-        btnInactive.addActionListener(new ActionListener()
-        {
+        btnInactive.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0)
-            {
+            public void actionPerformed(ActionEvent arg0) {
                 addToRestrict();
             }
         });
@@ -653,8 +585,7 @@ public class EditMachine extends JPanel implements IFlaggable
         this.init = false;
     }
 
-    protected void addEvent()
-    {
+    protected void addEvent() {
         this.eventBeingModified = true;
         SerialMachineEvent sme = new SerialMachineEvent();
         this.machine.event.add(sme);
@@ -663,15 +594,13 @@ public class EditMachine extends JPanel implements IFlaggable
         changeToEvent(this.machine.event.size() - 1);
     }
 
-    protected void removeEvent()
-    {
+    protected void removeEvent() {
         this.machine.event.remove(this.event);
         this.edit.flagChange();
         updateValues();
     }
 
-    protected void changeToEvent(int selectedIndex)
-    {
+    protected void changeToEvent(int selectedIndex) {
         this.eventBeingModified = true;
         this.timedEvents.setSelectedIndex(selectedIndex);
         this.event = this.machine.event.get(selectedIndex);
@@ -679,10 +608,8 @@ public class EditMachine extends JPanel implements IFlaggable
         this.eventBeingModified = false;
     }
 
-    private void fillEvents()
-    {
-        if (this.machine.event == null)
-            return;
+    private void fillEvents() {
+        if (this.machine.event == null) return;
 
         this.delayMin.setValue(this.event.delay_min);
         this.delayMax.setValue(this.event.delay_max);
@@ -693,19 +620,16 @@ public class EditMachine extends JPanel implements IFlaggable
         this.pitchMod.setValue(this.event.pitch_mod);
     }
 
-    private void updateValues()
-    {
+    private void updateValues() {
         this.delayIn.setValue(this.machine.delay_fadein);
         this.delayOut.setValue(this.machine.delay_fadeout);
         this.fadeIn.setValue(this.machine.fadein);
         this.fadeOut.setValue(this.machine.fadeout);
 
-        if (this.machine.event != null)
-        {
+        if (this.machine.event != null) {
             List<String> data = new ArrayList<String>();
             int acc = 1;
-            for (SerialMachineEvent e : this.machine.event)
-            {
+            for (SerialMachineEvent e : this.machine.event) {
                 data.add("(" + acc + ") " + e.event);
                 acc = acc + 1;
             }
@@ -713,10 +637,9 @@ public class EditMachine extends JPanel implements IFlaggable
             this.timedEvents.setListData(data.toArray(new String[data.size()]));
         }
 
-        if (this.machine.stream != null)
-        {
-            this.machine.stream.vol = (Float) streamVol.getValue();
-            this.machine.stream.pitch = (Float) streamPitch.getValue();
+        if (this.machine.stream != null) {
+            this.machine.stream.vol = (Float)streamVol.getValue();
+            this.machine.stream.pitch = (Float)streamPitch.getValue();
             this.machine.stream.looping = chckbxIsLooping.isSelected();
         }
 
@@ -726,69 +649,54 @@ public class EditMachine extends JPanel implements IFlaggable
 
     }
 
-    protected void addToAllow()
-    {
+    protected void addToAllow() {
         List<String> values = this.list.getSelectedValuesList();
-        if (values.size() == 0)
-            return;
+        if (values.size() == 0) return;
 
         int addedCount = 0;
-        for (Object o : values)
-        {
-            String value = (String) o;
-            if (!this.machine.allow.contains(value))
-            {
+        for (Object o : values) {
+            String value = (String)o;
+            if (!this.machine.allow.contains(value)) {
                 this.machine.allow.add(value);
                 addedCount = addedCount + 1;
             }
         }
 
-        if (addedCount > 0)
-        {
+        if (addedCount > 0) {
             flagChange();
         }
     }
 
-    protected void addToRestrict()
-    {
+    protected void addToRestrict() {
         List<String> values = this.list.getSelectedValuesList();
-        if (values.size() == 0)
-            return;
+        if (values.size() == 0) return;
 
         int addedCount = 0;
-        for (Object o : values)
-        {
-            String value = (String) o;
-            if (!this.machine.restrict.contains(value))
-            {
+        for (Object o : values) {
+            String value = (String)o;
+            if (!this.machine.restrict.contains(value)) {
                 this.machine.restrict.add(value);
                 addedCount = addedCount + 1;
             }
         }
 
-        if (addedCount > 0)
-        {
+        if (addedCount > 0) {
             flagChange();
         }
     }
 
     // dag edit
-    private void addStreamDialog()
-    {
+    private void addStreamDialog() {
         OggFileChooser fc = new OggFileChooser(this.edit.getSoundDirectory());
         fc.setMultiSelectionEnabled(true);
         int returnValue = fc.showOpenDialog(this);
-        if (returnValue != JFileChooser.APPROVE_OPTION)
-            return;
+        if (returnValue != JFileChooser.APPROVE_OPTION) return;
 
         File[] files = fc.getSelectedFiles();
-        if (files.length == 0)
-            return;
+        if (files.length == 0) return;
 
-        for (File file : files)
-        {
-            if (file != null && file.isFile() && file.exists())
-            {
+        for (File file : files) {
+            if (file != null && file.isFile() && file.exists()) {
                 String path = new File(this.edit.getSoundDirectory().getAbsolutePath()).toURI().relativize(new File(file.getAbsolutePath()).toURI()).getPath();
                 this.machine.stream = new SerialMachineStream();
                 this.machine.stream.path = path;
@@ -799,8 +707,7 @@ public class EditMachine extends JPanel implements IFlaggable
         updateValues();
     }
 
-    private void fillWithValues()
-    {
+    private void fillWithValues() {
         Set<String> unused = new TreeSet<String>(this.edit.getSerialRoot().set.keySet());
         unused.removeAll(this.machine.allow);
         unused.removeAll(this.machine.restrict);
@@ -810,8 +717,7 @@ public class EditMachine extends JPanel implements IFlaggable
     }
 
     @Override
-    public void flagChange()
-    {
+    public void flagChange() {
         this.edit.flagChange();
         updateValues();
     }
