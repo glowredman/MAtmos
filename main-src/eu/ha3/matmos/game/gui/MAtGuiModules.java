@@ -1,6 +1,6 @@
 package eu.ha3.matmos.game.gui;
 
-import eu.ha3.matmos.game.data.abstractions.module.ModuleProcessor;
+import eu.ha3.matmos.game.data.modules.ModuleProcessor;
 import eu.ha3.matmos.game.mod.MAtMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;

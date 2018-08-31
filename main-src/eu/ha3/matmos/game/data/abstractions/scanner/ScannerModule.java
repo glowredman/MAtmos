@@ -1,9 +1,9 @@
 package eu.ha3.matmos.game.data.abstractions.scanner;
 
 import eu.ha3.matmos.engine.core.interfaces.Data;
-import eu.ha3.matmos.game.data.abstractions.module.ExternalStringCountModule;
-import eu.ha3.matmos.game.data.abstractions.module.PassOnceModule;
-import eu.ha3.matmos.game.data.abstractions.module.ThousandStringCountModule;
+import eu.ha3.matmos.game.data.modules.ExternalStringCountModule;
+import eu.ha3.matmos.game.data.modules.PassOnceModule;
+import eu.ha3.matmos.game.data.modules.ThousandStringCountModule;
 import eu.ha3.matmos.game.system.MAtmosUtility;
 import eu.ha3.matmos.log.MAtLog;
 import net.minecraft.client.Minecraft;
