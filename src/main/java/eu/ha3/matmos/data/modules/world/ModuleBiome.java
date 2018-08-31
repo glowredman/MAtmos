@@ -21,7 +21,6 @@ public class ModuleBiome extends ModuleProcessor implements Module {
         int biomej = mod.getConfig().getInteger("useroptions.biome.override");
 
         if (biomej <= -1) {
-            //Solly edit - only calculate biome once
             Biome biome = calculateBiome();
             setValue("id", Biome.getIdForBiome(biome));
             setValue("biome_name", biome.getBiomeName());

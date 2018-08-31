@@ -1,4 +1,4 @@
-package eu.ha3.matmos.debug.game;
+package eu.ha3.matmos.debug;
 
 import java.io.File;
 
@@ -6,8 +6,7 @@ import com.google.common.base.Optional;
 
 import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.core.expansion.Expansion;
-import eu.ha3.matmos.debug.PluggableIntoMinecraft;
-import eu.ha3.matmos.debug.expansions.FolderResourcePackEditableEDU;
+import eu.ha3.matmos.core.expansion.FolderExpansionDebugUnit;
 import net.minecraft.util.text.TextFormatting;
 
 /*
@@ -25,9 +24,9 @@ public class PluggableIntoMAtmos implements PluggableIntoMinecraft {
 
     public PluggableIntoMAtmos(MAtMod mod, Expansion expansion) {
         this.mod = mod;
-        if (expansion.obtainDebugUnit() instanceof FolderResourcePackEditableEDU) {
-            file = ((FolderResourcePackEditableEDU)expansion.obtainDebugUnit()).obtainExpansionFile();
-            workingDirectory = ((FolderResourcePackEditableEDU)expansion.obtainDebugUnit()).obtainExpansionFolder();
+        if (expansion.obtainDebugUnit() instanceof FolderExpansionDebugUnit) {
+            file = ((FolderExpansionDebugUnit)expansion.obtainDebugUnit()).getExpansionFile();
+            workingDirectory = ((FolderExpansionDebugUnit)expansion.obtainDebugUnit()).getExpansionFolder();
             isReadOnly = false;
         } else {
             isReadOnly = true;

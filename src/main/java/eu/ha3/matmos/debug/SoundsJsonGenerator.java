@@ -1,4 +1,4 @@
-package eu.ha3.matmos.debug.game;
+package eu.ha3.matmos.debug;
 
 import java.io.File;
 import java.io.FileWriter;

@@ -4,11 +4,11 @@ import java.io.File;
 
 import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.core.expansion.Expansion;
-import eu.ha3.matmos.debug.expansions.ExpansionDebugUnit;
-import eu.ha3.matmos.debug.expansions.FolderResourcePackEditableEDU;
-import eu.ha3.matmos.debug.expansions.ReadOnlyJasonStringEDU;
-import eu.ha3.matmos.debug.game.PluggableIntoMAtmos;
-import eu.ha3.matmos.debug.game.SoundsJsonGenerator;
+import eu.ha3.matmos.core.expansion.ExpansionDebugUnit;
+import eu.ha3.matmos.core.expansion.FolderExpansionDebugUnit;
+import eu.ha3.matmos.core.expansion.JsonExpansionDebugUnit;
+import eu.ha3.matmos.debug.PluggableIntoMAtmos;
+import eu.ha3.matmos.debug.SoundsJsonGenerator;
 import eu.ha3.matmos.game.user.VisualExpansionDebugging;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
 import net.minecraft.client.gui.GuiButton;
@@ -79,7 +79,7 @@ public class GuiExpansionDetails extends GuiScreen {
                 if (editor != null) {
                     new Thread(editor, "EditorWindow_for_" + expansion.getName()).start();
 
-                    if (debugUnit instanceof ReadOnlyJasonStringEDU) {
+                    if (debugUnit instanceof JsonExpansionDebugUnit) {
                         // XXX Read only mode
                         mod.getChatter().printChat(TextFormatting.RED, I18n.format("mat.zip.unsupported"));
                         mod.getChatter().printChatShort(TextFormatting.RED, I18n.format("mat.zip.unzip"));
@@ -91,9 +91,9 @@ public class GuiExpansionDetails extends GuiScreen {
         } else if (button.id == 204) {
             final ExpansionDebugUnit debugUnit = expansion.obtainDebugUnit();
 
-            if (debugUnit instanceof FolderResourcePackEditableEDU) {
+            if (debugUnit instanceof FolderExpansionDebugUnit) {
 
-                File expFolder = ((FolderResourcePackEditableEDU)debugUnit).obtainExpansionFolder();
+                File expFolder = ((FolderExpansionDebugUnit)debugUnit).getExpansionFolder();
                 File minecraftFolder = new File(expFolder, "assets/minecraft/");
 
                 if (minecraftFolder.exists()) {

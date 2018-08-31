@@ -14,8 +14,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.MalformedJsonException;
 
+import eu.ha3.matmos.core.expansion.JsonExpansionDebugUnit;
 import eu.ha3.matmos.debug.PluggableIntoMinecraft;
-import eu.ha3.matmos.debug.expansions.ReadOnlyJasonStringEDU;
 import eu.ha3.matmos.editor.interfaces.Editor;
 import eu.ha3.matmos.editor.interfaces.Window;
 import eu.ha3.matmos.editor.tree.Selector;
@@ -84,10 +84,10 @@ public class EditorMaster implements Runnable, Editor {
             trySetAndLoadFile(file);
         }
 
-        if (minecraft instanceof ReadOnlyJasonStringEDU) {
+        if (minecraft instanceof JsonExpansionDebugUnit) {
             flushFileAndSerial();
-            root = new JsonExpansions_EngineDeserializer().jsonToSerial(((ReadOnlyJasonStringEDU)minecraft)
-                    .obtainJasonString());
+            root = new JsonExpansions_EngineDeserializer().jsonToSerial(((JsonExpansionDebugUnit)minecraft)
+                    .getJsonString());
             updateFileAndContentsState();
         }
     }

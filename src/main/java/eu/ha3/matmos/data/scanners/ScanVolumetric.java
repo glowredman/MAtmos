@@ -2,8 +2,6 @@ package eu.ha3.matmos.data.scanners;
 
 import net.minecraft.client.Minecraft;
 
-/* x-placeholder */
-
 public class ScanVolumetric implements Progress {
     private ScanOperations pipeline;
 
@@ -20,9 +18,8 @@ public class ScanVolumetric implements Progress {
     private boolean isScanning;
 
     private int finalProgress = 1;
-    private int progress = 1; // We don't want progress to be zero, to avoid divide by zero
-
-    //
+    // We don't want progress to be zero, to avoid divide by zero
+    private int progress = 1;
 
     private int xx;
     private int yy;
@@ -37,8 +34,7 @@ public class ScanVolumetric implements Progress {
         pipeline = pipelineIn;
     }
 
-    public void startScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn) //throws MAtScannerTooLargeException
-    {
+    public void startScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn) {
         if (isScanning) {
             return;
         }
@@ -97,7 +93,8 @@ public class ScanVolumetric implements Progress {
             if (xx == 0) {
                 zz = (zz + 1) % zsize;
                 if (zz == 0) {
-                    yy = yy + 1;
+                    yy++;
+
                     if (yy >= ysize && progress != finalProgress - 1) {
                         System.err.println("LOGIC ERROR");
                     }

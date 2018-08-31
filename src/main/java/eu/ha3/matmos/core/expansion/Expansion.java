@@ -26,15 +26,10 @@ import eu.ha3.matmos.core.sound.SoundAccessor;
 import eu.ha3.matmos.core.sound.SoundHelperRelay;
 import eu.ha3.matmos.data.Collector;
 import eu.ha3.matmos.data.modules.ModuleRegistry;
-import eu.ha3.matmos.debug.expansions.ExpansionDebugUnit;
-import eu.ha3.matmos.debug.expansions.FolderResourcePackEditableEDU;
-import eu.ha3.matmos.debug.expansions.ReadOnlyJasonStringEDU;
 import eu.ha3.util.property.simple.ConfigProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.FolderResourcePack;
 import net.minecraft.util.ResourceLocation;
-
-/* x-placeholder */
 
 public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated {
     private static ReferenceTime TIME = new SystemClock();
@@ -51,12 +46,9 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
     private boolean isActive;
     private boolean reliesOnLegacyModules;
 
-    //
-
     private Knowledge knowledge; // Knowledge is not final
-    private LoadingAgent agent;
 
-    //
+    private LoadingAgent agent;
     private LoadingAgent jasonDebugPush;
 
     public Expansion(ExpansionIdentity identity, DataPackage data, Collector collector, SoundAccessor accessor, VolumeContainer masterVolume, File configurationSource) {
@@ -197,7 +189,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
             return;
         }
 
-        if (getVolume() <= 0f) {
+        if (getVolume() <= 0) {
             return;
         }
 
@@ -208,8 +200,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
             if (isSuccessfullyBuilt) {
                 MAtLog.info("Expansion " + getName() + " built (" + stat.getSecondsAsString(3) + "s).");
             } else {
-                MAtLog.warning("Expansion "
-                        + getName() + " failed to build!!! (" + stat.getSecondsAsString(3) + "s).");
+                MAtLog.warning("Expansion " + getName() + " failed to build!!! (" + stat.getSecondsAsString(3) + "s).");
             }
         }
 
@@ -217,9 +208,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
             Set<String> requiredModules = knowledge.calculateRequiredModules();
             collector.addModuleStack(identity.getUniqueName(), requiredModules);
 
-            MAtLog.info("Expansion "
-                    + identity.getUniqueName() + " requires " + requiredModules.size() + " found modules: "
-                    + Arrays.toString(requiredModules.toArray()));
+            MAtLog.info("Expansion " + identity.getUniqueName() + " requires " + requiredModules.size() + " found modules: " + Arrays.toString(requiredModules.toArray()));
 
             List<String> legacyModules = new ArrayList<>();
             for (String module : requiredModules) {
@@ -229,9 +218,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
             }
             if (legacyModules.size() > 0) {
                 Collections.sort(legacyModules);
-                MAtLog.warning("Expansion "
-                        + identity.getUniqueName() + " uses LEGACY modules: "
-                        + Arrays.toString(legacyModules.toArray()));
+                MAtLog.warning("Expansion " + identity.getUniqueName() + " uses LEGACY modules: " + Arrays.toString(legacyModules.toArray()));
                 reliesOnLegacyModules = true;
             }
         }
@@ -287,8 +274,6 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
 
     /**
      * Obtain the providers of the knowledge, for debugging purposes.
-     *
-     * @return
      */
     public ProviderCollection obtainProvidersForDebugging() {
         return knowledge.obtainProviders();
@@ -307,24 +292,24 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
                     System.out.println(identity.getLocation().getPath());
                     final File file = new File(folder, "assets/matmos/" + identity.getLocation().getPath());
 
-                    return new FolderResourcePackEditableEDU() {
+                    return new FolderExpansionDebugUnit() {
                         @Override
-                        public Knowledge obtainKnowledge() {
+                        public Knowledge getKnowledge() {
                             return knowledge;
                         }
 
                         @Override
-                        public DataPackage obtainData() {
+                        public DataPackage getData() {
                             return data;
                         }
 
                         @Override
-                        public File obtainExpansionFile() {
+                        public File getExpansionFile() {
                             return file;
                         }
 
                         @Override
-                        public File obtainExpansionFolder() {
+                        public File getExpansionFolder() {
                             return folder;
                         }
                     };
@@ -334,34 +319,27 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
             e.printStackTrace();
         }
 
-        return new ReadOnlyJasonStringEDU() {
+        return new JsonExpansionDebugUnit() {
 
             @Override
-            public Knowledge obtainKnowledge() {
+            public Knowledge getKnowledge() {
                 return knowledge;
             }
 
             @Override
-            public DataPackage obtainData() {
+            public DataPackage getData() {
                 return data;
             }
 
             @Override
-            public String obtainJasonString() {
-                //Solly edit - resource leak
-                Scanner sc = null;
-                try {
-                    sc = new Scanner(identity.getPack().getInputStream(identity.getLocation()));
+            public String getJsonString() {
+                try (Scanner sc = new Scanner(identity.getPack().getInputStream(identity.getLocation()))) {
                     // XXX does not handle XML
                     return sc.useDelimiter("\\Z").next();
                 } catch (IOException e) {
                     e.printStackTrace();
                     System.err.println("Jason unavailable.");
                     return "{}";
-                } finally {
-                    if (sc != null) {
-                        sc.close();
-                    }
                 }
             }
         };
@@ -372,18 +350,11 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
     }
 
     public String getInfo() {
-        //Solly edit - resource leak
-        Scanner sc = null;
-        try {
-            sc = new Scanner(identity.getPack().getInputStream(new ResourceLocation("matmos", "info.txt")));
+        try (Scanner sc = new Scanner(identity.getPack().getInputStream(new ResourceLocation("matmos", "info.txt")))) {
             return sc.useDelimiter("\\Z").next();
         } catch (Exception e) {
             e.printStackTrace();
             return "Error while fetching info.txt";
-        } finally {
-            if (sc != null) {
-                sc.close();
-            }
         }
     }
 }
