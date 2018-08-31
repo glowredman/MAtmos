@@ -6,10 +6,6 @@ import eu.ha3.matmos.core.logic.Junction;
 import eu.ha3.matmos.core.logic.Machine;
 import eu.ha3.matmos.core.sheet.SheetCommander;
 
-/*
- * --filenotes-placeholder
- */
-
 public interface ProviderCollection {
     ReferenceTime getReferenceTime();
 

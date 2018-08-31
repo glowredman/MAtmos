@@ -2,10 +2,6 @@ package eu.ha3.matmos.core;
 
 import java.util.List;
 
-/*
- * --filenotes-placeholder
- */
-
 public class Possibilities extends Component implements PossibilityList {
     private final List<String> list;
 

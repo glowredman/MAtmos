@@ -26,8 +26,6 @@ import net.minecraft.client.resources.IResourcePack;
 public class Knowledge implements Evaluated, Simulated {
     private DataPackage data;
 
-    //
-
     private final Map<String, Dynamic> dynamicMapped = new TreeMap<>();
     private final Map<String, PossibilityList> possibilityMapped = new TreeMap<>();
     private final Map<String, Condition> conditionMapped = new TreeMap<>();
@@ -117,8 +115,6 @@ public class Knowledge implements Evaluated, Simulated {
 
     /**
      * This method must return an object that can be modified afterwards by something else.
-     *
-     * @return
      */
     public Set<String> calculateRequiredModules() {
         Set<String> requiredModules = new TreeSet<>();
@@ -187,9 +183,11 @@ public class Knowledge implements Evaluated, Simulated {
         for (Evaluated o : conditionMapped.values()) {
             o.evaluate();
         }
+
         for (Evaluated o : junctionMapped.values()) {
             o.evaluate();
         }
+
         for (Evaluated o : machineMapped.values()) {
             o.evaluate();
         }

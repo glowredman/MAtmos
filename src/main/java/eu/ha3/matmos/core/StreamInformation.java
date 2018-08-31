@@ -2,8 +2,6 @@ package eu.ha3.matmos.core;
 
 import eu.ha3.matmos.core.logic.Machine;
 
-/* x-placeholder */
-
 public class StreamInformation extends MultistateComponent implements Simulated {
     private String path;
     private float volume;
@@ -14,8 +12,6 @@ public class StreamInformation extends MultistateComponent implements Simulated 
     private float fadeOutTime;
     private boolean isLooping;
     private boolean usesPause;
-
-    //
 
     private final String machineName;
     private final Provider<Machine> provider;
@@ -79,7 +75,7 @@ public class StreamInformation extends MultistateComponent implements Simulated 
     @Override
     public void simulate() {
         if (!isLooping && usesPause) {
-            return; // FIXME: A non-looping sound cannot use the pause scheme. 
+            return; // FIXME: A non-looping sound cannot use the pause scheme.
         }
 
         if (isActive && !isPlaying) {

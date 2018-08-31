@@ -1,10 +1,6 @@
 package eu.ha3.matmos.core;
 
-/*
- * --filenotes-placeholder
- */
-
-public interface Versionned {
+public interface Versioned {
     /**
      * Gets the version of this. Starts at -1.
      *

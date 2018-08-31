@@ -1,7 +1,5 @@
 package eu.ha3.matmos.core;
 
-/* x-placeholder */
-
 public interface SoundRelay {
     void routine();
 
@@ -16,8 +14,6 @@ public interface SoundRelay {
     void startStreaming(int token, float fadeDuration);
 
     void stopStreaming(int token, float fadeDuration);
-
-    //public void pauseStreaming(int token, float fadeDuration);
 
     void eraseStreamingToken(int token);
 

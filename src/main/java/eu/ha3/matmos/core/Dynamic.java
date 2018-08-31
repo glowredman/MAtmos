@@ -8,8 +8,6 @@ import eu.ha3.matmos.core.sheet.SheetCommander;
 import eu.ha3.matmos.core.sheet.SheetIndex;
 import eu.ha3.matmos.util.math.LongFloatSimplificator;
 
-/* x-placeholder */
-
 public class Dynamic extends Component implements Evaluated, InformationContainer<Long>, Dependable {
     public static final String DEDICATED_SHEET = "_DYNAMIC";
 

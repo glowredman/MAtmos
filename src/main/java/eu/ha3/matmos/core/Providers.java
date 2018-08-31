@@ -6,10 +6,6 @@ import eu.ha3.matmos.core.logic.Junction;
 import eu.ha3.matmos.core.logic.Machine;
 import eu.ha3.matmos.core.sheet.SheetCommander;
 
-/*
- * --filenotes-placeholder
- */
-
 public class Providers implements ProviderCollection {
     private final ReferenceTime time;
     private final SoundRelay soundRelay;

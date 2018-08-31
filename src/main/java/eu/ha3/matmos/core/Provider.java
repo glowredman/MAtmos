@@ -2,10 +2,6 @@ package eu.ha3.matmos.core;
 
 import java.util.Set;
 
-/*
- * --filenotes-placeholder
- */
-
 public interface Provider<T> {
     /**
      * Returns whether a named object exists.

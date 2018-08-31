@@ -2,8 +2,6 @@ package eu.ha3.matmos.core;
 
 import java.util.List;
 
-/* x-placeholder */
-
 public class StringListContainer extends Component implements ListContainer {
     private final List<String> list;
 

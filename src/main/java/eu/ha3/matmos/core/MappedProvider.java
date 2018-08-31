@@ -3,11 +3,7 @@ package eu.ha3.matmos.core;
 import java.util.Map;
 import java.util.Set;
 
-/*
- * --filenotes-placeholder
- */
-
-public class MappedProvider<T extends Versionned> implements Provider<T> {
+public class MappedProvider<T extends Versioned> implements Provider<T> {
     private Map<String, T> map;
 
     public MappedProvider(Map<String, T> map) {

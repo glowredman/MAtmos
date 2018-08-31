@@ -3,8 +3,6 @@ package eu.ha3.matmos.core;
 import java.util.HashMap;
 import java.util.Map;
 
-/* x-placeholder */
-
 public enum Operator {
     ALWAYS_FALSE("ALWAYS_FALSE", "><") {
         @Override
@@ -117,9 +115,6 @@ public enum Operator {
 
     /**
      * Returns ALWAYS_FALSE in case the symbol doesn't exist or is null.
-     *
-     * @param  symbol
-     * @return
      */
     public static Operator fromSymbol(String symbol) {
         if (symbol == null || !fromSymbol.containsKey(symbol)) {

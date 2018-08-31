@@ -3,9 +3,7 @@ package eu.ha3.matmos.core;
 import java.util.HashSet;
 import java.util.Set;
 
-/* x-placeholder */
-
-public abstract class Component implements Named, Versionned {
+public abstract class Component implements Named, Versioned {
     private final String name;
     private final Set<VersionListener> listeners;
     private int version;
