@@ -1,35 +1,29 @@
 package eu.ha3.matmos.gui;
 
 import eu.ha3.matmos.MAtMod;
-import eu.ha3.mc.gui.HDisplayStringProvider;
 import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 
 import java.io.IOException;
-
-/* x-placeholder */
 
 public class MAtGuiMore extends GuiScreen {
     private final int IDS_PER_PAGE = 5;
 
     private GuiScreen parentScreen;
 
-    protected String screenTitle;
-
     private MAtMod mod;
 
-    private int buttonId;
+    private int buttonId = -1;
 
-    public MAtGuiMore(GuiScreen par1GuiScreen, MAtMod matmos) {
-        this.screenTitle = "MAtmos Advanced options";
-        this.buttonId = -1;
-        this.parentScreen = par1GuiScreen;
-        this.mod = matmos;
+    public MAtGuiMore(GuiScreen parent, MAtMod matmos) {
+        parentScreen = parent;
+        mod = matmos;
     }
 
     @Override
@@ -40,125 +34,89 @@ public class MAtGuiMore extends GuiScreen {
 
         final int _MIX = _GAP + _UNIT;
 
-        final int _LEFT = this.width / 2 - _WIDTH / 2;
+        final int _LEFT = width / 2 - _WIDTH / 2;
 
         final int _SEPARATOR = 10;
         final int _TURNOFFWIDTH = _WIDTH / 5;
 
-        this.buttonList.add(new GuiButton(211, _LEFT + _MIX, _MIX * (0 + 1), _WIDTH - _MIX * 2, _UNIT, this.mod
-                .getConfig().getBoolean("reversed.controls") ? "Menu: Hold Down Key to open" : "Menu: Press Key to open"));
+        buttonList.add(new GuiButton(211, _LEFT + _MIX, _MIX * (0 + 1), _WIDTH - _MIX * 2, _UNIT, mod.getConfig().getBoolean("reversed.controls") ? "Menu: Hold Down Key to open" : "Menu: Press Key to open"));
 
-        this.buttonList.add(new GuiButton(212, _LEFT + _MIX, _MIX * (1 + 1), _WIDTH - _MIX * 2, _UNIT, this.mod
-                .getConfig().getBoolean("useroptions.altitudes.low")
-                        ? "Low-altitude ambiences: ON" : "Low-altitude ambiences: OFF"));
+        buttonList.add(new GuiButton(212, _LEFT + _MIX, _MIX * (1 + 1), _WIDTH - _MIX * 2, _UNIT, formatOpt("mat.options.ambience.low", mod.getConfig().getBoolean("useroptions.altitudes.low"))));
+        buttonList.add(new GuiButton(213, _LEFT + _MIX, _MIX * (2 + 1), _WIDTH - _MIX * 2, _UNIT, formatOpt("mat.options.ambience.high", mod.getConfig().getBoolean("useroptions.altitudes.high"))));
 
-        this.buttonList.add(new GuiButton(213, _LEFT + _MIX, _MIX * (2 + 1), _WIDTH - _MIX * 2, _UNIT, this.mod
-                .getConfig().getBoolean("useroptions.altitudes.high")
-                        ? "High-altitude ambiences: ON" : "High-altitude ambiences: OFF"));
-
-        MAtGuiBiomeSlider biomeSlider = new MAtGuiBiomeSlider(this.mod, this.mod.getConfig().getInteger("useroptions.biome.override"));
-        HGuiSliderControl biomeControl = new HGuiSliderControl(
-                214, _LEFT, _MIX * (3 + 1), _WIDTH, _UNIT, "", biomeSlider.calculateSliderLocation(this.mod
-                        .getConfig().getInteger("useroptions.biome.override")));
+        MAtGuiBiomeSlider biomeSlider = new MAtGuiBiomeSlider(mod, mod.getConfig().getInteger("useroptions.biome.override"));
+        HGuiSliderControl biomeControl = new HGuiSliderControl(214, _LEFT, _MIX * (3 + 1), _WIDTH, _UNIT, "", biomeSlider.calculateSliderLocation(mod.getConfig().getInteger("useroptions.biome.override")));
 
         biomeControl.setListener(biomeSlider);
         biomeControl.setDisplayStringProvider(biomeSlider);
         biomeControl.updateDisplayString();
-        this.buttonList.add(biomeControl);
+        buttonList.add(biomeControl);
 
-        HGuiSliderControl ambienceVolume = new HGuiSliderControl(216, _LEFT, _MIX * (4 + 1), _WIDTH, _UNIT, "", this.mod.getConfig().getFloat(
-                "minecraftsound.ambient.volume"));
+        HGuiSliderControl ambienceVolume = new HGuiSliderControl(216, _LEFT, _MIX * (4 + 1), _WIDTH, _UNIT, "", mod.getConfig().getFloat("minecraftsound.ambient.volume"));
         ambienceVolume.setListener(new HSliderListener() {
 
             @Override
             public void sliderValueChanged(HGuiSliderControl slider, float value) {
                 Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.AMBIENT, value);
-                MAtGuiMore.this.mod.getConfig().setProperty("minecraftsound.ambient.volume", value);
+                mod.getConfig().setProperty("minecraftsound.ambient.volume", value);
                 slider.updateDisplayString();
             }
 
             @Override
             public void sliderReleased(HGuiSliderControl hGuiSliderControl) {
-                MAtGuiMore.this.mod.saveConfig();
+                mod.saveConfig();
                 Minecraft.getMinecraft().gameSettings.saveOptions();
             }
-
-            @Override
-            public void sliderPressed(HGuiSliderControl hGuiSliderControl) {
-            }
         });
-        ambienceVolume.setDisplayStringProvider(new HDisplayStringProvider() {
-            @Override
-            public String provideDisplayString() {
-                return "Minecraft base Ambient/Environment volume: "
-                        + (int)Math.floor(MAtGuiMore.this.mod.getConfig().getFloat("minecraftsound.ambient.volume") * 100)
-                        + "%";
-            }
+        ambienceVolume.setDisplayStringProvider(() -> {
+            return I18n.format("mat.options.volume.ambient", (int)Math.floor(mod.getConfig().getFloat("minecraftsound.ambient.volume") * 100) + "%");
         });
         ambienceVolume.updateDisplayString();
-        this.buttonList.add(ambienceVolume);
-
-        this.buttonList.add(new GuiButton(215, _LEFT + _MIX, _MIX * (6 + 1), _WIDTH - _MIX * 2, _UNIT, this.mod
-                .getConfig().getInteger("debug.mode") == 1
-                        ? TextFormatting.GOLD + "Dev/Editor mode: ON" : "Dev/Editor mode: OFF"));
-
-        this.buttonList.add(new GuiButton(200, _LEFT + _MIX, _SEPARATOR + _MIX * (this.IDS_PER_PAGE + 4), _WIDTH
-                - _MIX * 2 - _GAP - _TURNOFFWIDTH, _UNIT, "Done"));
+        buttonList.add(ambienceVolume);
+        buttonList.add(new GuiButton(215, _LEFT + _MIX, _MIX * (6 + 1), _WIDTH - _MIX * 2, _UNIT, formatOpt("mat.options.devmode", mod.getConfig().getInteger("debug.mode") == 1)));
+        buttonList.add(new GuiButton(200, _LEFT + _MIX, _SEPARATOR + _MIX * (IDS_PER_PAGE + 4), _WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.done")));
     }
 
     @Override
-    protected void actionPerformed(GuiButton par1GuiButton) {
-        if (par1GuiButton.id == 200) {
-            this.mc.displayGuiScreen(this.parentScreen);
-        } else if (par1GuiButton.id == 211) {
-            this.mod
-                    .getConfig().setProperty("reversed.controls", !this.mod.getConfig().getBoolean("reversed.controls"));
-            par1GuiButton.displayString = this.mod.getConfig().getBoolean("reversed.controls")
-                    ? "Menu: Hold Down Key to open" : "Menu: Press Key to open";
-            this.mod.saveConfig();
-        } else if (par1GuiButton.id == 212) {
-            this.mod.getConfig().setProperty(
-                    "useroptions.altitudes.low", !this.mod.getConfig().getBoolean("useroptions.altitudes.low"));
-            par1GuiButton.displayString = this.mod.getConfig().getBoolean("useroptions.altitudes.low")
-                    ? "Low-altitude ambiences: ON" : "Low-altitude ambiences: OFF";
-            this.mod.saveConfig();
-        } else if (par1GuiButton.id == 213) {
-            this.mod.getConfig().setProperty(
-                    "useroptions.altitudes.high", !this.mod.getConfig().getBoolean("useroptions.altitudes.high"));
-            par1GuiButton.displayString = this.mod.getConfig().getBoolean("useroptions.altitudes.high")
-                    ? "High-altitude ambiences: ON" : "High-altitude ambiences: OFF";
-            this.mod.saveConfig();
-        }
-        /*else if (par1GuiButton.id == 214)
-        {
-        	this.mod.getConfig().setProperty(
-        		"world.height", 256 + (this.mod.getConfig().getInteger("world.height") - 128) % 896);
-        	par1GuiButton.displayString = "Use custom world height: " + this.mod.getConfig().getInteger("world.height");
-        	this.mod.saveConfig();
-        }*/
-        else if (par1GuiButton.id == 215) {
-            this.mod.getConfig().setProperty("debug.mode", this.mod.getConfig().getInteger("debug.mode") == 0 ? 1 : 0);
-            par1GuiButton.displayString = this.mod.getConfig().getInteger("debug.mode") == 1 ? TextFormatting.GOLD + "Dev/Editor mode: ON" : "Dev/Editor mode: OFF";
-            this.mod.changedDebugMode();
-            this.mod.saveConfig();
+    protected void actionPerformed(GuiButton button) {
+        if (button.id == 200) {
+            mc.displayGuiScreen(parentScreen);
+        } else if (button.id == 211) {            
+            mod.getConfig().setProperty("reversed.controls", !mod.getConfig().getBoolean("reversed.controls"));
+            button.displayString = mod.getConfig().getBoolean("reversed.controls") ? "Menu: Hold Down Key to open" : "Menu: Press Key to open";
+            mod.saveConfig();
+        } else if (button.id == 212) {
+            toggleOption("useroptions.altitudes.low", "mat.options.ambience.low", button);
+        } else if (button.id == 213) {
+            toggleOption("useroptions.altitudes.high", "mat.options.ambience.high", button);
+        } else if (button.id == 215) {
+            mod.getConfig().setProperty("debug.mode", mod.getConfig().getInteger("debug.mode") == 0 ? 1 : 0);
+            button.displayString = mod.getConfig().getInteger("debug.mode") == 1 ? TextFormatting.GOLD + "Dev/Editor mode: ON" : "Dev/Editor mode: OFF";
+            mod.changedDebugMode();
+            mod.saveConfig();
         }
 
     }
-
-    private void aboutToClose() {
-        this.mod.saveConfig();
+    
+    private void toggleOption(String key, String name, GuiButton button) {
+        mod.getConfig().setProperty(key, !mod.getConfig().getBoolean(key));
+        mod.saveConfig();
+        
+        button.displayString = formatOpt(name, mod.getConfig().getBoolean(key));
+    }
+    
+    private String formatOpt(String key, boolean value) {
+        return I18n.format(key) + ": " + I18n.format("mat." + value);
     }
 
     @Override
     public void onGuiClosed() {
-        aboutToClose();
-
+        mod.saveConfig();
     }
 
-    // dag edit + throws IOException
     @Override
     protected void mouseClicked(int par1, int par2, int par3) throws IOException {
-        if (this.buttonId < 0) {
+        if (buttonId < 0) {
             super.mouseClicked(par1, par2, par3);
         }
     }
@@ -170,21 +128,18 @@ public class MAtGuiMore extends GuiScreen {
         final int _MIX = _GAP + _UNIT;
         final int _SEPARATOR = 10;
 
-        if (!this.mod.isDebugMode()) {
-            drawGradientRect(0, 0, this.width, this.height, 0xC0000000, 0x60000000);
-            drawCenteredString(this.fontRenderer, "MAtmos Advanced options", this.width / 2, 8, 0xffffff);
+        if (!mod.isDebugMode()) {
+            drawGradientRect(0, 0, width, height, 0xC0000000, 0x60000000);
+            drawCenteredString(fontRenderer, I18n.format("mat.title.advanced"), width / 2, 8, 0xffffff);
         } else {
+            drawGradientRect(0, 0, width, height, 0xC0C06000, 0x60C06000);
+            drawCenteredString(fontRenderer, I18n.format("mat.title.advanced") + "(Dev mode)", width / 2, 8, 0xffffff);
 
-            drawGradientRect(0, 0, this.width, this.height, 0xC0C06000, 0x60C06000);
-            drawCenteredString(this.fontRenderer, "MAtmos Advanced options " + TextFormatting.GOLD + "(Dev mode)", this.width / 2, 8, 0xffffff);
-
-            drawCenteredString(this.fontRenderer, TextFormatting.YELLOW
-                    + "Dev mode is enabled. This may cause Minecraft to run slower.", this.width / 2, _SEPARATOR
-                            + _MIX * (this.IDS_PER_PAGE + 3) - 9, 0xffffff);
+            drawCenteredString(fontRenderer, I18n.format("mat.title.devmode"), width / 2, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3) - 9, 0xffffff);
         }
 
-        this.mod.util().prepareDrawString();
-        this.mod.util().drawString(TextFormatting.GRAY.toString() + this.mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0, 0, '3', 0, 0, 0, 0, true);
+        mod.util().prepareDrawString();
+        mod.util().drawString(I18n.format("mat.resources.lag", mod.getLag().getMilliseconds()), 1f, 1f, 0, 0, '3', 0, 0, 0, 0, true);
 
         super.drawScreen(par1, par2, par3);
 

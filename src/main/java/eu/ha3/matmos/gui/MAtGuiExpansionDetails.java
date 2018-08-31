@@ -11,15 +11,11 @@ import eu.ha3.matmos.game.user.VisualExpansionDebugging;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
 
 import java.io.File;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
-
-/*
- * --filenotes-placeholder
- */
 
 public class MAtGuiExpansionDetails extends GuiScreen {
     private final MAtGuiMenu parentScreen;
@@ -38,9 +34,7 @@ public class MAtGuiExpansionDetails extends GuiScreen {
     public void drawScreen(int par1, int par2, float par3) {
         drawGradientRect(0, 0, this.width, this.height, 0xF0000000, 0x90000000);
 
-        drawCenteredString(this.fontRenderer, TextFormatting.GOLD + "Dev mode: Viewing " + TextFormatting.YELLOW
-                + TextFormatting.ITALIC + this.expansion.getFriendlyName() + " (" + this.expansion.getName() + ")",
-                this.width / 2, 4, 0xffffff);
+        drawCenteredString(this.fontRenderer, I18n.format("mat.mode.dev", this.expansion.getFriendlyName(), this.expansion.getName()), this.width / 2, 4, 0xffffff);
 
         this.debug.onFrame(0f);
 
@@ -54,78 +48,74 @@ public class MAtGuiExpansionDetails extends GuiScreen {
 
     @Override
     public void initGui() {
-        final int _GAP = 2;
-        final int _UNIT = 20;
+        int h = new ScaledResolution(this.mc).getScaledHeight() - 22;
 
-        int h = new ScaledResolution(this.mc).getScaledHeight();
-        h = h - _UNIT - _GAP;
-
-        this.buttonList.add(new GuiButton(200, _GAP, h, 70, _UNIT, "Close"));
-        this.buttonList
-                .add(new GuiButton(201, _GAP * 2 + 70, h, 70, _UNIT, TextFormatting.GOLD + "Use in OSD"));
-        this.buttonList.add(new GuiButton(202, _GAP * 3 + 70 * 2, h, 70, _UNIT, "Reload file"));
-        if (this.mod.isEditorAvailable()) {
-            this.buttonList.add(new GuiButton(203, _GAP * 4 + 70 * 3, h, 110, _UNIT, "Open in Editor..."));
-        } else {
-            this.buttonList.add(new GuiButton(203, _GAP * 4 + 70 * 3 + 110, h, 220, _UNIT, "Editor Unavailable"));
-        }
-        this.buttonList.add(new GuiButton(204, _GAP * 5 + 70 * 3 + 110, h, 96, _UNIT, "Make sounds.json"));
+        buttonList.add(new GuiButton(200, 2, h, 70, 20, I18n.format("mat.options.close")));
+        buttonList.add(new GuiButton(201, 4 + 70, h, 70, 20, I18n.format("mat.options.osd")));
+        buttonList.add(new GuiButton(202, 6 + 70 * 2, h, 70, 20, I18n.format("mat.options.reload")));
+        
+        String editor = I18n.format(mod.isEditorAvailable() ? "mat.options.editor" : "mat.options.editor.disabled");
+        
+        buttonList.add(new GuiButton(203, 8 + 70 * 3, h, 110, 20, editor));
+        buttonList.add(new GuiButton(204, 10 + 70 * 3 + 110, h, 96, 20, I18n.format("mat.options.sounds")));
     }
 
     @Override
-    protected void actionPerformed(GuiButton par1GuiButton) {
-        Minecraft mc = Minecraft.getMinecraft();
-
-        if (par1GuiButton.id == 200) {
+    protected void actionPerformed(GuiButton button) {
+        if (button.id == 200) {
             // This triggers onGuiClosed
             mc.displayGuiScreen(this.parentScreen);
-        } else if (par1GuiButton.id == 201) {
+        } else if (button.id == 201) {
             this.mod.getVisualDebugger().debugModeExpansion(this.debug);
-
-            // This triggers onGuiClosed
             mc.displayGuiScreen(null);
-        } else if (par1GuiButton.id == 202) {
+        } else if (button.id == 202) {
             this.expansion.refreshKnowledge();
-        } else if (par1GuiButton.id == 203 && this.mod.isEditorAvailable()) {
+        } else if (button.id == 203 && this.mod.isEditorAvailable()) {
             final ExpansionDebugUnit debugUnit = this.expansion.obtainDebugUnit();
             if (debugUnit != null) {
                 PluggableIntoMAtmos plug = new PluggableIntoMAtmos(this.mod, this.expansion);
 
                 Runnable editor = this.mod.instantiateRunnableEditor(plug);
                 if (editor != null) {
-                    new Thread(editor, "EditorWindow_for_" + this.expansion.getName()).start();
+                    new Thread(editor, "EditorWindow_for_" + expansion.getName()).start();
 
                     if (debugUnit instanceof ReadOnlyJasonStringEDU) {
                         // XXX Read only mode
-                        this.mod.getChatter().printChat(TextFormatting.RED, "Expansions inside ZIP files are not supported in this version.");
-                        this.mod.getChatter().printChatShort(TextFormatting.RED, "Please unzip the resource packs to be able to view them.");
+                        mod.getChatter().printChat(TextFormatting.RED, I18n.format("mat.zip.unsupported"));
+                        mod.getChatter().printChatShort(TextFormatting.RED, I18n.format("mat.zip.unzip"));
                     }
                 } else {
-                    this.mod.getChatter().printChat(TextFormatting.RED, "Could not start editor for an unknown reason.");
+                    mod.getChatter().printChat(TextFormatting.RED, "Could not start editor for an unknown reason.");
                 }
             }
-        } else if (par1GuiButton.id == 204) {
-            final ExpansionDebugUnit debugUnit = this.expansion.obtainDebugUnit();
+        } else if (button.id == 204) {
+            final ExpansionDebugUnit debugUnit = expansion.obtainDebugUnit();
+            
             if (debugUnit instanceof FolderResourcePackEditableEDU) {
+                
                 File expFolder = ((FolderResourcePackEditableEDU)debugUnit).obtainExpansionFolder();
                 File minecraftFolder = new File(expFolder, "assets/minecraft/");
+                
                 if (minecraftFolder.exists()) {
+                    
                     File soundsFolder = new File(minecraftFolder, "sounds/");
                     File jsonFile = new File(minecraftFolder, "sounds.json");
+                    
                     if (soundsFolder.exists()) {
                         try {
                             new SoundsJsonGenerator(soundsFolder, jsonFile).run();
-                            this.mod.getChatter().printChat("File generated in " + jsonFile.getAbsolutePath());
-                            this.mod.getChatter().printChatShort("Changes will be applied next time Resource Packs are reloaded.");
+                            
+                            this.mod.getChatter().printChat(I18n.format("mat.generator.done", jsonFile.getAbsolutePath()));
+                            this.mod.getChatter().printChatShort(I18n.format("mat.generator.plswait"));
                         } catch (Exception e) {
                             e.printStackTrace(System.out);
-                            IDontKnowHowToCode.whoops__printExceptionToChat(this.mod.getChatter(), e, this);
+                            IDontKnowHowToCode.whoops__printExceptionToChat(mod.getChatter(), e, this);
                         }
                     } else {
-                        this.mod.getChatter().printChat(TextFormatting.RED, "Create the sounds/ folder first.");
+                        mod.getChatter().printChat(TextFormatting.RED, I18n.format("mat.folders.sounds"));
                     }
                 } else {
-                    this.mod.getChatter().printChat(TextFormatting.RED, "Create the minecraft/ folder first.");
+                    mod.getChatter().printChat(TextFormatting.RED, I18n.format("mat.folders.mc"));
                 }
             }
         }

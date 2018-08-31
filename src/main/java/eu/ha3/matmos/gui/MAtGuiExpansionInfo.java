@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
 
 public class MAtGuiExpansionInfo extends GuiScreen {
@@ -19,7 +20,8 @@ public class MAtGuiExpansionInfo extends GuiScreen {
         this.parentScreen = menu;
         this.expansion = expansion;
 
-        this.info = expansion.hasMoreInfo() ? expansion.getInfo().replace("\r", "").replace("�", "\u00A7").split("\n") : new String[] {"No info.txt available."};
+        String info = expansion.hasMoreInfo() ? expansion.getInfo() : I18n.format("mat.expansion.noinfo");
+        this.info = info.replace("\r", "").replace("�", "\u00A7").split("\n");
     }
 
     @Override
@@ -46,7 +48,7 @@ public class MAtGuiExpansionInfo extends GuiScreen {
     public void initGui() {
         int h = new ScaledResolution(this.mc).getScaledHeight() - 22;
 
-        this.buttonList.add(new GuiButton(200, 2, h, 70, 20, "Close"));
+        buttonList.add(new GuiButton(200, 2, h, 70, 20, I18n.format("mat.options.close")));
     }
 
     @Override

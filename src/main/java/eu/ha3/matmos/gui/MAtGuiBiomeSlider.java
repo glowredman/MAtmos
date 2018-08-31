@@ -4,14 +4,14 @@ import eu.ha3.matmos.MAtMod;
 import eu.ha3.mc.gui.HDisplayStringProvider;
 import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.RegistryNamespaced;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.StringUtils;
 import net.minecraft.world.biome.Biome;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/* x-placeholder */
+import javax.annotation.Nullable;
 
 public class MAtGuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
     final protected MAtMod mod;
@@ -29,62 +29,84 @@ public class MAtGuiBiomeSlider implements HDisplayStringProvider, HSliderListene
     }
 
     private void computeBiomes() {
-        RegistryNamespaced<ResourceLocation, Biome> biomes = Biome.REGISTRY;
-
-        for (Biome i : biomes) {
-            int id = biomes.getIDForObject(i);
-            validBiomes.add(id);
+        for (Biome i : Biome.REGISTRY) {
+            validBiomes.add(Biome.REGISTRY.getIDForObject(i));
         }
     }
 
     @Override
     public void sliderValueChanged(HGuiSliderControl slider, float value) {
-        int biomeID = (int)(Math.floor(value * this.validBiomes.size()) - 1);
-        this.definedBiomeID = biomeID >= 0 && biomeID < this.validBiomes.size() ? this.validBiomes.get(biomeID) : biomeID;
+        int biomeID = (int)(Math.floor(value * validBiomes.size()) - 1);
+        
+        this.definedBiomeID = biomeID >= 0 && biomeID < this.validBiomes.size() ? validBiomes.get(biomeID) : biomeID;
 
         slider.updateDisplayString();
     }
 
     @Override
-    public void sliderPressed(HGuiSliderControl hGuiSliderControl) {
-    }
-
-    @Override
     public void sliderReleased(HGuiSliderControl hGuiSliderControl) {
-        this.mod.getConfig().setProperty("useroptions.biome.override", this.definedBiomeID);
-        this.mod.saveConfig();
+        mod.getConfig().setProperty("useroptions.biome.override", definedBiomeID);
+        mod.saveConfig();
     }
 
     @Override
     public String provideDisplayString() {
-        final String base = "Override biome detection: ";
-        // biomeList
+        String desc = getDescriptorString();
+        
+        if (desc == null) {
+            return "";
+        }
+        
+        return I18n.format("mat.biome.override", desc);
+    }
+    
+    @Nullable
+    protected String getDescriptorString() {
         if (definedBiomeID >= 0 && definedBiomeID <= maxBiomes) {
             Biome biome = Biome.getBiomeForId(definedBiomeID);
-            if (biome == null) return base + "Undefined biome (" + definedBiomeID + ")";
-            if (biome.getBiomeName().equals("")) return base + "Unnamed biome (" + definedBiomeID + ")";
+            
+            if (biome == null) {
+                return I18n.format("mat.biome.undef", definedBiomeID);
+            }
+            
+            if (StringUtils.isNullOrEmpty(biome.getBiomeName())) {
+                return I18n.format("mat.biome.unamed", definedBiomeID);
+            }
 
-            return base + "Only " + biome.getBiomeName() + " (" + definedBiomeID + ")";
+            return I18n.format("mat.biome.biome", biome.getBiomeName(), definedBiomeID);
         }
-        if (definedBiomeID == -1) return base + "Disabled (use current biome)";
+        
+        if (definedBiomeID == -1) {
+            return I18n.format("mat.biome.disabled");
+        }
 
-        return "";
+        return null;
     }
 
     public float calculateSliderLocation(int biomeID) {
-        if (this.validBiomes.contains(biomeID)) return (this.validBiomes.indexOf(biomeID) + 1f) / this.validBiomes.size();
-        else if (biomeID == -1) return 0;
-        else return 1f;
+        
+        if (biomeID == -1) {
+            return 0;
+        }
+        
+        if (validBiomes.contains(biomeID)) {
+            return (validBiomes.indexOf(biomeID) + 1) / validBiomes.size();
+        }
+        
+        return 1;
     }
 
     private int calculateMaxBiomes() {
-        RegistryNamespaced<ResourceLocation, Biome> biomes = Biome.REGISTRY;
         int max = 0;
 
-        for (Biome i : biomes) {
-            int id = biomes.getIDForObject(i);
-            if (id > max) max = id;
+        for (Biome i : Biome.REGISTRY) {
+            int id = Biome.REGISTRY.getIDForObject(i);
+            
+            if (id > max) {
+                max = id;
+            }
         }
+        
         return max;
     }
 

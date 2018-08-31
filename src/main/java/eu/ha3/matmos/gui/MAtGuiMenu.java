@@ -9,14 +9,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiScreenResourcePacks;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
 
 import java.io.IOException;
 import java.util.*;
-
-/*
- * --filenotes-placeholder
- */
 
 public class MAtGuiMenu extends GuiScreen {
     private GuiScreen parentScreen;
@@ -28,7 +25,7 @@ public class MAtGuiMenu extends GuiScreen {
     private int pageFromZero;
     private final int IDS_PER_PAGE = 5;
 
-    private List<Expansion> expansionList;
+    private final List<Expansion> expansionList = new ArrayList<Expansion>();
 
     // Keep the active page in memory. Globally... (herpderp)
     private static int in_memory_page = 0;
@@ -42,8 +39,6 @@ public class MAtGuiMenu extends GuiScreen {
         this.parentScreen = par1GuiScreen;
         this.mod = matmos;
         this.pageFromZero = pageFromZero;
-
-        this.expansionList = new ArrayList<Expansion>();
 
         in_memory_page = this.pageFromZero;
     }
@@ -78,7 +73,7 @@ public class MAtGuiMenu extends GuiScreen {
                 MAtGuiMenu.this.mod.getConfig().setProperty("globalvolume.scale", globalVolumeControl.getVolume());
             });
             sliderControl.setDisplayStringProvider(() -> {
-                return "Global Volume Control: " + (int)Math.floor(globalVolumeControl.getVolume() * 100) + "%";
+                return I18n.format("mat.options.volume", (int)Math.floor(globalVolumeControl.getVolume() * 100) + "%");
             });
             sliderControl.updateDisplayString();
 
@@ -137,31 +132,20 @@ public class MAtGuiMenu extends GuiScreen {
             this.buttonList.add(sliderControl);
 
             if (!this.mod.isDebugMode()) {
-                this.buttonList.add(new GuiButton(Make.make(new ActionPerformed() {
-                    @Override
-                    public void actionPerformed() {
-                        if (expansion.isActivated()) {
-                            expansion.playSample();
-                        }
+                buttonList.add(new GuiButton(Make.make(() -> {
+                    if (expansion.isActivated()) {
+                        expansion.playSample();
                     }
                 }), _RIGHT - _UNIT, _MIX * (id + 1), _UNIT, _UNIT, "?"));
 
                 if (expansion.hasMoreInfo()) {
-                    this.buttonList.add(new GuiButton(Make.make(new ActionPerformed() {
-                        @Override
-                        public void actionPerformed() {
-                            MAtGuiMenu.this.mc.displayGuiScreen(new MAtGuiExpansionInfo(
-                                    MAtGuiMenu.this, MAtGuiMenu.this.mod, expansion));
-                        }
+                    buttonList.add(new GuiButton(Make.make(() -> {
+                        mc.displayGuiScreen(new MAtGuiExpansionInfo(this, mod, expansion));
                     }), _RIGHT + _GAP, _MIX * (id + 1), _UNIT, _UNIT, "..."));
                 }
             } else {
-                this.buttonList.add(new GuiButton(Make.make(new ActionPerformed() {
-                    @Override
-                    public void actionPerformed() {
-                        MAtGuiMenu.this.mc.displayGuiScreen(new MAtGuiExpansionDetails(
-                                MAtGuiMenu.this, MAtGuiMenu.this.mod, expansion));
-                    }
+                this.buttonList.add(new GuiButton(Make.make(() -> {
+                    mc.displayGuiScreen(new MAtGuiExpansionDetails(this, mod, expansion));
                 }), _RIGHT - _UNIT, _MIX * (id + 1), _UNIT, _UNIT, TextFormatting.GOLD + "+"));
             }
 
@@ -170,39 +154,25 @@ public class MAtGuiMenu extends GuiScreen {
         }
 
         if (!this.mod.isDebugMode()) {
-            this.buttonList.add(new GuiButton(
-                    220, _RIGHT - _UNIT, _MIX * (this.IDS_PER_PAGE + 2), _UNIT, _UNIT, isAutopreviewEnabled()
-                            ? "^o^" : "^_^"));
+            this.buttonList.add(new GuiButton(220, _RIGHT - _UNIT, _MIX * (this.IDS_PER_PAGE + 2), _UNIT, _UNIT, isAutopreviewEnabled() ? "^o^" : "^_^"));
         } else {
-            this.buttonList.add(new GuiButton(
-                    230, _RIGHT - _UNIT, _MIX * (this.IDS_PER_PAGE + 2), 40, _UNIT, TextFormatting.GOLD + "OSD"));
+            this.buttonList.add(new GuiButton(230, _RIGHT - _UNIT, _MIX * (this.IDS_PER_PAGE + 2), 40, _UNIT, TextFormatting.GOLD + "OSD"));
         }
 
         if (this.pageFromZero != 0) {
-            this.buttonList.add(new GuiButton(
-                    201, _LEFT + _MIX, _MIX * (this.IDS_PER_PAGE + 2), _PREVNEWTWIDTH, _UNIT, "Previous"));
+            this.buttonList.add(new GuiButton(201, _LEFT + _MIX, _MIX * (this.IDS_PER_PAGE + 2), _PREVNEWTWIDTH, _UNIT, I18n.format("mat.options.prev")));
         }
         if (this.pageFromZero * this.IDS_PER_PAGE + this.IDS_PER_PAGE < sortedNames.size()) {
-            this.buttonList.add(new GuiButton(
-                    202, _RIGHT - _MIX - _PREVNEWTWIDTH, _MIX * (this.IDS_PER_PAGE + 2), _PREVNEWTWIDTH, _UNIT, "Next"));
+            this.buttonList.add(new GuiButton(202, _RIGHT - _MIX - _PREVNEWTWIDTH, _MIX * (this.IDS_PER_PAGE + 2), _PREVNEWTWIDTH, _UNIT, I18n.format("mat.options.next")));
         }
 
-        this.buttonList.add(new GuiButton(
-                210, _LEFT, _SEPARATOR + _MIX * (this.IDS_PER_PAGE + 3), _AWID, _UNIT, this.mod.getConfig().getBoolean(
-                        "start.enabled") ? "Start Enabled: ON" : "Start Enabled: OFF"));
-
-        this.buttonList.add(new GuiButton(
-                211, _LEFT + _AWID + _GAP, _SEPARATOR + _MIX * (this.IDS_PER_PAGE + 3), _AWID, _UNIT, (this.mod
-                        .isDebugMode() ? TextFormatting.GOLD : "") + "Advanced options..."));
+        this.buttonList.add(new GuiButton(210, _LEFT, _SEPARATOR + _MIX * (this.IDS_PER_PAGE + 3), _AWID, _UNIT, I18n.format("mat.options.start." + mod.getConfig().getBoolean("start.enabled"))));
+        this.buttonList.add(new GuiButton(211, _LEFT + _AWID + _GAP, _SEPARATOR + _MIX * (this.IDS_PER_PAGE + 3), _AWID, _UNIT, (this.mod.isDebugMode() ? TextFormatting.GOLD : "") + I18n.format("mat.options.advanced")));
 
         final int _TURNOFFWIDTH = _ELEMENT_WIDTH / 5;
 
-        this.buttonList.add(new GuiButton(
-                200, _LEFT + _MIX, _SEPARATOR + _MIX * (this.IDS_PER_PAGE + 4), _ELEMENT_WIDTH
-                        - _MIX * 2 - _GAP - _TURNOFFWIDTH, _UNIT, "Done"));
-
-        this.buttonList.add(new GuiButton(212, _RIGHT - _TURNOFFWIDTH - _MIX, _SEPARATOR
-                + _MIX * (this.IDS_PER_PAGE + 4), _TURNOFFWIDTH, _UNIT, "Turn Off"));
+        this.buttonList.add(new GuiButton(200, _LEFT + _MIX, _SEPARATOR + _MIX * (this.IDS_PER_PAGE + 4), _ELEMENT_WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH, _UNIT, "Done"));
+        this.buttonList.add(new GuiButton(212, _RIGHT - _TURNOFFWIDTH - _MIX, _SEPARATOR + _MIX * (this.IDS_PER_PAGE + 4), _TURNOFFWIDTH, _UNIT, "Turn Off"));
 
         if (!this.mod.hasResourcePacksLoaded()) {
             this.buttonList.add(new GuiButton(199, _LEFT + _MIX, _SEPARATOR + _MIX * (this.IDS_PER_PAGE + 1), _ELEMENT_WIDTH - _MIX * 2, _UNIT, (this.mod.hasNonethelessResourcePacksInstalled() ? "Enable" : "Install") + " MAtmos Resource Pack"));
@@ -220,13 +190,13 @@ public class MAtGuiMenu extends GuiScreen {
             // This triggers onGuiClosed
             this.mc.displayGuiScreen(new GuiScreenResourcePacks(this));
         } else if (par1GuiButton.id == 201) {
-            mc.displayGuiScreen(new MAtGuiMenu(this.parentScreen, this.mod, this.pageFromZero - 1));
+            mc.displayGuiScreen(new MAtGuiMenu(parentScreen, mod, pageFromZero - 1));
         } else if (par1GuiButton.id == 202) {
-            mc.displayGuiScreen(new MAtGuiMenu(this.parentScreen, this.mod, this.pageFromZero + 1));
+            mc.displayGuiScreen(new MAtGuiMenu(parentScreen, mod, pageFromZero + 1));
         } else if (par1GuiButton.id == 210) {
             boolean newEnabledState = !this.mod.getConfig().getBoolean("start.enabled");
             this.mod.getConfig().setProperty("start.enabled", newEnabledState);
-            par1GuiButton.displayString = newEnabledState ? "Start Enabled: ON" : "Start Enabled: OFF";
+            par1GuiButton.displayString = I18n.format("mat.options.start." + newEnabledState);
             this.mod.saveConfig();
         } else if (par1GuiButton.id == 211) {
             mc.displayGuiScreen(new MAtGuiMore(this, this.mod));
@@ -276,24 +246,23 @@ public class MAtGuiMenu extends GuiScreen {
 
         if (!this.mod.isDebugMode()) {
             drawGradientRect(0, 0, this.width, this.height, 0xC0000000, 0x60000000);
-            drawCenteredString(this.fontRenderer, "MAtmos Expansions", this.width / 2, 8, 0xffffff);
+            drawCenteredString(this.fontRenderer, I18n.format("mat.title.expansions"), this.width / 2, 8, 0xffffff);
         } else {
             drawGradientRect(0, 0, this.width, this.height, 0xC0C06000, 0x60C06000);
-            drawCenteredString(this.fontRenderer, "MAtmos Expansions " + TextFormatting.GOLD + "(Dev mode)", this.width / 2, 8, 0xffffff);
-
-            drawCenteredString(this.fontRenderer, TextFormatting.YELLOW + "Dev mode is enabled. This may cause Minecraft to run slower.", this.width / 2, _SEPARATOR + _MIX * (this.IDS_PER_PAGE + 3) - 9, 0xffffff);
+            drawCenteredString(this.fontRenderer, I18n.format("mat.title.expansions") + TextFormatting.GOLD + "(Dev mode)", this.width / 2, 8, 0xffffff);
+            drawCenteredString(this.fontRenderer, I18n.format("mat.title.devmode"), this.width / 2, _SEPARATOR + _MIX * (this.IDS_PER_PAGE + 3) - 9, 0xffffff);
         }
 
-        this.mod.util().prepareDrawString();
-        this.mod.util().drawString(TextFormatting.GRAY.toString() + this.mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0, 0, '3', 0, 0, 0, 0, true);
+        mod.util().prepareDrawString();
+        mod.util().drawString(I18n.format("mat.resources.lag", mod.getLag().getMilliseconds()), 1f, 1f, 0, 0, '3', 0, 0, 0, 0, true);
 
         if (!this.mod.hasResourcePacksLoaded()) {
             if (this.mod.hasNonethelessResourcePacksInstalled()) {
-                drawCenteredString(this.fontRenderer, "Your MAtmos Resource Pack isn't enabled yet!", this.width / 2, 10 + 22 * 6 - 40 + 20, 0xff0000);
-                drawCenteredString(this.fontRenderer, "Activate it in the Minecraft Options menu for it to run.", this.width / 2, 10 + 22 * 6 - 40 + 28, 0xff0000);
+                drawCenteredString(this.fontRenderer, I18n.format("mat.resources.off.1"), width / 2, 10 + 22 * 6 - 40 + 20, 0xff0000);
+                drawCenteredString(this.fontRenderer, I18n.format("mat.resources.off.2"), width / 2, 10 + 22 * 6 - 40 + 28, 0xff0000);
             } else {
-                drawCenteredString(this.fontRenderer, "You don't have any MAtmos Resource Pack installed!", this.width / 2, 10 + 22 * 6 - 40 + 20, 0xff0000);
-                drawCenteredString(this.fontRenderer, "Put the Resource Pack in the resourcepacks/ folder.", this.width / 2, 10 + 22 * 6 - 40 + 28, 0xff0000);
+                drawCenteredString(this.fontRenderer, I18n.format("mat.resources.none.1"), width / 2, 10 + 22 * 6 - 40 + 20, 0xff0000);
+                drawCenteredString(this.fontRenderer, I18n.format("mat.resources.none.2"), width / 2, 10 + 22 * 6 - 40 + 28, 0xff0000);
             }
         }
 
@@ -301,6 +270,7 @@ public class MAtGuiMenu extends GuiScreen {
 
     }
 
+    @Deprecated
     private static class Make {
         private static int makeIn = 1000;
         private static Map<Integer, ActionPerformed> actions = new HashMap<Integer, ActionPerformed>();
@@ -326,7 +296,8 @@ public class MAtGuiMenu extends GuiScreen {
         return false;
     }
 
+    @FunctionalInterface
     private interface ActionPerformed {
-        public void actionPerformed();
+        void actionPerformed();
     }
 }

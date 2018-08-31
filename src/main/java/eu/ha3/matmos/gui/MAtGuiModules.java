@@ -4,7 +4,7 @@ import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.resources.I18n;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -44,15 +44,15 @@ public class MAtGuiModules extends GuiScreen {
         final int _SEPARATOR = 10;
         final int _TURNOFFWIDTH = _WIDTH / 5;
 
-        this.buttonList.add(new GuiButton(201, _LEFT + _MIX + _WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH + _GAP, _SEPARATOR + _MIX * (5 + 4), _TURNOFFWIDTH, _UNIT, "Discard"));
-        this.buttonList.add(new GuiButton(202, _LEFT + _MIX + _WIDTH - _MIX * 2 + _GAP, _SEPARATOR + _MIX * (5 + 4), _TURNOFFWIDTH, _UNIT, "Deltas?"));
+        this.buttonList.add(new GuiButton(201, _LEFT + _MIX + _WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH + _GAP, _SEPARATOR + _MIX * (5 + 4), _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.discard")));
+        this.buttonList.add(new GuiButton(202, _LEFT + _MIX + _WIDTH - _MIX * 2 + _GAP, _SEPARATOR + _MIX * (5 + 4), _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.deltas")));
 
         for (int id = 0; id < this.val.size(); id++) {
             int flid = id / 18;
             this.buttonList.add(new GuiButton(id, _LEFT + flid * _WIDTH / 3, _SEPARATOR + _MIX / 2 * (id % 18), _WIDTH / 3, _UNIT / 2, this.val.get(id)));
         }
 
-        this.buttonList.add(new GuiButton(200, _LEFT + _MIX, _SEPARATOR + _MIX * (5 + 4), _WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH, _UNIT, "Done"));
+        this.buttonList.add(new GuiButton(200, _LEFT + _MIX, _SEPARATOR + _MIX * (5 + 4), _WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.done")));
     }
 
     @Override
@@ -79,17 +79,17 @@ public class MAtGuiModules extends GuiScreen {
 
     @Override
     protected void mouseClicked(int par1, int par2, int par3) throws IOException {
-        if (this.buttonId < 0) {
+        if (buttonId < 0) {
             super.mouseClicked(par1, par2, par3);
         }
     }
 
     @Override
     public void drawScreen(int par1, int par2, float par3) {
-        drawGradientRect(0, 0, this.width, this.height, 0xC0C06000, 0x60C06000);
-        drawCenteredString(this.fontRenderer, TextFormatting.GOLD + "Dev mode: On-screen Display", this.width / 2, 1, 0xffffff);
+        drawGradientRect(0, 0, width, height, 0xC0C06000, 0x60C06000);
+        drawCenteredString(fontRenderer, I18n.format("mat.title.devmode.display"), width / 2, 1, 0xffffff);
 
-        this.mod.getVisualDebugger().onFrame(-1f);
+        mod.getVisualDebugger().onFrame(-1f);
 
         super.drawScreen(par1, par2, par3);
 
