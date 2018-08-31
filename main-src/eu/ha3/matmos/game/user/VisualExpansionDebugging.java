@@ -1,13 +1,13 @@
 package eu.ha3.matmos.game.user;
 
-import eu.ha3.matmos.engine.core.implem.Junction;
-import eu.ha3.matmos.engine.core.implem.Machine;
-import eu.ha3.matmos.engine.core.implem.ProviderCollection;
-import eu.ha3.matmos.engine.core.implem.abstractions.Provider;
-import eu.ha3.matmos.engine.core.interfaces.Dependable;
-import eu.ha3.matmos.engine.core.visualize.Visualized;
-import eu.ha3.matmos.game.mod.MAtMod;
-import eu.ha3.matmos.game.system.IDontKnowHowToCode;
+import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.core.Dependable;
+import eu.ha3.matmos.core.Provider;
+import eu.ha3.matmos.core.ProviderCollection;
+import eu.ha3.matmos.core.logic.Junction;
+import eu.ha3.matmos.core.logic.Machine;
+import eu.ha3.matmos.core.logic.Visualized;
+import eu.ha3.matmos.util.IDontKnowHowToCode;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import java.util.*;
 import net.minecraft.client.Minecraft;

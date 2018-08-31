@@ -1,0 +1,13 @@
+package eu.ha3.matmos.serialisation.expansion;
+
+/*
+ * --filenotes-placeholder
+ */
+
+public class SerialMachineStream {
+    public String path = "";
+    public float vol = 1f;
+    public float pitch = 1f;
+    public boolean looping = false;
+    public boolean pause = false;
+}

@@ -1,9 +1,9 @@
 package eu.ha3.matmos.game.user;
 
 import eu.ha3.easy.TimeStatistic;
-import eu.ha3.matmos.game.gui.MAtGuiMenu;
-import eu.ha3.matmos.game.mod.MAtMod;
-import eu.ha3.matmos.game.system.MAtmosUtility;
+import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.gui.MAtGuiMenu;
+import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.convenience.Ha3HoldActions;
 import eu.ha3.mc.convenience.Ha3KeyHolding;
 import eu.ha3.mc.convenience.Ha3KeyManager_2;
@@ -80,12 +80,12 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
         if (!this.mod.isInitialized()) {
             this.mod.getChatter().printChat(TextFormatting.RED, "Unknown error: MAtmos isn't initialized");
         } else {
-            if (!MAtmosUtility.isSoundMasterEnabled()) {
+            if (!MAtUtil.isSoundMasterEnabled()) {
                 this.mod.getChatter().printChat(
                         TextFormatting.RED, "Warning: ", TextFormatting.WHITE,
                         "Sounds are turned off in your game settings!");
             }
-            if (!MAtmosUtility.isSoundAmbientEnabled()) {
+            if (!MAtUtil.isSoundAmbientEnabled()) {
                 this.mod.getChatter().printChat(
                         TextFormatting.RED, "Warning: ", TextFormatting.WHITE,
                         "Ambient sounds are at 0% volume in the advanced MAtmos options menu!");

@@ -1,11 +1,11 @@
 package eu.ha3.matmos.game.user;
 
-import eu.ha3.matmos.engine.core.implem.LongFloatSimplificator;
-import eu.ha3.matmos.engine.core.interfaces.Sheet;
-import eu.ha3.matmos.game.data.ModularDataGatherer;
-import eu.ha3.matmos.game.data.abstractions.scanner.Progress;
-import eu.ha3.matmos.game.data.abstractions.scanner.ScannerModule;
-import eu.ha3.matmos.game.mod.MAtMod;
+import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.core.sheet.Sheet;
+import eu.ha3.matmos.data.modules.ModuleRegistry;
+import eu.ha3.matmos.data.scanners.Progress;
+import eu.ha3.matmos.data.scanners.ScannerModule;
+import eu.ha3.matmos.util.math.LongFloatSimplificator;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,14 +20,14 @@ import org.lwjgl.opengl.GL11;
 
 public class VisualDebugger implements SupportsFrameEvents {
     private final MAtMod mod;
-    private final ModularDataGatherer dataGatherer;
+    private final ModuleRegistry dataGatherer;
 
     private DebugMode mode = DebugMode.NONE;
     private VisualExpansionDebugging ed;
     private String scanDebug;
     private boolean deltas = false;
 
-    public VisualDebugger(MAtMod mod, ModularDataGatherer dataGatherer) {
+    public VisualDebugger(MAtMod mod, ModuleRegistry dataGatherer) {
         this.mod = mod;
         this.dataGatherer = dataGatherer;
     }

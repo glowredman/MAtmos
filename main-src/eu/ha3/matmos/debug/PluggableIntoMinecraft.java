@@ -1,0 +1,17 @@
+package eu.ha3.matmos.debug;
+
+import java.io.File;
+
+public interface PluggableIntoMinecraft {
+    public boolean isReadOnly();
+
+    public File getFileIfAvailable();
+
+    public File getWorkingDirectoryIfAvailable();
+
+    public void pushJason(String jason);
+
+    public void reloadFromDisk();
+
+    public void onEditorClosed();
+}

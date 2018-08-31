@@ -1,7 +1,7 @@
 package eu.ha3.matmos.game.user;
 
-import eu.ha3.matmos.game.mod.MAtMod;
-import eu.ha3.matmos.game.system.MAtmosUtility;
+import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.convenience.Ha3Scroller;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -104,7 +104,7 @@ public class VolumeScroller extends Ha3Scroller {
 
             EntityPlayer ply = Minecraft.getMinecraft().player;
 
-            MAtmosUtility.playSound("random.click", (float)ply.posX, (float)ply.posY, (float)ply.posZ, hgn, res);
+            MAtUtil.playSound("random.click", (float)ply.posX, (float)ply.posY, (float)ply.posZ, hgn, res);
 
         }
 
