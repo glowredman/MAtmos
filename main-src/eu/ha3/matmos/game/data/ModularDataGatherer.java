@@ -17,6 +17,7 @@ import eu.ha3.matmos.game.data.modules.*;
 import eu.ha3.matmos.game.mod.MAtMod;
 import eu.ha3.matmos.game.system.IDontKnowHowToCode;
 import eu.ha3.matmos.log.MAtLog;
+import net.minecraft.inventory.EntityEquipmentSlot;
 
 import java.util.*;
 
@@ -115,10 +116,11 @@ public class ModularDataGatherer implements Collector, Processor
 		addModule(new R__meta_option(this.data, this.mod), 200);
 		addModule(new R__server_info(this.data), 200);
 		addModule(new S__detect(this.data, this, "detect_mindist", "detect_radius", 256, 2, 5, 10, 20, 50));
-		addModule(new S__ench_armor(this.data, 0));
-		addModule(new S__ench_armor(this.data, 1));
-		addModule(new S__ench_armor(this.data, 2));
-		addModule(new S__ench_armor(this.data, 3));
+		
+		for (EntityEquipmentSlot i : EntityEquipmentSlot.values()) {
+			addModule(new S__ench_armor(this.data, i));
+		}
+		
 		addModule(new S__ench_current(this.data));
 		addModule(new S__ply_hitscan(this.data));
 		addModule(new S__ply_leash(this.data));

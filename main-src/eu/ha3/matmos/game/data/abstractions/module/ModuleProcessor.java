@@ -1,6 +1,8 @@
 package eu.ha3.matmos.game.data.abstractions.module;
 
 import eu.ha3.matmos.engine.core.interfaces.Data;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -66,5 +68,9 @@ public abstract class ModuleProcessor extends ProcessorModel implements EntryBas
 	protected void EI(EI ei)
 	{
 		this.eis.put(ei.getName(), ei);
+	}
+	
+	protected EntityPlayer getPlayer() {
+		return Minecraft.getMinecraft().player;
 	}
 }

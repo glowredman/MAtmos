@@ -6,6 +6,7 @@ import eu.ha3.matmos.game.data.abstractions.module.Module;
 import eu.ha3.matmos.game.data.abstractions.module.ModuleProcessor;
 import eu.ha3.matmos.game.system.MAtmosUtility;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 
 import java.util.HashMap;
@@ -32,10 +33,9 @@ public class L__legacy_hitscan extends ModuleProcessor implements Module
 	@Override
 	protected void doProcess()
 	{
-		Minecraft mc = Minecraft.getMinecraft();
+		RayTraceResult mc = Minecraft.getMinecraft().objectMouseOver;
 		
-		if (mc.objectMouseOver == null || mc.objectMouseOver.typeOfHit == null)
-		{
+		if (mc == null || mc.typeOfHit == null) {
 			setValue("mouse_over_something", false);
 			setValue("mouse_over_what_remapped", -1);
 			setValue("block_as_number", MODULE_CONSTANTS.LEGACY_NO_BLOCK_IN_THIS_CONTEXT);
@@ -44,21 +44,15 @@ public class L__legacy_hitscan extends ModuleProcessor implements Module
 			return;
 		}
 
-        // dag edits - getBlockPos().get..()
-		setValue("mouse_over_something", mc.objectMouseOver.typeOfHit != Type.MISS);
-		setValue("mouse_over_what_remapped", this.equiv.get(mc.objectMouseOver.typeOfHit));
-		setValue(
-			"block_as_number",
-			mc.objectMouseOver.typeOfHit == Type.BLOCK
-				? MAtmosUtility.legacyOf(MAtmosUtility.getBlockAt(
-					mc.objectMouseOver.getBlockPos().getX(), mc.objectMouseOver.getBlockPos().getY(),
-                    mc.objectMouseOver.getBlockPos().getZ()))
+		setValue("mouse_over_something", mc.typeOfHit != Type.MISS);
+		setValue("mouse_over_what_remapped", this.equiv.get(mc.typeOfHit));
+		setValue("block_as_number",
+			mc.typeOfHit == Type.BLOCK
+				? MAtmosUtility.legacyOf(MAtmosUtility.getBlockAt(mc.getBlockPos()))
 				: MODULE_CONSTANTS.LEGACY_NO_BLOCK_IN_THIS_CONTEXT);
-		setValue(
-			"meta_as_number",
-			mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtmosUtility.getMetaAt(
-				mc.objectMouseOver.getBlockPos().getX(), mc.objectMouseOver.getBlockPos().getY(),
-                    mc.objectMouseOver.getBlockPos().getZ(),
-				MODULE_CONSTANTS.LEGACY_NO_BLOCK_OUT_OF_BOUNDS) : MODULE_CONSTANTS.LEGACY_NO_BLOCK_IN_THIS_CONTEXT);
+		setValue("meta_as_number",
+			mc.typeOfHit == Type.BLOCK ?
+					MAtmosUtility.getMetaAt(mc.getBlockPos(), MODULE_CONSTANTS.LEGACY_NO_BLOCK_OUT_OF_BOUNDS)
+					: MODULE_CONSTANTS.LEGACY_NO_BLOCK_IN_THIS_CONTEXT);
 	}
 }

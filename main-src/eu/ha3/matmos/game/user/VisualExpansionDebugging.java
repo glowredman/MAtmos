@@ -11,7 +11,6 @@ import eu.ha3.matmos.game.system.IDontKnowHowToCode;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import java.util.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.opengl.GL11;
 
@@ -123,9 +122,8 @@ public class VisualExpansionDebugging implements SupportsFrameEvents
 		boolean isActive = vis.isActive();
 		
 		Minecraft mc = Minecraft.getMinecraft();
-		FontRenderer fontRenderer = mc.fontRendererObj;
 		
-		fontRenderer.drawStringWithShadow(name + "(" + feed + ")", x, y, isActive ? 0x0099FF : 0xFF0000);
+		mc.fontRenderer.drawStringWithShadow(name + "(" + feed + ")", x, y, isActive ? 0x0099FF : 0xFF0000);
 		
 		// PAINT
 	}

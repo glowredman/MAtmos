@@ -109,7 +109,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
 				this.userconfigFolder, identity.getUniqueName() + ".cfg"));
 		this.expansions.put(identity.getUniqueName(), expansion);
 		
-		if (identity.getLocation().getResourcePath().endsWith(".xml"))
+		if (identity.getLocation().getPath().endsWith(".xml"))
 		{
 			File folder = new File(this.userconfigFolder, "DO NOT EDIT UNLESS COPIED/");
 			if (!folder.exists())

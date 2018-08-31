@@ -14,15 +14,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
-
-/*
---filenotes-placeholder
-*/
 
 public class VisualDebugger implements SupportsFrameEvents
 {
@@ -162,7 +156,7 @@ public class VisualDebugger implements SupportsFrameEvents
 			}
 		}
 		
-		FontRenderer fontRenderer = mc.fontRendererObj;
+		FontRenderer fontRenderer = mc.fontRenderer;
 		
 		int lineNumber = 0;
 		
@@ -181,104 +175,61 @@ public class VisualDebugger implements SupportsFrameEvents
 		
 		int leftAlign = 2 + (isDeltaPass ? 300 : 0);
 		
-		for (String index : sort)
-		{
-			if (lineNumber <= 100 && !index.contains("^"))
-			{
-				if (this.scanDebug.startsWith("scan_") || this.scanDebug.equals("block_contact"))
-				{
+		for (String index : sort) {
+			if (lineNumber <= 100 && !index.contains("^")) {
+				if (this.scanDebug.startsWith("scan_") || this.scanDebug.equals("block_contact")) {
 					Long count = LongFloatSimplificator.longOf(sheet.get(index));
-					if (count != null)
-					{
-						if (count > 0)
-						{
+					if (count != null) {
+						if (count > 0) {
 							float scalar = (float) count / total;
-							String percentage =
-								!this.scanDebug.endsWith(ScannerModule.THOUSAND_SUFFIX) ? Float.toString(Math
-									.round(scalar * 1000f) / 10f) : Integer.toString(Math.round(scalar * 100f));
-							if (percentage.equals("0.0"))
-							{
+							String percentage = !this.scanDebug.endsWith(ScannerModule.THOUSAND_SUFFIX) ? Float.toString(Math.round(scalar * 1000f) / 10f) : Integer.toString(Math.round(scalar * 100f));
+								
+							if (percentage.equals("0.0")) {
 								percentage = "0";
 							}
 							
 							int fill = Math.round(scalar * ALL * 2 /* * 2*/);
 							int superFill = 0;
-							if (fill > ALL * 2)
-							{
+							
+							if (fill > ALL * 2) {
 								fill = ALL * 2;
 							}
-							if (fill > ALL)
-							{
+							
+							if (fill > ALL) {
 								superFill = fill - ALL;
 							}
 							
 							String bars = "";
-							if (superFill > 0)
-							{
-								bars = bars + TextFormatting.YELLOW + StringUtils.repeat("|", superFill);
+							if (superFill > 0) {
+								bars += TextFormatting.YELLOW + StringUtils.repeat("|", superFill);
 							}
-							bars =
-								bars
-									+ TextFormatting.RESET
-									+ StringUtils.repeat("|", fill - superFill * 2);
 							
-							if (index.startsWith("minecraft:"))
-							{
+							bars += TextFormatting.RESET + StringUtils.repeat("|", fill - superFill * 2);
+							
+							if (index.startsWith("minecraft:")) {
 								index = index.substring(10);
 							}
 							
-							fontRenderer.drawStringWithShadow(bars
-								+ (fill == ALL * 2
-									? TextFormatting.YELLOW + "++" + TextFormatting.RESET : "") + " ("
-								+ count + ", " + percentage + "%) " + index, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
+							fontRenderer.drawStringWithShadow(bars + (fill == ALL * 2 ? TextFormatting.YELLOW + "++" + TextFormatting.RESET : "") + " (" + count + ", " + percentage + "%) " + index, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
 							lineNumber = lineNumber + 1;
 						}
 					}
-				}
-				else if ( scanDebug.startsWith("detect_") )
-				{
+				} else if (this.scanDebug.startsWith("detect_")) {
 					String val = sheet.get(index);
-					if ( !val.equals("0") && !val.equals(Integer.toString(Integer.MAX_VALUE)) )
-					{
-						if ( !index.equals("0") )
-						{
-							Entity ent = mc.world.getEntityByID(Integer.parseInt(index));
-							String entName = ( ent == null ? "Unknown entity: ".concat(index) : 
-									EntityList.getEntityString(ent)
-											.concat(": ")
-											.concat(ent.getName()) );
-							
-							fontRenderer.drawStringWithShadow( 
-									index
-										+ " ("
-										+ entName
-										+ "): " 
-										+ val,
-									leftAlign,
-									2 + 9 * lineNumber,
-									0xFFFFFF );
-						}
-						else
-						{
-							fontRenderer.drawStringWithShadow(
-								index + " (Player): " + val, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
-						}
-						
+					if (!val.equals("0") && !val.equals(Integer.toString(Integer.MAX_VALUE))) {
+						fontRenderer.drawStringWithShadow(String.format("%s (%s): %s", index, index, val), leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
 						lineNumber = lineNumber + 1;
 					}
-				}
-				else
-				{
+				} else {
 					String val = sheet.get(index);
 					int color = 0xFFFFFF;
-					if (val.equals("0"))
-					{
+					
+					if (val.equals("0")) {
 						color = 0xFF0000;
-					}
-					else if (val.equals("1"))
-					{
+					} else if (val.equals("1")) {
 						color = 0x0099FF;
 					}
+					
 					fontRenderer.drawStringWithShadow(index + ": " + val, leftAlign, 2 + 9 * lineNumber, color);
 					lineNumber = lineNumber + 1;
 				}

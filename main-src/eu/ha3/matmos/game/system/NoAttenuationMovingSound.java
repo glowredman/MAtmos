@@ -21,8 +21,7 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
 	private float desiredVolume;
 	private float desiredPitch;
 
-	protected NoAttenuationMovingSound(ResourceLocation myResource, float volume, float pitch, boolean isLooping, boolean usesPause)
-	{
+	protected NoAttenuationMovingSound(ResourceLocation myResource, float volume, float pitch, boolean isLooping, boolean usesPause) {
 		super(SoundEvents.AMBIENT_CAVE, SoundCategory.MASTER);
 		
 		positionedSoundLocation = myResource;
@@ -38,14 +37,12 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
 		this.usesPause = usesPause;
 	}
 	
-	public NoAttenuationMovingSound copy()
-	{
+	public NoAttenuationMovingSound copy() {
 		return new NoAttenuationMovingSound(this.getSoundLocation(), desiredVolume, desiredPitch, repeat, usesPause);
 	}
 
 	@Override
-	public void update()
-	{
+	public void update() {
 		Entity e = Minecraft.getMinecraft().player;
 		
 		this.xPosF = (float) e.posX;
@@ -54,47 +51,41 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
 
 		this.volume = helper.calculateFadeFactor() * desiredVolume;
 
-		if (volume < 0.01f && usesPause)
-		{
+		if (volume < 0.01f && usesPause) {
 			pitch = 0f;
 		}
-		if (volume > 0.01f && usesPause)
-        {
+		
+		if (volume > 0.01f && usesPause) {
             pitch = desiredPitch;
         }
-        if (helper.isDoneFadingOut() && this.repeat && !this.isDonePlaying())
-        {
+		
+        if (helper.isDoneFadingOut() && this.repeat && !this.isDonePlaying()) {
             dispose();
         }
 	}
 
 	@Override
-	public void play(float fadeIn)
-	{
+	public void play(float fadeIn) {
 		this.helper.fadeIn((long) (fadeIn * 1000));
 	}
 
 	@Override
-	public void stop(float fadeOut)
-	{
+	public void stop(float fadeOut) {
 		this.helper.fadeOut((long) (fadeOut * 1000));
 	}
 
 	@Override
-	public void applyVolume(float volumeMod)
-	{
+	public void applyVolume(float volumeMod) {
         this.volume = volumeMod;
 	}
 
 	@Override
-	public void dispose()
-	{
+	public void dispose() {
 		this.donePlaying = true;
 	}
 
 	@Override
-	public void interrupt()
-	{
+	public void interrupt() {
 		this.donePlaying = true;
 	}
 }

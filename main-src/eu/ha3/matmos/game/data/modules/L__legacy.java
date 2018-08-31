@@ -6,31 +6,25 @@ import eu.ha3.matmos.game.data.abstractions.module.Module;
 import eu.ha3.matmos.game.data.abstractions.module.ModuleProcessor;
 import eu.ha3.matmos.game.system.MAtmosUtility;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityMinecartEmpty;
 import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-/*
---filenotes-placeholder
-*/
-
-public class L__legacy extends ModuleProcessor implements Module
-{
-	public L__legacy(Data data)
-	{
+public class L__legacy extends ModuleProcessor implements Module {
+	public L__legacy(Data data) {
 		super(data, "legacy");
 	}
 	
 	@Override
-	protected void doProcess()
-	{
+	protected void doProcess() {
 		Minecraft mc = Minecraft.getMinecraft();
-        // dag edit EntityClientPlayerMP -> EntityPlayerSP
-		EntityPlayerSP player = mc.player;
+
+		EntityPlayer player = getPlayer();
+		
 		Entity ride = player.getRidingEntity();
 		
 		setValue("player_health_ceil", (int) Math.ceil(player.getHealth()));
@@ -50,8 +44,7 @@ public class L__legacy extends ModuleProcessor implements Module
 		setValue("seed_lower", (int) (mc.world.getSeed() & 0xFFFFFFFF));
 	}
 	
-	private int number(ItemStack item)
-	{
+	private int number(ItemStack item) {
 		return item != null ? MAtmosUtility.legacyOf(item) : MODULE_CONSTANTS.LEGACY_NO_ITEM;
 	}
 }

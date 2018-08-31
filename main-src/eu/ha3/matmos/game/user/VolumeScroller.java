@@ -36,7 +36,7 @@ public class VolumeScroller extends Ha3Scroller
 	protected void doDraw(float fspan)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-		FontRenderer fontRenderer = mc.fontRendererObj;
+		FontRenderer fontRenderer = mc.fontRenderer;
 		
 		String msgper = (int) Math.floor(this.doneValue * 100) + "%";
 		
@@ -88,9 +88,8 @@ public class VolumeScroller extends Ha3Scroller
 		
 	}
 	
-	private int getWidthOf(String s)
-	{
-		return Minecraft.getMinecraft().fontRendererObj.getStringWidth(s);
+	private int getWidthOf(String s) {
+		return Minecraft.getMinecraft().fontRenderer.getStringWidth(s);
 	}
 	
 	public float getValue()
@@ -113,11 +112,8 @@ public class VolumeScroller extends Ha3Scroller
 			float res = (float) Math.pow(2, -Math.floor(getPitch() / caps) / 12);
 			
 			EntityPlayer ply = Minecraft.getMinecraft().player;
-			float posX = (float) ply.posX;
-			float posY = (float) ply.posY;
-			float posZ = (float) ply.posZ;
 			
-			MAtmosUtility.playSound("random.click", posX, posY, posZ, hgn, res);
+			MAtmosUtility.playSound("random.click", (float)ply.posX, (float)ply.posY, (float)ply.posZ, hgn, res);
 			
 		}
 		

@@ -7,20 +7,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.inventory.*;
 
-/*
---filenotes-placeholder
-*/
-
-public class M__gui_general extends ModuleProcessor implements Module
-{
-	public M__gui_general(Data data)
-	{
+public class M__gui_general extends ModuleProcessor implements Module {
+	public M__gui_general(Data data) {
 		super(data, "gui_general");
 	}
 	
 	@Override
-	protected void doProcess()
-	{
+	protected void doProcess() {
 		GuiScreen gui = Minecraft.getMinecraft().currentScreen;
 		
 		setValue("open", gui != null);

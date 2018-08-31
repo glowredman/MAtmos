@@ -3,57 +3,30 @@ package eu.ha3.matmos.game.data.modules;
 import eu.ha3.matmos.engine.core.interfaces.Data;
 import eu.ha3.matmos.game.data.abstractions.module.Module;
 import eu.ha3.matmos.game.data.abstractions.module.ModuleProcessor;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
 
-import java.util.Iterator;
 import java.util.List;
 
-/*
---filenotes-placeholder
-*/
-
-public class S__ply_leash extends ModuleProcessor implements Module
-{
-	public S__ply_leash(Data data)
-	{
+public class S__ply_leash extends ModuleProcessor implements Module {
+	private static final int RADIUS = 20;
+	
+	public S__ply_leash(Data data) {
 		super(data, "ply_leash");
 	}
 	
 	@Override
-	protected void doProcess()
-	{
-        // dag edit EntityClientPlayerMP -> EntityPlayerSP
-		EntityPlayerSP player = Minecraft.getMinecraft().player;
-		World w = Minecraft.getMinecraft().world;
-		
-		final int distance = 20;
-		int count = 0;
+	protected void doProcess() {
+		EntityPlayer player = getPlayer();
 
-        // dag edit AxisAlignedBB.getBoundingBox(..) -> AxisAlignedBB.fromBounds(..)
-		List<EntityLiving> var6 =
-			w.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(
-                    player.posX - distance, player.posY - distance, player.posZ - distance, player.posX + distance,
-                    player.posY + distance, player.posZ + distance));
+		List<EntityLiving> entities = player.getEntityWorld().getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(
+                    player.posX - RADIUS, player.posY - RADIUS,
+                    player.posZ - RADIUS, player.posX + RADIUS,
+                    player.posY + RADIUS, player.posZ + RADIUS));
 		
-		if (var6 != null)
-		{
-			Iterator<EntityLiving> var7 = var6.iterator();
-			
-			while (var7.hasNext())
-			{
-				EntityLiving var8 = var7.next();
-				
-				if (var8.getLeashed() && var8.getLeashedToEntity() == player)
-				{
-					count = count + 1;
-				}
-			}
-		}
-		
-		setValue("total", count);
+		setValue("total", entities.stream().filter(entity -> {
+			return entity.getLeashed() && entity.getLeashHolder() == player;
+		}).count());
 	}
 }

@@ -48,28 +48,16 @@ public class S__ply_hitscan extends ModuleProcessor implements Module
 		setValue("mouse_over_something", mc.objectMouseOver.typeOfHit != Type.MISS);
 		setValue("mouse_over_what", this.equiv.get(mc.objectMouseOver.typeOfHit));
         // dag edit -> getBlockPos().get..()
-		setValue("block",
-			mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtmosUtility.getNameAt(
-				mc.objectMouseOver.getBlockPos().getX(), mc.objectMouseOver.getBlockPos().getY(),
-                    mc.objectMouseOver.getBlockPos().getZ(),
-				MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS) : MODULE_CONSTANTS.NO_BLOCK_IN_THIS_CONTEXT);
-        // dag edit -> getBlockPos().get..()
-		setValue("meta",
-			mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtmosUtility.getMetaAsStringAt(
-				mc.objectMouseOver.getBlockPos().getX(), mc.objectMouseOver.getBlockPos().getY(),
-                    mc.objectMouseOver.getBlockPos().getZ(),
-				MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS) : MODULE_CONSTANTS.NO_BLOCK_IN_THIS_CONTEXT);
-        // dag edit -> getBlockPos().get..()
-		setValue(
-			"powermeta",
-			mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtmosUtility.getPowerMetaAt(
-				mc.objectMouseOver.getBlockPos().getX(), mc.objectMouseOver.getBlockPos().getY(),
-                    mc.objectMouseOver.getBlockPos().getZ(),
-				MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS) : MODULE_CONSTANTS.NO_BLOCK_IN_THIS_CONTEXT);
-        // dag edit -> getBlockPos().get..()
-		setValue(
-			"entity_id",
-			mc.objectMouseOver.typeOfHit == Type.ENTITY ? /*EntityList*/
-				/*.getEntityID(*/mc.objectMouseOver.entityHit.getEntityId()/*)*/ : MODULE_CONSTANTS.NO_ENTITY);
+		setValue("block", mc.objectMouseOver.typeOfHit == Type.BLOCK ?
+					MAtmosUtility.getNameAt(mc.objectMouseOver.getBlockPos(), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS)
+					: MODULE_CONSTANTS.NO_BLOCK_IN_THIS_CONTEXT);
+		setValue("meta", mc.objectMouseOver.typeOfHit == Type.BLOCK ?
+				MAtmosUtility.getMetaAsStringAt(mc.objectMouseOver.getBlockPos(), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS)
+				: MODULE_CONSTANTS.NO_BLOCK_IN_THIS_CONTEXT);
+		setValue("powermeta", mc.objectMouseOver.typeOfHit == Type.BLOCK ?
+				MAtmosUtility.getPowerMetaAt(mc.objectMouseOver.getBlockPos(), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS)
+				: MODULE_CONSTANTS.NO_BLOCK_IN_THIS_CONTEXT);
+		setValue("entity_id", mc.objectMouseOver.typeOfHit == Type.ENTITY ?
+					EntityList.getKey(mc.objectMouseOver.entityHit).toString() : MODULE_CONSTANTS.NO_ENTITY);
 	}
 }

@@ -14,10 +14,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 
-/*
---filenotes-placeholder
-*/
-
 public class JasonExpansions_Engine1Deserializer2000
 {
 	private List<Named> elements;

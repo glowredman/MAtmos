@@ -3,30 +3,23 @@ package eu.ha3.matmos.game.data.modules;
 import eu.ha3.matmos.engine.core.interfaces.Data;
 import eu.ha3.matmos.game.data.abstractions.module.Module;
 import eu.ha3.matmos.game.data.abstractions.module.ModuleProcessor;
-import net.minecraft.client.Minecraft;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 
-/*
---filenotes-placeholder
-*/
-
 public class M__ride_horse extends ModuleProcessor implements Module
 {
-	public M__ride_horse(Data data)
-	{
+	public M__ride_horse(Data data) {
 		super(data, "ride_horse");
 	}
 	
 	@Override
-	protected void doProcess()
-	{
-		Entity xride = Minecraft.getMinecraft().player.getRidingEntity();
+	protected void doProcess() {
+		Entity xride = getPlayer().getRidingEntity();
 		
-		if (xride == null || !(xride instanceof EntityHorse))
-		{
-			//setValue("jumping", false);
+		if (xride == null || !(xride instanceof EntityHorse)) {
+			setValue("jumping", false);
 			setValue("rearing", false);
 			setValue("saddled", false);
 			setValue("leashed", false);
@@ -50,49 +43,40 @@ public class M__ride_horse extends ModuleProcessor implements Module
 		
 		EntityHorse ride = (EntityHorse) xride;
 		
-		//setValue("jumping", ride.isHorseJumping()); // not functionnal
+		setValue("jumping", ride.isHorseJumping());
 		setValue("rearing", ride.isRearing());
 		setValue("saddled", ride.isHorseSaddled());
 		setValue("leashed", ride.getLeashed());
-		//setValue("chested", ride.isChested()); TODO: find out usage
 		setValue("tame", ride.isTame());
-		
-		setValue("type", !ride.isDead/*getType().isUndead()*/);
+		// TODO: Where'd it go?
+		//setValue("chested", ride.isChested());
+		setValue("tame", ride.isTame());
+		setValue("type", ride.isEntityUndead());
 		setValue("variant", ride.getHorseVariant());
 		
 		setValue("name_tag", ride.getCustomNameTag());
 		
 		setValue("health1k", (int) (ride.getHealth() * 1000));
-		setValue("leashed_to_player", ride.getLeashed() && ride.getLeashedToEntity() instanceof EntityPlayer);
-        // dag edit func_152119_ch() -> getOwnerId()
-		setValue(
-			"ridden_by_owner",
+		setValue("leashed_to_player", ride.getLeashed() && ride.getLeashHolder() instanceof EntityPlayer);
+		setValue("ridden_by_owner",
 			ride.getControllingPassenger() instanceof EntityPlayer
 				&& ride.getOwnerUniqueId() != null
 				&& ride.getOwnerUniqueId().equals(((EntityPlayer) ride.getControllingPassenger()).getGameProfile().getId()));
-        // dag edit func_152119_ch() -> getOwnerId()
-		setValue(
-			"leashed_to_owner",
-			ride.getLeashedToEntity() instanceof EntityPlayer
-				&& !ride.getOwnerUniqueId().equals("")
-				&& ride.getOwnerUniqueId().equals(((EntityPlayer) ride.getLeashedToEntity()).getGameProfile().getId().toString()));
+		setValue("leashed_to_owner",
+			ride.getLeashHolder() instanceof EntityPlayer
+				&& !ride.getOwnerUniqueId().toString().equals("")
+				&& ride.getOwnerUniqueId().equals(((EntityPlayer) ride.getLeashHolder()).getGameProfile().getId()));
 		
-		if (ride.getLeashed() && ride.getLeashedToEntity() != null)
-		{
-			Entity e = ride.getLeashedToEntity();
-			setValue("leash_distance", (int) (e.getDistanceToEntity(ride) * 1000));
-		}
-		else
-		{
+		if (ride.getLeashed() && ride.getLeashHolder() != null) {
+			setValue("leash_distance", (int) (ride.getLeashHolder().getDistance(ride) * 1000));
+		} else {
 			setValue("leash_distance", 0);
 		}
 		
 		// Server only?
 		setValue("temper", ride.getTemper());
-        // dag edit func_152119_ch() -> getOwnerId()
 		setValue("owner_uuid", ride.getOwnerUniqueId().toString());
-		//setValue("reproduced", ride.getHasReproduced()); TODO: find out usage
-        // dag edit func_110205_ce() -> isBreeding() [this is probably wrong, not sure what 'bred' represents]
-        setValue("bred", ride.isBreeding());
+		setValue("reproduced", ride.isBreeding());
+        setValue("bred", ride.isEatingHaystack());
 	}
 }

@@ -24,6 +24,6 @@ public class MODULE_CONSTANTS
 	public static String NO_ITEM = "";
 	public static String NO_POWERMETA = "";
 	public static String NO_NAME = "";
-	public static int NO_ENTITY = -1;
+	public static String NO_ENTITY = "";
 	public static int NO_META = -1;
 }

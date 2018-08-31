@@ -3,7 +3,6 @@ package eu.ha3.matmos.game.data.modules;
 import eu.ha3.matmos.engine.core.interfaces.Data;
 import eu.ha3.matmos.game.data.abstractions.module.Module;
 import eu.ha3.matmos.game.data.abstractions.module.ModuleProcessor;
-import eu.ha3.matmos.game.system.MAtmosUtility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
@@ -21,19 +20,11 @@ public class M__cb_light extends ModuleProcessor implements Module
 	}
 	
 	@Override
-	protected void doProcess()
-	{
+	protected void doProcess() {
 		World w = Minecraft.getMinecraft().world;
-        BlockPos playerPos = MAtmosUtility.getPlayerPosition();
 
-        /* dag edits
-         * Use BlockPos
-         * getSavedLightValue(..) -> getLightFor(..)
-         * EnumSkyBlock.Sky -> EnumSkyBlock.SKY
-         * EnumSkyBlock.Block -> EnumSkyBlock.BLOCK
-         * getBlockLightValue(..) -> getLight(..)
-         * canBlockSeeTheSky(..) -> canSeeSky(..)
-         */
+        BlockPos playerPos = getPlayer().getPosition();
+
         setValue("sky", w.getLightFor(EnumSkyBlock.SKY, playerPos));
 		setValue("lamp", w.getLightFor(EnumSkyBlock.BLOCK, playerPos));
 		setValue("final", w.getLight(playerPos));

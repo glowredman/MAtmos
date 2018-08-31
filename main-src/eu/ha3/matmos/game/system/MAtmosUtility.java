@@ -8,38 +8,33 @@ import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 /* x-placeholder */
 
-public class MAtmosUtility
-{
+public class MAtmosUtility {
     private static final MAtMutableBlockPos position = new MAtMutableBlockPos();
 
-    public static MAtMutableBlockPos getPlayerPosition()
-    {
+    public static MAtMutableBlockPos getPlayerPosition() {
         return position.of(getPlayerX(), getPlayerY(), getPlayerZ());
     }
 
-    public static int getPlayerX()
-    {
+    public static int getPlayerX() {
         return (int) Math.floor(Minecraft.getMinecraft().player.posX);
     }
 
-    public static int getPlayerY()
-    {
+    public static int getPlayerY() {
         return (int) Math.floor(Minecraft.getMinecraft().player.posY);
     }
 
-    public static int getPlayerZ()
-    {
+    public static int getPlayerZ() {
         return (int) Math.floor(Minecraft.getMinecraft().player.posZ);
     }
 
-    public static boolean isUnderwaterAnyGamemode()
-    {
+    public static boolean isUnderwaterAnyGamemode() {
         return Minecraft.getMinecraft().player.isInsideOfMaterial(Material.WATER);
     }
 
@@ -50,8 +45,7 @@ public class MAtmosUtility
      * @param y
      * @return
      */
-    public static boolean isWithinBounds(int y)
-    {
+    public static boolean isWithinBounds(int y) {
         return y >= 0 && y < Minecraft.getMinecraft().world.getHeight();
     }
 
@@ -62,15 +56,8 @@ public class MAtmosUtility
      * @param y
      * @return
      */
-    public static int clampToBounds(int y)
-    {
-        if (y < 0)
-            return 0;
-
-        if (y >= Minecraft.getMinecraft().world.getHeight())
-            return Minecraft.getMinecraft().world.getHeight() - 1;
-
-        return y;
+    public static int clampToBounds(int y) {
+        return Math.max(Math.min(0, y), Minecraft.getMinecraft().world.getHeight() - 1);
     }
 
     /**
@@ -82,11 +69,15 @@ public class MAtmosUtility
      * @param z
      * @return
      */
-    public static Block getBlockAt(int x, int y, int z)
-    {
+    @Deprecated
+    public static Block getBlockAt(int x, int y, int z) {
         return getBlockAt(Minecraft.getMinecraft().world, x, y, z);
     }
 
+    public static Block getBlockAt(BlockPos pos) {
+    	return Minecraft.getMinecraft().world.getBlockState(pos).getBlock();
+    }
+    
     /**
      * Gets the name of the block at a certain location in the current world. If
      * the location is in an undefined space (lower than zero or higher than the
@@ -99,12 +90,21 @@ public class MAtmosUtility
      * @param defaultIfFail
      * @return
      */
+    @Deprecated
     public static String getNameAt(int x, int y, int z, String defaultIfFail)
     {
         if (!isWithinBounds(y))
             return defaultIfFail;
 
         return getNameAt(Minecraft.getMinecraft().world, x, y, z);
+    }
+    
+    public static String getNameAt(BlockPos pos, String defaultIfFail) {
+    	if (!isWithinBounds(pos.getY())) {
+            return defaultIfFail;
+    	}
+    	
+    	return nameOf(getBlockAt(pos));
     }
 
     /**
@@ -231,6 +231,7 @@ public class MAtmosUtility
      * @param defaultIfFail
      * @return
      */
+    @Deprecated
     public static String getPowerMetaAt(int x, int y, int z, String defaultIfFail)
     {
         if (!isWithinBounds(y))
@@ -239,6 +240,15 @@ public class MAtmosUtility
         Block block = getBlockAt(x, y, z);
         IBlockState blockState = Minecraft.getMinecraft().world.getBlockState(position.of(x, y, z));
         return asPowerMeta(block, block.getMetaFromState(blockState));
+    }
+
+    public static String getPowerMetaAt(BlockPos pos, String defaultIfFail) {
+        if (!isWithinBounds(pos.getY())) {
+            return defaultIfFail;
+        }
+        
+        IBlockState state = Minecraft.getMinecraft().world.getBlockState(pos);
+        return asPowerMeta(state.getBlock(), state.getBlock().getMetaFromState(state));
     }
 
     /**
@@ -301,6 +311,7 @@ public class MAtmosUtility
      * @param defaultIfFail
      * @return
      */
+    @Deprecated
     public static int getMetaAt(int x, int y, int z, int defaultIfFail)
     {
         if (!isWithinBounds(y))
@@ -308,6 +319,11 @@ public class MAtmosUtility
 
         IBlockState blockState = Minecraft.getMinecraft().world.getBlockState(position.of(x, y, z));
         return blockState.getBlock().getMetaFromState(blockState);
+    }
+    
+    public static int getMetaAt(BlockPos pos, int defaultIdFail) {
+    	IBlockState state = Minecraft.getMinecraft().world.getBlockState(pos);
+    	return state.getBlock().getMetaFromState(state);
     }
 
     /**
@@ -319,12 +335,21 @@ public class MAtmosUtility
      * @param defaultIfFail
      * @return
      */
-    public static String getMetaAsStringAt(int x, int y, int z, String defaultIfFail)
-    {
+    @Deprecated
+    public static String getMetaAsStringAt(int x, int y, int z, String defaultIfFail) {
         if (!isWithinBounds(y))
             return defaultIfFail;
 
         IBlockState blockState = Minecraft.getMinecraft().world.getBlockState(position.of(x, y, z));
+        return Integer.toString(blockState.getBlock().getMetaFromState(blockState));
+    }
+    
+    public static String getMetaAsStringAt(BlockPos pos, String defaultIfFail) {
+        if (!isWithinBounds(pos.getY())) {
+            return defaultIfFail;
+        }
+
+        IBlockState blockState = Minecraft.getMinecraft().world.getBlockState(pos);
         return Integer.toString(blockState.getBlock().getMetaFromState(blockState));
     }
 
@@ -334,8 +359,7 @@ public class MAtmosUtility
      * @param itemStack
      * @return
      */
-    public static int legacyOf(ItemStack itemStack)
-    {
+    public static int legacyOf(ItemStack itemStack) {
         return Item.REGISTRY.getIDForObject(itemStack.getItem());
     }
 
@@ -345,13 +369,11 @@ public class MAtmosUtility
      * @param block
      * @return
      */
-    public static int legacyOf(Block block)
-    {
+    public static int legacyOf(Block block) {
         return Block.REGISTRY.getIDForObject(block);
     }
 
-    public static String sanitizeUniqueName(String name)
-    {
+    public static String sanitizeUniqueName(String name) {
         return name.replaceAll("[^a-zA-Z0-9.-_]", "");
     }
 }

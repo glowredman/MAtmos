@@ -12,7 +12,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
 	}
 }
 configurations {
@@ -39,8 +39,7 @@ sourceSets {
 	}
 }
 
-// Basic project information
-version = "r36"
+version = "r37"
 group = "eu.ha3"
 archivesBaseName = 'presencefootsteps'
 ext.revision = "0"
@@ -52,7 +51,6 @@ minecraft {
 }
 
 processResources {
-	// this will ensure that this task is redone when the versions change.
 	def props = [
 		version: version,
 		mcversion: minecraft.version,
@@ -60,15 +58,10 @@ processResources {
 	]
 	
 	inputs.properties props
-	
-	// replace stuff in litemod.json, nothing else
 	from(sourceSets.main.resources.srcDirs) {
 		include 'litemod.json'
-		// replace version and mcversion
 		expand props
 	}
-	
-	// copy everything else, thats not the litemod.json
 	from(sourceSets.main.resources.srcDirs) {
 		exclude 'litemod.json'
 	}

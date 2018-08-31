@@ -227,7 +227,6 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 	@Override
 	public void input(int x, int y, int z)
 	{
-        // MAtmosUtility.getNameAt(x, y, z, "")
 		String name = MAtmosUtility.nameOf(MAtmosUtility.getBlockAt(x, y, z));
 		this.base.increment(name);
 		this.base.increment(MAtmosUtility.getPowerMetaAt(x, y, z, ""));

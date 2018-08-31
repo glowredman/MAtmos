@@ -9,14 +9,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-/*
---filenotes-placeholder
-*/
-
-public class M__cb_column extends ModuleProcessor implements Module
-{
-	public M__cb_column(Data data)
-	{
+public class M__cb_column extends ModuleProcessor implements Module {
+	public M__cb_column(Data data) {
 		super(data, "cb_column");
 		
 		EI("y-2", "Block under the feet");
@@ -29,17 +23,17 @@ public class M__cb_column extends ModuleProcessor implements Module
 	}
 	
 	@Override
-	protected void doProcess()
-	{
+	protected void doProcess() {
 		World w = Minecraft.getMinecraft().world;
 
-        BlockPos pos = MAtmosUtility.getPlayerPosition();
+        BlockPos pos = getPlayer().getPosition();
         BlockPos topMostBlock = w.getTopSolidOrLiquidBlock(pos);
 		
-		setValue("y-1", MAtmosUtility.getNameAt(pos.getX(), pos.getY() - 1, pos.getZ(), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS));
-        setValue("y-2", MAtmosUtility.getNameAt(pos.getX(), pos.getY() - 2, pos.getZ(), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS));
-		setValue("y0", MAtmosUtility.getNameAt(pos.getX(), pos.getY(), pos.getZ(), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS));
-		setValue("y1", MAtmosUtility.getNameAt(pos.getX(), pos.getY() + 1, pos.getZ(), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS));
+		setValue("y-1", MAtmosUtility.getNameAt(pos.down(), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS));
+        setValue("y-2", MAtmosUtility.getNameAt(pos.down(2), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS));
+		setValue("y0", MAtmosUtility.getNameAt(pos, MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS));
+		setValue("y1", MAtmosUtility.getNameAt(pos.up(), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS));
+		
 		setValue("topmost_block", topMostBlock.getY());
 		setValue("thickness_overhead", topMostBlock.getY() - pos.getY());
 		setValue("can_rain_reach", w.canSeeSky(pos) && !(topMostBlock.getY() > pos.getY()));

@@ -40,7 +40,7 @@ public class MAtGuiExpansionDetails extends GuiScreen
 	{
 		drawGradientRect(0, 0, this.width, this.height, 0xF0000000, 0x90000000);
 		
-		drawCenteredString(this.fontRendererObj, TextFormatting.GOLD + "Dev mode: Viewing " + TextFormatting.YELLOW
+		drawCenteredString(this.fontRenderer, TextFormatting.GOLD + "Dev mode: Viewing " + TextFormatting.YELLOW
                 + TextFormatting.ITALIC + this.expansion.getFriendlyName() + " (" + this.expansion.getName() + ")",
                 this.width / 2, 4, 0xffffff);
 		
@@ -115,10 +115,8 @@ public class MAtGuiExpansionDetails extends GuiScreen
 					if (debugUnit instanceof ReadOnlyJasonStringEDU)
 					{
 						// XXX Read only mode
-						this.mod.getChatter().printChat(TextFormatting.RED,
-                                "Expansions inside ZIP files are not supported in this version.");
-						this.mod.getChatter().printChatShort(TextFormatting.RED,
-                                "Please unzip the resource packs to be able to view them.");
+						this.mod.getChatter().printChat(TextFormatting.RED, "Expansions inside ZIP files are not supported in this version.");
+						this.mod.getChatter().printChatShort(TextFormatting.RED, "Please unzip the resource packs to be able to view them.");
 					}
 				}
 				else
