@@ -11,81 +11,80 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public class NoAttenuationMovingSound extends MovingSound implements StreamingSound
-{
-	private boolean usesPause;
-	private final HelperFadeCalculator helper = new HelperFadeCalculator(new SystemClock());
-	private float desiredVolume;
-	private float desiredPitch;
+public class NoAttenuationMovingSound extends MovingSound implements StreamingSound {
+    private boolean usesPause;
+    private final HelperFadeCalculator helper = new HelperFadeCalculator(new SystemClock());
+    private float desiredVolume;
+    private float desiredPitch;
 
-	protected NoAttenuationMovingSound(ResourceLocation myResource, float volume, float pitch, boolean isLooping, boolean usesPause) {
-		super(SoundEvents.AMBIENT_CAVE, SoundCategory.MASTER);
-		
-		positionedSoundLocation = myResource;
-		this.attenuationType = ISound.AttenuationType.NONE;
-		this.repeat = isLooping;
-		this.repeatDelay = 0;
+    protected NoAttenuationMovingSound(ResourceLocation myResource, float volume, float pitch, boolean isLooping, boolean usesPause) {
+        super(SoundEvents.AMBIENT_CAVE, SoundCategory.MASTER);
 
-		this.desiredVolume = volume;
-		this.desiredPitch = pitch;
-		this.volume = volume;
-		this.pitch = pitch;
+        positionedSoundLocation = myResource;
+        this.attenuationType = ISound.AttenuationType.NONE;
+        this.repeat = isLooping;
+        this.repeatDelay = 0;
 
-		this.usesPause = usesPause;
-	}
-	
-	public NoAttenuationMovingSound copy() {
-		return new NoAttenuationMovingSound(this.getSoundLocation(), desiredVolume, desiredPitch, repeat, usesPause);
-	}
+        this.desiredVolume = volume;
+        this.desiredPitch = pitch;
+        this.volume = volume;
+        this.pitch = pitch;
 
-	@Override
-	public void update() {
-		Entity e = Minecraft.getMinecraft().player;
-		
-		this.xPosF = (float) e.posX;
-		this.yPosF = (float) e.posY;
-		this.zPosF = (float) e.posZ;
+        this.usesPause = usesPause;
+    }
 
-		this.volume = helper.calculateFadeFactor() * desiredVolume;
+    public NoAttenuationMovingSound copy() {
+        return new NoAttenuationMovingSound(this.getSoundLocation(), desiredVolume, desiredPitch, repeat, usesPause);
+    }
 
-		if (volume < 0.01f && usesPause) {
-			pitch = 0f;
-		}
-		
-		if (volume > 0.01f && usesPause) {
+    @Override
+    public void update() {
+        Entity e = Minecraft.getMinecraft().player;
+
+        this.xPosF = (float)e.posX;
+        this.yPosF = (float)e.posY;
+        this.zPosF = (float)e.posZ;
+
+        this.volume = helper.calculateFadeFactor() * desiredVolume;
+
+        if (volume < 0.01f && usesPause) {
+            pitch = 0f;
+        }
+
+        if (volume > 0.01f && usesPause) {
             pitch = desiredPitch;
         }
-		
+
         if (helper.isDoneFadingOut() && this.repeat && !this.isDonePlaying()) {
             dispose();
         }
-	}
+    }
 
-	@Override
-	public void play(float fadeIn) {
-		this.helper.fadeIn((long) (fadeIn * 1000));
-	}
+    @Override
+    public void play(float fadeIn) {
+        this.helper.fadeIn((long)(fadeIn * 1000));
+    }
 
-	@Override
-	public void stop(float fadeOut) {
-		this.helper.fadeOut((long) (fadeOut * 1000));
-	}
+    @Override
+    public void stop(float fadeOut) {
+        this.helper.fadeOut((long)(fadeOut * 1000));
+    }
 
-	@Override
-	public void applyVolume(float volumeMod) {
+    @Override
+    public void applyVolume(float volumeMod) {
         this.volume = volumeMod;
-	}
+    }
 
-	@Override
-	public void dispose() {
-		this.donePlaying = true;
-	}
+    @Override
+    public void dispose() {
+        this.donePlaying = true;
+    }
 
-	@Override
-	public void interrupt() {
-		this.donePlaying = true;
-	}
+    @Override
+    public void interrupt() {
+        this.donePlaying = true;
+    }
 }

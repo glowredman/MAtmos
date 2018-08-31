@@ -4,10 +4,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public class DVSerialRoot
-{
-	public Map<String, String> entries = new TreeMap<String, String>();
+public class DVSerialRoot {
+    public Map<String, String> entries = new TreeMap<String, String>();
 }

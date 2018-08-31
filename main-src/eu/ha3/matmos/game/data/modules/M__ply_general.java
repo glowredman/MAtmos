@@ -12,22 +12,19 @@ import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public class M__ply_general extends ModuleProcessor implements Module
-{
+public class M__ply_general extends ModuleProcessor implements Module {
     private final Utility util;
 
-    public M__ply_general(Data data, Utility util)
-    {
+    public M__ply_general(Data data, Utility util) {
         super(data, "ply_general");
         this.util = util;
     }
 
     @Override
-    protected void doProcess()
-    {
+    protected void doProcess() {
         // dag edit EntityClientPlayerMP -> EntityPlayerSP
         EntityPlayerSP player = Minecraft.getMinecraft().player;
 
@@ -36,20 +33,17 @@ public class M__ply_general extends ModuleProcessor implements Module
         setValue("on_ground", player.onGround);
         setValue("burning", player.isBurning());
         setValue("jumping", player.movementInput.jump);
-        try
-        {
-            setValue("in_web", (Boolean) this.util.getPrivate(player, "isInWeb"));
-        }
-        catch (PrivateAccessException e)
-        {
+        try {
+            setValue("in_web", (Boolean)this.util.getPrivate(player, "isInWeb"));
+        } catch (PrivateAccessException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
         setValue("on_ladder", player.isOnLadder());
-        
+
         ItemStack held = player.getHeldItemMainhand();
         if (held == null) held = player.getHeldItemOffhand();
-        
+
         setValue("blocking", player.isHandActive() && held != null && held.getItem() instanceof ItemShield);
         setValue("sprinting", player.isSprinting());
         setValue("sneaking", player.isSneaking());

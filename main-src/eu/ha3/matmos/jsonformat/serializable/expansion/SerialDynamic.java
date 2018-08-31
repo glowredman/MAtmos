@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public class SerialDynamic
-{
-	public List<SerialDynamicSheetIndex> entries = new ArrayList<SerialDynamicSheetIndex>();
+public class SerialDynamic {
+    public List<SerialDynamicSheetIndex> entries = new ArrayList<SerialDynamicSheetIndex>();
 }

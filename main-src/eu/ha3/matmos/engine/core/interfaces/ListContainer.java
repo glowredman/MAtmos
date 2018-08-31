@@ -1,10 +1,9 @@
 package eu.ha3.matmos.engine.core.interfaces;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public interface ListContainer
-{
-	public boolean contains(String element);
+public interface ListContainer {
+    public boolean contains(String element);
 }

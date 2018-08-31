@@ -11,37 +11,32 @@ import java.util.Iterator;
 import java.util.List;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public class MAtGuiModules extends GuiScreen
-{
+public class MAtGuiModules extends GuiScreen {
     private final MAtMod mod;
     private GuiScreen parentScreen;
 
     private int buttonId;
     private List<String> val;
 
-    public MAtGuiModules(GuiScreen par1GuiScreen, MAtMod mod)
-    {
+    public MAtGuiModules(GuiScreen par1GuiScreen, MAtMod mod) {
         this.mod = mod;
         this.buttonId = -1;
         this.parentScreen = par1GuiScreen;
 
         this.val = mod.getVisualDebugger().obtainSheetNamesCopy();
         Iterator<String> iter = this.val.iterator();
-        while (iter.hasNext())
-        {
-            if (iter.next().endsWith(ModuleProcessor.DELTA_SUFFIX))
-            {
+        while (iter.hasNext()) {
+            if (iter.next().endsWith(ModuleProcessor.DELTA_SUFFIX)) {
                 iter.remove();
             }
         }
     }
 
     @Override
-    public void initGui()
-    {
+    public void initGui() {
         final int _GAP = 2;
         final int _UNIT = 20;
         final int _WIDTH = 155 * 2;
@@ -62,12 +57,11 @@ public class MAtGuiModules extends GuiScreen
                         202, _LEFT + _MIX + _WIDTH - _MIX * 2 + _GAP, _SEPARATOR + _MIX * (5 + 4), _TURNOFFWIDTH, _UNIT,
                         "Deltas?"));
 
-        for (int id = 0; id < this.val.size(); id++)
-        {
+        for (int id = 0; id < this.val.size(); id++) {
             int flid = id / 18;
             this.buttonList.add(new GuiButton(
                     id, _LEFT + flid * _WIDTH / 3, _SEPARATOR + _MIX / 2 * (id % 18), _WIDTH / 3, _UNIT / 2, this.val
-                    .get(id)));
+                            .get(id)));
         }
 
         this.buttonList.add(new GuiButton(200, _LEFT + _MIX, _SEPARATOR + _MIX * (5 + 4), _WIDTH
@@ -75,56 +69,40 @@ public class MAtGuiModules extends GuiScreen
     }
 
     @Override
-    protected void actionPerformed(GuiButton par1GuiButton)
-    {
-        if (par1GuiButton.id == 200)
-        {
+    protected void actionPerformed(GuiButton par1GuiButton) {
+        if (par1GuiButton.id == 200) {
             this.mc.displayGuiScreen(this.parentScreen);
-        }
-        else if (par1GuiButton.id == 201)
-        {
+        } else if (par1GuiButton.id == 201) {
             this.mod.getVisualDebugger().noDebug();
-        }
-        else if (par1GuiButton.id == 202)
-        {
+        } else if (par1GuiButton.id == 202) {
             this.mod.getVisualDebugger().toggleDeltas();
-        }
-        else if (par1GuiButton.id < this.val.size())
-        {
+        } else if (par1GuiButton.id < this.val.size()) {
             this.mod.getVisualDebugger().debugModeScan(this.val.get(par1GuiButton.id));
         }
 
     }
 
-    private void aboutToClose()
-    {
+    private void aboutToClose() {
         this.mod.saveConfig();
     }
 
     @Override
-    public void onGuiClosed()
-    {
+    public void onGuiClosed() {
         aboutToClose();
     }
 
     // dag edit: throws IOException
     @Override
-    protected void mouseClicked(int par1, int par2, int par3) throws IOException
-    {
-        if (this.buttonId >= 0)
-        {
-        }
-        else
-        {
+    protected void mouseClicked(int par1, int par2, int par3) throws IOException {
+        if (this.buttonId >= 0) {} else {
             super.mouseClicked(par1, par2, par3);
         }
     }
 
     @Override
-    public void drawScreen(int par1, int par2, float par3)
-    {
+    public void drawScreen(int par1, int par2, float par3) {
         drawGradientRect(0, 0, this.width, this.height, 0xC0C06000, 0x60C06000);
-        drawCenteredString(this.fontRenderer, TextFormatting.GOLD + "Dev mode: On-screen Display", this.width / 2, 1,0xffffff);
+        drawCenteredString(this.fontRenderer, TextFormatting.GOLD + "Dev mode: On-screen Display", this.width / 2, 1, 0xffffff);
 
         this.mod.getVisualDebugger().onFrame(-1f);
 
@@ -133,8 +111,7 @@ public class MAtGuiModules extends GuiScreen
     }
 
     @Override
-    public boolean doesGuiPauseGame()
-    {
+    public boolean doesGuiPauseGame() {
         return false;
     }
 }

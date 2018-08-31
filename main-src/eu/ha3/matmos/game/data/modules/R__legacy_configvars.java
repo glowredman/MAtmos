@@ -11,56 +11,45 @@ import java.io.File;
 import java.io.IOException;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public class R__legacy_configvars extends ModuleProcessor implements Module
-{
-	private final MAtMod mod;
-	
-	private File defaultsConfig;
-	private File userConfig;
-	private ConfigProperty config;
-	
-	public R__legacy_configvars(Data data, MAtMod mod)
-	{
-		super(data, "legacy_configvars", true);
-		this.mod = mod;
-		
-		this.defaultsConfig = new File(mod.util().getModsFolder(), "matmos/dataconfigvars_defaults.cfg");
-		this.userConfig = new File(mod.util().getModsFolder(), "matmos/dataconfigvars.cfg");
-		
-		this.config = new ConfigProperty();
-		this.config.setSource(this.defaultsConfig.getAbsolutePath());
-		this.config.load();
-		
-		this.config.setSource(this.userConfig.getAbsolutePath());
-		if (!this.userConfig.exists())
-		{
-			try
-			{
-				this.userConfig.createNewFile();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	@Override
-	protected void doProcess()
-	{
-		for (String key : this.config.getAllProperties().keySet())
-		{
-			try
-			{
-				setValue(key, this.config.getInteger(key));
-			}
-			catch (Exception e)
-			{
-				IDontKnowHowToCode.whoops__printExceptionToChat(this.mod.getChatter(), e, this);
-			}
-		}
-	}
+public class R__legacy_configvars extends ModuleProcessor implements Module {
+    private final MAtMod mod;
+
+    private File defaultsConfig;
+    private File userConfig;
+    private ConfigProperty config;
+
+    public R__legacy_configvars(Data data, MAtMod mod) {
+        super(data, "legacy_configvars", true);
+        this.mod = mod;
+
+        this.defaultsConfig = new File(mod.util().getModsFolder(), "matmos/dataconfigvars_defaults.cfg");
+        this.userConfig = new File(mod.util().getModsFolder(), "matmos/dataconfigvars.cfg");
+
+        this.config = new ConfigProperty();
+        this.config.setSource(this.defaultsConfig.getAbsolutePath());
+        this.config.load();
+
+        this.config.setSource(this.userConfig.getAbsolutePath());
+        if (!this.userConfig.exists()) {
+            try {
+                this.userConfig.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    protected void doProcess() {
+        for (String key : this.config.getAllProperties().keySet()) {
+            try {
+                setValue(key, this.config.getInteger(key));
+            } catch (Exception e) {
+                IDontKnowHowToCode.whoops__printExceptionToChat(this.mod.getChatter(), e, this);
+            }
+        }
+    }
 }

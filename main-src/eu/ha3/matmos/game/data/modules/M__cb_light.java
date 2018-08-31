@@ -9,25 +9,23 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public class M__cb_light extends ModuleProcessor implements Module
-{
-	public M__cb_light(Data data)
-	{
-		super(data, "cb_light");
-	}
-	
-	@Override
-	protected void doProcess() {
-		World w = Minecraft.getMinecraft().world;
+public class M__cb_light extends ModuleProcessor implements Module {
+    public M__cb_light(Data data) {
+        super(data, "cb_light");
+    }
+
+    @Override
+    protected void doProcess() {
+        World w = Minecraft.getMinecraft().world;
 
         BlockPos playerPos = getPlayer().getPosition();
 
         setValue("sky", w.getLightFor(EnumSkyBlock.SKY, playerPos));
-		setValue("lamp", w.getLightFor(EnumSkyBlock.BLOCK, playerPos));
-		setValue("final", w.getLight(playerPos));
+        setValue("lamp", w.getLightFor(EnumSkyBlock.BLOCK, playerPos));
+        setValue("final", w.getLight(playerPos));
         setValue("see_sky", w.canSeeSky(playerPos));
-	}
+    }
 }

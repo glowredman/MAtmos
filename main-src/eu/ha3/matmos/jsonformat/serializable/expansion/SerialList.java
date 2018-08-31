@@ -4,10 +4,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public class SerialList
-{
-	public Set<String> entries = new TreeSet<String>();
+public class SerialList {
+    public Set<String> entries = new TreeSet<String>();
 }

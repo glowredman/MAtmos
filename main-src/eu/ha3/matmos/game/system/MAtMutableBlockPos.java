@@ -6,37 +6,31 @@ import net.minecraft.util.math.BlockPos;
  * @author dags_ <dags@dags.me>
  */
 
-public class MAtMutableBlockPos extends BlockPos
-{
+public class MAtMutableBlockPos extends BlockPos {
     private int x;
     private int y;
     private int z;
 
-    public MAtMutableBlockPos()
-    {
+    public MAtMutableBlockPos() {
         super(0, 0, 0);
     }
 
-    public MAtMutableBlockPos of(int xPos, int yPos, int zPos)
-    {
+    public MAtMutableBlockPos of(int xPos, int yPos, int zPos) {
         x = xPos;
         y = yPos;
         z = zPos;
         return this;
     }
 
-    public int getX()
-    {
+    public int getX() {
         return this.x;
     }
 
-    public int getY()
-    {
+    public int getY() {
         return this.y;
     }
 
-    public int getZ()
-    {
+    public int getZ() {
         return this.z;
     }
 }

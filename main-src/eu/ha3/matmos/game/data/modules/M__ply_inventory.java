@@ -7,19 +7,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public class M__ply_inventory extends ModuleProcessor implements Module
-{
-    public M__ply_inventory(Data data)
-    {
+public class M__ply_inventory extends ModuleProcessor implements Module {
+    public M__ply_inventory(Data data) {
         super(data, "ply_inventory");
     }
 
     @Override
-    protected void doProcess()
-    {
+    protected void doProcess() {
         // dag edit EntityClientPlayerMP -> EntityPlayerSP
         EntityPlayerSP player = Minecraft.getMinecraft().player;
 

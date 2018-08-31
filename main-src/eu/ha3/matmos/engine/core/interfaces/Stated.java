@@ -1,15 +1,14 @@
 package eu.ha3.matmos.engine.core.interfaces;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public interface Stated
-{
-	/**
-	 * Tells if this state is active.
-	 * 
-	 * @return
-	 */
-	public boolean isActive();
+public interface Stated {
+    /**
+     * Tells if this state is active.
+     * 
+     * @return
+     */
+    public boolean isActive();
 }

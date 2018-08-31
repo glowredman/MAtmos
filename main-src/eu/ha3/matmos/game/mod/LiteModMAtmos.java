@@ -3,11 +3,11 @@ package eu.ha3.matmos.game.mod;
 import eu.ha3.mc.haddon.litemod.TempLiteKey;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
 public class LiteModMAtmos extends TempLiteKey {
-	public LiteModMAtmos() {
-		super(new MAtMod());
-	}
+    public LiteModMAtmos() {
+        super(new MAtMod());
+    }
 }

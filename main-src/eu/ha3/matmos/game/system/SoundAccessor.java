@@ -4,12 +4,11 @@ import net.minecraft.client.audio.SoundManager;
 import paulscode.sound.SoundSystem;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public interface SoundAccessor
-{
-	public SoundManager getSoundManager();
-	
-	public SoundSystem getSoundSystem();
+public interface SoundAccessor {
+    public SoundManager getSoundManager();
+
+    public SoundSystem getSoundSystem();
 }

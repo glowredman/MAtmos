@@ -1,10 +1,9 @@
 package eu.ha3.matmos.engine.core.interfaces;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public interface VersionListener
-{
-	public void onIncrement(Versionned versionned);
+public interface VersionListener {
+    public void onIncrement(Versionned versionned);
 }

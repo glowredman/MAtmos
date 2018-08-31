@@ -1,12 +1,11 @@
 package eu.ha3.matmos.engine.core.interfaces;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public interface SheetIndex
-{
-	public String getSheet();
-	
-	public String getIndex();
+public interface SheetIndex {
+    public String getSheet();
+
+    public String getIndex();
 }

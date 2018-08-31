@@ -6,19 +6,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public class S__ench_current extends AbstractEnchantmentModule
-{
-	public S__ench_current(Data data)
-	{
-		super(data, "ench_current");
-	}
-	
-	@Override
-	protected ItemStack getItem(EntityPlayer player)
-	{
-		return player.getActiveItemStack();
-	}
+public class S__ench_current extends AbstractEnchantmentModule {
+    public S__ench_current(Data data) {
+        super(data, "ench_current");
+    }
+
+    @Override
+    protected ItemStack getItem(EntityPlayer player) {
+        return player.getActiveItemStack();
+    }
 }

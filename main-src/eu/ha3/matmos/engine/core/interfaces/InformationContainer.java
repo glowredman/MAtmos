@@ -1,10 +1,9 @@
 package eu.ha3.matmos.engine.core.interfaces;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public interface InformationContainer<T>
-{
-	public T getInformation();
+public interface InformationContainer<T> {
+    public T getInformation();
 }

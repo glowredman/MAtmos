@@ -3,13 +3,11 @@ package eu.ha3.matmos.engine.core.implem.abstractions;
 import eu.ha3.matmos.engine.core.interfaces.Dependable;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public abstract class DependableComponent extends MultistateComponent implements Dependable
-{
-	public DependableComponent(String name)
-	{
-		super(name);
-	}
+public abstract class DependableComponent extends MultistateComponent implements Dependable {
+    public DependableComponent(String name) {
+        super(name);
+    }
 }

@@ -6,24 +6,23 @@ import eu.ha3.matmos.engine.core.interfaces.SheetCommander;
 import eu.ha3.matmos.engine.core.interfaces.SoundRelay;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public interface ProviderCollection
-{
-	public ReferenceTime getReferenceTime();
-	
-	public SoundRelay getSoundRelay();
-	
-	public SheetCommander<String> getSheetCommander();
-	
-	public Provider<Condition> getCondition();
-	
-	public Provider<Junction> getJunction();
-	
-	public Provider<Machine> getMachine();
-	
-	public Provider<Event> getEvent();
-	
-	public Provider<Dynamic> getDynamic();
+public interface ProviderCollection {
+    public ReferenceTime getReferenceTime();
+
+    public SoundRelay getSoundRelay();
+
+    public SheetCommander<String> getSheetCommander();
+
+    public Provider<Condition> getCondition();
+
+    public Provider<Junction> getJunction();
+
+    public Provider<Machine> getMachine();
+
+    public Provider<Event> getEvent();
+
+    public Provider<Dynamic> getDynamic();
 }

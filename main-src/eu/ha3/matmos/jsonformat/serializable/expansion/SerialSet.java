@@ -4,11 +4,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /*
---filenotes-placeholder
-*/
+ * --filenotes-placeholder
+ */
 
-public class SerialSet
-{
-	public Set<String> yes = new TreeSet<String>();
-	public Set<String> no = new TreeSet<String>();
+public class SerialSet {
+    public Set<String> yes = new TreeSet<String>();
+    public Set<String> no = new TreeSet<String>();
 }
