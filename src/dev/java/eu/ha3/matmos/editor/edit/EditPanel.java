@@ -4,7 +4,13 @@ import eu.ha3.matmos.editor.InstantTextField;
 import eu.ha3.matmos.editor.interfaces.Editor;
 import eu.ha3.matmos.editor.interfaces.IFlaggable;
 import eu.ha3.matmos.editor.interfaces.NamedSerialEditor;
-import eu.ha3.matmos.jsonformat.serializable.expansion.*;
+import eu.ha3.matmos.serialisation.expansion.SerialCondition;
+import eu.ha3.matmos.serialisation.expansion.SerialDynamic;
+import eu.ha3.matmos.serialisation.expansion.SerialEvent;
+import eu.ha3.matmos.serialisation.expansion.SerialList;
+import eu.ha3.matmos.serialisation.expansion.SerialMachine;
+import eu.ha3.matmos.serialisation.expansion.SerialRoot;
+import eu.ha3.matmos.serialisation.expansion.SerialSet;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

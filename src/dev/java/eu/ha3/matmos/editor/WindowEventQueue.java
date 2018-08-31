@@ -1,7 +1,7 @@
 package eu.ha3.matmos.editor;
 
 import eu.ha3.matmos.editor.interfaces.Window;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialRoot;
+import eu.ha3.matmos.serialisation.expansion.SerialRoot;
 
 import java.awt.*;
 

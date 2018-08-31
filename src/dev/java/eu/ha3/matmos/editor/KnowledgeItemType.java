@@ -1,6 +1,6 @@
 package eu.ha3.matmos.editor;
 
-import eu.ha3.matmos.jsonformat.serializable.expansion.*;
+import eu.ha3.matmos.serialisation.expansion.*;
 
 import java.util.HashMap;
 import java.util.Map;

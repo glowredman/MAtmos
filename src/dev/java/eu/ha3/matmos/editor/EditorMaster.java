@@ -3,15 +3,15 @@ package eu.ha3.matmos.editor;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.MalformedJsonException;
+
+import eu.ha3.matmos.debug.PluggableIntoMinecraft;
+import eu.ha3.matmos.debug.expansions.ReadOnlyJasonStringEDU;
 import eu.ha3.matmos.editor.interfaces.Editor;
 import eu.ha3.matmos.editor.interfaces.Window;
 import eu.ha3.matmos.editor.tree.Selector;
-import eu.ha3.matmos.expansions.debugunit.ReadOnlyJasonStringEDU;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialEvent;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialRoot;
-import eu.ha3.matmos.pluggable.PluggableIntoMinecraft;
-import eu.ha3.matmos.tools.Jason;
-import eu.ha3.matmos.tools.JasonExpansions_Engine1Deserializer2000;
+import eu.ha3.matmos.serialisation.JsonExpansions_EngineDeserializer;
+import eu.ha3.matmos.serialisation.expansion.*;
+import eu.ha3.matmos.util.Json;
 
 import javax.swing.*;
 import java.io.File;
@@ -108,7 +108,7 @@ public class EditorMaster implements Runnable, Editor
 		{
 			flushFileAndSerial();
 			this.root =
-				new JasonExpansions_Engine1Deserializer2000().jsonToSerial(((ReadOnlyJasonStringEDU) this.minecraft)
+				new JsonExpansions_EngineDeserializer().jsonToSerial(((ReadOnlyJasonStringEDU) this.minecraft)
 					.obtainJasonString());
 			updateFileAndContentsState();
 		}
@@ -194,7 +194,7 @@ public class EditorMaster implements Runnable, Editor
 			sc = new Scanner(new FileInputStream(potentialFile));
 			String jasonString = sc.useDelimiter("\\Z").next();
 			System.out.println(jasonString);
-			this.root = new JasonExpansions_Engine1Deserializer2000().jsonToSerial(jasonString);
+			this.root = new JsonExpansions_EngineDeserializer().jsonToSerial(jasonString);
 			this.hasModifiedContents = false;
 			updateFileAndContentsState();
 		} finally {
@@ -210,7 +210,7 @@ public class EditorMaster implements Runnable, Editor
 			sc = new Scanner(new FileInputStream(potentialFile));
 			String jasonString = sc.useDelimiter("\\Z").next();
 			System.out.println(jasonString);
-			SerialRoot mergeFrom = new JasonExpansions_Engine1Deserializer2000().jsonToSerial(jasonString);
+			SerialRoot mergeFrom = new JsonExpansions_EngineDeserializer().jsonToSerial(jasonString);
 			
 			if (Collections.disjoint(this.root.condition.keySet(), mergeFrom.condition.keySet())
 				&& Collections.disjoint(this.root.dynamic.keySet(), mergeFrom.dynamic.keySet())
@@ -289,13 +289,13 @@ public class EditorMaster implements Runnable, Editor
 	@Override
 	public String generateJson(boolean pretty)
 	{
-		return pretty ? Jason.toJsonPretty(this.root) : Jason.toJson(this.root);
+		return pretty ? Json.toJsonPretty(this.root) : Json.toJson(this.root);
 	}
 	
 	@Override
 	public void minecraftPushCurrentState()
 	{
-		this.minecraft.pushJason(Jason.toJson(this.root));
+		this.minecraft.pushJason(Json.toJson(this.root));
 	}
 	
 	@Override
@@ -338,7 +338,7 @@ public class EditorMaster implements Runnable, Editor
 			}
 			
 			FileWriter write = new FileWriter(fileToWrite);
-			write.append(Jason.toJsonPretty(this.root));
+			write.append(Json.toJsonPretty(this.root));
 			write.close();
 		}
 		catch (Exception e)
@@ -535,7 +535,7 @@ public class EditorMaster implements Runnable, Editor
 		Class<? extends Object> serialClass = map.get(name).getClass();
 		@SuppressWarnings("unchecked")
 		T duplicate =
-			(T) new Gson().fromJson(new JsonParser().parse(Jason.toJson(map.get(name))).getAsJsonObject(), serialClass);
+			(T) new Gson().fromJson(new JsonParser().parse(Json.toJson(map.get(name))).getAsJsonObject(), serialClass);
 		
 		int add = 1;
 		while (map.containsKey(name + " (" + add + ")"))
@@ -567,8 +567,6 @@ public class EditorMaster implements Runnable, Editor
 	@Override
 	public void pushSound(SerialEvent event)
 	{
-		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override

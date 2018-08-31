@@ -1,9 +1,6 @@
 package eu.ha3.matmos.editor;
 
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialMachine;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialMachineEvent;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialRoot;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialSet;
+import eu.ha3.matmos.serialisation.expansion.*;
 
 import java.util.HashSet;
 import java.util.Set;

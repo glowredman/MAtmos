@@ -1,7 +1,7 @@
 package eu.ha3.matmos.editor.edit;
 
 import eu.ha3.matmos.editor.interfaces.IFlaggable;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialSet;
+import eu.ha3.matmos.serialisation.expansion.SerialSet;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

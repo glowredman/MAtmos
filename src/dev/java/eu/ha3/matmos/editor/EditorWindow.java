@@ -8,7 +8,8 @@ import eu.ha3.matmos.editor.interfaces.Window;
 import eu.ha3.matmos.editor.tree.ItemTreeBranch;
 import eu.ha3.matmos.editor.tree.ItemTreeNode;
 import eu.ha3.matmos.editor.tree.ItemTreeViewPanel;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialRoot;
+import eu.ha3.matmos.serialisation.expansion.SerialRoot;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;

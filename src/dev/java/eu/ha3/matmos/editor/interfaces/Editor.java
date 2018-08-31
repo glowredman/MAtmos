@@ -2,13 +2,10 @@ package eu.ha3.matmos.editor.interfaces;
 
 import eu.ha3.matmos.editor.KnowledgeItemType;
 import eu.ha3.matmos.editor.tree.Selector;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialEvent;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialRoot;
-import java.io.File;
+import eu.ha3.matmos.serialisation.expansion.SerialEvent;
+import eu.ha3.matmos.serialisation.expansion.SerialRoot;
 
-/*
---filenotes-placeholder
-*/
+import java.io.File;
 
 public interface Editor
 {

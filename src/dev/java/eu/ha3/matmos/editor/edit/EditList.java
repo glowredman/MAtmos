@@ -1,8 +1,7 @@
 package eu.ha3.matmos.editor.edit;
 
 import eu.ha3.matmos.editor.interfaces.IFlaggable;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialDynamic;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialDynamicSheetIndex;
+import eu.ha3.matmos.serialisation.expansion.SerialList;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -17,18 +16,17 @@ import java.awt.event.ActionListener;
 */
 
 @SuppressWarnings("serial")
-public class EditDynamic extends JPanel implements IFlaggable
+public class EditList extends JPanel implements IFlaggable
 {
 	private final EditPanel edit;
-	private final SerialDynamic serialDynamic;
-	private DynamicRemoverPanel listRemover;
-	private JTextField textFieldSheet;
-	private JTextField textFieldIndex;
+	private final SerialList serialList;
+	private SetRemoverPanel listRemover;
+	private JTextField textField;
 	
-	public EditDynamic(EditPanel parentConstruct, SerialDynamic serialDynamicConstruct)
+	public EditList(EditPanel parentConstruct, SerialList serialListConstruct)
 	{
 		this.edit = parentConstruct;
-		this.serialDynamic = serialDynamicConstruct;
+		this.serialList = serialListConstruct;
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel = new JPanel();
@@ -49,7 +47,7 @@ public class EditDynamic extends JPanel implements IFlaggable
 		gbc_lblMustBeActive.gridy = 0;
 		panel.add(lblMustBeActive, gbc_lblMustBeActive);
 		
-		this.listRemover = new DynamicRemoverPanel(this, this.serialDynamic);
+		this.listRemover = new SetRemoverPanel(this, this.serialList.entries);
 		GridBagConstraints gbc_listRemover = new GridBagConstraints();
 		gbc_listRemover.fill = GridBagConstraints.BOTH;
 		gbc_listRemover.gridx = 0;
@@ -61,38 +59,16 @@ public class EditDynamic extends JPanel implements IFlaggable
 		add(panel_1, BorderLayout.SOUTH);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel_2 = new JPanel();
-		panel_1.add(panel_2, BorderLayout.CENTER);
-		GridBagLayout gbl_panel_2 = new GridBagLayout();
-		gbl_panel_2.columnWidths = new int[] { 86, 0, 0 };
-		gbl_panel_2.rowHeights = new int[] { 20, 0 };
-		gbl_panel_2.columnWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
-		gbl_panel_2.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
-		panel_2.setLayout(gbl_panel_2);
-		
-		this.textFieldSheet = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.fill = GridBagConstraints.BOTH;
-		gbc_textField.insets = new Insets(0, 0, 0, 5);
-		gbc_textField.gridx = 0;
-		gbc_textField.gridy = 0;
-		panel_2.add(this.textFieldSheet, gbc_textField);
-		this.textFieldSheet.addActionListener(new ActionListener() {
+		this.textField = new JTextField();
+		this.textField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
 				addLine();
 			}
 		});
-		this.textFieldSheet.setColumns(10);
-		
-		this.textFieldIndex = new JTextField();
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.fill = GridBagConstraints.BOTH;
-		gbc_textField_1.gridx = 1;
-		gbc_textField_1.gridy = 0;
-		panel_2.add(this.textFieldIndex, gbc_textField_1);
-		this.textFieldIndex.setColumns(10);
+		panel_1.add(this.textField, BorderLayout.CENTER);
+		this.textField.setColumns(10);
 		
 		JButton btnAddenter = new JButton("Add (ENTER)");
 		btnAddenter.addActionListener(new ActionListener() {
@@ -118,27 +94,28 @@ public class EditDynamic extends JPanel implements IFlaggable
 	
 	private void pickupSelection()
 	{
-		int value = this.listRemover.getList().getSelectedIndex();
-		if (value == -1 || value >= this.serialDynamic.entries.size())
+		Object value = this.listRemover.getList().getSelectedValue();
+		if (value == null || !(value instanceof String))
 			return;
 		
-		this.textFieldSheet.setText(this.serialDynamic.entries.get(value).sheet);
-		this.textFieldIndex.setText(this.serialDynamic.entries.get(value).index);
+		this.textField.setText((String) value);
 	}
 	
 	private void addLine()
 	{
-		String ctsOfSheet = this.textFieldSheet.getText();
-		if (ctsOfSheet.equals(""))
+		String cts = this.textField.getText();
+		if (cts.equals(""))
 			return;
 		
-		String ctsOfIndex = this.textFieldIndex.getText();
-		if (ctsOfIndex.equals(""))
+		if (this.serialList.entries.contains(cts))
+		{
+			this.listRemover.getList().setSelectedValue(cts, true);
 			return;
+		}
 		
-		this.serialDynamic.entries.add(new SerialDynamicSheetIndex(ctsOfSheet, ctsOfIndex));
+		this.serialList.entries.add(cts);
 		flagChange();
-		this.listRemover.getList().setSelectedValue(ctsOfSheet + "@" + ctsOfIndex, true);
+		this.listRemover.getList().setSelectedValue(cts, true);
 	}
 	
 	@Override

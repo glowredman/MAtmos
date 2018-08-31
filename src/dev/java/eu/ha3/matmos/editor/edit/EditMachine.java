@@ -3,9 +3,7 @@ package eu.ha3.matmos.editor.edit;
 import eu.ha3.matmos.editor.InstantTextField;
 import eu.ha3.matmos.editor.filechooser.OggFileChooser;
 import eu.ha3.matmos.editor.interfaces.IFlaggable;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialMachine;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialMachineEvent;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialMachineStream;
+import eu.ha3.matmos.serialisation.expansion.*;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

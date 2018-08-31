@@ -1,8 +1,8 @@
 package eu.ha3.matmos.editor.edit;
 
+import eu.ha3.matmos.core.Operator;
 import eu.ha3.matmos.editor.InstantTextField;
-import eu.ha3.matmos.engine.core.interfaces.Operator;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialCondition;
+import eu.ha3.matmos.serialisation.expansion.SerialCondition;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

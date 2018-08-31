@@ -1,19 +1,24 @@
 buildscript {
-	repositories {
-		jcenter()
-		mavenCentral()
-		maven {
-			name = "sonatype"
-			url = "https://oss.sonatype.org/content/repositories/snapshots/"
-		}
-		maven {
-			name 'forge'
-			url 'http://files.minecraftforge.net/maven/'
-		}
-	}
-	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-	}
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            name 'forge'
+            url 'http://files.minecraftforge.net/maven/'
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+        maven {
+            name = 'sponge'
+            url = 'http://repo.spongepowered.org/maven'
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:' + project.forgeGradleVersion
+        classpath 'org.spongepowered:mixingradle:' + project.mixinGradleVersion
+    }
 }
 configurations {
 	embed
@@ -23,50 +28,68 @@ dependencies {
 	embed 'net.sf.practicalxml:practicalxml:1.1.19'
 }
 apply plugin: 'net.minecraftforge.gradle.liteloader'
+apply plugin: 'org.spongepowered.mixin'
+
+def ver = "${project.mcVersion}.${project.buildVersion}-${project.buildType}"
+
+version = ver
+group = project.group
+description = project.name
+archivesBaseName = 'presencefootsteps'
+ext.revision = "0"
+
+minecraft {
+		version = project.mcVersion
+		mappings = project.mcMappings
+		runDir = 'run'
+    replace '@MODID@', project.modid
+    replace '@NAME@', project.name
+    replace '@AUTHOR@', project.author
+    replace '@VERSION@', ver
+    replace '@DESCRIPTION@', project.description
+}
+
+mixin {
+    defaultObfuscationEnv notch
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 sourceSets {
-	main {
+	commons {
 		java {
 			srcDir "lib/MC-Commons/mc-src"
-			srcDir "main-src"
-		}
-		resources {
-			srcDirs "matmos-packaging"
 		}
 	}
-}
-
-version = "r37"
-group = "eu.ha3"
-archivesBaseName = 'presencefootsteps'
-ext.revision = "0"
-
-minecraft {
-	version = project.mcVersion
-	mappings = project.mcMappings
-	runDir = 'jars'
-}
-
-processResources {
-	def props = [
-		version: version,
-		mcversion: minecraft.version,
-		revision: revision
-	]
-	
-	inputs.properties props
-	from(sourceSets.main.resources.srcDirs) {
-		include 'litemod.json'
-		expand props
+	main {
+		compileClasspath += commons.output
 	}
-	from(sourceSets.main.resources.srcDirs) {
-		exclude 'litemod.json'
+	dev {
+		compileClasspath += main.output
 	}
 }
 
 jar {
-	from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
+  def props = [
+      modid: project.modid,
+      name: project.name,
+      description: project.description,
+        version: ver,
+        revision: project.buildRevision,
+        mcversion: project.mcVersion,
+        author: project.author,
+				url: project.url
+    ]
+    inputs.properties props
+
+		from(sourceSets.main.output) {
+			exclude 'litemod.json'
+		}
+		from(sourceSets.main.output) {
+			include 'litemod.json'
+			expand props
+		}
+
+		from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
 }

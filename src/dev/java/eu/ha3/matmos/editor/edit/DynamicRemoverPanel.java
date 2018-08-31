@@ -1,14 +1,11 @@
 package eu.ha3.matmos.editor.edit;
 
 import eu.ha3.matmos.editor.interfaces.IFlaggable;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialDynamic;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialDynamicSheetIndex;
+import eu.ha3.matmos.serialisation.expansion.*;
 
 import javax.swing.*;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,13 +44,7 @@ public class DynamicRemoverPanel extends JPanel
 		panel.add(panel_1, BorderLayout.EAST);
 		
 		JButton btnRemoveSelected = new JButton("Remove");
-		btnRemoveSelected.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				removeSelected();
-			}
-		});
+		btnRemoveSelected.addActionListener(arg -> removeSelected());
 		panel_1.setLayout(new BorderLayout(0, 0));
 		panel_1.add(btnRemoveSelected);
 	}

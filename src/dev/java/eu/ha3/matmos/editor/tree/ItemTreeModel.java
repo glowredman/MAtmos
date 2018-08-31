@@ -1,7 +1,7 @@
 package eu.ha3.matmos.editor.tree;
 
 import eu.ha3.matmos.editor.interfaces.ISerialUpdate;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialRoot;
+import eu.ha3.matmos.serialisation.expansion.SerialRoot;
 
 import javax.swing.tree.DefaultTreeModel;
 

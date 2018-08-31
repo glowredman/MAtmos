@@ -4,7 +4,7 @@ import eu.ha3.matmos.editor.KnowledgeItemType;
 import eu.ha3.matmos.editor.interfaces.Editor;
 import eu.ha3.matmos.editor.interfaces.ISerialUpdate;
 import eu.ha3.matmos.editor.interfaces.NamedSerialEditor;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialRoot;
+import eu.ha3.matmos.serialisation.expansion.SerialRoot;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;

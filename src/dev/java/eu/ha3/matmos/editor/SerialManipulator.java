@@ -1,11 +1,11 @@
 package eu.ha3.matmos.editor;
 
-import eu.ha3.matmos.engine.core.implem.Dynamic;
-import eu.ha3.matmos.engine.core.interfaces.Operator;
-import eu.ha3.matmos.jsonformat.serializable.expansion.*;
-
 import java.util.Iterator;
 import java.util.Map;
+
+import eu.ha3.matmos.core.Dynamic;
+import eu.ha3.matmos.core.Operator;
+import eu.ha3.matmos.serialisation.expansion.*;
 
 /*
 --filenotes-placeholder

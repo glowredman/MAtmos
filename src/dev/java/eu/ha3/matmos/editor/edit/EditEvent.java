@@ -1,7 +1,7 @@
 package eu.ha3.matmos.editor.edit;
 
 import eu.ha3.matmos.editor.filechooser.OggFileChooser;
-import eu.ha3.matmos.jsonformat.serializable.expansion.SerialEvent;
+import eu.ha3.matmos.serialisation.expansion.SerialEvent;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
