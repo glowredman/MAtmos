@@ -57,6 +57,10 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 sourceSets {
+	air {
+	}
+	breeze {
+	}
 	commons {
 		java {
 			srcDir "lib/MC-Commons/mc-src"
