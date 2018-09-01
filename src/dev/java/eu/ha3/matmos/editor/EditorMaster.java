@@ -244,7 +244,7 @@ public class EditorMaster implements Runnable, Editor {
 
     @Override
     public void minecraftPushCurrentState() {
-        minecraft.pushJason(Json.toJson(root));
+        minecraft.pushJson(Json.toJson(root));
     }
 
     @Override

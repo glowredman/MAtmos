@@ -1,13 +1,20 @@
 package eu.ha3.matmos.serialisation.expansion;
 
-/*
- * --filenotes-placeholder
- */
+import com.google.gson.annotations.Expose;
 
 public class SerialMachineStream {
+    @Expose
     public String path = "";
-    public float vol = 1f;
-    public float pitch = 1f;
-    public boolean looping = false;
-    public boolean pause = false;
+
+    @Expose
+    public float vol = 1;
+
+    @Expose
+    public float pitch = 1;
+
+    @Expose
+    public boolean looping;
+
+    @Expose
+    public boolean pause;
 }

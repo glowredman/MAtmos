@@ -7,8 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import eu.ha3.easy.StopWatchStatistic;
 import eu.ha3.easy.TimeStatistic;
@@ -60,7 +59,7 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     // State
     private boolean isListenerInstalled;
-    private Optional<Simulacrum> simulacrum = Optional.absent();
+    private Optional<Simulacrum> simulacrum = Optional.empty();
     private boolean isUnderwaterMode;
 
     // Components
@@ -187,7 +186,7 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
         }
         MAtLog.fine("Stopping...");
         simulacrum.get().dispose();
-        simulacrum = Optional.absent();
+        simulacrum = Optional.empty();
         MAtLog.fine("Stopped.");
     }
 
@@ -426,7 +425,7 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     public Optional<Expansion> getExpansionEffort(String expansionName) {
         if (!isActivated() || !simulacrum.get().getExpansions().containsKey(expansionName)) {
-            return Optional.absent();
+            return Optional.empty();
         }
         return Optional.of(simulacrum.get().getExpansions().get(expansionName));
     }

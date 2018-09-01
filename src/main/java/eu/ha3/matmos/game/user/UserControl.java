@@ -32,7 +32,6 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
     }
 
     public void load() {
-        // new KeyBinding registers it rightaway to the list of keys
         keyBindingMain = new KeyBinding("MAtmos", 65, "key.categories.misc");
         Minecraft.getMinecraft().gameSettings.keyBindings = ArrayUtils.addAll(Minecraft.getMinecraft().gameSettings.keyBindings, keyBindingMain);
         keyBindingMain.setKeyCode(mod.getConfig().getInteger("key.code"));

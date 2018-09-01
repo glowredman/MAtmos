@@ -49,7 +49,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
     private Knowledge knowledge; // Knowledge is not final
 
     private LoadingAgent agent;
-    private LoadingAgent jasonDebugPush;
+    private LoadingAgent jsonAgent;
 
     public Expansion(ExpansionIdentity identity, DataPackage data, Collector collector, SoundAccessor accessor, VolumeContainer masterVolume, File configurationSource) {
         this.identity = identity;
@@ -89,8 +89,8 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
         }
     }
 
-    public void pushDebugJasonAndRefreshKnowledge(String jasonString) {
-        jasonDebugPush = new RawJsonLoadingAgent(jasonString);
+    public void pushDebugJsonAndRefreshKnowledge(String jsonString) {
+        jsonAgent = new RawJsonLoadingAgent(jsonString);
         refreshKnowledge();
     }
 
@@ -106,11 +106,11 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
 
         newKnowledge();
 
-        if (jasonDebugPush == null) {
+        if (jsonAgent == null) {
             isSuccessfullyBuilt = agent.load(identity, knowledge);
         } else {
-            isSuccessfullyBuilt = jasonDebugPush.load(identity, knowledge);
-            jasonDebugPush = null;
+            isSuccessfullyBuilt = jsonAgent.load(identity, knowledge);
+            jsonAgent = null;
         }
 
         if (!isSuccessfullyBuilt) {

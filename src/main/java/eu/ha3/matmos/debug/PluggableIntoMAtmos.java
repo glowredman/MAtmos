@@ -1,17 +1,12 @@
 package eu.ha3.matmos.debug;
 
 import java.io.File;
-
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.FolderExpansionDebugUnit;
 import net.minecraft.util.text.TextFormatting;
-
-/*
- * --filenotes-placeholder
- */
 
 public class PluggableIntoMAtmos implements PluggableIntoMinecraft {
     private MAtMod mod;
@@ -36,18 +31,15 @@ public class PluggableIntoMAtmos implements PluggableIntoMinecraft {
     }
 
     @Override
-    public void pushJason(String jason) {
-        final String jasonString = jason;
+    public void pushJson(String json) {
         mod.queueForNextTick(() -> {
             Optional<Expansion> opt = mod.getExpansionEffort(expansionName);
 
             if (opt.isPresent()) {
                 Expansion expansion = opt.get();
 
-                mod.getChatter().printChat(
-                        TextFormatting.AQUA,
-                        "Reloading from editor state: " + expansion.getName() + " " + getTimestamp());
-                expansion.pushDebugJasonAndRefreshKnowledge(jasonString);
+                mod.getChatter().printChat(TextFormatting.AQUA, "Reloading from editor state: " + expansion.getName() + " " + getTimestamp());
+                expansion.pushDebugJsonAndRefreshKnowledge(json);
             }
         });
     }
@@ -55,16 +47,10 @@ public class PluggableIntoMAtmos implements PluggableIntoMinecraft {
     @Override
     public void reloadFromDisk() {
         mod.queueForNextTick(() -> {
-            Optional<Expansion> opt = mod.getExpansionEffort(expansionName);
-
-            if (opt.isPresent()) {
-                Expansion expansion = opt.get();
-
-                mod.getChatter().printChat(
-                        TextFormatting.BLUE,
-                        "Reloading from disk: ", expansion.getName() + " " + getTimestamp());
+            mod.getExpansionEffort(expansionName).ifPresent(expansion -> {
+                mod.getChatter().printChat(TextFormatting.BLUE, "Reloading from disk: ", expansion.getName() + " " + getTimestamp());
                 expansion.refreshKnowledge();
-            }
+            });
         });
     }
 

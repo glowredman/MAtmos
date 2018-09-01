@@ -9,7 +9,7 @@ public interface PluggableIntoMinecraft {
 
     File getWorkingDirectoryIfAvailable();
 
-    void pushJason(String jason);
+    void pushJson(String json);
 
     void reloadFromDisk();
 

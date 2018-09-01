@@ -134,7 +134,6 @@ public class JsonExpansions_EngineDeserializer {
                     tie = new TimedEventInformation(entry.getKey(), providers.getMachine(), providers.getReferenceTime(), events, serial.delay_fadein, serial.delay_fadeout, serial.fadein, serial.fadeout);
                 }
 
-                //Solly edit - only add a Machine if one is needed.
                 if (tie != null || stream != null) {
                     Named element = new Machine(entry.getKey(), providers.getJunction(), asList(serial.allow), asList(serial.restrict), tie, stream);
                     elements.add(element);
@@ -142,7 +141,6 @@ public class JsonExpansions_EngineDeserializer {
             }
         }
 
-        //Solly edit - only add knowledge is there is knowledge to give
         if (elements.size() > 0) {
             knowledgeWorkstation.addKnowledge(elements);
         }

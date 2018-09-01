@@ -1,7 +1,5 @@
 package eu.ha3.matmos.data.scanners;
 
-/* x-placeholder */
-
 public interface ScanOperations {
     void begin();
 
