@@ -6,7 +6,7 @@ import java.util.Map;
 
 import eu.ha3.easy.TimeStatistic;
 import eu.ha3.matmos.Matmos;
-import eu.ha3.matmos.MAtResourcePackDealer;
+import eu.ha3.matmos.ResourcePackDealer;
 import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.ExpansionManager;
 import eu.ha3.matmos.core.expansion.VolumeUpdatable;
@@ -39,8 +39,9 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
 
         hasResourcePacks = true;
         if (expansionManager.getExpansions().size() == 0) {
-            MAtResourcePackDealer dealer = new MAtResourcePackDealer();
-            if (dealer.findResourcePacks().size() == 0) {
+            ResourcePackDealer dealer = new ResourcePackDealer();
+
+            if (dealer.findResourcePacks().count() == 0) {
                 hasResourcePacks = false;
                 hasDisabledResourcePacks = dealer.findDisabledResourcePacks().size() > 0;
             }
