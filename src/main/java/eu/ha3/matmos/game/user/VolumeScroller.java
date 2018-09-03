@@ -1,6 +1,6 @@
 package eu.ha3.matmos.game.user;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.convenience.Ha3Scroller;
 import net.minecraft.client.Minecraft;
@@ -14,13 +14,13 @@ public class VolumeScroller extends Ha3Scroller {
     final private String MESSAGE_MORE = "+";
     final private String MESSAGE_LESS = "-";
 
-    private MAtMod mod;
+    private Matmos mod;
     private float prevPitch;
 
     private boolean knowsHowToUse;
     private float doneValue;
 
-    public VolumeScroller(MAtMod mod) {
+    public VolumeScroller(Matmos mod) {
         super(Minecraft.getMinecraft());
         this.mod = mod;
 

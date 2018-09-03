@@ -4,20 +4,20 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 
 public class GuiModules extends GuiScreen {
-    private final MAtMod mod;
+    private final Matmos mod;
     private GuiScreen parentScreen;
 
     private int buttonId;
     private List<String> val;
 
-    public GuiModules(GuiScreen par1GuiScreen, MAtMod mod) {
+    public GuiModules(GuiScreen par1GuiScreen, Matmos mod) {
         this.mod = mod;
         buttonId = -1;
         parentScreen = par1GuiScreen;

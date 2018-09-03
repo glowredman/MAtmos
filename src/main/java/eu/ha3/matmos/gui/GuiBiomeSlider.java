@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.mc.gui.HDisplayStringProvider;
 import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
@@ -14,14 +14,14 @@ import net.minecraft.util.StringUtils;
 import net.minecraft.world.biome.Biome;
 
 public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
-    final protected MAtMod mod;
+    final protected Matmos mod;
 
     final protected int maxBiomes = calculateMaxBiomes();
     protected int definedBiomeID;
 
     private List<Integer> validBiomes = new ArrayList<>();
 
-    public GuiBiomeSlider(MAtMod mod, int define) {
+    public GuiBiomeSlider(Matmos mod, int define) {
         this.mod = mod;
         definedBiomeID = define;
 

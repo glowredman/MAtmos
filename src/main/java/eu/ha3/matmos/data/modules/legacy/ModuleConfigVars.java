@@ -3,7 +3,7 @@ package eu.ha3.matmos.data.modules.legacy;
 import java.io.File;
 import java.io.IOException;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
@@ -11,13 +11,13 @@ import eu.ha3.matmos.util.IDontKnowHowToCode;
 import eu.ha3.util.property.simple.ConfigProperty;
 
 public class ModuleConfigVars extends ModuleProcessor implements Module {
-    private final MAtMod mod;
+    private final Matmos mod;
 
     private File defaultsConfig;
     private File userConfig;
     private ConfigProperty config;
 
-    public ModuleConfigVars(DataPackage data, MAtMod mod) {
+    public ModuleConfigVars(DataPackage data, Matmos mod) {
         super(data, "legacy_configvars", true);
         this.mod = mod;
 

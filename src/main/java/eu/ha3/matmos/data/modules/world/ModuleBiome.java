@@ -1,6 +1,6 @@
 package eu.ha3.matmos.data.modules.world;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
@@ -9,9 +9,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 
 public class ModuleBiome extends ModuleProcessor implements Module {
-    private final MAtMod mod;
+    private final Matmos mod;
 
-    public ModuleBiome(DataPackage data, MAtMod mod) {
+    public ModuleBiome(DataPackage data, Matmos mod) {
         super(data, "w_biome");
         this.mod = mod;
     }

@@ -1,6 +1,6 @@
 package eu.ha3.matmos.data.modules;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.sheet.DataPackage;
 
 /*
@@ -8,9 +8,9 @@ import eu.ha3.matmos.core.sheet.DataPackage;
  */
 
 public class ModuleMetaOptions extends ModuleProcessor implements Module {
-    private final MAtMod mod;
+    private final Matmos mod;
 
-    public ModuleMetaOptions(DataPackage data, MAtMod mod) {
+    public ModuleMetaOptions(DataPackage data, Matmos mod) {
         super(data, "meta_option", true);
         this.mod = mod;
     }

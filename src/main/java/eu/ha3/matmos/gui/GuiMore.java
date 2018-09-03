@@ -2,7 +2,7 @@ package eu.ha3.matmos.gui;
 
 import java.io.IOException;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
 import net.minecraft.client.gui.GuiButton;
@@ -16,11 +16,11 @@ public class GuiMore extends GuiScreen {
 
     private GuiScreen parentScreen;
 
-    private MAtMod mod;
+    private Matmos mod;
 
     private int buttonId = -1;
 
-    public GuiMore(GuiScreen parent, MAtMod matmos) {
+    public GuiMore(GuiScreen parent, Matmos matmos) {
         parentScreen = parent;
         mod = matmos;
     }

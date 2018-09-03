@@ -2,7 +2,7 @@ package eu.ha3.matmos.gui;
 
 import java.io.File;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.ExpansionDebugUnit;
 import eu.ha3.matmos.core.expansion.FolderExpansionDebugUnit;
@@ -19,11 +19,11 @@ import net.minecraft.util.text.TextFormatting;
 
 public class GuiExpansionDetails extends GuiScreen {
     private final GuiMatMenu parentScreen;
-    private final MAtMod mod;
+    private final Matmos mod;
     private final Expansion expansion;
     private final VisualExpansionDebugging debug;
 
-    public GuiExpansionDetails(GuiMatMenu menu, MAtMod mod, Expansion expansion) {
+    public GuiExpansionDetails(GuiMatMenu menu, Matmos mod, Expansion expansion) {
         parentScreen = menu;
         this.mod = mod;
         this.expansion = expansion;

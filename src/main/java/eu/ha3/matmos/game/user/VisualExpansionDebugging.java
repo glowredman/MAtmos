@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 import org.lwjgl.opengl.GL11;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.Provider;
 import eu.ha3.matmos.core.ProviderCollection;
 import eu.ha3.matmos.core.logic.Visualized;
@@ -18,12 +18,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 
 public class VisualExpansionDebugging implements SupportsFrameEvents {
-    private final MAtMod mod;
+    private final Matmos mod;
     private final String ex;
 
     private int GAP = 10;
 
-    public VisualExpansionDebugging(MAtMod mod, String ex) {
+    public VisualExpansionDebugging(Matmos mod, String ex) {
         this.mod = mod;
         this.ex = ex;
     }

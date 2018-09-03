@@ -14,7 +14,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.MAtResourcePackDealer;
 import eu.ha3.matmos.core.expansion.agents.JsonLoadingAgent;
 import eu.ha3.matmos.core.expansion.agents.LegacyXMLLoadingAgent;
@@ -77,11 +77,11 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
                         ExpansionIdentity identity = new ExpansionIdentity(uniqueName, friendlyName, pack.getResourcePack(), location);
                         identities.add(identity);
                     } else {
-                        MAtMod.LOGGER.warn("An expansion pointer doesn't exist: " + pointer);
+                        Matmos.LOGGER.warn("An expansion pointer doesn't exist: " + pointer);
                     }
                 }
             } catch (Exception e) {
-                MAtMod.LOGGER.warn(pack.getResourcePackName() + " " + "has failed with an error: " + e.getMessage());
+                Matmos.LOGGER.warn(pack.getResourcePackName() + " " + "has failed with an error: " + e.getMessage());
             }
         }
     }

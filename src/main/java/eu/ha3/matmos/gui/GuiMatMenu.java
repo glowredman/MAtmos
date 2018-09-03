@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.VolumeUpdatable;
 import eu.ha3.mc.gui.HGuiSliderControl;
@@ -21,7 +21,7 @@ import net.minecraft.util.text.TextFormatting;
 public class GuiMatMenu extends GuiScreen {
     private GuiScreen parentScreen;
 
-    private MAtMod mod;
+    private Matmos mod;
 
     private int buttonId;
 
@@ -33,11 +33,11 @@ public class GuiMatMenu extends GuiScreen {
     // Keep the active page in memory. Globally... (herpderp)
     private static int in_memory_page = 0;
 
-    public GuiMatMenu(GuiScreen par1GuiScreen, MAtMod matmos) {
+    public GuiMatMenu(GuiScreen par1GuiScreen, Matmos matmos) {
         this(par1GuiScreen, matmos, in_memory_page);
     }
 
-    public GuiMatMenu(GuiScreen par1GuiScreen, MAtMod matmos, int pageFromZero) {
+    public GuiMatMenu(GuiScreen par1GuiScreen, Matmos matmos, int pageFromZero) {
         buttonId = -1;
         parentScreen = par1GuiScreen;
         mod = matmos;

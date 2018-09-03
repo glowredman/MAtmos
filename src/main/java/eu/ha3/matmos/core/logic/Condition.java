@@ -3,7 +3,7 @@ package eu.ha3.matmos.core.logic;
 import java.util.Collection;
 import java.util.HashSet;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.Dependable;
 import eu.ha3.matmos.core.MultistateComponent;
 import eu.ha3.matmos.core.Operator;
@@ -55,7 +55,7 @@ public class Condition extends MultistateComponent implements Dependable, Visual
         if (pre != isActive) {
             incrementVersion();
 
-            MAtMod.LOGGER.debug("C: " + getName() + " -> " + isActive);
+            Matmos.LOGGER.debug("C: " + getName() + " -> " + isActive);
         }
     }
 

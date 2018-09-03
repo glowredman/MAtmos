@@ -5,7 +5,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import eu.ha3.easy.TimeStatistic;
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.MAtResourcePackDealer;
 import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.ExpansionManager;
@@ -24,7 +24,7 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
     private boolean hasResourcePacks;
     private boolean hasDisabledResourcePacks;
 
-    public Simulacrum(MAtMod mod) {
+    public Simulacrum(Matmos mod) {
         expansionManager = new ExpansionManager(new File(mod.util().getModsFolder(), "matmos/expansions_r29_userconfig/"), mod.getSoundHandler());
         expansionManager.setVolumeAndUpdate(mod.getConfig().getFloat("globalvolume.scale"));
 
@@ -48,7 +48,7 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
 
         expansionManager.synchronize();
 
-        MAtMod.LOGGER.info("Expansions loaded (" + stat.getSecondsAsString(1) + "s).");
+        Matmos.LOGGER.info("Expansions loaded (" + stat.getSecondsAsString(1) + "s).");
     }
 
     public void interruptBrutally() {

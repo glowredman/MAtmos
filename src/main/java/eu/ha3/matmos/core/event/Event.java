@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.Component;
 import eu.ha3.matmos.core.SoundRelay;
 import net.minecraft.client.Minecraft;
@@ -44,7 +44,7 @@ public class Event extends Component implements EventInterface {
             if (resourcePack.resourceExists(location) || def.resourceExists(location)) {
                 relay.cacheSound(path);
             } else {
-                MAtMod.LOGGER.warn("File: " + path + " appears to be missing from: " + resourcePack.getPackName() + " [This sound will not be cached or played in-game]");
+                Matmos.LOGGER.warn("File: " + path + " appears to be missing from: " + resourcePack.getPackName() + " [This sound will not be cached or played in-game]");
                 toRemove.add(path);
             }
         }

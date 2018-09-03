@@ -10,7 +10,7 @@ import java.util.Map;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.InitialDirContext;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
@@ -111,7 +111,7 @@ public class ModuleServerInfo extends ModuleProcessor implements Module {
             serverAddresses.put(playerDefinedAddress, 0);
             serverPorts.put(playerDefinedAddress, conPort);
 
-            MAtMod.LOGGER.info("Error while hashing server addess: Defaulted to 0");
+            Matmos.LOGGER.info("Error while hashing server addess: Defaulted to 0");
 
             return;
         }
@@ -119,7 +119,7 @@ public class ModuleServerInfo extends ModuleProcessor implements Module {
         serverAddresses.put(playerDefinedAddress, wellHashCode);
         serverPorts.put(playerDefinedAddress, conPort);
 
-        MAtMod.LOGGER.info("Computed server IP and hashed as (" + wellHashCode + ") : " + conPort);
+        Matmos.LOGGER.info("Computed server IP and hashed as (" + wellHashCode + ") : " + conPort);
 
     }
 

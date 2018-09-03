@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.Dependable;
 import eu.ha3.matmos.core.MultistateComponent;
 import eu.ha3.matmos.core.Provider;
@@ -65,7 +65,7 @@ public class Machine extends MultistateComponent implements Dependable, Simulate
                 stream.evaluate();
             }
 
-            MAtMod.LOGGER.debug("M: " + getName() + " -> " + isActive);
+            Matmos.LOGGER.debug("M: " + getName() + " -> " + isActive);
         }
     }
 

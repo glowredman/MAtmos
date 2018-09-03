@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.sheet.Sheet;
 import eu.ha3.matmos.data.modules.ModuleRegistry;
 import eu.ha3.matmos.data.scanners.Progress;
@@ -21,7 +21,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.text.TextFormatting;
 
 public class VisualDebugger implements SupportsFrameEvents {
-    private final MAtMod mod;
+    private final Matmos mod;
     private final ModuleRegistry dataGatherer;
 
     private DebugMode mode = DebugMode.NONE;
@@ -29,7 +29,7 @@ public class VisualDebugger implements SupportsFrameEvents {
     private String scanDebug;
     private boolean deltas = false;
 
-    public VisualDebugger(MAtMod mod, ModuleRegistry dataGatherer) {
+    public VisualDebugger(Matmos mod, ModuleRegistry dataGatherer) {
         this.mod = mod;
         this.dataGatherer = dataGatherer;
     }

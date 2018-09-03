@@ -1,6 +1,6 @@
 package eu.ha3.matmos.gui;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.expansion.Expansion;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -15,7 +15,7 @@ public class GuiExpansionInfo extends GuiScreen {
 
     private final String[] info;
 
-    public GuiExpansionInfo(GuiMatMenu menu, MAtMod mod, Expansion expansion) {
+    public GuiExpansionInfo(GuiMatMenu menu, Matmos mod, Expansion expansion) {
         parentScreen = menu;
         this.expansion = expansion;
 

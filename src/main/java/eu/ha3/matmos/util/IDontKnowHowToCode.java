@@ -3,7 +3,7 @@ package eu.ha3.matmos.util;
 import java.util.HashSet;
 import java.util.Set;
 
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.mc.quick.chat.Chatter;
 import net.minecraft.util.text.TextFormatting;
 
@@ -17,7 +17,7 @@ public class IDontKnowHowToCode {
         }
         warning.add(message.hashCode());
 
-        MAtMod.LOGGER.warn(message);
+        Matmos.LOGGER.warn(message);
     }
 
     public static void whoops__printExceptionToChat(Chatter chatter, Exception e, Object caller) {

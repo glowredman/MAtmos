@@ -4,7 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
 
 import eu.ha3.easy.TimeStatistic;
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.gui.GuiMatMenu;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.convenience.Ha3HoldActions;
@@ -18,7 +18,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.text.TextFormatting;
 
 public class UserControl implements Ha3HoldActions, SupportsTickEvents, SupportsFrameEvents {
-    private final MAtMod mod;
+    private final Matmos mod;
     private final Ha3KeyManager_2 keyManager = new Ha3KeyManager_2();
 
     private KeyBinding keyBindingMain;
@@ -27,7 +27,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 
     private int loadingCount;
 
-    public UserControl(MAtMod mod) {
+    public UserControl(Matmos mod) {
         this.mod = mod;
     }
 

@@ -10,7 +10,7 @@ import java.util.TreeSet;
 
 import eu.ha3.easy.StopWatchStatistic;
 import eu.ha3.easy.TimeStatistic;
-import eu.ha3.matmos.MAtMod;
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sheet.GenericSheet;
 import eu.ha3.matmos.core.sheet.SheetDataPackage;
@@ -49,7 +49,7 @@ import eu.ha3.matmos.util.IDontKnowHowToCode;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
 public class ModuleRegistry implements Collector, Processor {
-    private final MAtMod mod;
+    private final Matmos mod;
 
     private DataPackage data;
     private int ticksPassed;
@@ -67,7 +67,7 @@ public class ModuleRegistry implements Collector, Processor {
 
     private ScannerModule largeScanner;
 
-    public ModuleRegistry(MAtMod mAtmosHaddon) {
+    public ModuleRegistry(Matmos mAtmosHaddon) {
         mod = mAtmosHaddon;
 
         modules = new TreeMap<>();
@@ -151,7 +151,7 @@ public class ModuleRegistry implements Collector, Processor {
                 data, "_POM__scan_small", "scan_small", true, -1, 2 /*64*/, 16, 8, 16, 512));
         // Each ticks, check half of the small scan
 
-        MAtMod.LOGGER.info("Modules initialized: " + Arrays.toString(new TreeSet<>(modules.keySet()).toArray()));
+        Matmos.LOGGER.info("Modules initialized: " + Arrays.toString(new TreeSet<>(modules.keySet()).toArray()));
     }
 
     public DataPackage getData() {
@@ -171,7 +171,7 @@ public class ModuleRegistry implements Collector, Processor {
             }
             watch.stop();
             if (watch.getMilliseconds() > 50 && mod.isDebugMode()) {
-                MAtMod.LOGGER.warn("Module " + requiredModule + " took " + stat.getMilliseconds() + "ms!!!");
+                Matmos.LOGGER.warn("Module " + requiredModule + " took " + stat.getMilliseconds() + "ms!!!");
             }
         }
         ticksPassed = ticksPassed + 1;
@@ -200,7 +200,7 @@ public class ModuleRegistry implements Collector, Processor {
         Set<String> missingModules = new HashSet<>();
         for (String module : requiredModules) {
             if (!modules.containsKey(module) && !passOnceSubmodules.contains(module)) {
-                MAtMod.LOGGER.error("Stack " + name + " requires missing module " + module);
+                Matmos.LOGGER.error("Stack " + name + " requires missing module " + module);
                 missingModules.add(module);
             }
         }
