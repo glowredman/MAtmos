@@ -1,9 +1,9 @@
 package eu.ha3.matmos.data.modules;
 
 import eu.ha3.matmos.core.Named;
-import eu.ha3.matmos.data.Processor;
+import eu.ha3.matmos.data.IDataGatherer;
 
-public interface Module extends Processor, Named {
+public interface Module extends IDataGatherer, Named {
     int LEGACY_NO_ITEM = -1;
     int LEGACY_NO_BLOCK_IN_THIS_CONTEXT = 0;
     int LEGACY_NO_BLOCK_OUT_OF_BOUNDS = 0;

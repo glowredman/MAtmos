@@ -15,7 +15,7 @@ import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sheet.GenericSheet;
 import eu.ha3.matmos.core.sheet.SheetDataPackage;
 import eu.ha3.matmos.data.Collector;
-import eu.ha3.matmos.data.Processor;
+import eu.ha3.matmos.data.IDataGatherer;
 import eu.ha3.matmos.data.modules.items.ModulePotionDuration;
 import eu.ha3.matmos.data.modules.items.ModulePotionStrength;
 import eu.ha3.matmos.data.modules.legacy.ModuleConfigVars;
@@ -48,7 +48,7 @@ import eu.ha3.matmos.data.scanners.ScannerModule;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
-public class ModuleRegistry implements Collector, Processor {
+public class ModuleRegistry implements Collector, IDataGatherer {
     private final Matmos mod;
 
     private DataPackage data;

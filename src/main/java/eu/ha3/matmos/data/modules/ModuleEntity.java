@@ -9,7 +9,7 @@ import java.util.Set;
 
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.Collector;
-import eu.ha3.matmos.data.Processor;
+import eu.ha3.matmos.data.IDataGatherer;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -18,9 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 
-/* x-placeholder */
-
-public class ModuleEntity implements Processor, PassOnceModule {
+public class ModuleEntity implements IDataGatherer, PassOnceModule {
     private final Set<String> submodules;
     private final Collector collector;
 

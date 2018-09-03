@@ -4,7 +4,7 @@ import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sheet.DeltaSheet;
 import eu.ha3.matmos.core.sheet.Sheet;
 import eu.ha3.matmos.core.sheet.VirtualSheet;
-import eu.ha3.matmos.data.Processor;
+import eu.ha3.matmos.data.IDataGatherer;
 
 /**
  * A processor that contains a sheet, or a virtual delta sheet if the deltaName is not null. Calling
@@ -13,7 +13,7 @@ import eu.ha3.matmos.data.Processor;
  *
  * @author Hurry
  */
-public abstract class ProcessorModel implements Processor {
+public abstract class ProcessorModel implements IDataGatherer {
     protected Sheet sheet;
 
     private int interval;
