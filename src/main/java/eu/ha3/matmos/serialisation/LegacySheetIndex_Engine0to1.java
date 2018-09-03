@@ -1,5 +1,6 @@
 package eu.ha3.matmos.serialisation;
 
+import java.util.AbstractMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -269,5 +270,13 @@ public class LegacySheetIndex_Engine0to1 implements SheetIndex {
     @Override
     public String getIndex() {
         return index;
+    }
+
+    @SuppressWarnings("serial")
+    private static class LegacyMapping extends AbstractMap.SimpleEntry<String, String> {
+
+        public LegacyMapping(String sheet, String index) {
+            super(sheet, index);
+        }
     }
 }
