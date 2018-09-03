@@ -115,7 +115,7 @@ public class ModuleRegistry implements Collector, Processor {
         addModule(new ModuleContainer(data));
         addModule(new ModuleAction(data));
         addModule(new ModuleArmour(data));
-        addModule(new ModulePlayerStats(data, mod.util()));
+        addModule(new ModulePlayerStats(data));
         addModule(new ModuleInventory(data));
         addModule(new ModuleMotion(data));
         addModule(new ModuleStats(data));

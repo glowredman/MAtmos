@@ -1,10 +1,10 @@
 package eu.ha3.matmos.data.modules.player;
 
+import eu.ha3.matmos.core.mixin.IEntity;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import eu.ha3.matmos.util.MAtUtil;
-import eu.ha3.mc.haddon.PrivateAccessException;
 import eu.ha3.mc.haddon.Utility;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.ItemShield;
@@ -15,11 +15,8 @@ import net.minecraft.item.ItemStack;
  *
  */
 public class ModulePlayerStats extends ModuleProcessor implements Module {
-    private final Utility util;
-
-    public ModulePlayerStats(DataPackage data, Utility util) {
+    public ModulePlayerStats(DataPackage data) {
         super(data, "ply_general");
-        this.util = util;
     }
 
     @Override
@@ -31,14 +28,7 @@ public class ModulePlayerStats extends ModuleProcessor implements Module {
         setValue("on_ground", player.onGround);
         setValue("burning", player.isBurning());
         setValue("jumping", player.movementInput.jump);
-
-        try {
-            setValue("in_web", (Boolean)util.getPrivate(player, "isInWeb"));
-        } catch (PrivateAccessException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-
+        setValue("in_web", ((IEntity)player).isInWeb());
         setValue("on_ladder", player.isOnLadder());
 
         ItemStack held = player.getHeldItemMainhand();
