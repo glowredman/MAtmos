@@ -12,7 +12,7 @@ import eu.ha3.matmos.core.sheet.Sheet;
 import eu.ha3.matmos.data.modules.ModuleRegistry;
 import eu.ha3.matmos.data.scanners.Progress;
 import eu.ha3.matmos.data.scanners.ScannerModule;
-import eu.ha3.matmos.util.math.LongFloatSimplificator;
+import eu.ha3.matmos.util.math.Numbers;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -107,8 +107,8 @@ public class VisualDebugger implements SupportsFrameEvents {
         if (scanDebug.startsWith("scan_")) {
             try {
                 Collections.sort(sort, (String o1, String o2) -> {
-                    Long l1 = LongFloatSimplificator.longOf(sheet.get(o1));
-                    Long l2 = LongFloatSimplificator.longOf(sheet.get(o2));
+                    Long l1 = Numbers.toLong(sheet.get(o1));
+                    Long l2 = Numbers.toLong(sheet.get(o2));
 
                     if (l1 == null && l2 == null) {
                         return o1.compareTo(o2);
@@ -135,7 +135,7 @@ public class VisualDebugger implements SupportsFrameEvents {
         int total = 0;
         for (String index : sort) {
             if (!index.contains("^")) {
-                Long l = LongFloatSimplificator.longOf(sheet.get(index));
+                Long l = Numbers.toLong(sheet.get(index));
                 if (l != null) {
                     total = total + (int)(long)l;
                 }
@@ -163,7 +163,7 @@ public class VisualDebugger implements SupportsFrameEvents {
         for (String index : sort) {
             if (lineNumber <= 100 && !index.contains("^")) {
                 if (scanDebug.startsWith("scan_") || scanDebug.equals("block_contact")) {
-                    Long count = LongFloatSimplificator.longOf(sheet.get(index));
+                    Long count = Numbers.toLong(sheet.get(index));
                     if (count != null) {
                         if (count > 0) {
                             float scalar = (float)count / total;

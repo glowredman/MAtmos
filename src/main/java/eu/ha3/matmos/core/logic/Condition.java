@@ -9,9 +9,7 @@ import eu.ha3.matmos.core.MultistateComponent;
 import eu.ha3.matmos.core.Operator;
 import eu.ha3.matmos.core.sheet.SheetCommander;
 import eu.ha3.matmos.core.sheet.SheetIndex;
-import eu.ha3.matmos.util.math.LongFloatSimplificator;
-
-/* x-placeholder */
+import eu.ha3.matmos.util.math.Numbers;
 
 public class Condition extends MultistateComponent implements Dependable, Visualized {
     private final SheetIndex indexX;
@@ -37,8 +35,7 @@ public class Condition extends MultistateComponent implements Dependable, Visual
         operatorX = operator;
         constantX = constant;
 
-        constantLongX = LongFloatSimplificator.longOf(constant);
-        //this.constantFloatX = LongFloatSimplificator.floatOf(constant);
+        constantLongX = Numbers.toLong(constant);
 
         dependencies = new HashSet<>();
         dependencies.add(index.getSheet());
@@ -46,14 +43,6 @@ public class Condition extends MultistateComponent implements Dependable, Visual
 
     @Override
     public void evaluate() {
-        // Bypass exists: We want sheets to return their default value
-        //if (!this.sheetCommander.exists(this.indexX))
-        //	return;
-
-        //System.out.println(getName()
-        //	+ " -> " + this.indexX.getSheet() + " " + this.indexX.getIndex() + ": "
-        //	+ this.sheetCommander.get(this.indexX));
-
         if (sheetCommander.version(indexX) == siVersion) {
             return;
         }
@@ -78,7 +67,7 @@ public class Condition extends MultistateComponent implements Dependable, Visual
                     return !sheetCommander.listHas(constantX, value);
                 default:
                     if (constantLongX != null) {
-                        Long longValue = LongFloatSimplificator.longOf(value);
+                        Long longValue = Numbers.toLong(value);
                         if (longValue != null) {
                             return operatorX.test(longValue, constantLongX);
                         }

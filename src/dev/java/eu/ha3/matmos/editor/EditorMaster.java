@@ -15,7 +15,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.MalformedJsonException;
 
 import eu.ha3.matmos.core.expansion.JsonExpansionDebugUnit;
-import eu.ha3.matmos.debug.PluggableIntoMinecraft;
+import eu.ha3.matmos.debug.Pluggable;
 import eu.ha3.matmos.editor.interfaces.Editor;
 import eu.ha3.matmos.editor.interfaces.Window;
 import eu.ha3.matmos.editor.tree.Selector;
@@ -28,7 +28,7 @@ public class EditorMaster implements Runnable, Editor {
 
     private Window window__EventQueue;
 
-    private final PluggableIntoMinecraft minecraft;
+    private final Pluggable minecraft;
 
     private File file;
     private File workingDirectory = new File(System.getProperty("user.dir"));
@@ -39,11 +39,11 @@ public class EditorMaster implements Runnable, Editor {
         this(null);
     }
 
-    public EditorMaster(PluggableIntoMinecraft minecraft) {
+    public EditorMaster(Pluggable minecraft) {
         this(minecraft, null);
     }
 
-    public EditorMaster(PluggableIntoMinecraft minecraft, File fileIn) {
+    public EditorMaster(Pluggable minecraft, File fileIn) {
         File potentialFile = fileIn;
 
         this.minecraft = minecraft;

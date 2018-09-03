@@ -8,7 +8,7 @@ import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.FolderExpansionDebugUnit;
 import net.minecraft.util.text.TextFormatting;
 
-public class PluggableIntoMAtmos implements PluggableIntoMinecraft {
+public class PluggableIntoMAtmos implements Pluggable {
     private MAtMod mod;
     private String expansionName;
 

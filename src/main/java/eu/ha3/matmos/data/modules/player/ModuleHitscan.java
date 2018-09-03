@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import eu.ha3.matmos.core.sheet.DataPackage;
-import eu.ha3.matmos.data.modules.MODULE_CONSTANTS;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import eu.ha3.matmos.util.MAtUtil;
@@ -32,23 +31,19 @@ public class ModuleHitscan extends ModuleProcessor implements Module {
         if (mc.objectMouseOver == null || mc.objectMouseOver.typeOfHit == null) {
             setValue("mouse_over_something", false);
             setValue("mouse_over_what", "");
-            setValue("block", MODULE_CONSTANTS.NO_BLOCK_IN_THIS_CONTEXT);
-            setValue("meta", MODULE_CONSTANTS.NO_META);
-            setValue("powermeta", MODULE_CONSTANTS.NO_POWERMETA);
-            setValue("entity_id", MODULE_CONSTANTS.NO_ENTITY);
+            setValue("block", NO_BLOCK_IN_THIS_CONTEXT);
+            setValue("meta", NO_META);
+            setValue("powermeta", NO_POWERMETA);
+            setValue("entity_id", NO_ENTITY);
 
             return;
         }
 
         setValue("mouse_over_something", mc.objectMouseOver.typeOfHit != Type.MISS);
         setValue("mouse_over_what", equiv.get(mc.objectMouseOver.typeOfHit));
-        // dag edit -> getBlockPos().get..()
-        setValue("block", mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtUtil.getNameAt(mc.objectMouseOver.getBlockPos(), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS)
-                : MODULE_CONSTANTS.NO_BLOCK_IN_THIS_CONTEXT);
-        setValue("meta", mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtUtil.getMetaAsStringAt(mc.objectMouseOver.getBlockPos(), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS)
-                : MODULE_CONSTANTS.NO_BLOCK_IN_THIS_CONTEXT);
-        setValue("powermeta", mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtUtil.getPowerMetaAt(mc.objectMouseOver.getBlockPos(), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS)
-                : MODULE_CONSTANTS.NO_BLOCK_IN_THIS_CONTEXT);
-        setValue("entity_id", mc.objectMouseOver.typeOfHit == Type.ENTITY ? EntityList.getKey(mc.objectMouseOver.entityHit).toString() : MODULE_CONSTANTS.NO_ENTITY);
+        setValue("block", mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtUtil.getNameAt(mc.objectMouseOver.getBlockPos(), NO_BLOCK_OUT_OF_BOUNDS) : NO_BLOCK_IN_THIS_CONTEXT);
+        setValue("meta", mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtUtil.getMetaAsStringAt(mc.objectMouseOver.getBlockPos(), NO_BLOCK_OUT_OF_BOUNDS) : NO_BLOCK_IN_THIS_CONTEXT);
+        setValue("powermeta", mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtUtil.getPowerMetaAt(mc.objectMouseOver.getBlockPos(), NO_BLOCK_OUT_OF_BOUNDS) : NO_BLOCK_IN_THIS_CONTEXT);
+        setValue("entity_id", mc.objectMouseOver.typeOfHit == Type.ENTITY ? EntityList.getKey(mc.objectMouseOver.entityHit).toString() : NO_ENTITY);
     }
 }

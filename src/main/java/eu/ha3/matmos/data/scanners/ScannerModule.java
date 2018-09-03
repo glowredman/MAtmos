@@ -9,6 +9,7 @@ import eu.ha3.matmos.data.modules.ExternalStringCountModule;
 import eu.ha3.matmos.data.modules.PassOnceModule;
 import eu.ha3.matmos.data.modules.ThousandStringCountModule;
 import eu.ha3.matmos.util.MAtUtil;
+import eu.ha3.matmos.util.math.MAtMutableBlockPos;
 import net.minecraft.client.Minecraft;
 
 public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
@@ -30,8 +31,6 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     private final ThousandStringCountModule thousand;
 
     private final Set<String> subModules = new HashSet<>();
-
-    //
 
     private int ticksSinceBoot;
     private boolean firstScan;
@@ -79,7 +78,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     }
 
     @Override
-    public String getModuleName() {
+    public String getName() {
         return passOnceName;
     }
 
@@ -91,7 +90,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     @Override
     public void process() {
         if (tryToReboot()) {
-            MAtLog.info("Detected large movement or teleportation. Rebooted module " + getModuleName());
+            MAtLog.info("Detected large movement or teleportation. Rebooted module " + getName());
             return;
         }
 
@@ -181,9 +180,9 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
 
     @Override
     public void input(int x, int y, int z) {
-        String name = MAtUtil.nameOf(MAtUtil.getBlockAt(x, y, z));
+        String name = MAtUtil.nameOf(MAtUtil.getBlockAt(MAtMutableBlockPos.of(x, y, z)));
         base.increment(name);
-        base.increment(MAtUtil.getPowerMetaAt(x, y, z, ""));
+        base.increment(MAtUtil.getPowerMetaAt(MAtMutableBlockPos.of(x, y, z), ""));
         thousand.increment(name);
     }
 

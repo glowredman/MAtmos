@@ -8,10 +8,6 @@ import java.util.Set;
 
 import eu.ha3.matmos.core.sheet.DataPackage;
 
-/*
- * --filenotes-placeholder
- */
-
 /**
  * An abstract module that specializes in counting things in one pass.
  *

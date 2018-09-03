@@ -2,10 +2,6 @@ package eu.ha3.matmos.data.modules;
 
 import eu.ha3.matmos.core.sheet.DataPackage;
 
-/*
- * --filenotes-placeholder
- */
-
 /**
  * Implements doProcess with nothing inside it. This class is used for placeholder modules where the
  * logic of updating the sheet is outsourced to another logic. One should call the set...() methods

@@ -4,10 +4,6 @@ import java.util.Map.Entry;
 
 import eu.ha3.matmos.core.sheet.DataPackage;
 
-/*
- * --filenotes-placeholder
- */
-
 // XXX: This is a terrible use of extends.
 public class ThousandStringCountModule extends ExternalStringCountModule {
     private int total = 0;
@@ -23,7 +19,7 @@ public class ThousandStringCountModule extends ExternalStringCountModule {
     @Override
     public void increment(String name) {
         super.increment(name);
-        total = total + 1;
+        total++;
     }
 
     @Override

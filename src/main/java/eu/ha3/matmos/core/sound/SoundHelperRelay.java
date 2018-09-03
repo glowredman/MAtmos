@@ -7,19 +7,10 @@ import eu.ha3.matmos.core.SoundRelay;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 
-/*
- * --filenotes-placeholder
- */
-
 public class SoundHelperRelay extends SoundHelper implements SoundRelay {
     private static int streamingToken;
-    private Map<String, String> paths;
 
-    public SoundHelperRelay(SoundAccessor accessor) {
-        super(accessor);
-
-        paths = new HashMap<>();
-    }
+    private final Map<String, String> paths = new HashMap<>();
 
     @Override
     public void routine() {

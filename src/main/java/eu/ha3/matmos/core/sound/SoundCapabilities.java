@@ -1,9 +1,5 @@
 package eu.ha3.matmos.core.sound;
 
-/*
- * --filenotes-placeholder
- */
-
 public interface SoundCapabilities {
     /**
      * Plays a mono, localized sound at a certain location.

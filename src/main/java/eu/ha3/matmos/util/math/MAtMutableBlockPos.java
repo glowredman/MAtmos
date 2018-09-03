@@ -6,15 +6,24 @@ import net.minecraft.util.math.BlockPos;
  * @author dags_ <dags@dags.me>
  */
 public class MAtMutableBlockPos extends BlockPos {
+    private static final MAtMutableBlockPos INSTANCE = new MAtMutableBlockPos();
+
     private int x;
     private int y;
     private int z;
 
-    public MAtMutableBlockPos() {
+    private MAtMutableBlockPos() {
         super(0, 0, 0);
     }
 
-    public MAtMutableBlockPos of(int xPos, int yPos, int zPos) {
+    /**
+     * Returns a block position wrapper set at the given coordinates.
+     */
+    public static BlockPos of(int x, int y, int z) {
+        return INSTANCE.at(x, y, z);
+    }
+
+    private MAtMutableBlockPos at(int xPos, int yPos, int zPos) {
         x = xPos;
         y = yPos;
         z = zPos;

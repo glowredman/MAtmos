@@ -1,11 +1,7 @@
 package eu.ha3.matmos.util.math;
 
-/*
- * --filenotes-placeholder
- */
-
-public class LongFloatSimplificator {
-    public static Long longOf(Object o) {
+public class Numbers {
+    public static Long toLong(Object o) {
         if (o == null) {
             return null;
         }
@@ -25,7 +21,7 @@ public class LongFloatSimplificator {
         return null;
     }
 
-    public static Float floatOf(Object o) {
+    public static Float toFloat(Object o) {
         if (o == null) {
             return null;
         }

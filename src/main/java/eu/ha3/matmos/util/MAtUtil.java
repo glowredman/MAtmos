@@ -1,12 +1,12 @@
 package eu.ha3.matmos.util;
 
-import eu.ha3.matmos.util.math.MAtMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -14,44 +14,44 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-/* x-placeholder */
-
 public class MAtUtil {
-    private static final MAtMutableBlockPos position = new MAtMutableBlockPos();
+
+    public static EntityPlayer getPlayer() {
+        return Minecraft.getMinecraft().player;
+    }
+
+    public static World getWorld() {
+        return Minecraft.getMinecraft().world;
+    }
 
     public static int getPlayerX() {
-        return (int)Math.floor(Minecraft.getMinecraft().player.posX);
+        return (int)Math.floor(getPlayer().posX);
     }
 
     public static int getPlayerY() {
-        return (int)Math.floor(Minecraft.getMinecraft().player.posY);
+        return (int)Math.floor(getPlayer().posY);
     }
 
     public static int getPlayerZ() {
-        return (int)Math.floor(Minecraft.getMinecraft().player.posZ);
+        return (int)Math.floor(getPlayer().posZ);
     }
 
     public static boolean isUnderwaterAnyGamemode() {
-        return Minecraft.getMinecraft().player.isInsideOfMaterial(Material.WATER);
+        return getPlayer().isInsideOfMaterial(Material.WATER);
     }
 
     /**
      * Tells if y is within the height boundaries of the current world, where blocks can exist.
      */
-    public static boolean isWithinBounds(int y) {
-        return y >= 0 && y < Minecraft.getMinecraft().world.getHeight();
+    private static boolean isWithinBounds(BlockPos pos) {
+        return pos.getY() >= 0 && pos.getY() < getWorld().getHeight();
     }
 
     /**
      * Clamps the y value to something that is within the current worlds' boundaries.
      */
     public static int clampToBounds(int y) {
-        return Math.max(Math.min(0, y), Minecraft.getMinecraft().world.getHeight() - 1);
-    }
-
-    @Deprecated
-    public static Block getBlockAt(int x, int y, int z) {
-        return getBlockAt(Minecraft.getMinecraft().world, x, y, z);
+        return Math.max(Math.min(0, y), getWorld().getHeight() - 1);
     }
 
     /**
@@ -59,18 +59,8 @@ public class MAtUtil {
      * locations in undefined space.
      */
     public static Block getBlockAt(BlockPos pos) {
-        return Minecraft.getMinecraft().world.getBlockState(pos).getBlock();
+        return getWorld().getBlockState(pos).getBlock();
     }
-
-    @Deprecated
-    public static String getNameAt(int x, int y, int z, String defaultIfFail) {
-        if (!isWithinBounds(y)) {
-            return defaultIfFail;
-        }
-
-        return nameOf(getBlockAt(Minecraft.getMinecraft().world, x, y, z));
-    }
-
 
     /**
      * Gets the name of the block at a certain location in the current world. If the location is in an
@@ -78,19 +68,11 @@ public class MAtUtil {
      * exception during evaluation), it will return a default string.
      */
     public static String getNameAt(BlockPos pos, String defaultIfFail) {
-        if (!isWithinBounds(pos.getY())) {
+        if (!isWithinBounds(pos)) {
             return defaultIfFail;
         }
 
         return nameOf(getBlockAt(pos));
-    }
-
-    /**
-     * Gets the block at a certain location in the given world. This method is not safe against
-     * locations in undefined space.
-     */
-    private static Block getBlockAt(World world, int x, int y, int z) {
-        return world.getBlockState(position.of(x, y, z)).getBlock();
     }
 
     /**
@@ -141,17 +123,12 @@ public class MAtUtil {
         Minecraft.getMinecraft().getSoundHandler().playSound(positionedsoundrecord);
     }
 
-    @Deprecated
-    public static String getPowerMetaAt(int x, int y, int z, String defaultIfFail) {
-        return getPowerMetaAt(position.of(x, y, z), defaultIfFail);
-    }
-
     /**
      * Returns the PowerMeta of the block at the specified coordinates.<br>
      * The PowerMeta is a string that combines the block name and the metadata of a certain block.
      */
     public static String getPowerMetaAt(BlockPos pos, String defaultIfFail) {
-        if (!isWithinBounds(pos.getY())) {
+        if (!isWithinBounds(pos)) {
             return defaultIfFail;
         }
 
@@ -167,13 +144,6 @@ public class MAtUtil {
     }
 
     /**
-     * Returns the PowerMeta, a string that combines the item name and the metadata of a certain block.
-     */
-    public static String asPowerMeta(Item item, int meta) {
-        return asPowerMeta(nameOf(item), meta);
-    }
-
-    /**
      * Returns the PowerMeta, a string that combines the block name and the metadata of a certain block.
      */
     public static String asPowerMeta(Block block, int meta) {
@@ -183,7 +153,7 @@ public class MAtUtil {
     /**
      * Returns the PowerMeta, a string that combines the item/block name and its metadata.
      */
-    public static String asPowerMeta(String block, int meta) {
+    private static String asPowerMeta(String block, int meta) {
         return block + "^" + Integer.toString(meta);
     }
 
@@ -191,7 +161,7 @@ public class MAtUtil {
      * Returns the metadata of a certain block at the specified coordinates.
      */
     public static int getMetaAt(BlockPos pos, int defaultIdFail) {
-        IBlockState state = Minecraft.getMinecraft().world.getBlockState(pos);
+        IBlockState state = getWorld().getBlockState(pos);
         return state.getBlock().getMetaFromState(state);
     }
 
@@ -199,12 +169,11 @@ public class MAtUtil {
      * Returns the metadata of a certain block at the specified coordinates.
      */
     public static String getMetaAsStringAt(BlockPos pos, String defaultIfFail) {
-        if (!isWithinBounds(pos.getY())) {
+        if (!isWithinBounds(pos)) {
             return defaultIfFail;
         }
 
-        IBlockState blockState = Minecraft.getMinecraft().world.getBlockState(pos);
-        return Integer.toString(blockState.getBlock().getMetaFromState(blockState));
+        return Integer.toString(getMetaAt(pos, 0));
     }
 
     /**

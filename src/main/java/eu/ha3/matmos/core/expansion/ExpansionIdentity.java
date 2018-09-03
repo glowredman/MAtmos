@@ -3,10 +3,6 @@ package eu.ha3.matmos.core.expansion;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.util.ResourceLocation;
 
-/*
- * --filenotes-placeholder
- */
-
 public final class ExpansionIdentity {
     private final String uniqueName;
     private final String friendlyName;

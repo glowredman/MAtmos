@@ -21,8 +21,6 @@ public class Event extends Component implements EventInterface {
     public final float pitchMax;
     public final int distance;
 
-    //
-
     private final SoundRelay relay;
 
     public Event(String name, SoundRelay relay, List<String> paths, float volMin, float volMax, float pitchMin, float pitchMax, int distance) {
@@ -39,7 +37,6 @@ public class Event extends Component implements EventInterface {
 
     @Override
     public void cacheSounds(IResourcePack resourcePack) {
-        //Solly edit - if it's not in the current resourcepack don't panic! It might be in a previous one.
         IResourcePack def = Minecraft.getMinecraft().getResourcePackRepository().rprDefaultResourcePack;
         List<String> toRemove = new ArrayList<>();
         for (String path : paths) {

@@ -6,7 +6,7 @@ import java.util.List;
 
 import eu.ha3.matmos.core.sheet.SheetCommander;
 import eu.ha3.matmos.core.sheet.SheetIndex;
-import eu.ha3.matmos.util.math.LongFloatSimplificator;
+import eu.ha3.matmos.util.math.Numbers;
 
 public class Dynamic extends Component implements Evaluated, InformationContainer<Long>, Dependable {
     public static final String DEDICATED_SHEET = "_DYNAMIC";
@@ -39,7 +39,7 @@ public class Dynamic extends Component implements Evaluated, InformationContaine
 
         for (SheetIndex sheetIndex : indexes) {
             if (sheetCommander.exists(sheetIndex)) {
-                Long value = LongFloatSimplificator.longOf(sheetCommander.get(sheetIndex));
+                Long value = Numbers.toLong(sheetCommander.get(sheetIndex));
                 if (value != null) {
                     this.value = this.value + value;
                 }

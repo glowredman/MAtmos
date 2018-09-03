@@ -26,7 +26,7 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
     private boolean hasDisabledResourcePacks;
 
     public Simulacrum(MAtMod mod) {
-        expansionManager = new ExpansionManager(new File(mod.util().getModsFolder(), "matmos/expansions_r29_userconfig/"), mod);
+        expansionManager = new ExpansionManager(new File(mod.util().getModsFolder(), "matmos/expansions_r29_userconfig/"), mod.getSoundHandler());
         expansionManager.setVolumeAndUpdate(mod.getConfig().getFloat("globalvolume.scale"));
 
         TimeStatistic stat = new TimeStatistic(Locale.ENGLISH);

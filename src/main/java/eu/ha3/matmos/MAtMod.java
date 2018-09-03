@@ -14,15 +14,14 @@ import eu.ha3.easy.TimeStatistic;
 import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.Stable;
 import eu.ha3.matmos.core.expansion.VolumeUpdatable;
+import eu.ha3.matmos.core.mixin.ISoundHandler;
 import eu.ha3.matmos.core.sound.Simulacrum;
-import eu.ha3.matmos.core.sound.SoundAccessor;
-import eu.ha3.matmos.debug.PluggableIntoMinecraft;
+import eu.ha3.matmos.debug.Pluggable;
 import eu.ha3.matmos.game.user.UserControl;
 import eu.ha3.matmos.game.user.VisualDebugger;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.haddon.Identity;
 import eu.ha3.mc.haddon.OperatorCaster;
-import eu.ha3.mc.haddon.PrivateAccessException;
 import eu.ha3.mc.haddon.implem.HaddonIdentity;
 import eu.ha3.mc.haddon.implem.HaddonImpl;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
@@ -32,17 +31,14 @@ import eu.ha3.mc.quick.update.NotifiableHaddon;
 import eu.ha3.mc.quick.update.UpdateNotifier;
 import eu.ha3.util.property.simple.ConfigProperty;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
-import paulscode.sound.SoundSystem;
 
-public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, NotifiableHaddon, IResourceManagerReloadListener, SoundAccessor, Stable {
+public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, NotifiableHaddon, IResourceManagerReloadListener, Stable {
     private static final boolean _COMPILE_IS_UNSTABLE = true;
 
     // Identity
@@ -82,13 +78,8 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void onLoad() {
-        util().registerPrivateGetter("getSoundManager", SoundHandler.class, 5, "sndManager", "field_147694_f", "f");
-        util().registerPrivateGetter("getSoundSystem", SoundManager.class, 3, "sndHandler", "field_148622_c", "d");
-
-        util().registerPrivateGetter("isInWeb", Entity.class, 30, "isInWeb", "field_70134_J", "E");
-
-        ((OperatorCaster)op()).setTickEnabled(true);
-        ((OperatorCaster)op()).setFrameEnabled(true);
+        this.<OperatorCaster>op().setTickEnabled(true);
+        this.<OperatorCaster>op().setFrameEnabled(true);
 
         TimeStatistic timeMeasure = new TimeStatistic(Locale.ENGLISH);
         userControl = new UserControl(this);
@@ -344,22 +335,8 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
         }
     }
 
-    @Override
-    public SoundManager getSoundManager() {
-        try {
-            return (SoundManager)util().getPrivate(Minecraft.getMinecraft().getSoundHandler(), "getSoundManager");
-        } catch (PrivateAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public SoundSystem getSoundSystem() {
-        try {
-            return (SoundSystem)util().getPrivate(getSoundManager(), "getSoundSystem");
-        } catch (PrivateAccessException e) {
-            throw new RuntimeException(e);
-        }
+    public ISoundHandler getSoundHandler() {
+        return ((ISoundHandler)Minecraft.getMinecraft().getSoundHandler());
     }
 
     public VolumeUpdatable getGlobalVolumeControl() {
@@ -419,8 +396,8 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
         return util().isPresent("eu.ha3.matmos.editor.EditorMaster");
     }
 
-    public Runnable instantiateRunnableEditor(PluggableIntoMinecraft pluggable) {
-        return util().<Runnable>getInstantiator("eu.ha3.matmos.editor.EditorMaster", PluggableIntoMinecraft.class).instantiate(pluggable);
+    public Runnable instantiateRunnableEditor(Pluggable pluggable) {
+        return util().<Runnable>getInstantiator("eu.ha3.matmos.editor.EditorMaster", Pluggable.class).instantiate(pluggable);
     }
 
     public Optional<Expansion> getExpansionEffort(String expansionName) {

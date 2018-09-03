@@ -18,6 +18,7 @@ import eu.ha3.matmos.MAtLog;
 import eu.ha3.matmos.MAtResourcePackDealer;
 import eu.ha3.matmos.core.expansion.agents.JsonLoadingAgent;
 import eu.ha3.matmos.core.expansion.agents.LegacyXMLLoadingAgent;
+import eu.ha3.matmos.core.mixin.ISoundHandler;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sound.SoundAccessor;
 import eu.ha3.matmos.data.Collector;
@@ -27,22 +28,19 @@ import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
 import net.minecraft.client.resources.ResourcePackRepository;
 import net.minecraft.util.ResourceLocation;
 
-/* x-placeholder */
-
 public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, SupportsFrameEvents {
-    private final SoundAccessor accessor;
+    private final ISoundHandler accessor;
     private final File userconfigFolder;
 
     private final MAtResourcePackDealer dealer = new MAtResourcePackDealer();
     private final Map<String, Expansion> expansions = new HashMap<>();
-    //private final Map<String, IResourcePack> confirmedResourcePacks = new LinkedHashMap<String, IResourcePack>();
 
     private DataPackage data;
 
     private float volume = 1f;
     private Collector collector;
 
-    public ExpansionManager(File userconfigFolder, SoundAccessor accessor) {
+    public ExpansionManager(File userconfigFolder, ISoundHandler accessor) {
         this.userconfigFolder = userconfigFolder;
         this.accessor = accessor;
 

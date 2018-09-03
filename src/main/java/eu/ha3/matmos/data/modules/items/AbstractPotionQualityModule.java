@@ -6,12 +6,8 @@ import java.util.Set;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import eu.ha3.matmos.data.modules.RegistryBasedModule;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-
-/* x-placeholder */
 
 /**
  * An abstract module that extracts a certain quality of all potion effects (such as time,
@@ -25,6 +21,7 @@ abstract class AbstractPotionQualityModule extends ModuleProcessor implements Re
 
     public AbstractPotionQualityModule(DataPackage data, String name) {
         super(data, name);
+
         data.getSheet(name).setDefaultValue("0");
         data.getSheet(name + ModuleProcessor.DELTA_SUFFIX).setDefaultValue("0");
     }
@@ -36,18 +33,17 @@ abstract class AbstractPotionQualityModule extends ModuleProcessor implements Re
 
     @Override
     protected void doProcess() {
-        EntityPlayer player = Minecraft.getMinecraft().player;
-
         for (String i : oldThings) {
             setValue(i, 0);
         }
+
         oldThings.clear();
 
-        for (Object oeffect : player.getActivePotionEffects()) {
-            PotionEffect effect = (PotionEffect)oeffect;
-
+        for (PotionEffect effect : getPlayer().getActivePotionEffects()) {
             int id = Potion.getIdFromPotion(effect.getPotion());
+
             setValue(Integer.toString(id), getQuality(effect));
+
             oldThings.add(Integer.toString(id));
         }
     }

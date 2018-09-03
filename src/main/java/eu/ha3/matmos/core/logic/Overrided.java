@@ -1,9 +1,5 @@
 package eu.ha3.matmos.core.logic;
 
-/*
- * --filenotes-placeholder
- */
-
 public interface Overrided {
     /**
      * Bypass internal logic to force this on.

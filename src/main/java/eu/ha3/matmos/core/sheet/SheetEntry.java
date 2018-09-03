@@ -1,9 +1,5 @@
 package eu.ha3.matmos.core.sheet;
 
-/*
- * --filenotes-placeholder
- */
-
 public class SheetEntry implements SheetIndex {
     private final String sheet;
     private final String index;

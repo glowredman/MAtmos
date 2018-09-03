@@ -4,10 +4,6 @@ import java.util.Collection;
 
 import eu.ha3.matmos.core.Dependable;
 
-/*
- * --filenotes-placeholder
- */
-
 public interface VisualizedSpecialDependencies extends Visualized, Dependable {
     Collection<String> getSpecialDependencies(String type);
 }

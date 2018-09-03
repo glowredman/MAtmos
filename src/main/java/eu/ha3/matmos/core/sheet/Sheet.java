@@ -8,11 +8,16 @@ public interface Sheet {
     /**
      * Get the value of a certain position. This should return a default value if the position does not
      * exist.
-     *
-     * @param  key
-     * @return
      */
     String get(String key);
+
+
+    /**
+     * Returns the value associated with the given key if such a mapping exists, otherwise returns the default.
+     */
+    default String getOrDefault(String key, String def) {
+        return exists(key) ? get(key) : def;
+    }
 
     /**
      * Sets the value of a certain position.
@@ -34,9 +39,6 @@ public interface Sheet {
 
     /**
      * Tells if this sheet contains a certain key.
-     *
-     * @param  key
-     * @return
      */
     boolean exists(String key);
 

@@ -47,7 +47,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
             return "undefined";
         }
 
-        return Keyboard.getKeyName(keyBindingMain.getKeyCode()); // OBF getKeyCode(), or .keyCode
+        return Keyboard.getKeyName(keyBindingMain.getKeyCode());
     }
 
     @Override
@@ -95,31 +95,18 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 
     @Override
     public void beginHold() {
-        /*if (this.mod.getConfig().getBoolean("reversed.controls") && false)
-        {
-        	//TODO: Disabled for now
-        	displayMenu();
-        }
-        else*/ if (mod.isActivated()) {
+        if (mod.isActivated()) {
             scroller.start();
         }
     }
 
     @Override
     public void shortPress() {
-        /*if (this.mod.getConfig().getBoolean("reversed.controls") && false)
-        {
-        	//TODO: Disabled for now
-        	whenWantsToggle();
-        }
-        else
-        {*/
         if (!mod.isActivated()) {
             whenWantsToggle();
         } else {
             displayMenu();
         }
-        //}
 
         printUnusualMessages();
     }
@@ -170,8 +157,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 
         TimeStatistic stat = new TimeStatistic();
         mod.start();
-        mod.getChatter().printChat(
-                TextFormatting.GREEN, "Loading for the first time (" + stat.getSecondsAsString(2) + "s)");
+        mod.getChatter().printChat(TextFormatting.GREEN, "Loading for the first time (" + stat.getSecondsAsString(2) + "s)");
     }
 
     private void whenWantsForcing() {
@@ -179,8 +165,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
             TimeStatistic stat = new TimeStatistic();
             mod.refresh();
             mod.activate();
-            mod.getChatter().printChat(
-                    TextFormatting.GREEN, "Reloading expansions (" + stat.getSecondsAsString(2) + "s)");
+            mod.getChatter().printChat(TextFormatting.GREEN, "Reloading expansions (" + stat.getSecondsAsString(2) + "s)");
         } else if (!mod.isInitialized()) {
             whenUninitializedAction();
         }
@@ -188,9 +173,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 
     private void displayMenu() {
         if (mod.isActivated() && mod.util().isCurrentScreen(null)) {
-            // OBF displayGuiScreen
-            Minecraft.getMinecraft().displayGuiScreen(
-                    new GuiMatMenu((GuiScreen)mod.util().getCurrentScreen(), mod));
+            Minecraft.getMinecraft().displayGuiScreen(new GuiMatMenu((GuiScreen)mod.util().getCurrentScreen(), mod));
         }
     }
 

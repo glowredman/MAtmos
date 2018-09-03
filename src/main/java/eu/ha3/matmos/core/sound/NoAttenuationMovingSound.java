@@ -10,10 +10,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 
-/*
- * --filenotes-placeholder
- */
-
 public class NoAttenuationMovingSound extends MovingSound implements StreamingSound {
     private boolean usesPause;
     private final HelperFadeCalculator helper = new HelperFadeCalculator(new SystemClock());

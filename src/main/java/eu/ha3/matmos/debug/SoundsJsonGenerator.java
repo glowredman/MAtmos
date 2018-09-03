@@ -11,10 +11,6 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-/*
- * --filenotes-placeholder
- */
-
 public class SoundsJsonGenerator implements Runnable {
     private List<String> filenames = new ArrayList<>();
 

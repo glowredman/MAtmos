@@ -75,10 +75,10 @@ public class ModuleEntity implements Processor, PassOnceModule {
 
     private void refresh() {
         isRequired = false;
-        isRequired = collector.requires(mindistModel.getModuleName());
+        isRequired = collector.requires(mindistModel.getName());
 
         for (ModuleProcessor processor : radiusSheets) {
-            isRequired = isRequired || collector.requires(processor.getModuleName());
+            isRequired = isRequired || collector.requires(processor.getName());
         }
 
         for (Map<String, Integer> mappy : entityCount) {
@@ -157,26 +157,26 @@ public class ModuleEntity implements Processor, PassOnceModule {
         }
 
         for (int i = 0; i < radiusValuesSorted.length; i++) {
-            if (collector.requires(radiusSheets[i].getModuleName())) {
+            if (collector.requires(radiusSheets[i].getName())) {
                 for (String entityID : entityCount[i].keySet()) {
                     radiusSheets[i].setValue(entityID, entityCount[i].get(entityID));
                 }
             }
         }
 
-        if (collector.requires(mindistModel.getModuleName())) {
+        if (collector.requires(mindistModel.getName())) {
             for (String entityID : minimumDistanceReports.keySet()) {
                 mindistModel.setValue(entityID, (int)Math.floor(minimumDistanceReports.get(entityID) * 1000));
             }
         }
 
         // Apply the virtual sheets
-        if (collector.requires(mindistModel.getModuleName())) {
+        if (collector.requires(mindistModel.getName())) {
             mindistModel.process();
         }
 
         for (int i = 0; i < radiusValuesSorted.length; i++) {
-            if (collector.requires(radiusSheets[i].getModuleName())) {
+            if (collector.requires(radiusSheets[i].getName())) {
                 radiusSheets[i].process();
             }
         }
@@ -197,7 +197,7 @@ public class ModuleEntity implements Processor, PassOnceModule {
     }
 
     @Override
-    public String getModuleName() {
+    public String getName() {
         return "_POM__entity_detector";
     }
 

@@ -9,17 +9,11 @@ import eu.ha3.matmos.core.Simulated;
 import eu.ha3.matmos.core.logic.Machine;
 import eu.ha3.matmos.util.math.HelperFadeCalculator;
 
-/*
- * --filenotes-placeholder
- */
-
 public class TimedEventInformation extends MultistateComponent implements Simulated {
-    private float delayBeforeFadeIn = 0f;
-    private float delayBeforeFadeOut = 0f;
-    private float fadeInTime = 0f;
-    private float fadeOutTime = 0f;
-
-    //
+    private float delayBeforeFadeIn = 0;
+    private float delayBeforeFadeOut = 0;
+    private float fadeInTime = 0;
+    private float fadeOutTime = 0;
 
     private final String machineName;
     private final Provider<Machine> provider;

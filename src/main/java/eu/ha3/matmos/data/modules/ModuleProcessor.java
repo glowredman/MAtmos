@@ -30,7 +30,7 @@ public abstract class ModuleProcessor extends ProcessorModel implements EntryBas
     }
 
     @Override
-    public final String getModuleName() {
+    public final String getName() {
         return name;
     }
 

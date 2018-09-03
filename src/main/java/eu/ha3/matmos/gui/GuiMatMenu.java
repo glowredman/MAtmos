@@ -185,8 +185,6 @@ public class GuiMatMenu extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton par1GuiButton) {
-        Minecraft mc = Minecraft.getMinecraft();
-
         if (par1GuiButton.id == 200) {
             // This triggers onGuiClosed
             mc.displayGuiScreen(parentScreen);

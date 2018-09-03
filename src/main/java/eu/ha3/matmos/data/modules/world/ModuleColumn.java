@@ -1,7 +1,6 @@
 package eu.ha3.matmos.data.modules.world;
 
 import eu.ha3.matmos.core.sheet.DataPackage;
-import eu.ha3.matmos.data.modules.MODULE_CONSTANTS;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import eu.ha3.matmos.util.MAtUtil;
@@ -29,10 +28,10 @@ public class ModuleColumn extends ModuleProcessor implements Module {
         BlockPos pos = getPlayer().getPosition();
         BlockPos topMostBlock = w.getTopSolidOrLiquidBlock(pos);
 
-        setValue("y-1", MAtUtil.getNameAt(pos.down(), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS));
-        setValue("y-2", MAtUtil.getNameAt(pos.down(2), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS));
-        setValue("y0", MAtUtil.getNameAt(pos, MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS));
-        setValue("y1", MAtUtil.getNameAt(pos.up(), MODULE_CONSTANTS.NO_BLOCK_OUT_OF_BOUNDS));
+        setValue("y-1", MAtUtil.getNameAt(pos.down(), NO_BLOCK_OUT_OF_BOUNDS));
+        setValue("y-2", MAtUtil.getNameAt(pos.down(2), NO_BLOCK_OUT_OF_BOUNDS));
+        setValue("y0", MAtUtil.getNameAt(pos, NO_BLOCK_OUT_OF_BOUNDS));
+        setValue("y1", MAtUtil.getNameAt(pos.up(), NO_BLOCK_OUT_OF_BOUNDS));
 
         setValue("topmost_block", topMostBlock.getY());
         setValue("thickness_overhead", topMostBlock.getY() - pos.getY());

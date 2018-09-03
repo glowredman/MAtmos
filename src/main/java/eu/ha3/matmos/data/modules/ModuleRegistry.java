@@ -80,9 +80,9 @@ public class ModuleRegistry implements Collector, Processor {
     }
 
     private void addModule(Module module) {
-        modules.put(module.getModuleName(), module);
+        modules.put(module.getName(), module);
         if (module instanceof PassOnceModule) {
-            passOnceModules.put(module.getModuleName(), ((PassOnceModule)module).getSubModules());
+            passOnceModules.put(module.getName(), ((PassOnceModule)module).getSubModules());
             passOnceSubmodules.addAll(((PassOnceModule)module).getSubModules());
         }
     }

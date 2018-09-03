@@ -5,11 +5,7 @@ import java.util.TreeMap;
 
 import eu.ha3.matmos.core.sheet.SheetIndex;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
-import eu.ha3.matmos.util.math.LongFloatSimplificator;
-
-/*
- * --filenotes-placeholder
- */
+import eu.ha3.matmos.util.math.Numbers;
 
 public class LegacySheetIndex_Engine0to1 implements SheetIndex {
     private static final Map<String, LegacyMapping> forward;
@@ -246,7 +242,7 @@ public class LegacySheetIndex_Engine0to1 implements SheetIndex {
     }
 
     public LegacySheetIndex_Engine0to1(String sheet, String index) {
-        Long id = LongFloatSimplificator.longOf(index);
+        Long id = Numbers.toLong(index);
         if (id != null && forward.containsKey(sheet + "@@@" + index)) {
             Map.Entry<String, String> mapping = forward.get(sheet + "@@@" + index);
             this.sheet = mapping.getKey();

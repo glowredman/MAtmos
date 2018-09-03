@@ -1,7 +1,6 @@
 package eu.ha3.matmos.data.modules.mount;
 
 import eu.ha3.matmos.core.sheet.DataPackage;
-import eu.ha3.matmos.data.modules.MODULE_CONSTANTS;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import net.minecraft.entity.Entity;
@@ -28,6 +27,6 @@ public class ModuleRiding extends ModuleProcessor implements Module {
         setValue("player", ride instanceof EntityPlayer);
 
         setValue("burning", ride != null && ride.isBurning());
-        setValue("entity_id", ride == null ? MODULE_CONSTANTS.NO_ENTITY : EntityList.getEntityString(ride));
+        setValue("entity_id", ride == null ? NO_ENTITY : EntityList.getEntityString(ride));
     }
 }

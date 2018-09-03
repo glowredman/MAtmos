@@ -21,8 +21,8 @@ import eu.ha3.matmos.core.SystemClock;
 import eu.ha3.matmos.core.event.EventInterface;
 import eu.ha3.matmos.core.expansion.agents.LoadingAgent;
 import eu.ha3.matmos.core.expansion.agents.RawJsonLoadingAgent;
+import eu.ha3.matmos.core.mixin.ISoundHandler;
 import eu.ha3.matmos.core.sheet.DataPackage;
-import eu.ha3.matmos.core.sound.SoundAccessor;
 import eu.ha3.matmos.core.sound.SoundHelperRelay;
 import eu.ha3.matmos.data.Collector;
 import eu.ha3.matmos.data.modules.ModuleRegistry;
@@ -37,9 +37,12 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
     private final ExpansionIdentity identity;
     private final DataPackage data;
     private final Collector collector;
-    private final SoundHelperRelay capabilities;
+
+    private final SoundHelperRelay capabilities = new SoundHelperRelay();
+
     private final VolumeContainer masterVolume;
-    private final ConfigProperty myConfiguration;
+
+    private final ConfigProperty myConfiguration = new ConfigProperty();
 
     private float volume;
     private boolean isSuccessfullyBuilt;
@@ -51,17 +54,15 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
     private LoadingAgent agent;
     private LoadingAgent jsonAgent;
 
-    public Expansion(ExpansionIdentity identity, DataPackage data, Collector collector, SoundAccessor accessor, VolumeContainer masterVolume, File configurationSource) {
+    public Expansion(ExpansionIdentity identity, DataPackage data, Collector collector, ISoundHandler accessor, VolumeContainer masterVolume, File configurationSource) {
         this.identity = identity;
         this.masterVolume = masterVolume;
-        capabilities = new SoundHelperRelay(accessor);
         this.data = data;
         this.collector = collector;
 
         newKnowledge();
 
-        myConfiguration = new ConfigProperty();
-        myConfiguration.setProperty("volume", 1f);
+        myConfiguration.setProperty("volume", 1);
         myConfiguration.commit();
         try {
             myConfiguration.setSource(configurationSource.getCanonicalPath());

@@ -8,10 +8,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
-/*
- * --filenotes-placeholder
- */
-
 public class ModuleLighting extends ModuleProcessor implements Module {
     public ModuleLighting(DataPackage data) {
         super(data, "cb_light");

@@ -1,9 +1,5 @@
 package eu.ha3.matmos.core.sheet;
 
-/*
- * --filenotes-placeholder
- */
-
 public interface SheetCommander<T> {
     /**
      * Tells if the sheet index exists

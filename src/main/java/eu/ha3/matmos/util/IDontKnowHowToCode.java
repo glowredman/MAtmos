@@ -7,10 +7,6 @@ import eu.ha3.matmos.MAtLog;
 import eu.ha3.mc.quick.chat.Chatter;
 import net.minecraft.util.text.TextFormatting;
 
-/*
- * --filenotes-placeholder
- */
-
 public class IDontKnowHowToCode {
     private static Set<Integer> crash = new HashSet<>();
     private static Set<Integer> warning = new HashSet<>();

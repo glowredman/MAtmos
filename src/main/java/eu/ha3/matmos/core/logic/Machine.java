@@ -14,8 +14,6 @@ import eu.ha3.matmos.core.Simulated;
 import eu.ha3.matmos.core.StreamInformation;
 import eu.ha3.matmos.core.event.TimedEventInformation;
 
-/* x-placeholder */
-
 public class Machine extends MultistateComponent implements Dependable, Simulated, Overrided, VisualizedSpecialDependencies {
     private final List<String> allow;
     private final List<String> restrict;

@@ -1,7 +1,6 @@
 package eu.ha3.matmos.data.modules.legacy;
 
 import eu.ha3.matmos.core.sheet.DataPackage;
-import eu.ha3.matmos.data.modules.MODULE_CONSTANTS;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import eu.ha3.matmos.util.MAtUtil;
@@ -45,6 +44,6 @@ public class ModuleLegacy extends ModuleProcessor implements Module {
     }
 
     private int number(ItemStack item) {
-        return item != null ? MAtUtil.legacyOf(item) : MODULE_CONSTANTS.LEGACY_NO_ITEM;
+        return item != null ? MAtUtil.legacyOf(item) : LEGACY_NO_ITEM;
     }
 }

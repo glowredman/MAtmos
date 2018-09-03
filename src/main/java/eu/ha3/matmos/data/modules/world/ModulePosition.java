@@ -5,10 +5,6 @@ import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import net.minecraft.util.math.BlockPos;
 
-/*
- * --filenotes-placeholder
- */
-
 public class ModulePosition extends ModuleProcessor implements Module {
     public ModulePosition(DataPackage data) {
         super(data, "cb_pos");

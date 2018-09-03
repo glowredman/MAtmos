@@ -2,10 +2,6 @@ package eu.ha3.matmos.util.math;
 
 import eu.ha3.matmos.core.ReferenceTime;
 
-/*
- * --filenotes-placeholder
- */
-
 public class HelperFadeCalculator {
     private final ReferenceTime time;
 

@@ -5,10 +5,6 @@ import java.util.TreeMap;
 
 import com.google.gson.annotations.Expose;
 
-/*
- * --filenotes-placeholder
- */
-
 public class SerialRoot {
     @Expose
     public Map<String, SerialCondition> condition = new TreeMap<>();

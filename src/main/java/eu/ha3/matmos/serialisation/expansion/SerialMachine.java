@@ -7,10 +7,6 @@ import java.util.TreeSet;
 
 import com.google.gson.annotations.Expose;
 
-/*
- * --filenotes-placeholder
- */
-
 public class SerialMachine {
     @Expose
     public Set<String> allow = new TreeSet<>();

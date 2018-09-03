@@ -5,7 +5,6 @@ import java.io.IOException;
 import eu.ha3.matmos.MAtMod;
 import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -57,7 +56,7 @@ public class GuiMore extends GuiScreen {
 
             @Override
             public void sliderValueChanged(HGuiSliderControl slider, float value) {
-                Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.AMBIENT, value);
+                mc.gameSettings.setSoundLevel(SoundCategory.AMBIENT, value);
                 mod.getConfig().setProperty("minecraftsound.ambient.volume", value);
                 slider.updateDisplayString();
             }
@@ -65,7 +64,7 @@ public class GuiMore extends GuiScreen {
             @Override
             public void sliderReleased(HGuiSliderControl hGuiSliderControl) {
                 mod.saveConfig();
-                Minecraft.getMinecraft().gameSettings.saveOptions();
+                mc.gameSettings.saveOptions();
             }
         });
         ambienceVolume.setDisplayStringProvider(() -> {

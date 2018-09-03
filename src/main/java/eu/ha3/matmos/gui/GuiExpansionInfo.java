@@ -53,8 +53,6 @@ public class GuiExpansionInfo extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        Minecraft mc = Minecraft.getMinecraft();
-
         if (button.id == 200) {
             mc.displayGuiScreen(parentScreen);
         }

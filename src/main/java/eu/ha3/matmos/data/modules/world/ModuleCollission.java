@@ -23,7 +23,7 @@ public class ModuleCollission extends AbstractStringCountModule {
 
     public ModuleCollission(DataPackage dataIn) {
         super(dataIn, "block_contact", true);
-        dataIn.getSheet(getModuleName()).setDefaultValue("0");
+        dataIn.getSheet(getName()).setDefaultValue("0");
     }
 
     @Override

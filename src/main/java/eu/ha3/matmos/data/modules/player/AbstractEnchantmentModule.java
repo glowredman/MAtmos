@@ -6,10 +6,10 @@ import java.util.Set;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import eu.ha3.matmos.data.modules.RegistryBasedModule;
-import net.minecraft.client.Minecraft;
+import eu.ha3.matmos.util.Tags;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * An abstract module that extracts all enchantments associated to an item defined by the
@@ -33,22 +33,18 @@ public abstract class AbstractEnchantmentModule extends ModuleProcessor implemen
 
     @Override
     protected void doProcess() {
-        EntityPlayer player = Minecraft.getMinecraft().player;
-        ItemStack item = getItem(player);
+        ItemStack item = getItem(getPlayer());
 
         for (String i : oldThings) {
             setValue(i, 0);
         }
         oldThings.clear();
 
-        if (item != null && item.getEnchantmentTagList() != null && item.getEnchantmentTagList().tagCount() > 0) {
-            int total = item.getEnchantmentTagList().tagCount();
+        if (item != null) {
+            for (NBTTagCompound tag : Tags.of(item.getEnchantmentTagList())) {
+                int id = tag.getShort("id");
+                short lvl = tag.getShort("lvl");
 
-            NBTTagList enchantments = item.getEnchantmentTagList();
-            for (int i = 0; i < total; i++) {
-                int id = enchantments.getCompoundTagAt(i).getShort("id");
-
-                short lvl = enchantments.getCompoundTagAt(i).getShort("lvl");
                 setValue(Integer.toString(id), Short.toString(lvl));
                 oldThings.add(Integer.toString(id));
             }

@@ -6,8 +6,6 @@ import eu.ha3.matmos.core.Provider;
 import eu.ha3.matmos.core.ReferenceTime;
 import eu.ha3.matmos.serialisation.expansion.SerialMachineEvent;
 
-/* x-placeholder */
-
 public class TimedEvent implements TimedEventInterface {
     private static Random random = new Random();
 

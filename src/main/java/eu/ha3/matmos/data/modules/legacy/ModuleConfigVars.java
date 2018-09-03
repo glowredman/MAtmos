@@ -10,10 +10,6 @@ import eu.ha3.matmos.data.modules.ModuleProcessor;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
 import eu.ha3.util.property.simple.ConfigProperty;
 
-/*
- * --filenotes-placeholder
- */
-
 public class ModuleConfigVars extends ModuleProcessor implements Module {
     private final MAtMod mod;
 

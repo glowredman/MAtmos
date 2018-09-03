@@ -8,8 +8,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 
-/* x-placeholder */
-
 public class VolumeScroller extends Ha3Scroller {
     final private String MESSAGE_TITLE = "MAtmos Volume";
     final private String MESSAGE_HINT = "<Look up/down>";

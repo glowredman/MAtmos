@@ -4,11 +4,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-/* x-placeholder */
-
 public class GenericSheet implements Sheet {
     protected final Map<String, String> values;
     protected final Map<String, Integer> versions;
+
     private String def = "_ENTRY_NOT_DEFINED";
 
     public GenericSheet() {

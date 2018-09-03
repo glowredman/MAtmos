@@ -5,26 +5,16 @@ import java.util.Map;
 
 import eu.ha3.matmos.util.IDontKnowHowToCode;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 public class SoundHelper implements SoundCapabilities {
-    protected SoundAccessor accessor;
-    protected Map<String, NoAttenuationMovingSound> streaming;
+
+    protected final Map<String, NoAttenuationMovingSound> streaming = new LinkedHashMap<>();
 
     private float volumeModulator;
 
     private boolean isInterrupt;
-
-    public SoundHelper(SoundAccessor accessor) {
-        this.accessor = accessor;
-        streaming = new LinkedHashMap<>();
-    }
-
-    public SoundManager getSoundManager() {
-        return accessor.getSoundManager();
-    }
 
     @Override
     public void playMono(String event, double xx, double yy, double zz, float volume, float pitch) {

@@ -11,8 +11,6 @@ import eu.ha3.matmos.core.Dependable;
 import eu.ha3.matmos.core.MultistateComponent;
 import eu.ha3.matmos.core.Provider;
 
-/* x-placeholder */
-
 public class Junction extends MultistateComponent implements Dependable, VisualizedSpecialDependencies {
     private final List<String> yes;
     private final List<String> no;

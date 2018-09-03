@@ -2,6 +2,7 @@ package eu.ha3.matmos.serialisation;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.xpath.XPathExpressionException;
 
@@ -25,12 +26,10 @@ import eu.ha3.matmos.serialisation.expansion.SerialMachineStream;
 import eu.ha3.matmos.serialisation.expansion.SerialRoot;
 import eu.ha3.matmos.serialisation.expansion.SerialSet;
 import eu.ha3.matmos.util.MAtUtil;
-import eu.ha3.matmos.util.math.LongFloatSimplificator;
+import eu.ha3.matmos.util.math.Numbers;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.sf.practicalxml.DomUtil;
-
-/* x-placeholder */
 
 public class LegacyXMLExpansions_Engine1 {
     private static final String AS_ITEM = "__AS_ITEM";
@@ -83,12 +82,26 @@ public class LegacyXMLExpansions_Engine1 {
     private static final String ISLOOPING = "islooping";
     private static final String ISUSINGPAUSE = "isusingpause";
 
-    private Map<String, String> scanDicts;
+    private Map<String, String> scanDicts = new HashMap<>();
 
     private SerialRoot root;
 
+
+    private Map<String, DynamicElementSerialiser> serialisers = new HashMap<>();
+
+    @FunctionalInterface
+    protected interface DynamicElementSerialiser {
+        void parseXML(Element capsule, String name);
+    }
+
     public LegacyXMLExpansions_Engine1() {
-        scanDicts = new HashMap<>();
+        serialisers.put(DYNAMIC, this::parseXML_1_dynamic);
+        serialisers.put(LIST, this::parseXML_2_list);
+        serialisers.put(CONDITION, this::parseXML_3_condition);
+        serialisers.put(SET, this::parseXML_4_set);
+        serialisers.put(EVENT, this::parseXML_5_event);
+        serialisers.put(MACHINE, this::parseXML_6_machine);
+
         scanDicts.put("LargeScan", "scan_large");
         scanDicts.put("LargeScanPerMil", "scan_large_p1k");
         scanDicts.put("SmallScan", "scan_small");
@@ -122,7 +135,7 @@ public class LegacyXMLExpansions_Engine1 {
             return null;
         }
 
-        Long l = LongFloatSimplificator.longOf(longFloatSimplificated);
+        Long l = Numbers.toLong(longFloatSimplificated);
         if (l == null) {
             return null;
         }
@@ -144,7 +157,7 @@ public class LegacyXMLExpansions_Engine1 {
             return null;
         }
 
-        Long l = LongFloatSimplificator.longOf(longFloatSimplificated);
+        Long l = Numbers.toLong(longFloatSimplificated);
         if (l == null) {
             return null;
         }
@@ -158,46 +171,32 @@ public class LegacyXMLExpansions_Engine1 {
 
     private SerialMachineEvent inscriptXMLeventTimed(Element specs) {
         SerialMachineEvent sme = new SerialMachineEvent();
-
-        String eventname = eltString(EVENTNAME, specs);
-        String volmod = eltString(VOLMOD, specs);
-        String pitchmod = eltString(PITCHMOD, specs);
-        String delaymin = eltString(DELAYMIN, specs);
-        String delaymax = eltString(DELAYMAX, specs);
-        String delaystart = eltString(DELAYSTART, specs);
-
-        sme.event = eventname;
-        sme.vol_mod = volmod != null ? Float.parseFloat(volmod) : 1f;
-        sme.pitch_mod = pitchmod != null ? Float.parseFloat(pitchmod) : 1f;
-        sme.delay_min = delaymin != null ? Float.parseFloat(delaymin) : 1f; // 1f is dummy
-        sme.delay_max = delaymax != null ? Float.parseFloat(delaymax) : 1f; // 1f is dummy
-        sme.delay_start = delaystart != null ? Float.parseFloat(delaystart) : 1f; // 1f is dummy
+        sme.event = eltString(EVENTNAME, specs);
+        sme.vol_mod = toFloat(eltString(VOLMOD, specs));
+        sme.pitch_mod = toFloat(eltString(PITCHMOD, specs));
+        sme.delay_min = toFloat(eltString(DELAYMIN, specs));
+        sme.delay_max = toFloat(eltString(DELAYMAX, specs));
+        sme.delay_start = toFloat(eltString(DELAYSTART, specs));
 
         return sme;
+    }
+
+    private float toFloat(String value) {
+        return value != null ? Float.parseFloat(value) : 1;
     }
 
     private SerialMachineStream inscriptXMLstream(Element specs, SerialMachine machine) {
         SerialMachineStream sms = new SerialMachineStream();
 
-        String _PATH = eltString(PATH, specs);
-        String _VOLUME = eltString(VOLUME, specs);
-        String _PITCH = eltString(PITCH, specs);
-        String _FADEINTIME = eltString(FADEINTIME, specs);
-        String _FADEOUTTIME = eltString(FADEOUTTIME, specs);
-        String _DELAYBEFOREFADEIN = eltString(DELAYBEFOREFADEIN, specs);
-        String _DELAYBEFOREFADEOUT = eltString(DELAYBEFOREFADEOUT, specs);
-        String _ISLOOPING = eltString(ISLOOPING, specs);
-        String _ISUSINGPAUSE = eltString(ISUSINGPAUSE, specs);
-
-        sms.path = _PATH;
-        sms.vol = _VOLUME != null ? Float.parseFloat(_VOLUME) : 1f;
-        sms.pitch = _PITCH != null ? Float.parseFloat(_PITCH) : 1f;
-        machine.fadein = _FADEINTIME != null ? Float.parseFloat(_FADEINTIME) : 1f; // 1f is dummy
-        machine.fadeout = _FADEOUTTIME != null ? Float.parseFloat(_FADEOUTTIME) : 1f; // 1f is dummy
-        machine.delay_fadein = _DELAYBEFOREFADEIN != null ? Float.parseFloat(_DELAYBEFOREFADEIN) : 1f; // 1f is dummy
-        machine.delay_fadeout = _DELAYBEFOREFADEOUT != null ? Float.parseFloat(_DELAYBEFOREFADEOUT) : 1f; // 1f is dummy
-        sms.looping = toInt(_ISLOOPING) == 1;
-        sms.pause = toInt(_ISUSINGPAUSE) == 1;
+        sms.path = eltString(PATH, specs);
+        sms.vol = toFloat(eltString(VOLUME, specs));
+        sms.pitch = toFloat(eltString(PITCH, specs));
+        machine.fadein = toFloat(eltString(FADEINTIME, specs));
+        machine.fadeout = toFloat(eltString(FADEOUTTIME, specs));
+        machine.delay_fadein = toFloat(eltString(DELAYBEFOREFADEIN, specs));
+        machine.delay_fadeout = toFloat(eltString(DELAYBEFOREFADEOUT, specs));
+        sms.looping = toInt(eltString(ISLOOPING, specs)) == 1;
+        sms.pause = toInt(eltString(ISUSINGPAUSE, specs)) == 1;
 
         return sms;
     }
@@ -219,34 +218,13 @@ public class LegacyXMLExpansions_Engine1 {
         Element elt = doc.getDocumentElement();
         DomUtil.removeEmptyTextRecursive(elt);
 
-        for (Element capsule : DomUtil.getChildren(elt, DYNAMIC)) {
-            if (nameOf(capsule) != null) {
-                parseXML_1_dynamic(capsule, nameOf(capsule));
-            }
-        }
-        for (Element capsule : DomUtil.getChildren(elt, LIST)) {
-            if (nameOf(capsule) != null) {
-                parseXML_2_list(capsule, nameOf(capsule));
-            }
-        }
-        for (Element capsule : DomUtil.getChildren(elt, CONDITION)) {
-            if (nameOf(capsule) != null) {
-                parseXML_3_condition(capsule, nameOf(capsule));
-            }
-        }
-        for (Element capsule : DomUtil.getChildren(elt, SET)) {
-            if (nameOf(capsule) != null) {
-                parseXML_4_set(capsule, nameOf(capsule));
-            }
-        }
-        for (Element capsule : DomUtil.getChildren(elt, EVENT)) {
-            if (nameOf(capsule) != null) {
-                parseXML_5_event(capsule, nameOf(capsule));
-            }
-        }
-        for (Element capsule : DomUtil.getChildren(elt, MACHINE)) {
-            if (nameOf(capsule) != null) {
-                parseXML_6_machine(capsule, nameOf(capsule));
+        for (Entry<String, DynamicElementSerialiser> entry : serialisers.entrySet()) {
+            for (Element capsule : DomUtil.getChildren(elt, entry.getKey())) {
+                String name = nameOf(capsule);
+
+                if (name != null) {
+                    entry.getValue().parseXML(capsule, name);
+                }
             }
         }
     }
@@ -283,7 +261,7 @@ public class LegacyXMLExpansions_Engine1 {
         for (Element eelt : DomUtil.getChildren(capsule, CONSTANT)) {
             list.entries.add(textOf(eelt));
 
-            Long l = LongFloatSimplificator.longOf(textOf(eelt));
+            Long l = Numbers.toLong(textOf(eelt));
             if (l != null) {
                 int il = (int)(long)l;
                 if (asBlock(il) != null) {
@@ -323,40 +301,17 @@ public class LegacyXMLExpansions_Engine1 {
             sheetNotComputed = recomputeScanSheetName(sheetNotComputed);
         }
 
-        SheetIndex si = !dynamic ? new LegacySheetIndex_Engine0to1(sheetNotComputed, indexNotComputed) : new SheetEntry(
-                sheetNotComputed, indexNotComputed);
+        SheetIndex si = !dynamic ? new LegacySheetIndex_Engine0to1(sheetNotComputed, indexNotComputed) : new SheetEntry(sheetNotComputed, indexNotComputed);
 
-        {
-            SerialCondition condition = new SerialCondition();
+        root.condition.put(name, new SerialCondition(si, Operator.fromSymbol(symbol).getSerializedForm(), value));
 
-            condition.sheet = si.getSheet();
-            condition.index = si.getIndex();
-            condition.symbol = Operator.fromSymbol(symbol).getSerializedForm();
-            condition.value = value;
-
-            root.condition.put(name, condition);
-        }
         if (si instanceof LegacySheetIndex_Engine0to1) {
             if (((LegacySheetIndex_Engine0to1)si).isBlock() && asBlock(value) != null) {
-                SerialCondition condition = new SerialCondition();
-
-                condition.sheet = si.getSheet();
-                condition.index = si.getIndex();
-                condition.symbol = Operator.fromSymbol(symbol).getSerializedForm();
-                condition.value = asBlock(value);
-
-                root.condition.put(name + AS_BLOCK, condition);
+                root.condition.put(name + AS_BLOCK, new SerialCondition(si, Operator.fromSymbol(symbol).getSerializedForm(), asBlock(value)));
             }
 
             if (((LegacySheetIndex_Engine0to1)si).isItem() && asItem(value) != null) {
-                SerialCondition condition = new SerialCondition();
-
-                condition.sheet = si.getSheet();
-                condition.index = si.getIndex();
-                condition.symbol = Operator.fromSymbol(symbol).getSerializedForm();
-                condition.value = asItem(value);
-
-                root.condition.put(name + AS_ITEM, condition);
+                root.condition.put(name + AS_ITEM, new SerialCondition(si, Operator.fromSymbol(symbol).getSerializedForm(), asItem(value)));
             }
         }
     }
@@ -429,7 +384,7 @@ public class LegacyXMLExpansions_Engine1 {
     }
 
     private String recomputeBlockName(String index) {
-        Long l = LongFloatSimplificator.longOf(index);
+        Long l = Numbers.toLong(index);
         if (l != null && l < 256) {
             Object o = Block.REGISTRY.getObjectById((int)(long)l);
             if (o != null && o instanceof Block) {
@@ -469,5 +424,4 @@ public class LegacyXMLExpansions_Engine1 {
             return (int)Float.parseFloat(source);
         }
     }
-
 }
