@@ -3,7 +3,7 @@ package eu.ha3.matmos.core.logic;
 import java.util.Collection;
 import java.util.HashSet;
 
-import eu.ha3.matmos.MAtLog;
+import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.core.Dependable;
 import eu.ha3.matmos.core.MultistateComponent;
 import eu.ha3.matmos.core.Operator;
@@ -13,10 +13,12 @@ import eu.ha3.matmos.util.math.Numbers;
 
 public class Condition extends MultistateComponent implements Dependable, Visualized {
     private final SheetIndex indexX;
+
     private final Operator operatorX;
+
     private final String constantX;
+
     private final Long constantLongX;
-    //private final Float constantFloatX;
 
     private final SheetCommander<String> sheetCommander;
 
@@ -53,7 +55,7 @@ public class Condition extends MultistateComponent implements Dependable, Visual
         if (pre != isActive) {
             incrementVersion();
 
-            MAtLog.fine("C: " + getName() + " -> " + isActive);
+            MAtMod.LOGGER.debug("C: " + getName() + " -> " + isActive);
         }
     }
 

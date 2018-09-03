@@ -10,7 +10,6 @@ import java.util.TreeSet;
 
 import eu.ha3.easy.StopWatchStatistic;
 import eu.ha3.easy.TimeStatistic;
-import eu.ha3.matmos.MAtLog;
 import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sheet.GenericSheet;
@@ -152,7 +151,7 @@ public class ModuleRegistry implements Collector, Processor {
                 data, "_POM__scan_small", "scan_small", true, -1, 2 /*64*/, 16, 8, 16, 512));
         // Each ticks, check half of the small scan
 
-        MAtLog.info("Modules initialized: " + Arrays.toString(new TreeSet<>(modules.keySet()).toArray()));
+        MAtMod.LOGGER.info("Modules initialized: " + Arrays.toString(new TreeSet<>(modules.keySet()).toArray()));
     }
 
     public DataPackage getData() {
@@ -172,7 +171,7 @@ public class ModuleRegistry implements Collector, Processor {
             }
             watch.stop();
             if (watch.getMilliseconds() > 50 && mod.isDebugMode()) {
-                MAtLog.warning("WARNING: Module " + requiredModule + " took " + stat.getMilliseconds() + "ms!!!");
+                MAtMod.LOGGER.warn("Module " + requiredModule + " took " + stat.getMilliseconds() + "ms!!!");
             }
         }
         ticksPassed = ticksPassed + 1;
@@ -201,7 +200,7 @@ public class ModuleRegistry implements Collector, Processor {
         Set<String> missingModules = new HashSet<>();
         for (String module : requiredModules) {
             if (!modules.containsKey(module) && !passOnceSubmodules.contains(module)) {
-                MAtLog.severe("Stack " + name + " requires missing module " + module);
+                MAtMod.LOGGER.error("Stack " + name + " requires missing module " + module);
                 missingModules.add(module);
             }
         }

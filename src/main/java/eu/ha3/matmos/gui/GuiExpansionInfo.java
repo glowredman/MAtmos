@@ -2,7 +2,6 @@ package eu.ha3.matmos.gui;
 
 import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.core.expansion.Expansion;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;

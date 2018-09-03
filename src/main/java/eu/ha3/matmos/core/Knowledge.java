@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import eu.ha3.matmos.MAtLog;
+import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.core.event.Event;
 import eu.ha3.matmos.core.event.EventInterface;
 import eu.ha3.matmos.core.expansion.ExpansionIdentity;
@@ -144,11 +144,11 @@ public class Knowledge implements Evaluated, Simulated {
         missing.removeAll(inferior.keySet());
 
         if (missing.size() > 0) {
-            MAtLog.warning("Missing " + inferiorName + ": " + Arrays.toString(missing.toArray()));
+            MAtMod.LOGGER.warn("Missing " + inferiorName + ": " + Arrays.toString(missing.toArray()));
         }
 
         if (unused.size() > 0) {
-            MAtLog.warning("Unused " + inferiorName + ": " + Arrays.toString(unused.toArray()));
+            MAtMod.LOGGER.warn("Unused " + inferiorName + ": " + Arrays.toString(unused.toArray()));
             for (String junk : unused) {
                 inferior.remove(junk);
             }

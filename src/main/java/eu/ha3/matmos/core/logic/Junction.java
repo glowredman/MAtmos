@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
-import eu.ha3.matmos.MAtLog;
+import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.core.Dependable;
 import eu.ha3.matmos.core.MultistateComponent;
 import eu.ha3.matmos.core.Provider;
@@ -37,7 +37,7 @@ public class Junction extends MultistateComponent implements Dependable, Visuali
         isActive = testIfTrue();
 
         if (pre != isActive) {
-            MAtLog.fine("S: " + getName() + " -> " + isActive);
+            MAtMod.LOGGER.debug("S: " + getName() + " -> " + isActive);
 
             incrementVersion();
         }

@@ -5,7 +5,6 @@ import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import eu.ha3.matmos.util.MAtUtil;
-import eu.ha3.mc.haddon.Utility;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;

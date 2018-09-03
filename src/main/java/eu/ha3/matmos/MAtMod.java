@@ -9,6 +9,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import eu.ha3.easy.StopWatchStatistic;
 import eu.ha3.easy.TimeStatistic;
 import eu.ha3.matmos.core.expansion.Expansion;
@@ -34,12 +37,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 
 public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, NotifiableHaddon, IResourceManagerReloadListener, Stable {
     private static final boolean _COMPILE_IS_UNSTABLE = true;
+
+    public static final Logger LOGGER = LogManager.getLogger();
 
     // Identity
     protected final String NAME = "MAtmos";
@@ -71,10 +75,6 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
     private Object queueLock = new Object();
     private List<Runnable> queue = new ArrayList<>();
     private boolean hasResourcePacks_FixMe;
-
-    public MAtMod() {
-        MAtLog.setRefinedness(MAtLog.INFO);
-    }
 
     @Override
     public void onLoad() {
@@ -118,7 +118,7 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
         // This registers stuff to Minecraft (key bindings...)
         userControl.load();
 
-        MAtLog.info("Took " + timeMeasure.getSecondsAsString(3) + " seconds to setup MAtmos base.");
+        LOGGER.info("Took " + timeMeasure.getSecondsAsString(3) + " seconds to setup MAtmos base.");
         if (config.getBoolean("start.enabled")) {
             start();
         }
@@ -165,9 +165,9 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
         if (isActivated()) {
             return;
         }
-        MAtLog.fine("Loading...");
+        LOGGER.info("Loading...");
         simulacrum = Optional.of(new Simulacrum(this));
-        MAtLog.fine("Loaded.");
+        LOGGER.info("Loaded.");
     }
 
     @Override
@@ -175,10 +175,10 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
         if (!isActivated()) {
             return;
         }
-        MAtLog.fine("Stopping...");
+        LOGGER.info("Stopping...");
         simulacrum.get().dispose();
         simulacrum = Optional.empty();
-        MAtLog.fine("Stopped.");
+        LOGGER.info("Stopped.");
     }
 
     // Events
@@ -288,7 +288,7 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
-        MAtLog.warning("ResourceManager has changed. Unintended side-effects may happen.");
+        LOGGER.warn("ResourceManager has changed. Unintended side-effects may happen.");
         interrupt();
         // Initiate hot reload
         if (isActivated()) {
@@ -329,7 +329,7 @@ public class MAtMod extends HaddonImpl implements SupportsFrameEvents, SupportsT
     public void saveConfig() {
         // If there were changes...
         if (config.commit()) {
-            MAtLog.info("Saving configuration...");
+            LOGGER.info("Saving configuration...");
             // Write changes on disk.
             config.save();
         }

@@ -11,7 +11,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 import eu.ha3.easy.TimeStatistic;
-import eu.ha3.matmos.MAtLog;
+import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.core.Evaluated;
 import eu.ha3.matmos.core.Knowledge;
 import eu.ha3.matmos.core.ProviderCollection;
@@ -195,13 +195,13 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
         }
 
         if (!isSuccessfullyBuilt && agent != null) {
-            MAtLog.info("Building expansion " + getName() + "...");
+            MAtMod.LOGGER.info("Building expansion " + getName() + "...");
             TimeStatistic stat = new TimeStatistic(Locale.ENGLISH);
             buildKnowledge();
             if (isSuccessfullyBuilt) {
-                MAtLog.info("Expansion " + getName() + " built (" + stat.getSecondsAsString(3) + "s).");
+                MAtMod.LOGGER.info("Expansion " + getName() + " built (" + stat.getSecondsAsString(3) + "s).");
             } else {
-                MAtLog.warning("Expansion " + getName() + " failed to build!!! (" + stat.getSecondsAsString(3) + "s).");
+                MAtMod.LOGGER.warn("Expansion " + getName() + " failed to build!!! (" + stat.getSecondsAsString(3) + "s).");
             }
         }
 
@@ -209,7 +209,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
             Set<String> requiredModules = knowledge.calculateRequiredModules();
             collector.addModuleStack(identity.getUniqueName(), requiredModules);
 
-            MAtLog.info("Expansion " + identity.getUniqueName() + " requires " + requiredModules.size() + " found modules: " + Arrays.toString(requiredModules.toArray()));
+            MAtMod.LOGGER.info("Expansion " + identity.getUniqueName() + " requires " + requiredModules.size() + " found modules: " + Arrays.toString(requiredModules.toArray()));
 
             List<String> legacyModules = new ArrayList<>();
             for (String module : requiredModules) {
@@ -219,7 +219,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
             }
             if (legacyModules.size() > 0) {
                 Collections.sort(legacyModules);
-                MAtLog.warning("Expansion " + identity.getUniqueName() + " uses LEGACY modules: " + Arrays.toString(legacyModules.toArray()));
+                MAtMod.LOGGER.warn("Expansion " + identity.getUniqueName() + " uses LEGACY modules: " + Arrays.toString(legacyModules.toArray()));
                 reliesOnLegacyModules = true;
             }
         }

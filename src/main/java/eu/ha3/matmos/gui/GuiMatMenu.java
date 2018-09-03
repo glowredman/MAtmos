@@ -12,7 +12,6 @@ import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.VolumeUpdatable;
 import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiScreenResourcePacks;

@@ -14,13 +14,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import eu.ha3.matmos.MAtLog;
+import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.MAtResourcePackDealer;
 import eu.ha3.matmos.core.expansion.agents.JsonLoadingAgent;
 import eu.ha3.matmos.core.expansion.agents.LegacyXMLLoadingAgent;
 import eu.ha3.matmos.core.mixin.ISoundHandler;
 import eu.ha3.matmos.core.sheet.DataPackage;
-import eu.ha3.matmos.core.sound.SoundAccessor;
 import eu.ha3.matmos.data.Collector;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
@@ -78,11 +77,11 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
                         ExpansionIdentity identity = new ExpansionIdentity(uniqueName, friendlyName, pack.getResourcePack(), location);
                         identities.add(identity);
                     } else {
-                        MAtLog.warning("An expansion pointer doesn't exist: " + pointer);
+                        MAtMod.LOGGER.warn("An expansion pointer doesn't exist: " + pointer);
                     }
                 }
             } catch (Exception e) {
-                MAtLog.warning(pack.getResourcePackName() + " " + "has failed with an error: " + e.getMessage());
+                MAtMod.LOGGER.warn(pack.getResourcePackName() + " " + "has failed with an error: " + e.getMessage());
             }
         }
     }

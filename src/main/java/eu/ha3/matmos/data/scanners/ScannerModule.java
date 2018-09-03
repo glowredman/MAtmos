@@ -3,7 +3,7 @@ package eu.ha3.matmos.data.scanners;
 import java.util.HashSet;
 import java.util.Set;
 
-import eu.ha3.matmos.MAtLog;
+import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.ExternalStringCountModule;
 import eu.ha3.matmos.data.modules.PassOnceModule;
@@ -90,7 +90,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     @Override
     public void process() {
         if (tryToReboot()) {
-            MAtLog.info("Detected large movement or teleportation. Rebooted module " + getName());
+            MAtMod.LOGGER.info("Detected large movement or teleportation. Rebooted module " + getName());
             return;
         }
 

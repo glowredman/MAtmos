@@ -5,7 +5,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import eu.ha3.easy.TimeStatistic;
-import eu.ha3.matmos.MAtLog;
 import eu.ha3.matmos.MAtMod;
 import eu.ha3.matmos.MAtResourcePackDealer;
 import eu.ha3.matmos.core.expansion.Expansion;
@@ -49,7 +48,7 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
 
         expansionManager.synchronize();
 
-        MAtLog.info("Expansions loaded (" + stat.getSecondsAsString(1) + "s).");
+        MAtMod.LOGGER.info("Expansions loaded (" + stat.getSecondsAsString(1) + "s).");
     }
 
     public void interruptBrutally() {
