@@ -11,7 +11,6 @@ public interface Sheet {
      */
     String get(String key);
 
-
     /**
      * Returns the value associated with the given key if such a mapping exists, otherwise returns the default.
      */

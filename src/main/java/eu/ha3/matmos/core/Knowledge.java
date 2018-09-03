@@ -6,10 +6,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+
+import com.google.common.collect.Streams;
 
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.event.Event;
-import eu.ha3.matmos.core.event.EventInterface;
 import eu.ha3.matmos.core.expansion.ExpansionIdentity;
 import eu.ha3.matmos.core.logic.Condition;
 import eu.ha3.matmos.core.logic.Junction;
@@ -54,6 +56,7 @@ public class Knowledge implements Evaluated, Simulated {
             return data.getSheet(sheetIndex.getSheet()).exists(sheetIndex.getIndex());
         }
     };
+
     private final Provider<Dynamic> dynamicProvider = new MappedProvider<>(dynamicMapped);
     private final Provider<Condition> conditionProvider = new MappedProvider<>(conditionMapped);
     private final Provider<Junction> junctionProvider = new MappedProvider<>(junctionMapped);
@@ -65,15 +68,11 @@ public class Knowledge implements Evaluated, Simulated {
     //
 
     private final SoundRelay relay;
-    private final ReferenceTime time;
 
     public Knowledge(SoundRelay relay, ReferenceTime time) {
         this.relay = relay;
-        this.time = time;
 
-        providerCollection = new Providers(
-                this.time, this.relay, sheetCommander, conditionProvider, junctionProvider,
-                machineProvider, eventProvider, dynamicProvider);
+        providerCollection = new Providers(time, relay, sheetCommander, conditionProvider, junctionProvider, machineProvider, eventProvider, dynamicProvider);
     }
 
     public void setData(DataPackage data) {
@@ -117,15 +116,10 @@ public class Knowledge implements Evaluated, Simulated {
      * This method must return an object that can be modified afterwards by something else.
      */
     public Set<String> calculateRequiredModules() {
-        Set<String> requiredModules = new TreeSet<>();
-        for (Condition c : conditionMapped.values()) {
-            requiredModules.addAll(c.getDependencies());
-        }
-        for (Dynamic d : dynamicMapped.values()) {
-            requiredModules.addAll(d.getDependencies());
-        }
-
-        return requiredModules;
+        return Streams.concat(
+                conditionMapped.values().stream().flatMap(a -> a.getDependencies().stream()),
+                dynamicMapped.values().stream().flatMap(a -> a.getDependencies().stream()))
+            .collect(Collectors.toSet());
     }
 
     private void purge(Map<String, ? extends Dependable> superior, Map<String, ? extends Dependable> inferior, String inferiorName) {
@@ -149,47 +143,35 @@ public class Knowledge implements Evaluated, Simulated {
 
         if (unused.size() > 0) {
             Matmos.LOGGER.warn("Unused " + inferiorName + ": " + Arrays.toString(unused.toArray()));
-            for (String junk : unused) {
-                inferior.remove(junk);
-            }
+
+            unused.forEach(inferior::remove);
         }
     }
 
     public void cacheSounds(ExpansionIdentity identity) {
         IResourcePack resourcePack = identity.getPack();
-        for (EventInterface event : eventMapped.values()) {
-            event.cacheSounds(resourcePack);
-        }
+
+        eventMapped.values().forEach(event -> event.cacheSounds(resourcePack));
     }
 
     @Override
     public void simulate() {
         relay.routine();
-        for (Machine m : machineMapped.values()) {
-            m.simulate();
-        }
+        machineMapped.values().forEach(Machine::simulate);
     }
 
     @Override
     public void evaluate() {
         if (dynamicMapped.size() > 0) {
             Sheet dynamic = data.getSheet(Dynamic.DEDICATED_SHEET);
-            for (Evaluated o : dynamicMapped.values()) {
+            for (Dynamic o : dynamicMapped.values()) {
                 o.evaluate();
-                dynamic.set(((Dynamic)o).getName(), Long.toString(((Dynamic)o).getInformation()));
+                dynamic.set(o.getName(), Long.toString(o.getInformation()));
             }
         }
 
-        for (Evaluated o : conditionMapped.values()) {
-            o.evaluate();
-        }
-
-        for (Evaluated o : junctionMapped.values()) {
-            o.evaluate();
-        }
-
-        for (Evaluated o : machineMapped.values()) {
-            o.evaluate();
-        }
+        conditionMapped.values().forEach(Evaluated::evaluate);
+        junctionMapped.values().forEach(Evaluated::evaluate);
+        machineMapped.values().forEach(Evaluated::evaluate);
     }
 }

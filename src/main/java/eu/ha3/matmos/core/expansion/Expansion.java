@@ -2,13 +2,11 @@ package eu.ha3.matmos.core.expansion;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import eu.ha3.easy.TimeStatistic;
 import eu.ha3.matmos.Matmos;
@@ -211,15 +209,10 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
 
             Matmos.LOGGER.info("Expansion " + identity.getUniqueName() + " requires " + requiredModules.size() + " found modules: " + Arrays.toString(requiredModules.toArray()));
 
-            List<String> legacyModules = new ArrayList<>();
-            for (String module : requiredModules) {
-                if (module.startsWith(ModuleRegistry.LEGACY_PREFIX)) {
-                    legacyModules.add(module);
-                }
-            }
-            if (legacyModules.size() > 0) {
-                Collections.sort(legacyModules);
-                Matmos.LOGGER.warn("Expansion " + identity.getUniqueName() + " uses LEGACY modules: " + Arrays.toString(legacyModules.toArray()));
+            Stream<String> legacyModules = requiredModules.stream().filter(module -> module.startsWith(ModuleRegistry.LEGACY_PREFIX));
+
+            if (legacyModules.count() > 0) {
+                Matmos.LOGGER.warn("Expansion " + identity.getUniqueName() + " uses LEGACY modules: " + Arrays.toString(legacyModules.sorted().toArray()));
                 reliesOnLegacyModules = true;
             }
         }
