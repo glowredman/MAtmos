@@ -2,7 +2,7 @@ package eu.ha3.matmos.data;
 
 import java.util.Set;
 
-public interface Collector {
+public interface IDataCollector {
 
     void addModuleStack(String name, Set<String> requiredModules);
 

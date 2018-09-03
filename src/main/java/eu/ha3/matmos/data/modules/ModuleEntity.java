@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import eu.ha3.matmos.core.sheet.DataPackage;
-import eu.ha3.matmos.data.Collector;
+import eu.ha3.matmos.data.IDataCollector;
 import eu.ha3.matmos.data.IDataGatherer;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
 import net.minecraft.client.Minecraft;
@@ -20,7 +20,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 public class ModuleEntity implements IDataGatherer, PassOnceModule {
     private final Set<String> submodules;
-    private final Collector collector;
+    private final IDataCollector collector;
 
     private AxisAlignedBB bbox;
 
@@ -36,7 +36,7 @@ public class ModuleEntity implements IDataGatherer, PassOnceModule {
     private boolean isRequired;
 
     @SuppressWarnings("unchecked")
-    public ModuleEntity(DataPackage dataIn, Collector collector, String minDistModule, String radiModulePrefix, int max, int... radiis) {
+    public ModuleEntity(DataPackage dataIn, IDataCollector collector, String minDistModule, String radiModulePrefix, int max, int... radiis) {
         this.collector = collector;
         submodules = new LinkedHashSet<>();
 

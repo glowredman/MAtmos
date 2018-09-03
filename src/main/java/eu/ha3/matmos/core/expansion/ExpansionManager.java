@@ -17,7 +17,7 @@ import eu.ha3.matmos.core.expansion.agents.JsonLoadingAgent;
 import eu.ha3.matmos.core.expansion.agents.LegacyXMLLoadingAgent;
 import eu.ha3.matmos.core.mixin.ISoundHandler;
 import eu.ha3.matmos.core.sheet.DataPackage;
-import eu.ha3.matmos.data.Collector;
+import eu.ha3.matmos.data.IDataCollector;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
@@ -35,7 +35,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
 
     private float volume = 1;
 
-    private Collector collector;
+    private IDataCollector collector;
 
     public ExpansionManager(File userconfigFolder, ISoundHandler accessor) {
         this.userconfigFolder = userconfigFolder;
@@ -135,7 +135,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
         this.data = data;
     }
 
-    public void setCollector(Collector collector) {
+    public void setCollector(IDataCollector collector) {
         this.collector = collector;
     }
 

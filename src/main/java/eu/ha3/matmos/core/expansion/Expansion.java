@@ -24,7 +24,7 @@ import eu.ha3.matmos.core.expansion.agents.RawJsonLoadingAgent;
 import eu.ha3.matmos.core.mixin.ISoundHandler;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sound.SoundHelperRelay;
-import eu.ha3.matmos.data.Collector;
+import eu.ha3.matmos.data.IDataCollector;
 import eu.ha3.matmos.data.modules.ModuleRegistry;
 import eu.ha3.util.property.simple.ConfigProperty;
 import net.minecraft.client.Minecraft;
@@ -36,7 +36,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
 
     private final ExpansionIdentity identity;
     private final DataPackage data;
-    private final Collector collector;
+    private final IDataCollector collector;
 
     private final SoundHelperRelay capabilities = new SoundHelperRelay();
 
@@ -54,7 +54,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
     private LoadingAgent agent;
     private LoadingAgent jsonAgent;
 
-    public Expansion(ExpansionIdentity identity, DataPackage data, Collector collector, ISoundHandler accessor, VolumeContainer masterVolume, File configurationSource) {
+    public Expansion(ExpansionIdentity identity, DataPackage data, IDataCollector collector, ISoundHandler accessor, VolumeContainer masterVolume, File configurationSource) {
         this.identity = identity;
         this.masterVolume = masterVolume;
         this.data = data;
