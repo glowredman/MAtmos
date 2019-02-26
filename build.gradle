@@ -39,9 +39,9 @@ archivesBaseName = 'presencefootsteps'
 ext.revision = "0"
 
 minecraft {
-		version = project.mcVersion
-		mappings = project.mcMappings
-		runDir = 'run'
+    version = project.mcVersion
+    mappings = project.mcMappings
+    runDir = 'run'
     replace '@MODID@', project.modid
     replace '@NAME@', project.name
     replace '@AUTHOR@', project.author
@@ -56,15 +56,24 @@ mixin {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+def expensionPacks = [
+    default: 'Matmos Default Resourcepack 1.10',
+    air: 'MAtmos default 2012 pack Air',
+    breeze: 'MAtmos default 2014 pack Breeze'
+]
+
 sourceSets {
-	air {
-	}
-	breeze {
-	}
+	soundpacks {
+        resources {
+            srcDirs "src/soundpacks"
+        }
+    }
 	commons {
 		java {
 			srcDir "lib/MC-Commons/mc-src"
 		}
+
+        compileClasspath += main.compileClasspath
 	}
 	main {
 		compileClasspath += commons.output
@@ -75,25 +84,38 @@ sourceSets {
 }
 
 jar {
-  def props = [
-      modid: project.modid,
-      name: project.name,
-      description: project.description,
+    def props = [
+        modid: project.modid,
+        name: project.name,
+        description: project.description,
         version: ver,
         revision: project.buildRevision,
         mcversion: project.mcVersion,
         author: project.author,
-				url: project.url
+        url: project.url
     ]
     inputs.properties props
 
-		from(sourceSets.main.output) {
-			exclude 'litemod.json'
-		}
-		from(sourceSets.main.output) {
-			include 'litemod.json'
-			expand props
-		}
+    from(sourceSets.main.output) {
+        exclude 'litemod.json'
+    }
+    from(sourceSets.main.output) {
+        include 'litemod.json'
+        expand props
+    }
 
-		from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
+    from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
+}
+
+task allPacks { }
+
+expensionPacks.each {k, v ->
+    def pack = task "${k}"(type: Zip) {
+        baseName v
+        from(sourceSets.soundpacks) {
+            include k
+            include 'common'
+        }
+    }
+    allPacks.dependsOn pack
 }
