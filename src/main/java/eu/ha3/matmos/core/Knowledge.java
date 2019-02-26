@@ -6,9 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
-
-import com.google.common.collect.Streams;
 
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.event.Event;
@@ -20,6 +17,7 @@ import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sheet.Sheet;
 import eu.ha3.matmos.core.sheet.SheetCommander;
 import eu.ha3.matmos.core.sheet.SheetIndex;
+import eu.ha3.matmos.util.BetterStreams;
 import net.minecraft.client.resources.IResourcePack;
 
 /**
@@ -116,10 +114,9 @@ public class Knowledge implements Evaluated, Simulated {
      * This method must return an object that can be modified afterwards by something else.
      */
     public Set<String> calculateRequiredModules() {
-        return Streams.concat(
-                conditionMapped.values().stream().flatMap(a -> a.getDependencies().stream()),
-                dynamicMapped.values().stream().flatMap(a -> a.getDependencies().stream()))
-            .collect(Collectors.toSet());
+        return BetterStreams.<Dependable>of(conditionMapped, dynamicMapped)
+                            .flatten(a -> a.getDependencies())
+                            .asSet();
     }
 
     private void purge(Map<String, ? extends Dependable> superior, Map<String, ? extends Dependable> inferior, String inferiorName) {
@@ -170,8 +167,6 @@ public class Knowledge implements Evaluated, Simulated {
             }
         }
 
-        conditionMapped.values().forEach(Evaluated::evaluate);
-        junctionMapped.values().forEach(Evaluated::evaluate);
-        machineMapped.values().forEach(Evaluated::evaluate);
+        BetterStreams.<Evaluated>of(conditionMapped, junctionMapped, machineMapped).forEach(Evaluated::evaluate);
     }
 }

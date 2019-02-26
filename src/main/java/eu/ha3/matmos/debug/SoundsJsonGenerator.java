@@ -12,6 +12,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class SoundsJsonGenerator implements Runnable {
+
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
     private List<String> filenames = new ArrayList<>();
 
     private boolean OVERWRITE_FILE = true;
@@ -62,9 +65,6 @@ public class SoundsJsonGenerator implements Runnable {
             toJsonify.put(catName, blob);
         }
 
-        //
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String jason = gson.toJson(toJsonify);
 
         if (!OVERWRITE_FILE) {
@@ -72,11 +72,8 @@ public class SoundsJsonGenerator implements Runnable {
             return;
         }
 
-        FileWriter writer;
-        try {
-            writer = new FileWriter(jsonFile);
+        try (FileWriter writer = new FileWriter(jsonFile)) {
             writer.append(jason);
-            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

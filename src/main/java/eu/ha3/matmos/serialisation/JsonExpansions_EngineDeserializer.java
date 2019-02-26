@@ -35,6 +35,8 @@ import eu.ha3.matmos.serialisation.expansion.SerialRoot;
 import eu.ha3.matmos.serialisation.expansion.SerialSet;
 
 public class JsonExpansions_EngineDeserializer {
+    private static final Gson gson = new Gson();
+
     private List<Named> elements;
     private Knowledge knowledgeWorkstation;
     private ProviderCollection providers;
@@ -57,7 +59,7 @@ public class JsonExpansions_EngineDeserializer {
     }
 
     public SerialRoot jsonToSerial(String jasonString) {
-        return new Gson().fromJson(new JsonParser().parse(jasonString).getAsJsonObject(), SerialRoot.class);
+        return gson.fromJson(new JsonParser().parse(jasonString).getAsJsonObject(), SerialRoot.class);
     }
 
     private void prepare(ExpansionIdentity identity, Knowledge knowledge) {
