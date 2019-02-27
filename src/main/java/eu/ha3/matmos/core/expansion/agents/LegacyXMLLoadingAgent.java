@@ -18,6 +18,7 @@ import eu.ha3.matmos.serialisation.JsonExpansions_EngineDeserializer;
 import eu.ha3.matmos.serialisation.LegacyXMLExpansions_Engine1;
 import eu.ha3.matmos.serialisation.expansion.SerialRoot;
 
+@Deprecated
 public class LegacyXMLLoadingAgent implements LoadingAgent {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 

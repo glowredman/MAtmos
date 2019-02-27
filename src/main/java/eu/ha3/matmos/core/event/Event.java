@@ -59,13 +59,14 @@ public class Event extends Component implements EventInterface {
 
         float volume = volMax - volMin;
         float pitch = pitchMax - pitchMin;
+
         volume = volMin + (volume > 0 ? random.nextFloat() * volume : 0);
         pitch = pitchMin + (pitch > 0 ? random.nextFloat() * pitch : 0);
 
-        String path = paths.get(random.nextInt(paths.size()));
+        volume *= volMod;
+        pitch *= pitchMod;
 
-        volume = volume * volMod;
-        pitch = pitch * pitchMod;
+        String path = paths.get(random.nextInt(paths.size()));
 
         relay.playSound(path, volume, pitch, distance);
     }

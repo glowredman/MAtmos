@@ -31,6 +31,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.sf.practicalxml.DomUtil;
 
+@Deprecated
 public class LegacyXMLExpansions_Engine1 {
     private static final String AS_ITEM = "__AS_ITEM";
     private static final String AS_BLOCK = "__AS_BLOCK";

@@ -17,12 +17,19 @@ public class ModuleMotion extends ModuleProcessor implements Module {
     protected void doProcess() {
         EntityPlayer player = getPlayer();
 
-        int mxx = (int)Math.round(player.motionX * 1000);
-        int mzz = (int)Math.round(player.motionZ * 1000);
-
-        setValue("x_1k", mxx);
+        setValue("x_1k", (int)Math.round(player.motionX * 1000));
         setValue("y_1k", (int)Math.round(player.motionY * 1000));
-        setValue("z_1k", mzz);
-        setValue("sqrt_xx_zz", (int)Math.floor(Math.sqrt(mxx * mxx + mzz * mzz)));
+        setValue("z_1k", (int)Math.round(player.motionZ * 1000));
+        setValue("sqrt_xx_zz", (int)Math.floor(Math.sqrt(
+                  Math.pow(player.motionX, 2)
+                + Math.pow(player.motionZ, 2)
+            ))
+        );
+        setValue("sqrt_xx_yy_zz", (int)Math.floor(Math.sqrt(
+                    Math.pow(player.motionX, 2)
+                  + Math.pow(player.motionY, 2)
+                  + Math.pow(player.motionZ, 2)
+              ))
+        );
     }
 }

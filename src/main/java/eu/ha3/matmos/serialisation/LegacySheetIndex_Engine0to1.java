@@ -8,6 +8,7 @@ import eu.ha3.matmos.core.sheet.SheetIndex;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import eu.ha3.matmos.util.math.Numbers;
 
+@Deprecated
 public class LegacySheetIndex_Engine0to1 implements SheetIndex {
     private static final Map<String, LegacyMapping> forward;
     private static final Map<String, LegacyMapping> blocks;
