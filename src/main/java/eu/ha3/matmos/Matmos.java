@@ -14,10 +14,10 @@ import org.apache.logging.log4j.Logger;
 
 import eu.ha3.easy.StopWatchStatistic;
 import eu.ha3.easy.TimeStatistic;
+import eu.ha3.matmos.core.ducks.ISoundHandler;
 import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.Stable;
 import eu.ha3.matmos.core.expansion.VolumeUpdatable;
-import eu.ha3.matmos.core.mixin.ISoundHandler;
 import eu.ha3.matmos.core.sound.Simulacrum;
 import eu.ha3.matmos.debug.Pluggable;
 import eu.ha3.matmos.game.user.UserControl;
@@ -48,7 +48,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     // Identity
     protected final String NAME = "MAtmos";
     protected final int VERSION = 33;
-    protected final String FOR = "1.11";
+    protected final String FOR = "1.12.2";
     protected final String ADDRESS = "http://matmos.ha3.eu";
     protected final Identity identity = new HaddonIdentity(NAME, VERSION, FOR, ADDRESS);
 

@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import eu.ha3.easy.TimeStatistic;
 import eu.ha3.matmos.Matmos;
@@ -16,10 +15,10 @@ import eu.ha3.matmos.core.ProviderCollection;
 import eu.ha3.matmos.core.ReferenceTime;
 import eu.ha3.matmos.core.Simulated;
 import eu.ha3.matmos.core.SystemClock;
+import eu.ha3.matmos.core.ducks.ISoundHandler;
 import eu.ha3.matmos.core.event.EventInterface;
 import eu.ha3.matmos.core.expansion.agents.LoadingAgent;
 import eu.ha3.matmos.core.expansion.agents.RawJsonLoadingAgent;
-import eu.ha3.matmos.core.mixin.ISoundHandler;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sound.SoundHelperRelay;
 import eu.ha3.matmos.data.IDataCollector;
@@ -209,10 +208,13 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
 
             Matmos.LOGGER.info("Expansion " + identity.getUniqueName() + " requires " + requiredModules.size() + " found modules: " + Arrays.toString(requiredModules.toArray()));
 
-            Stream<String> legacyModules = requiredModules.stream().filter(module -> module.startsWith(ModuleRegistry.LEGACY_PREFIX));
+            String[] legacyModules = requiredModules.stream()
+                    .filter(module -> module.startsWith(ModuleRegistry.LEGACY_PREFIX))
+                    .sorted()
+                    .toArray(String[]::new);
 
-            if (legacyModules.count() > 0) {
-                Matmos.LOGGER.warn("Expansion " + identity.getUniqueName() + " uses LEGACY modules: " + Arrays.toString(legacyModules.sorted().toArray()));
+            if (legacyModules.length > 0) {
+                Matmos.LOGGER.warn("Expansion " + identity.getUniqueName() + " uses LEGACY modules: " + Arrays.toString(legacyModules));
                 reliesOnLegacyModules = true;
             }
         }

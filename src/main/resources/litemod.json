@@ -1,9 +1,12 @@
 {
-  "name": "MAtmos",
-  "mcversion": "${mcversion}",
-  "version": "${version}",
-  "revision": "${revision}",
-  "author": "${author}",
-  "url": "${url}",
-  "description": "${description}"
+	"name": "MAtmos",
+	"mcversion": "${mcversion}",
+	"version": "${version}",
+	"revision": "${revision}",
+	"author": "${author}",
+	"url": "${url}",
+	"description": "${description}",
+	"mixinConfigs": [
+        "matmos.mixin.json"
+	]
 }
