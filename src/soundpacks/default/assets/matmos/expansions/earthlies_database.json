@@ -4,7 +4,7 @@
       "sheet": "scan_large_p1k",
       "index": "minecraft:air",
       "symbol": "GREATER",
-      "value": "300"
+      "value": "999"
     },
     "Air is tight 35%": {
       "sheet": "scan_small_p1k",
@@ -821,10 +821,10 @@
         "Is Underwater",
         "Outdoor"
       ],
-      "fadein": 0.0,
-      "fadeout": 0.0,
-      "delay_fadein": 0.0,
-      "delay_fadeout": 0.0,
+      "fadein": 3.0,
+      "fadeout": 3.0,
+      "delay_fadein": 3.0,
+      "delay_fadeout": 5.0,
       "event": [
         {
           "event": "Wind, very strong",
@@ -856,10 +856,10 @@
         "Is Raining",
         "Is Underwater"
       ],
-      "fadein": 0.0,
-      "fadeout": 0.0,
-      "delay_fadein": 0.0,
-      "delay_fadeout": 0.0,
+      "fadein": 3.0,
+      "fadeout": 3.0,
+      "delay_fadein": 5.0,
+      "delay_fadeout": 6.0,
       "event": [
         {
           "event": "Wind, trees",
@@ -944,10 +944,10 @@
         "Is Underwater",
         "Outdoor"
       ],
-      "fadein": 0.0,
-      "fadeout": 0.0,
-      "delay_fadein": 0.0,
-      "delay_fadeout": 0.0,
+      "fadein": 3.0,
+      "fadeout": 3.0,
+      "delay_fadein": 5.0,
+      "delay_fadeout": 6.0,
       "event": [
         {
           "event": "Wind, trees",
@@ -969,10 +969,10 @@
         "Is Raining",
         "Is Underwater"
       ],
-      "fadein": 0.0,
-      "fadeout": 0.0,
-      "delay_fadein": 0.0,
-      "delay_fadeout": 0.0,
+      "fadein": 3.0,
+      "fadeout": 3.0,
+      "delay_fadein": 5.0,
+      "delay_fadeout": 6.0,
       "event": [
         {
           "event": "Wind, trees",
@@ -1013,10 +1013,10 @@
         "Is Underwater",
         "Manmade Town"
       ],
-      "fadein": 0.0,
-      "fadeout": 0.0,
-      "delay_fadein": 0.0,
-      "delay_fadeout": 0.0,
+      "fadein": 4.0,
+      "fadeout": 4.0,
+      "delay_fadein": 5.0,
+      "delay_fadeout": 6.0,
       "event": [
         {
           "event": "Wind, trees",
@@ -1347,8 +1347,8 @@
       ]
     },
     "Bad wind": {
-      "vol_min": 0.7,
-      "vol_max": 1.0,
+      "vol_min": 0.4,
+      "vol_max": 0.5,
       "pitch_min": 0.1,
       "pitch_max": 0.7,
       "distance": 0,
@@ -1596,7 +1596,7 @@
     },
     "Wind, trees": {
       "vol_min": 0.7,
-      "vol_max": 1.0,
+      "vol_max": 0.5,
       "pitch_min": 0.9,
       "pitch_max": 1.1,
       "distance": 0,
@@ -1608,8 +1608,8 @@
       ]
     },
     "Wind, very strong": {
-      "vol_min": 1.0,
-      "vol_max": 1.0,
+      "vol_min": 0.2,
+      "vol_max": 0.5,
       "pitch_min": 0.8,
       "pitch_max": 1.1,
       "distance": 0,
@@ -1620,7 +1620,7 @@
       ]
     },
     "Wind, very variable": {
-      "vol_min": 1.0,
+      "vol_min": 0.8,
       "vol_max": 1.0,
       "pitch_min": 0.8,
       "pitch_max": 1.7,
