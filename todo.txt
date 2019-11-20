@@ -1,0 +1,11 @@
+* implement diamond shaped flood fill volumetric scan (32x32x32)
+  * it refreshes when the player moves, or a block gets broken (or a door gets opened?)
+  * it maintains a height map of top sunlit blocks around the player, ignoring leaves (and glass?) 
+* implement diamond holed volumetric scan that relies on the former scan to scan the hole
+
+things to check:
+  can we check block modification events? [yes]
+  
+  can we check doors getting opened or closed? [yes]
+  
+  can one scanner add the counts of another scanner to itself? [seems doable]

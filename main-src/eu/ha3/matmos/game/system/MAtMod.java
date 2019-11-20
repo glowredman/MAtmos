@@ -31,6 +31,8 @@ import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.INetHandler;
+import net.minecraft.network.Packet;
 import paulscode.sound.SoundSystem;
 
 import java.io.File;
@@ -69,6 +71,7 @@ public class MAtMod extends HaddonImpl
 	private UserControl userControl;
 	private ModularDataGatherer dataGatherer;
 	private VisualDebugger visualDebugger;
+	private BlockModificationListener blockModificationListener = new BlockModificationListener();
 	
 	// Use once
 	private boolean hasFirstTickPassed;
@@ -557,5 +560,16 @@ public class MAtMod extends HaddonImpl
 		{
 			return null;
 		}
+	}
+	
+	
+	public List<Class<? extends Packet>> getHandledPackets()
+	{
+		return blockModificationListener.getHandledPackets();
+	}
+
+	public boolean handlePacket(INetHandler netHandler, Packet packet)
+	{
+		return blockModificationListener.handlePacket(netHandler, packet);
 	}
 }
