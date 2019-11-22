@@ -135,6 +135,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 	@Override
 	public void process()
 	{
+		Minecraft.getMinecraft().mcProfiler.startSection("scanner_module_process");
 		if (tryToReboot())
 		{
 			MAtLog.info("Detected large movement or teleportation. Rebooted module " + getModuleName());
@@ -154,6 +155,8 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 			this.scanner.routine();
 		}
 		this.ticksSinceBoot = this.ticksSinceBoot + 1;
+		
+		Minecraft.getMinecraft().mcProfiler.endSection();
 	}
 	
 	private boolean tryToReboot()
@@ -241,10 +244,12 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 	@Override
 	public void input(int x, int y, int z)
 	{
+		Minecraft.getMinecraft().mcProfiler.startSection("scanner_module_input");
 		String name = MAtmosUtility.getNameAt(x, y, z, "");
 		this.base.increment(name);
 		this.base.increment(MAtmosUtility.getPowerMetaAt(x, y, z, ""));
 		this.thousand.increment(name);
+		Minecraft.getMinecraft().mcProfiler.endSection();
 	}
 	
 	@Override

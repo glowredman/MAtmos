@@ -19,6 +19,8 @@ import eu.ha3.matmos.game.data.modules.*;
 import eu.ha3.matmos.game.system.IDontKnowHowToCode;
 import eu.ha3.matmos.game.system.MAtMod;
 import eu.ha3.matmos.log.MAtLog;
+import net.minecraft.client.Minecraft;
+import net.minecraft.profiler.Profiler;
 
 import java.util.*;
 
@@ -133,7 +135,7 @@ public class ModularDataGatherer implements Collector, Processor
 		
 		this.largeScanner =
 			new ScannerModule(
-				ScanVolumetric.class, this.data, "_POM__scan_large", "scan_large", true, 8, 20 /*256*/, 64, 32, 64, 16 * 8 * 16/*64 * 64 * 2*/);
+				ScanVolumetric.class, this.data, "_POM__scan_large", "scan_large", true, -1, 20 /*256*/, 64*2, 32*2, 64*2, 4*16*16 * 8 * 16/*64 * 64 * 2*/);
 		addModule(this.largeScanner);
 		
 		this.mediumScanner = new ScannerModule(
@@ -155,6 +157,8 @@ public class ModularDataGatherer implements Collector, Processor
 	@Override
 	public void process()
 	{
+		Minecraft.getMinecraft().mcProfiler.startSection("modular_data_gatherer_process");
+		
 		TimeStatistic stat = new TimeStatistic();
 		for (String requiredModule : this.iteratedThroughModules)
 		{
@@ -177,6 +181,7 @@ public class ModularDataGatherer implements Collector, Processor
 		
 		this.ticksPassed = this.ticksPassed + 1;
 		
+		Minecraft.getMinecraft().mcProfiler.endSection();
 	}
 	
 	@Override
