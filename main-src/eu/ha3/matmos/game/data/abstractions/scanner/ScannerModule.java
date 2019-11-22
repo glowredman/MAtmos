@@ -249,9 +249,21 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 	@Override
 	public void input(int x, int y, int z)
 	{
+		inputAndReturnBlockMeta(x, y, z, null, null);
+	}
+	
+	/** Not sure if this optimization is necessary */
+	public void inputAndReturnBlockMeta(int x, int y, int z, Block[] blockOut, int[] metaOut) {
 		Block block = MAtmosUtility.getBlockAt(x, y, z);
 		int meta = MAtmosUtility.getMetaAt(x, y, z, -1);
 		base.increment(block, meta);
+		
+		if(blockOut != null) {
+			blockOut[0] = block;
+		}
+		if(metaOut != null) {
+			metaOut[0] = meta;
+		}
 	}
 	
 	@Override
