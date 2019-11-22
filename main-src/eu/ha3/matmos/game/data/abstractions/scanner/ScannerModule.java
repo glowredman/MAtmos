@@ -34,10 +34,8 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 	private final int zS;
 	private final int blocksPerCall;
 	
-	private final ExternalStringCountModule base;
-	private final BlockCountModule baseBlock;
-	private final ThousandStringCountModule thousand;
-	private final VirtualModuleProcessor thousandVirtual;
+	private final BlockCountModule base;
+	private final VirtualModuleProcessor thousand;
 	
 	private final Set<String> subModules = new HashSet<String>();
 	
@@ -92,19 +90,16 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 		if (requireThousand)
 		{
 			String thousandName = baseName + THOUSAND_SUFFIX;
-			this.thousand = new ThousandStringCountModule(data, thousandName, true);
-			this.thousandVirtual = new VirtualModuleProcessor(data, thousandName, true);
+			this.thousand = new VirtualModuleProcessor(data, thousandName, true);
 			this.subModules.add(thousandName);
 			data.getSheet(thousandName).setDefaultValue("0");
 		}
 		else
 		{
 			this.thousand = null;
-			this.thousandVirtual = null;
 		}
 		
-		this.base = new ExternalStringCountModule(data, baseName, true);
-		this.baseBlock = new BlockCountModule(data, baseName, true, thousandVirtual);
+		this.base = new BlockCountModule(data, baseName, true, thousand);
 		this.subModules.add(baseName);
 		data.getSheet(baseName).setDefaultValue("0");
 		
@@ -254,21 +249,9 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 	@Override
 	public void input(int x, int y, int z)
 	{
-		boolean old = false;
-		if(old) {
-			String name = MAtmosUtility.getNameAt(x, y, z, "");
-			this.base.increment(name);
-			this.base.increment(MAtmosUtility.getPowerMetaAt(x, y, z, ""));
-			this.thousand.increment(name);
-		} else {
-			Block block = MAtmosUtility.getBlockAt(x, y, z);
-			int meta = MAtmosUtility.getMetaAt(x, y, z, -1);
-			baseBlock.increment(block, meta);
-		}
-		
-		/*if(base.get(name) != baseBlock.get(block, -1)) {
-			System.out.println("MISMATCH!!");
-		}*/
+		Block block = MAtmosUtility.getBlockAt(x, y, z);
+		int meta = MAtmosUtility.getMetaAt(x, y, z, -1);
+		base.increment(block, meta);
 	}
 	
 	@Override
@@ -279,19 +262,8 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 	@Override
 	public void finish()
 	{
-		boolean old = false;
-		if(old) {
-			this.base.apply();
-		} else {
-			baseBlock.apply();
-		}
+		base.apply();	
 		
-		
-		
-		if (this.requireThousand)
-		{
-			this.thousand.apply();
-		}
 		this.workInProgress = false;
 	}
 	

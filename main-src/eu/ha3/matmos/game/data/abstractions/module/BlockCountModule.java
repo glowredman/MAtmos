@@ -70,7 +70,6 @@ public class BlockCountModule extends ModuleProcessor implements Module
 		}
 		
 		blocksCounted++;
-		
 	}
 	
 	// for debugging
