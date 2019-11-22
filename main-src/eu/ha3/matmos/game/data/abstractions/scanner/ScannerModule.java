@@ -265,6 +265,10 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 			int meta = MAtmosUtility.getMetaAt(x, y, z, -1);
 			baseBlock.increment(block, meta);
 		}
+		
+		/*if(base.get(name) != baseBlock.get(block, -1)) {
+			System.out.println("MISMATCH!!");
+		}*/
 	}
 	
 	@Override
@@ -281,6 +285,8 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 		} else {
 			baseBlock.apply();
 		}
+		
+		
 		
 		if (this.requireThousand)
 		{

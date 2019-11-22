@@ -52,6 +52,11 @@ public abstract class AbstractStringCountModule extends ModuleProcessor implemen
 		this.things.put(thing, this.things.containsKey(thing) ? this.things.get(thing) + 1 : 1);
 	}
 	
+	// for debugging
+	public int get(String thing) {
+		return this.things.get(thing);
+	}
+	
 	protected abstract void count();
 	
 	public void apply()

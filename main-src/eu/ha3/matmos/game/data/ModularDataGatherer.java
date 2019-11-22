@@ -136,6 +136,7 @@ public class ModularDataGatherer implements Collector, Processor
 		this.largeScanner =
 			new ScannerModule(
 				ScanVolumetric.class, this.data, "_POM__scan_large", "scan_large", true, -1, 20 /*256*/, 64*2, 32*2, 64*2, 4*16*16 * 8 * 16/*64 * 64 * 2*/);
+				//ScanVolumetric.class, this.data, "_POM__scan_large", "scan_large", true, -1, 20 /*256*/, 64, 32, 64, 8*16 * 8 * 16/*64 * 64 * 2*/);
 		addModule(this.largeScanner);
 		
 		this.mediumScanner = new ScannerModule(

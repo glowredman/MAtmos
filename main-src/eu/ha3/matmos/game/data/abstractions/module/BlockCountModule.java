@@ -23,9 +23,8 @@ import net.minecraft.client.Minecraft;
  */
 public class BlockCountModule extends ModuleProcessor implements Module
 {
-	private int[] counts = new int[4096]; // TODO metadata
+	private int[] counts = new int[4096];
 	private TreeMap<Integer, Integer>[] metadatas = new TreeMap[4096];
-	private HashMap<Class, Integer> countsMap = new HashMap<Class, Integer>();
 	
 	ModuleProcessor thousand;
 	
@@ -54,36 +53,34 @@ public class BlockCountModule extends ModuleProcessor implements Module
 		apply();
 	}
 	
-	Class lastClass = null;
-	int lastID = -1;
 	int blocksCounted = 0;
 	
 	public void increment(Block block, int meta)
-	{
-		//Integer count = cunts.get(block.getClass());
-		//cunts.put(block.getClass(), count == null ? 0 : count + 1);
-		
-		int id = -1;
-		if(lastID == -1 || block.getClass() != lastClass) {
-			lastClass = block.getClass();
-			lastID = Block.getIdFromBlock(block);
-		}
-		
-		id = lastID;
+	{	
+		int id = Block.getIdFromBlock(block);
 		
 		counts[id]++;
 		
-		if(metadatas[id] == null) {
-			metadatas[id] = new TreeMap<Integer, Integer>();
-		}
-		
-		if(meta != -1) {
+		if(meta != -1 && meta != 0) {
+			if(metadatas[id] == null) {
+				metadatas[id] = new TreeMap<Integer, Integer>();
+			}
 			Integer metaCount = metadatas[id].get(meta);
 			metadatas[id].put(meta, metaCount == null ? 0 : metaCount + 1);
 		}
 		
 		blocksCounted++;
 		
+	}
+	
+	// for debugging
+	public int get(Block block, int meta) {
+		int id=Block.getIdFromBlock(block);
+		if(meta == -1) {
+			return counts[id];
+		} else {
+			return metadatas[id].get(meta);
+		}
 	}
 	
 	protected void count() {}
@@ -108,23 +105,7 @@ public class BlockCountModule extends ModuleProcessor implements Module
 				metadatas[i].clear();
 			}
 		}
-		/*for(Entry<Class, Integer> entry : cunts.entrySet()) {
-			Block inst = null;
-			try {
-				inst = (Block)entry.getKey().newInstance();
-			} catch (InstantiationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if(inst != null) {
-				String name = MAtmosUtility.nameOf(inst);
-				this.setValue(name, entry.getValue());
-			}
-		}*/
-		countsMap.clear();
+		
 		blocksCounted = 0;
 	}
 	
