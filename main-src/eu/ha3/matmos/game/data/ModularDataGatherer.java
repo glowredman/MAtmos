@@ -12,6 +12,7 @@ import eu.ha3.matmos.game.data.abstractions.module.ModuleProcessor;
 import eu.ha3.matmos.game.data.abstractions.module.PassOnceModule;
 import eu.ha3.matmos.game.data.abstractions.module.ProcessorModel;
 import eu.ha3.matmos.game.data.abstractions.scanner.Progress;
+import eu.ha3.matmos.game.data.abstractions.scanner.ScanVolumetric;
 import eu.ha3.matmos.game.data.abstractions.scanner.ScannerModule;
 import eu.ha3.matmos.game.data.modules.*;
 import eu.ha3.matmos.game.system.IDontKnowHowToCode;
@@ -131,10 +132,10 @@ public class ModularDataGatherer implements Collector, Processor
 		
 		this.largeScanner =
 			new ScannerModule(
-				this.data, "_POM__scan_large", "scan_large", true, 8, 20 /*256*/, 64, 32, 64, 16 * 8 * 16/*64 * 64 * 2*/);
+				ScanVolumetric.class, this.data, "_POM__scan_large", "scan_large", true, 8, 20 /*256*/, 64, 32, 64, 16 * 8 * 16/*64 * 64 * 2*/);
 		addModule(this.largeScanner);
 		addModule(new ScannerModule(
-			this.data, "_POM__scan_small", "scan_small", true, -1, 2 /*64*/, 16, 8, 16, 16 * 4 * 16));
+			ScanVolumetric.class, this.data, "_POM__scan_small", "scan_small", true, -1, 2 /*64*/, 16, 8, 16, 16 * 4 * 16));
 		// Each ticks, check half of the small scan
 		
 		MAtLog.info("Modules initialized: " + Arrays.toString(new TreeSet<String>(this.modules.keySet()).toArray()));

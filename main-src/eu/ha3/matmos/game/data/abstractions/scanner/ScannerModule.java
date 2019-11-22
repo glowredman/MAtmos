@@ -49,7 +49,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 	
 	//
 	
-	private final ScanVolumetric scanner = new ScanVolumetric();
+	private final Scan scanner;
 	
 	/**
 	 * Movement: Requires the player to move to another block to trigger a new
@@ -68,7 +68,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 	 * @param blocksPerCall
 	 */
 	public ScannerModule(
-		Data data, String passOnceName, String baseName, boolean requireThousand, int movement, int pulse, int xS,
+		Class scannerClass, Data data, String passOnceName, String baseName, boolean requireThousand, int movement, int pulse, int xS,
 		int yS, int zS, int blocksPerCall)
 	{
 		this.passOnceName = passOnceName;
@@ -99,6 +99,20 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 		}
 		
 		// 
+		
+		Scan theScanner = null;
+		
+		try
+		{
+			theScanner = (Scan)scannerClass.newInstance();
+		} catch (InstantiationException e)
+		{
+			e.printStackTrace();
+		} catch (IllegalAccessException e)
+		{
+			e.printStackTrace();
+		}
+		this.scanner = theScanner;
 		
 		this.scanner.setPipeline(this);
 		
