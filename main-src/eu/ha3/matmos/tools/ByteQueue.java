@@ -57,7 +57,7 @@ public class ByteQueue {
 	
 	public boolean pop4(byte[] b) {
 		if(length < 4) {
-			System.err.println("ByteQueue array doesn't have enough elements to pop 4!");
+			//System.err.println("ByteQueue array doesn't have enough elements to pop 4!");
 			return false;
 		}
 		for(int i = 0; i < 4; i++) {

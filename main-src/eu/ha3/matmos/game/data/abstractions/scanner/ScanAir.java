@@ -24,12 +24,15 @@ public class ScanAir extends Scan {
 	private boolean[] visited;
 	ByteQueue floodQueue;
 	ByteQueue solidQueue;
+	ByteQueue finalQueue;
 	
 	int nearest;
 	int nearestX, nearestY, nearestZ;
 	
 	enum Stage {AIR1, SOLID, AIR2, FINISH};
 	Stage stage = Stage.AIR1;
+	
+	private final int AIR_COST = 1, SOLID_COST = 2;
 	
 	@Override
 	void initScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn)
@@ -69,8 +72,13 @@ public class ScanAir extends Scan {
 		} else {
 			solidQueue.clear();
 		}
+		if(reallocate || finalQueue == null) {
+			finalQueue = new ByteQueue(scanDistance * scanDistance * 6 * 4);
+		} else {
+			finalQueue.clear();
+		}
 		
-		floodQueue.push4((byte)scanDistance, (byte)scanDistance, (byte)scanDistance, START_NEARNESS);
+		floodQueue.push4((byte)scanDistance, (byte)scanDistance, (byte)scanDistance, /*START_NEARNESS*/(byte)4);
 		
 		nearest = -1;
 		stage = Stage.AIR1;
@@ -95,6 +103,7 @@ public class ScanAir extends Scan {
 	@Override
 	protected boolean doRoutine()
 	{
+		System.out.println("doRoutine()");
 		int ops = 0;
 		
 		
@@ -103,21 +112,24 @@ public class ScanAir extends Scan {
 		
 		World w = Minecraft.getMinecraft().theWorld;
 		
+		int airs = 0;
+		int solids = 0;
+		
 		byte[] p = new byte[4];
 		while(ops < opspercall && progress < finalProgress)
 		{
 			switch(stage) {
 			case AIR1:
+			case AIR2:
 				if(floodQueue.pop4(p)) {
+					//System.out.println(String.format("air1 step (%d, %d, %d, %d)", p[0], p[1], p[2], p[3]));
 					int wx = startX - scanDistance + p[0];
 					int wy = startY - scanDistance + p[1];
 					int wz = startZ - scanDistance + p[2];
-					if(MAtmosUtility.isWithinBounds(wy) && !getVisited(p[0], p[1], p[2])) {
+					if(p[3] > 0 && MAtmosUtility.isWithinBounds(wy) && !getVisited(p[0], p[1], p[2])) {
 						
 						Block[] blockBuf = new Block[1];
 						int[] metaBuf = new int[1];
-						
-						
 						
 						((ScannerModule)pipeline).inputAndReturnBlockMeta(wx, wy, wz, blockBuf, metaBuf);
 						ops++;
@@ -125,18 +137,21 @@ public class ScanAir extends Scan {
 						Block block = blockBuf[0];
 						int meta = metaBuf[0];
 						
-						byte newN = (byte) (p[3] - 1);
+						byte newN = (byte) (p[3] - AIR_COST);
 						if(block instanceof BlockAir) {
+							airs++;
 							if(w.canBlockSeeTheSky(wx, wy, wz)) {
-								if(nearest == -1 || p[3] < nearest) {
+								if(nearest == -1 || p[3] > nearest) {
 									nearest = p[3];
 									nearestX = p[0];
 									nearestY = p[1];
 									nearestZ = p[2];
+									
+									finalQueue.push4(p[0], p[1], p[2], p[3]);
 								}
 							} else {
 								// enqueue neighbors
-								
+								System.out.println(String.format("    enqueue neighbors (%d, %d, %d, %d)", p[0], p[1], p[2], p[3]));
 								floodQueue.push4((byte)(p[0] - 1), 	p[1], 				p[2],				newN);
 								floodQueue.push4((byte)(p[0] + 1), 	p[1],				p[2],				newN);
 								floodQueue.push4(p[0], 				(byte)(p[1] - 1),	p[2],				newN);
@@ -145,13 +160,14 @@ public class ScanAir extends Scan {
 								floodQueue.push4(p[0], 				p[1], 				(byte)(p[2] + 1),	newN);
 							}
 						} else {
-							solidQueue.push4(p[0], p[1], p[2], newN);
+							solids++;
+							System.out.println(String.format("    enqueue solid (%d, %d, %d, %d)", p[0], p[1], p[2], p[3]));
+							(stage == Stage.AIR1 ? solidQueue : finalQueue).push4(p[0], p[1], p[2], p[3]);
 						}
 						
 						setVisited(p[0], p[1], p[2], true);
 					}
-				}
-				if(floodQueue.length() == 0) {
+				} else {
 					if(solidQueue.length() == 0) {
 						stage = Stage.FINISH;
 					} else {
@@ -160,18 +176,33 @@ public class ScanAir extends Scan {
 				}
 				break;
 			case SOLID:
-				
-				stage = Stage.AIR2;
-				// TODO
-				break;
-			case AIR2:
-				stage = Stage.FINISH;
-				
-				// TODO
+				if(solidQueue.pop4(p)) {
+					int wy = startY - scanDistance + p[1];
+					if(MAtmosUtility.isWithinBounds(wy)) {
+						
+						// enqueue neighbors
+						byte newN = (byte)(p[3] - /*SOLID_COST*/2);
+						
+						floodQueue.push4((byte)(p[0] - 1), 	p[1], 				p[2],				newN);
+						floodQueue.push4((byte)(p[0] + 1), 	p[1],				p[2],				newN);
+						floodQueue.push4(p[0], 				(byte)(p[1] - 1),	p[2],				newN);
+						floodQueue.push4(p[0], 				(byte)(p[1] + 1),	p[2],				newN);
+						floodQueue.push4(p[0], 				p[1], 				(byte)(p[2] - 1),	newN);
+						floodQueue.push4(p[0], 				p[1], 				(byte)(p[2] + 1),	newN);
+						
+						setVisited(p[0], p[1], p[2], true);
+					}
+				} else {
+					stage = Stage.AIR2;
+				}
 				break;
 			case FINISH:
-				// TODO
+				// We could scan the rest of the region here (expanding from finalQueue), with the ultimate
+				// goal of outsourcing scanning it to us in scan_large's stead, avoiding scanning it twice.
+				// But I'm not sure if it's worth the trouble for the optimization gain.
+				
 				System.out.println("end. nearest: " + nearest);
+				System.out.println(String.format("%d airs, %d solids", airs, solids));
 				progress = 1;
 				break;
 			}
