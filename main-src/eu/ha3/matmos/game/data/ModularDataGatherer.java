@@ -12,6 +12,7 @@ import eu.ha3.matmos.game.data.abstractions.module.ModuleProcessor;
 import eu.ha3.matmos.game.data.abstractions.module.PassOnceModule;
 import eu.ha3.matmos.game.data.abstractions.module.ProcessorModel;
 import eu.ha3.matmos.game.data.abstractions.scanner.Progress;
+import eu.ha3.matmos.game.data.abstractions.scanner.ScanAir;
 import eu.ha3.matmos.game.data.abstractions.scanner.ScanVolumetric;
 import eu.ha3.matmos.game.data.abstractions.scanner.ScannerModule;
 import eu.ha3.matmos.game.data.modules.*;
@@ -45,7 +46,7 @@ public class ModularDataGatherer implements Collector, Processor
 	private final Set<String> iteratedThroughModules;
 	private final Map<String, Set<String>> moduleStack;
 	
-	private ScannerModule largeScanner;
+	private ScannerModule largeScanner, mediumScanner;
 	
 	//
 	
@@ -134,6 +135,11 @@ public class ModularDataGatherer implements Collector, Processor
 			new ScannerModule(
 				ScanVolumetric.class, this.data, "_POM__scan_large", "scan_large", true, 8, 20 /*256*/, 64, 32, 64, 16 * 8 * 16/*64 * 64 * 2*/);
 		addModule(this.largeScanner);
+		
+		this.mediumScanner = new ScannerModule(
+				ScanAir.class, this.data, "_POM__scan_medium", "scan_medium", true, -1, 20, 31, 31, 31, 31*31*4);
+		addModule(this.mediumScanner);
+		
 		addModule(new ScannerModule(
 			ScanVolumetric.class, this.data, "_POM__scan_small", "scan_small", true, -1, 2 /*64*/, 16, 8, 16, 16 * 4 * 16));
 		// Each ticks, check half of the small scan

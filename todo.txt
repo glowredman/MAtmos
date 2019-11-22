@@ -1,6 +1,10 @@
 * implement diamond shaped flood fill volumetric scan (32x32x32)
   * it refreshes when the player moves, or a block gets broken (or a door gets opened?)
-  * it maintains a height map of top sunlit blocks around the player, ignoring leaves (and glass?) 
+  * it maintains a height map of top sunlit blocks around the player, ignoring leaves (and glass?)
+  * implementation steps:
+    * no leaf hack, refresh when the player moves
+    * leaf hack
+    * refresh when block is modified 
 * implement diamond holed volumetric scan that relies on the former scan to scan the hole
 
 things to check:
