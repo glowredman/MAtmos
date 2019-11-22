@@ -3,11 +3,14 @@ package eu.ha3.matmos.game.data.abstractions.scanner;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import eu.ha3.matmos.engine.core.interfaces.Data;
+import eu.ha3.matmos.game.data.abstractions.module.BlockCountModule;
 import eu.ha3.matmos.game.data.abstractions.module.ExternalStringCountModule;
 import eu.ha3.matmos.game.data.abstractions.module.PassOnceModule;
 import eu.ha3.matmos.game.data.abstractions.module.ThousandStringCountModule;
+import eu.ha3.matmos.game.data.abstractions.module.VirtualModuleProcessor;
 import eu.ha3.matmos.game.system.MAtmosUtility;
 import eu.ha3.matmos.log.MAtLog;
 
@@ -32,7 +35,9 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 	private final int blocksPerCall;
 	
 	private final ExternalStringCountModule base;
+	private final BlockCountModule baseBlock;
 	private final ThousandStringCountModule thousand;
+	private final VirtualModuleProcessor thousandVirtual;
 	
 	private final Set<String> subModules = new HashSet<String>();
 	
@@ -83,20 +88,25 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 		
 		//
 		
-		this.base = new ExternalStringCountModule(data, baseName, true);
-		this.subModules.add(baseName);
-		data.getSheet(baseName).setDefaultValue("0");
+		
 		if (requireThousand)
 		{
 			String thousandName = baseName + THOUSAND_SUFFIX;
 			this.thousand = new ThousandStringCountModule(data, thousandName, true);
+			this.thousandVirtual = new VirtualModuleProcessor(data, thousandName, true);
 			this.subModules.add(thousandName);
 			data.getSheet(thousandName).setDefaultValue("0");
 		}
 		else
 		{
 			this.thousand = null;
+			this.thousandVirtual = null;
 		}
+		
+		this.base = new ExternalStringCountModule(data, baseName, true);
+		this.baseBlock = new BlockCountModule(data, baseName, true, thousandVirtual);
+		this.subModules.add(baseName);
+		data.getSheet(baseName).setDefaultValue("0");
 		
 		// 
 		
@@ -244,12 +254,17 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 	@Override
 	public void input(int x, int y, int z)
 	{
-		Minecraft.getMinecraft().mcProfiler.startSection("scanner_module_input");
-		String name = MAtmosUtility.getNameAt(x, y, z, "");
-		this.base.increment(name);
-		this.base.increment(MAtmosUtility.getPowerMetaAt(x, y, z, ""));
-		this.thousand.increment(name);
-		Minecraft.getMinecraft().mcProfiler.endSection();
+		boolean old = false;
+		if(old) {
+			String name = MAtmosUtility.getNameAt(x, y, z, "");
+			this.base.increment(name);
+			this.base.increment(MAtmosUtility.getPowerMetaAt(x, y, z, ""));
+			this.thousand.increment(name);
+		} else {
+			Block block = MAtmosUtility.getBlockAt(x, y, z);
+			int meta = MAtmosUtility.getMetaAt(x, y, z, -1);
+			baseBlock.increment(block, meta);
+		}
 	}
 	
 	@Override
@@ -260,7 +275,13 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress
 	@Override
 	public void finish()
 	{
-		this.base.apply();
+		boolean old = false;
+		if(old) {
+			this.base.apply();
+		} else {
+			baseBlock.apply();
+		}
+		
 		if (this.requireThousand)
 		{
 			this.thousand.apply();
