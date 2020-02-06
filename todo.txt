@@ -7,9 +7,18 @@
     * refresh when block is modified 
 * implement diamond holed volumetric scan that relies on the former scan to scan the hole
 
+* medium scan should maybe scan entire 32x32x32 cube?
+* it should count the number of air blocks to decide if the player is in an open area, or shielded from wind
+* it should only count air blocks near the player's Y, because wind comes horizontally
+
 things to check:
   can we check block modification events? [yes]
   
   can we check doors getting opened or closed? [yes]
   
   can one scanner add the counts of another scanner to itself? [seems doable]
+
+--
+things needed for prototype:
+[ ] loop audio, multiple layers at a time
+[ ] eq (low-pass filter) outdoors audio when indoors (audio can be marked as indoors, then it won't be affected)
