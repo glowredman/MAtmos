@@ -129,7 +129,7 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         addModule(new ModuleServerInfo(data), 200);
         addModule(new ModuleEntity(data, this, "detect_mindist", "detect_radius", 256, 2, 5, 10, 20, 50));
 
-        for (EntityEquipmentSlot i : EntityEquipmentSlot.values()) {
+        for (int i = 0; i < 4; i++) {
             addModule(new ModuleArmourEnchantment(data, i));
         }
 
