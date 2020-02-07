@@ -39,6 +39,7 @@ import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
+import paulscode.sound.SoundSystemConfig;
 
 public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, NotifiableHaddon, IResourceManagerReloadListener, Stable {
     private static final boolean _COMPILE_IS_UNSTABLE = true;
@@ -194,6 +195,8 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void onTick() {
+        SoundSystemConfig.setStreamQueueFormatsMatch(true); // TODO only do this when sound engine is reloaded
+        
         userControl.onTick();
         if (isActivated()) {
             if (!queue.isEmpty()) {
