@@ -76,6 +76,7 @@ public class SoundHelper implements SoundCapabilities {
             newSound = previous; // reuse previous sound
         }
         newSound.play(fadeIn);
+        newSound.applyVolume(volumeModulator);
         
         if(newSound.notYetPlayed()) {
             Minecraft.getMinecraft().getSoundHandler().playSound(newSound);

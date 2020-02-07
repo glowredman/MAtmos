@@ -16,6 +16,7 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
     private final HelperFadeCalculator helper = new HelperFadeCalculator(new SystemClock());
     private float desiredVolume;
     private float desiredPitch;
+    private float volumeMod;
     
     private boolean notYetPlayed = true;
 
@@ -47,7 +48,7 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
         yPosF = (float)e.posY;
         zPosF = (float)e.posZ;
 
-        volume = helper.calculateFadeFactor() * desiredVolume;
+        volume = helper.calculateFadeFactor() * desiredVolume * volumeMod;
 
         if (volume < 0.01f && usesPause) {
             pitch = 0f;
@@ -78,7 +79,7 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
 
     @Override
     public void applyVolume(float volumeMod) {
-        volume = volumeMod;
+        this.volumeMod = volumeMod;
     }
 
     @Override
