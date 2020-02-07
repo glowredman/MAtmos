@@ -5,6 +5,7 @@ import eu.ha3.matmos.util.math.HelperFadeCalculator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.MovingSound;
+import net.minecraft.client.audio.Sound;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
@@ -15,6 +16,8 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
     private final HelperFadeCalculator helper = new HelperFadeCalculator(new SystemClock());
     private float desiredVolume;
     private float desiredPitch;
+    
+    private boolean notYetPlayed = true;
 
     protected NoAttenuationMovingSound(ResourceLocation myResource, float volume, float pitch, boolean isLooping, boolean usesPause) {
         super(SoundEvents.AMBIENT_CAVE, SoundCategory.MASTER);
@@ -82,5 +85,15 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
     @Override
     public void interrupt() {
         donePlaying = true;
+    }
+    
+    @Override
+    public Sound getSound() {
+        notYetPlayed = false;
+        return super.getSound();
+    }
+    
+    public boolean notYetPlayed() {
+        return notYetPlayed;
     }
 }

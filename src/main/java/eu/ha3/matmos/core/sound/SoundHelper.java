@@ -3,6 +3,7 @@ package eu.ha3.matmos.core.sound;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -66,13 +67,19 @@ public class SoundHelper implements SoundCapabilities {
             return;
         }
 
-        // Ensure previous sound is disposed of
-        streaming.get(customName).dispose();
-
-        NoAttenuationMovingSound copy = streaming.get(customName).copy();
-        streaming.put(customName, copy);
-        copy.play(fadeIn);
-        Minecraft.getMinecraft().getSoundHandler().playSound(copy);
+        NoAttenuationMovingSound previous = streaming.get(customName);
+        NoAttenuationMovingSound newSound = null;
+        if(previous.isDonePlaying()) {
+            newSound = previous.copy();
+            streaming.put(customName, newSound);
+        } else {
+            newSound = previous; // reuse previous sound
+        }
+        newSound.play(fadeIn);
+        
+        if(newSound.notYetPlayed()) {
+            Minecraft.getMinecraft().getSoundHandler().playSound(newSound);
+        }
     }
 
     @Override
