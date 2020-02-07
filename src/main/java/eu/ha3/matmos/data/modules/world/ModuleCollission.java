@@ -29,7 +29,7 @@ public class ModuleCollission extends AbstractStringCountModule {
     @Override
     protected void count() {
         for (BlockPos triplet : blocks) {
-            BlockPos center = triplet.add(getPlayer().getPosition());
+            BlockPos center = triplet.add(MAtUtil.getPlayerPos());
             increment(MAtUtil.getNameAt(center, ""));
             increment(MAtUtil.getPowerMetaAt(center, ""));
         }

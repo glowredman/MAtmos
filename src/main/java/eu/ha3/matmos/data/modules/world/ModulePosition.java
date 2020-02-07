@@ -3,6 +3,7 @@ package eu.ha3.matmos.data.modules.world;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
+import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.util.math.BlockPos;
 
 public class ModulePosition extends ModuleProcessor implements Module {
@@ -12,7 +13,7 @@ public class ModulePosition extends ModuleProcessor implements Module {
 
     @Override
     protected void doProcess() {
-        BlockPos pos = getPlayer().getPosition();
+        BlockPos pos = MAtUtil.getPlayerPos();
 
         setValue("x", pos.getX());
         setValue("y", pos.getY());

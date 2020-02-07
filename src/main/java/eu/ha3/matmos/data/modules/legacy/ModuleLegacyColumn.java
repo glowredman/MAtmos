@@ -13,7 +13,7 @@ public class ModuleLegacyColumn extends ModuleProcessor implements Module {
 
     @Override
     protected void doProcess() {
-        BlockPos pos = getPlayer().getPosition();
+        BlockPos pos = MAtUtil.getPlayerPos();
 
         setValue("y-1_as_number", MAtUtil.legacyOf(MAtUtil.getBlockAt(pos.down())));
         setValue("y-2_as_number", MAtUtil.legacyOf(MAtUtil.getBlockAt(pos.down(2))));

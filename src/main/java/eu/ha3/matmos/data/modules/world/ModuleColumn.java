@@ -25,7 +25,7 @@ public class ModuleColumn extends ModuleProcessor implements Module {
     protected void doProcess() {
         World w = Minecraft.getMinecraft().world;
 
-        BlockPos pos = getPlayer().getPosition();
+        BlockPos pos = MAtUtil.getPlayerPos();
         BlockPos topMostBlock = w.getTopSolidOrLiquidBlock(pos);
 
         setValue("y-1", MAtUtil.getNameAt(pos.down(), NO_BLOCK_OUT_OF_BOUNDS));

@@ -12,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class MAtUtil {
@@ -34,6 +36,13 @@ public class MAtUtil {
 
     public static int getPlayerZ() {
         return (int)Math.floor(getPlayer().posZ);
+    }
+    
+    public static BlockPos getPlayerPos() {
+        Vec3d doublePos = getPlayer().getPositionVector();
+        return new BlockPos(  MathHelper.floor(doublePos.x),
+                              MathHelper.floor(doublePos.y),
+                              MathHelper.floor(doublePos.z));
     }
 
     public static boolean isUnderwaterAnyGamemode() {

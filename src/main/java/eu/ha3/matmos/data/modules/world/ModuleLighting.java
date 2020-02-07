@@ -3,8 +3,11 @@ package eu.ha3.matmos.data.modules.world;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
+import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
@@ -17,7 +20,7 @@ public class ModuleLighting extends ModuleProcessor implements Module {
     protected void doProcess() {
         World w = Minecraft.getMinecraft().world;
 
-        BlockPos playerPos = getPlayer().getPosition();
+        BlockPos playerPos = MAtUtil.getPlayerPos();
 
         setValue("sky", w.getLightFor(EnumSkyBlock.SKY, playerPos));
         setValue("lamp", w.getLightFor(EnumSkyBlock.BLOCK, playerPos));
