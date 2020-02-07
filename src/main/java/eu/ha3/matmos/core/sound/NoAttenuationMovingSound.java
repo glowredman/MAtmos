@@ -64,6 +64,10 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
 
     @Override
     public void play(float fadeIn) {
+        if(notYetPlayed) {
+            volume = 0.00001f; // fixes sounds sometimes being at full volume in the first moment while fading in
+            // (sounds with a volume of 0 are ignored, so it has to be >0)
+        }
         helper.fadeIn((long)(fadeIn * 1000));
     }
 
