@@ -3,6 +3,7 @@ package eu.ha3.matmos.data.modules.world;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
+import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -27,8 +28,8 @@ public class ModuleWorld extends ModuleProcessor implements Module {
         setValue("light_subtracted", w.getSkylightSubtracted());
         setValue("remote", w.isRemote);
         setValue("moon_phase", w.getMoonPhase());
-        setValue("can_rain_on", w.canSeeSky(player.getPosition()));
-        setValue("biome_can_rain", w.getBiome(player.getPosition()).canRain());
+        setValue("can_rain_on", w.canSeeSky(MAtUtil.getPlayerPos()));
+        setValue("biome_can_rain", w.getBiome(MAtUtil.getPlayerPos()).canRain());
         setValue("rain_force1k", Math.round(w.getRainStrength(0f) * 1000));
         setValue("thunder_force1k", Math.round(w.getThunderStrength(0f) * 1000));
 
