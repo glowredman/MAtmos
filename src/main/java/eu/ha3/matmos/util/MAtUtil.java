@@ -60,7 +60,7 @@ public class MAtUtil {
      * Clamps the y value to something that is within the current worlds' boundaries.
      */
     public static int clampToBounds(int y) {
-        return Math.max(Math.min(0, y), getWorld().getHeight() - 1);
+        return Math.min(Math.max(0, y), getWorld().getHeight() - 1);
     }
 
     /**
