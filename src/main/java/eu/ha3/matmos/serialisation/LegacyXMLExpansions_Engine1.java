@@ -1,5 +1,6 @@
 package eu.ha3.matmos.serialisation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -361,7 +362,9 @@ public class LegacyXMLExpansions_Engine1 {
             stream = inscriptXMLstream(eelt, machine);
         }
         if (stream != null) {
-            machine.stream = stream;
+            ArrayList<SerialMachineStream> streamList = new ArrayList<SerialMachineStream>();
+            streamList.add(stream);
+            machine.stream = streamList;
         } else {
             machine.delay_fadein = 0f;
             machine.delay_fadeout = 0f;

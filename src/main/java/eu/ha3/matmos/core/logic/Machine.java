@@ -18,7 +18,7 @@ public class Machine extends MultistateComponent implements Dependable, Simulate
     private final List<String> allow;
     private final List<String> restrict;
     private final TimedEventInformation timed;
-    private final StreamInformation stream;
+    private final List<StreamInformation> streams;
 
     private final Provider<Junction> provider;
 
@@ -27,14 +27,14 @@ public class Machine extends MultistateComponent implements Dependable, Simulate
 
     private final Collection<String> dependencies;
 
-    public Machine(String name, Provider<Junction> provider, List<String> allow, List<String> restrict, TimedEventInformation timed, StreamInformation stream) {
+    public Machine(String name, Provider<Junction> provider, List<String> allow, List<String> restrict, TimedEventInformation timed, List<StreamInformation> streams) {
         super(name);
         this.provider = provider;
 
         this.allow = allow;
         this.restrict = restrict;
         this.timed = timed;
-        this.stream = stream;
+        this.streams = streams;
 
         dependencies = new TreeSet<>();
         dependencies.addAll(allow);
@@ -46,7 +46,7 @@ public class Machine extends MultistateComponent implements Dependable, Simulate
         if (timed != null) {
             timed.simulate();
         }
-        if (stream != null) {
+        for(StreamInformation stream : streams) {
             stream.simulate();
         }
     }
@@ -61,7 +61,7 @@ public class Machine extends MultistateComponent implements Dependable, Simulate
             if (timed != null) {
                 timed.evaluate();
             }
-            if (stream != null) {
+            for(StreamInformation stream : streams) {
                 stream.evaluate();
             }
 

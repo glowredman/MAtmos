@@ -30,5 +30,5 @@ public class SerialMachine {
     public List<SerialMachineEvent> event = new ArrayList<>();
 
     @Expose
-    public SerialMachineStream stream;
+    public Object stream = new Object();
 }

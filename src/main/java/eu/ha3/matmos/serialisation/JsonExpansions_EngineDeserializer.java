@@ -3,7 +3,9 @@ package eu.ha3.matmos.serialisation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
@@ -31,6 +33,7 @@ import eu.ha3.matmos.serialisation.expansion.SerialEvent;
 import eu.ha3.matmos.serialisation.expansion.SerialList;
 import eu.ha3.matmos.serialisation.expansion.SerialMachine;
 import eu.ha3.matmos.serialisation.expansion.SerialMachineEvent;
+import eu.ha3.matmos.serialisation.expansion.SerialMachineStream;
 import eu.ha3.matmos.serialisation.expansion.SerialRoot;
 import eu.ha3.matmos.serialisation.expansion.SerialSet;
 
@@ -126,9 +129,27 @@ public class JsonExpansions_EngineDeserializer {
                     }
                 }
 
-                StreamInformation stream = null;
+                List<StreamInformation> streams = new ArrayList<>();
                 if (serial.stream != null) {
-                    stream = new StreamInformation(entry.getKey(), providers.getMachine(), providers.getReferenceTime(), providers.getSoundRelay(), serial.stream.path, serial.stream.vol, serial.stream.pitch, serial.delay_fadein, serial.delay_fadeout, serial.fadein, serial.fadeout, serial.stream.looping, serial.stream.pause);
+                    List<Object> smsObjectList = new ArrayList<>();
+                    
+                    if(serial.stream instanceof Map) { // stream is an object
+                        smsObjectList.add(serial.stream);
+                    } else if(serial.stream instanceof List<?>) { // stream is a list of objects
+                        for(Object o : (List<?>)serial.stream) {
+                            smsObjectList.add(o);
+                        }
+                    }
+                    
+                    for(Object smsObject : smsObjectList) {
+                        SerialMachineStream sms = gson.fromJson(gson.toJson(smsObject), SerialMachineStream.class);
+                        streams.add(new StreamInformation(entry.getKey(),
+                                providers.getMachine(), providers.getReferenceTime(), providers.getSoundRelay(),
+                                sms.path, sms.vol, sms.pitch,
+                                serial.delay_fadein, serial.delay_fadeout, serial.fadein, serial.fadeout,
+                                sms.looping, sms.pause));
+                    }
+                    
                 }
 
                 TimedEventInformation tie = null;
@@ -136,8 +157,8 @@ public class JsonExpansions_EngineDeserializer {
                     tie = new TimedEventInformation(entry.getKey(), providers.getMachine(), providers.getReferenceTime(), events, serial.delay_fadein, serial.delay_fadeout, serial.fadein, serial.fadeout);
                 }
 
-                if (tie != null || stream != null) {
-                    Named element = new Machine(entry.getKey(), providers.getJunction(), asList(serial.allow), asList(serial.restrict), tie, stream);
+                if (tie != null || streams != null) {
+                    Named element = new Machine(entry.getKey(), providers.getJunction(), asList(serial.allow), asList(serial.restrict), tie, streams);
                     elements.add(element);
                 }
             }
