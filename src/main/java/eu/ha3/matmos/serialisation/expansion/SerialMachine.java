@@ -27,8 +27,14 @@ public class SerialMachine {
     public float delay_fadeout;
 
     @Expose
-    public List<SerialMachineEvent> event = new ArrayList<>();
+    public List<SerialMachineEvent> event = null;
+    
+    @Expose
+    public SerialMachineEventPair event_pair;
 
     @Expose
-    public Object stream = new Object();
+    public Object stream;
+    
+    @Expose
+    public SerialMachineStreamPair stream_pair;
 }

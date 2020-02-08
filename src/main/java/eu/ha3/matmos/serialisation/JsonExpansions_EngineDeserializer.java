@@ -5,11 +5,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.Dynamic;
 import eu.ha3.matmos.core.Knowledge;
 import eu.ha3.matmos.core.Named;
@@ -119,54 +119,142 @@ public class JsonExpansions_EngineDeserializer {
         }
         if (root.machine != null) {
             for (Entry<String, SerialMachine> entry : root.machine.entrySet()) {
-                SerialMachine serial = entry.getValue();
-
-                List<TimedEvent> events = new ArrayList<>();
-
-                if (serial.event != null) {
-                    for (SerialMachineEvent eelt : serial.event) {
-                        events.add(new TimedEvent(providers.getEvent(), eelt));
-                    }
-                }
-
-                List<StreamInformation> streams = new ArrayList<>();
-                if (serial.stream != null) {
-                    List<Object> smsObjectList = new ArrayList<>();
-                    
-                    if(serial.stream instanceof Map) { // stream is an object
-                        smsObjectList.add(serial.stream);
-                    } else if(serial.stream instanceof List<?>) { // stream is a list of objects
-                        for(Object o : (List<?>)serial.stream) {
-                            smsObjectList.add(o);
-                        }
-                    }
-                    
-                    for(Object smsObject : smsObjectList) {
-                        SerialMachineStream sms = gson.fromJson(gson.toJson(smsObject), SerialMachineStream.class);
-                        streams.add(new StreamInformation(entry.getKey(),
-                                providers.getMachine(), providers.getReferenceTime(), providers.getSoundRelay(),
-                                sms.path, sms.vol, sms.pitch,
-                                serial.delay_fadein, serial.delay_fadeout, serial.fadein, serial.fadeout,
-                                sms.looping, sms.pause));
-                    }
-                    
-                }
-
-                TimedEventInformation tie = null;
-                if (serial.event.size() > 0) {
-                    tie = new TimedEventInformation(entry.getKey(), providers.getMachine(), providers.getReferenceTime(), events, serial.delay_fadein, serial.delay_fadeout, serial.fadein, serial.fadeout);
-                }
-
-                if (tie != null || streams != null) {
-                    Named element = new Machine(entry.getKey(), providers.getJunction(), asList(serial.allow), asList(serial.restrict), tie, streams);
-                    elements.add(element);
-                }
+                deserializeMachine(entry);
             }
         }
 
         if (elements.size() > 0) {
             knowledgeWorkstation.addKnowledge(elements);
         }
+    }
+    
+    private void deserializeMachine(Entry<String, SerialMachine> entry) {
+        SerialMachine serial = entry.getValue();
+        
+        List<SerialMachineEvent>[] serialEventLists = getSerialMachineEventList(entry, serial);
+        List<SerialMachineStream>[] serialStreamLists = getSerialMachineStreamLists(entry, serial);
+        
+        boolean doubleMachine = serialEventLists[1] != null || serialStreamLists[1] != null;//
+        if(doubleMachine) {
+            // If a machine doesn't have a list defined, copy the list from the other machine
+            if(serialEventLists[0] == null) {
+                serialEventLists[0] = serialEventLists[1];
+            } else if(serialEventLists[1] == null) {
+                serialEventLists[1] = serialEventLists[0];
+            }
+            
+            if(serialStreamLists[0] == null) {
+                serialStreamLists[0] = serialStreamLists[1];
+            } else if(serialStreamLists[1] == null) {
+                serialStreamLists[1] = serialStreamLists[0];
+            }
+        }
+        
+        for(int m = 0; m < (doubleMachine ? 2 : 1); m++) {
+            MachineType type = !doubleMachine ? MachineType.NORMAL : (m == 0 ? MachineType.INDOOR : MachineType.OUTDOOR);
+            deserializeMachineFromLists(entry, serial, serialEventLists[m], serialStreamLists[m], type);
+        }
+    }
+    
+    enum MachineType {NORMAL, INDOOR, OUTDOOR};
+    
+    private void deserializeMachineFromLists(Entry<String, SerialMachine> entry, SerialMachine serial,
+            List<SerialMachineEvent> serialEventList, List<SerialMachineStream> serialStreamList, MachineType type) {
+        ArrayList<TimedEvent> events = new ArrayList<>();
+        serialEventList.forEach(x -> {events.add(new TimedEvent(providers.getEvent(), x));});
+        
+        ArrayList<StreamInformation> streamList = new ArrayList<StreamInformation>();
+        
+        boolean normal = type == MachineType.NORMAL;
+        boolean indoor = type == MachineType.INDOOR;
+        String machineName = entry.getKey();
+        if(!normal) {
+            machineName += (indoor ? " (Indoor)" : " (Outdoor)");
+        }
+        
+        if(serialStreamList != null) {
+            for(SerialMachineStream sms : serialStreamList) {
+                streamList.add(new StreamInformation(machineName,
+                        providers.getMachine(), providers.getReferenceTime(), providers.getSoundRelay(),
+                        sms.path, sms.vol, sms.pitch,
+                        serial.delay_fadein, serial.delay_fadeout, serial.fadein, serial.fadeout,
+                        sms.looping, sms.pause));
+                
+            }
+        }
+        
+        TimedEventInformation tie = null;
+        if (!events.isEmpty()) {
+            tie = new TimedEventInformation(machineName, providers.getMachine(), providers.getReferenceTime(), events, serial.delay_fadein, serial.delay_fadeout, serial.fadein, serial.fadeout);
+        }
+
+        if (tie != null || streamList != null) {
+            List<String> allowList = asList(serial.allow);
+            /*if(!normal) {
+                allowList.add(indoor ? "Indoor" : "Outdoor");
+            }*/
+            
+            List<String> restrictList = asList(serial.restrict);
+            if(!normal) {
+                restrictList.add(indoor ? "Outdoor" : "Indoor");
+            }
+            
+            Named element = new Machine(machineName, providers.getJunction(), allowList, restrictList, tie, streamList);
+            elements.add(element);
+        }
+    }
+    
+    private List<SerialMachineEvent>[] getSerialMachineEventList(Entry<String, SerialMachine> entry, SerialMachine serial) {
+        List<SerialMachineEvent>[] eventList = new ArrayList[2];
+        
+        if(serial.event_pair != null) {
+            if (serial.event != null) {
+                Matmos.LOGGER.warn("Machine " + entry.getKey() + " has both 'event' and 'event_pair' defined. Ignoring 'event'.");
+            }
+            
+            eventList[0] = serial.event_pair.indoor;
+            eventList[1] = serial.event_pair.outdoor;
+        } else if (serial.event != null) {
+            eventList[0] = serial.event;
+        }
+        
+        return eventList;
+    }
+    
+    private List<SerialMachineStream>[] getSerialMachineStreamLists(Entry<String, SerialMachine> entry, SerialMachine serial) {
+        
+        List<SerialMachineStream>[] smsLists = new ArrayList[2];
+        
+        if(serial.stream_pair!= null) {
+            if (serial.stream != null) {
+                Matmos.LOGGER.warn("Machine " + entry.getKey() + " has both 'stream' and 'stream_pair' defined. Ignoring 'stream'.");
+            }
+            
+            smsLists[0] = serial.stream_pair.indoor;
+            smsLists[1] = serial.stream_pair.outdoor;
+        }
+        
+        if (serial.stream != null) {
+            smsLists[0] = new ArrayList<>();
+            
+            List<Object> smsObjectList = new ArrayList<>();
+            
+            if(serial.stream instanceof Map) { // stream is an object
+                smsObjectList.add(serial.stream);
+            } else if(serial.stream instanceof List<?>) { // stream is a list of objects
+                //smsObjectList = (List<Object>)serial.stream;
+                for(Object o : (List<?>)serial.stream) {
+                    smsObjectList.add(o);
+                }
+            }
+            
+            for(Object smsObject : smsObjectList) {
+                SerialMachineStream sms = gson.fromJson(gson.toJson(smsObject), SerialMachineStream.class);
+                smsLists[0].add(sms);
+            }
+            
+        }
+        return smsLists;
     }
 
     private String dynamicSheetHash(String name) {
