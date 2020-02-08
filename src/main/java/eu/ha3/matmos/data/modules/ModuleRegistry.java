@@ -41,6 +41,7 @@ import eu.ha3.matmos.data.modules.world.ModuleBiome;
 import eu.ha3.matmos.data.modules.world.ModuleCollission;
 import eu.ha3.matmos.data.modules.world.ModuleColumn;
 import eu.ha3.matmos.data.modules.world.ModuleLighting;
+import eu.ha3.matmos.data.modules.world.ModuleOutdoorness;
 import eu.ha3.matmos.data.modules.world.ModulePosition;
 import eu.ha3.matmos.data.modules.world.ModuleWorld;
 import eu.ha3.matmos.data.scanners.Progress;
@@ -129,6 +130,7 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         addModule(new ModuleMetaOptions(data, mod), 200);
         addModule(new ModuleServerInfo(data), 200);
         addModule(new ModuleEntity(data, this, "detect_mindist", "detect_radius", 256, 2, 5, 10, 20, 50));
+        addModule(new ModuleOutdoorness(data));
 
         for (int i = 0; i < 4; i++) {
             addModule(new ModuleArmourEnchantment(data, i));
