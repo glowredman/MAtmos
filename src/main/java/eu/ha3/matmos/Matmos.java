@@ -79,6 +79,9 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void onLoad() {
+        SoundSystemConfig.setNumberStreamingChannels(11);
+        SoundSystemConfig.setNumberNormalChannels(32-11);
+        
         this.<OperatorCaster>op().setTickEnabled(true);
         this.<OperatorCaster>op().setFrameEnabled(true);
 
