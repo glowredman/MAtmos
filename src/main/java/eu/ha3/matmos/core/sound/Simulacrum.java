@@ -14,6 +14,7 @@ import eu.ha3.matmos.data.modules.ModuleRegistry;
 import eu.ha3.matmos.game.user.VisualDebugger;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
+import net.minecraft.client.Minecraft;
 
 public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
     private ExpansionManager expansionManager;
@@ -70,8 +71,10 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
 
     @Override
     public void onTick() {
+        Minecraft.getMinecraft().profiler.startSection("simulacrum");
         dataGatherer.process();
         expansionManager.onTick();
+        Minecraft.getMinecraft().profiler.endSection();
     }
 
     public boolean hasResourcePacks() {

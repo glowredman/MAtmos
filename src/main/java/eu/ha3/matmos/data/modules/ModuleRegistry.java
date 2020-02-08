@@ -46,6 +46,7 @@ import eu.ha3.matmos.data.modules.world.ModuleWorld;
 import eu.ha3.matmos.data.scanners.Progress;
 import eu.ha3.matmos.data.scanners.ScannerModule;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
+import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
 public class ModuleRegistry implements IDataCollector, IDataGatherer {
@@ -160,6 +161,7 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
 
     @Override
     public void process() {
+        Minecraft.getMinecraft().profiler.startSection("dataGatherer");
         TimeStatistic stat = new TimeStatistic();
         for (String requiredModule : iteratedThroughModules) {
             watch.reset();
@@ -175,6 +177,7 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
             }
         }
         ticksPassed = ticksPassed + 1;
+        Minecraft.getMinecraft().profiler.endSection();
     }
 
     @Override

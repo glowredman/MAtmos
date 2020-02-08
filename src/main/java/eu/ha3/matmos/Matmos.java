@@ -186,15 +186,18 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void onFrame(float semi) {
+        Minecraft.getMinecraft().profiler.startSection("onframe");
         if (!isActivated() || util().isGamePaused()) {
             return;
         }
         simulacrum.get().onFrame(semi);
         userControl.onFrame(semi);
+        Minecraft.getMinecraft().profiler.endSection();
     }
 
     @Override
     public void onTick() {
+        Minecraft.getMinecraft().profiler.startSection("ontick");
         SoundSystemConfig.setStreamQueueFormatsMatch(true); // TODO only do this when sound engine is reloaded
         
         userControl.onTick();
@@ -273,6 +276,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
             hasResourcePacks_FixMe = false;
             chatter.printChat(TextFormatting.GREEN, "It should work now!");
         }
+        Minecraft.getMinecraft().profiler.endSection();
     }
 
     @Override

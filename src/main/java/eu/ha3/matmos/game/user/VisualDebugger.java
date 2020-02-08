@@ -56,7 +56,7 @@ public class VisualDebugger implements SupportsFrameEvents {
 
     @Override
     public void onFrame(float semi) {
-        if (mod.isDebugMode()) {
+        if (mod.isDebugMode()) { // FIXME this is so slow! this HashMap.get() takes 1/3rd of the processing time per frame
             mod.util().prepareDrawString();
             mod.util().drawString(
                     TextFormatting.GRAY.toString() + mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0, 0, '3', 0, 0, 0,

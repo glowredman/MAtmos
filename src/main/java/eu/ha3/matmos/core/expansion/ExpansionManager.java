@@ -21,6 +21,7 @@ import eu.ha3.matmos.data.IDataCollector;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.util.ResourceLocation;
 
@@ -128,7 +129,9 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
 
     @Override
     public void onTick() {
+        Minecraft.getMinecraft().profiler.startSection("expansionmanager");
         expansions.values().forEach(Expansion::evaluate);
+        Minecraft.getMinecraft().profiler.endSection();
     }
 
     public void setData(DataPackage data) {
