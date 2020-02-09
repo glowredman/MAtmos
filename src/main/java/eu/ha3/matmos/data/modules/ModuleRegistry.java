@@ -132,7 +132,6 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         addModule(new ModuleMetaOptions(data, mod), 200);
         addModule(new ModuleServerInfo(data), 200);
         addModule(new ModuleEntity(data, this, "detect_mindist", "detect_radius", 256, 2, 5, 10, 20, 50));
-        addModule(new ModuleOutdoorness(data));
 
         for (int i = 0; i < 4; i++) {
             addModule(new ModuleArmourEnchantment(data, i));
@@ -144,6 +143,9 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         addModule(new ModulePotionDuration(data));
         addModule(new ModulePotionStrength(data));
         addModule(new ModuleCollission(data));
+        
+        ModuleOutdoorness moduleOutdoorness = new ModuleOutdoorness(data);
+        addModule(moduleOutdoorness);
 
         //this.frequent.add(new MAtProcessorEntityDetector(
         //	this.mod, this.data, "DetectMinDist", "Detect", "_Deltas", ENTITYIDS_MAX, 2, 5, 10, 20, 50));
@@ -153,7 +155,7 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         addModule(largeScanner);
         
         this.mediumScanner = new ScannerModule(
-                ScanAir.class, this.data, "_POM__scan_medium", "scan_medium", true, -1, 20, 31, 31, 31, 31*31*4);
+                ScanAir.class, moduleOutdoorness, this.data, "_POM__scan_medium", "scan_medium", true, -1, 20, 31, 31, 31, 31*31*4);
         addModule(this.mediumScanner);
         
         // 16 * 4 * 16

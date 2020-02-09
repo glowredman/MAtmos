@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import eu.ha3.matmos.data.modules.world.ModuleOutdoorness;
 import eu.ha3.matmos.util.ByteQueue;
 import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.block.Block;
@@ -30,11 +31,18 @@ public class ScanAir extends Scan {
 	int nearest;
 	int nearestX, nearestY, nearestZ;
 	
+	private int lastResult;
+	
 	enum Stage {AIR1, SOLID, AIR2, FINISH};
 	Stage stage = Stage.AIR1;
 	
 	private int AIR_COST, SOLID_COST, PANE_COST; // these are meant to be final, but for ease of development are non-final for now(?)
 	byte START_NEARNESS;
+	
+	public ScanAir() {}
+	public ScanAir(Object moduleOutdoorness) {
+	    ((ModuleOutdoorness)moduleOutdoorness).setScanner(this);
+	}
 	
 	@Override
 	void initScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn)
@@ -88,7 +96,7 @@ public class ScanAir extends Scan {
 		AIR_COST = 1;
 		SOLID_COST = 2;
 		PANE_COST = 2;
-		START_NEARNESS = 4;
+		START_NEARNESS = 15;
 		
 		finalProgress = 1; // TODO proper progress tracking. for now it just sets it to 1 when finished
 	}
@@ -197,7 +205,7 @@ public class ScanAir extends Scan {
 				// goal of outsourcing scanning it to us in scan_large's stead, avoiding scanning it twice.
 				// But I'm not sure if it's worth the trouble for the optimization gain.
 				
-				System.out.println("outdoor nearness: " + nearest);
+				lastResult = nearest;
 				progress = 1;
 				break;
 			}
@@ -215,4 +223,7 @@ public class ScanAir extends Scan {
 		return true;
 	}
 	
+	public int getLastResult() {
+	    return lastResult;
+	}
 }

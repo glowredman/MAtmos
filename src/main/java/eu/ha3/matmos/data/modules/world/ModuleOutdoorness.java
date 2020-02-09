@@ -3,11 +3,15 @@ package eu.ha3.matmos.data.modules.world;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
+import eu.ha3.matmos.data.scanners.Scan;
+import eu.ha3.matmos.data.scanners.ScanAir;
 import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 
 public class ModuleOutdoorness extends ModuleProcessor implements Module {
+    private ScanAir scanner;
+    
     public ModuleOutdoorness(DataPackage data) {
         super(data, "w_outdoorness");
     }
@@ -24,7 +28,15 @@ public class ModuleOutdoorness extends ModuleProcessor implements Module {
     private int getOutdoorness() {
         World w = Minecraft.getMinecraft().world;
         
-        // Temporary implementation for testing
-        return w.canSeeSky(MAtUtil.getPlayerPos()) ? 1000 : 0;
+        if(scanner == null) {
+            // Temporary implementation for testing
+            return w.canSeeSky(MAtUtil.getPlayerPos()) ? 1000 : 0;
+        } else {
+            return scanner.getLastResult();
+        }
+    }
+    
+    public void setScanner(ScanAir scanner) {
+        this.scanner = scanner;
     }
 }

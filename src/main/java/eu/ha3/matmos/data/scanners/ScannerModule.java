@@ -1,5 +1,6 @@
 package eu.ha3.matmos.data.scanners;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -53,7 +54,9 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
      * hasn't moved.
      */
               
-    public ScannerModule(Class scannerClass, DataPackage data, String passOnceName, String baseName, boolean requireThousand,
+    private ScannerModule(Class<Scan> scannerClass, Object scannerArgument, boolean hasScannerArgument,
+            DataPackage data, String passOnceName,
+            String baseName, boolean requireThousand,
             int movement, int pulse, int xS, int yS, int zS, int blocksPerCall) {
         this.passOnceName = passOnceName;
         this.requireThousand = requireThousand;
@@ -83,11 +86,13 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
         
         try
         {
-            theScanner = (Scan)scannerClass.newInstance();
-        } catch (InstantiationException e)
-        {
-            e.printStackTrace();
-        } catch (IllegalAccessException e)
+            if(hasScannerArgument) {
+                theScanner = (Scan)scannerClass.getConstructor(Object.class).newInstance(scannerArgument);
+            } else {
+                theScanner = (Scan)scannerClass.newInstance();
+            }
+        } catch (IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+                | SecurityException | InstantiationException | IllegalAccessException e)
         {
             e.printStackTrace();
         }
@@ -96,6 +101,24 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
 
         ticksSinceBoot = 0;
         firstScan = true;
+    }
+    
+    /*** Constructor used to pass an argument to the to-be-instantiated scanner object */
+    public ScannerModule(Class scannerClass, Object scannerArgument, DataPackage data, String passOnceName,
+            String baseName, boolean requireThousand,
+            int movement, int pulse, int xS, int yS, int zS, int blocksPerCall) {
+        this(scannerClass, scannerArgument, true, data, passOnceName,
+                baseName, requireThousand,
+                movement, pulse, xS, yS, zS, blocksPerCall);
+    }
+    
+    /*** Normal constructor */
+    public ScannerModule(Class scannerClass, DataPackage data, String passOnceName,
+            String baseName, boolean requireThousand,
+            int movement, int pulse, int xS, int yS, int zS, int blocksPerCall) {
+        this(scannerClass, null, false, data, passOnceName,
+                baseName, requireThousand,
+                movement, pulse, xS, yS, zS, blocksPerCall);
     }
 
     @Override
