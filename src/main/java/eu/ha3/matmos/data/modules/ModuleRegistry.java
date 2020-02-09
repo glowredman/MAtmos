@@ -45,7 +45,9 @@ import eu.ha3.matmos.data.modules.world.ModuleOutdoorness;
 import eu.ha3.matmos.data.modules.world.ModulePosition;
 import eu.ha3.matmos.data.modules.world.ModuleWorld;
 import eu.ha3.matmos.data.scanners.Progress;
+import eu.ha3.matmos.data.scanners.ScanVolumetric;
 import eu.ha3.matmos.data.scanners.ScannerModule;
+import eu.ha3.matmos.data.scanners.ScanAir;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -67,7 +69,7 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
     private final Set<String> iteratedThroughModules;
     private final Map<String, Set<String>> moduleStack;
 
-    private ScannerModule largeScanner;
+    private ScannerModule largeScanner, mediumScanner;
 
     public ModuleRegistry(Matmos mAtmosHaddon) {
         mod = mAtmosHaddon;
@@ -147,11 +149,16 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         //	this.mod, this.data, "DetectMinDist", "Detect", "_Deltas", ENTITYIDS_MAX, 2, 5, 10, 20, 50));
         // 16 * 8 * 16
         largeScanner = new ScannerModule(
-                data, "_POM__scan_large", "scan_large", true, 8, 20 /*256*/, 64, 32, 64, 1024/*64 * 64 * 2*/);
+                ScanVolumetric.class, this.data, "_POM__scan_large", "scan_large", true, 8, 20 /*256*/, 64, 32, 64, 16 * 8 * 16/*64 * 64 * 2*/);
         addModule(largeScanner);
+        
+        this.mediumScanner = new ScannerModule(
+                ScanAir.class, this.data, "_POM__scan_medium", "scan_medium", true, -1, 20, 31, 31, 31, 31*31*4);
+        addModule(this.mediumScanner);
+        
         // 16 * 4 * 16
         addModule(new ScannerModule(
-                data, "_POM__scan_small", "scan_small", true, -1, 2 /*64*/, 16, 8, 16, 512));
+                ScanVolumetric.class, this.data, "_POM__scan_small", "scan_small", true, -1, 2 /*64*/, 16, 8, 16, 16 * 4 * 16));
         // Each ticks, check half of the small scan
 
         Matmos.LOGGER.info("Modules initialized: " + Arrays.toString(new TreeSet<>(modules.keySet()).toArray()));

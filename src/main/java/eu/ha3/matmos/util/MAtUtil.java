@@ -52,7 +52,7 @@ public class MAtUtil {
     /**
      * Tells if y is within the height boundaries of the current world, where blocks can exist.
      */
-    private static boolean isWithinBounds(BlockPos pos) {
+    public static boolean isWithinBounds(BlockPos pos) {
         return pos.getY() >= 0 && pos.getY() < getWorld().getHeight();
     }
 

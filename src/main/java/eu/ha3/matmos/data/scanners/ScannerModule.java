@@ -5,12 +5,16 @@ import java.util.Set;
 
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.sheet.DataPackage;
+import eu.ha3.matmos.data.modules.BlockCountModule;
 import eu.ha3.matmos.data.modules.ExternalStringCountModule;
 import eu.ha3.matmos.data.modules.PassOnceModule;
 import eu.ha3.matmos.data.modules.ThousandStringCountModule;
+import eu.ha3.matmos.data.modules.VirtualModuleProcessor;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.matmos.util.math.MAtMutableBlockPos;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.math.BlockPos;
 
 public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     public static final String THOUSAND_SUFFIX = "_p1k";
@@ -27,8 +31,8 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     private final int zS;
     private final int blocksPerCall;
 
-    private final ExternalStringCountModule base;
-    private final ThousandStringCountModule thousand;
+    private final BlockCountModule base;
+    private final VirtualModuleProcessor thousand;
 
     private final Set<String> subModules = new HashSet<>();
 
@@ -41,14 +45,16 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     private int yy = Integer.MIN_VALUE;
     private int zz = Integer.MIN_VALUE;
 
-    private final ScanVolumetric scanner = new ScanVolumetric();
+    private final Scan scanner;
 
     /**
      * Movement: Requires the player to move to another block to trigger a new scan. If movement is
      * zero, no scan until the player moves. If movement is negative, always scan even if the player
      * hasn't moved.
      */
-    public ScannerModule(DataPackage data, String passOnceName, String baseName, boolean requireThousand, int movement, int pulse, int xS, int yS, int zS, int blocksPerCall) {
+              
+    public ScannerModule(Class scannerClass, DataPackage data, String passOnceName, String baseName, boolean requireThousand,
+            int movement, int pulse, int xS, int yS, int zS, int blocksPerCall) {
         this.passOnceName = passOnceName;
         this.requireThousand = requireThousand;
         this.movement = movement;
@@ -59,18 +65,33 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
         this.zS = zS;
         this.blocksPerCall = blocksPerCall;
 
-        base = new ExternalStringCountModule(data, baseName, true);
-        subModules.add(baseName);
-        data.getSheet(baseName).setDefaultValue("0");
         if (requireThousand) {
             String thousandName = baseName + THOUSAND_SUFFIX;
-            thousand = new ThousandStringCountModule(data, thousandName, true);
+            thousand = new VirtualModuleProcessor(data, thousandName, true);
             subModules.add(thousandName);
             data.getSheet(thousandName).setDefaultValue("0");
         } else {
             thousand = null;
         }
+        
+        this.base = new BlockCountModule(data, baseName, true, thousand);
+        this.subModules.add(baseName);
+        data.getSheet(baseName).setDefaultValue("0");
 
+        
+        Scan theScanner = null;
+        
+        try
+        {
+            theScanner = (Scan)scannerClass.newInstance();
+        } catch (InstantiationException e)
+        {
+            e.printStackTrace();
+        } catch (IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
+        scanner = theScanner;
         scanner.setPipeline(this);
 
         ticksSinceBoot = 0;
@@ -89,6 +110,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
 
     @Override
     public void process() {
+        Minecraft.getMinecraft().profiler.startSection("scanner_module_process");
         if (tryToReboot()) {
             Matmos.LOGGER.info("Detected large movement or teleportation. Rebooted module " + getName());
             return;
@@ -105,6 +127,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
             scanner.routine();
         }
         ticksSinceBoot = ticksSinceBoot + 1;
+        Minecraft.getMinecraft().profiler.endSection();
     }
 
     private boolean tryToReboot() {
@@ -177,25 +200,34 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
             }
         }
     }
-
+    
     @Override
     public void input(int x, int y, int z) {
-        String name = MAtUtil.nameOf(MAtUtil.getBlockAt(MAtMutableBlockPos.of(x, y, z)));
-        base.increment(name);
-        base.increment(MAtUtil.getPowerMetaAt(MAtMutableBlockPos.of(x, y, z), ""));
-        thousand.increment(name);
+        inputAndReturnBlockMeta(x, y, z, null, null);
     }
-
+    
+    /** Not sure if this optimization is necessary */
+    public void inputAndReturnBlockMeta(int x, int y, int z, Block[] blockOut, int[] metaOut) {
+        Block block = MAtUtil.getBlockAt(new BlockPos(x, y, z));
+        int meta = MAtUtil.getMetaAt(new BlockPos(x, y, z), -1);
+        base.increment(block, meta);
+        
+        if(blockOut != null) {
+            blockOut[0] = block;
+        }
+        if(metaOut != null) {
+            metaOut[0] = meta;
+        }
+    }
+    
     @Override
-    public void begin() {
+    public void begin()
+    {
     }
 
     @Override
     public void finish() {
         base.apply();
-        if (requireThousand) {
-            thousand.apply();
-        }
         workInProgress = false;
     }
 
