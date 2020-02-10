@@ -14,23 +14,17 @@ import eu.ha3.matmos.data.modules.ModuleProcessor;
  */
 
 public class ModuleDebug extends ModuleProcessor implements Module {
-    Sheet scanMedium;
+    Sheet scanMedium, scanRaycast;
     
     public ModuleDebug(DataPackage data) {
         super(data, "__DEBUG");
         scanMedium = data.getSheet("scan_medium");
+        scanRaycast = data.getSheet("scan_raycast");
     }
 
     @Override
     protected void doProcess() {
-        setValue("outdoorness", getOutdoorness());
-    }
-    
-    /***
-     * 
-     * @return a score between 0 and 1000 indicating how well the player can hear outdoor ambience
-     */
-    private int getOutdoorness() {
-        return Integer.parseInt(scanMedium.get(".outdoorness_score"));
+        setValue("raycast_medium", scanMedium.get(".outdoorness_score"));
+        setValue("raycast_oudoorness", scanRaycast.get(".outdoorness_score"));
     }
 }

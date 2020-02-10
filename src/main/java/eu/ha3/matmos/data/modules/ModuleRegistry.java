@@ -48,6 +48,7 @@ import eu.ha3.matmos.data.scanners.Progress;
 import eu.ha3.matmos.data.scanners.ScanVolumetric;
 import eu.ha3.matmos.data.scanners.ScannerModule;
 import eu.ha3.matmos.data.scanners.ScanAir;
+import eu.ha3.matmos.data.scanners.ScanRaycast;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -69,7 +70,7 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
     private final Set<String> iteratedThroughModules;
     private final Map<String, Set<String>> moduleStack;
 
-    private ScannerModule largeScanner, mediumScanner;
+    private ScannerModule largeScanner, mediumScanner, raycastScanner;
 
     public ModuleRegistry(Matmos mAtmosHaddon) {
         mod = mAtmosHaddon;
@@ -160,6 +161,10 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
                 ScanVolumetric.class, this.data, "_POM__scan_small", "scan_small", true, -1, 2 /*64*/, 16, 8, 16, 16 * 4 * 16));
         // Each ticks, check half of the small scan
 
+        addModule(new ScannerModule(
+                ScanRaycast.class, this.data, "_POM__scan_raycast", "scan_raycast", false, -1, 20, 100, 100, 100, 10));
+        
+        
         addModule(new ModuleDebug(data));
         
         Matmos.LOGGER.info("Modules initialized: " + Arrays.toString(new TreeSet<>(modules.keySet()).toArray()));
