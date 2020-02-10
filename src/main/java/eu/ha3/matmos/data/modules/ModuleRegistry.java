@@ -176,7 +176,9 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         for (String requiredModule : iteratedThroughModules) {
             watch.reset();
             try {
+                Minecraft.getMinecraft().profiler.startSection(requiredModule + "_process");
                 modules.get(requiredModule).process();
+                Minecraft.getMinecraft().profiler.endSection();
             } catch (Exception e) {
                 e.printStackTrace();
                 IDontKnowHowToCode.whoops__printExceptionToChat(mod.getChatter(), e, requiredModule.hashCode());
