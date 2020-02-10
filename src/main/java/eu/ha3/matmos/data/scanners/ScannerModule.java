@@ -252,7 +252,9 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
             String name = MAtUtil.getNameAt(new BlockPos(x, y, z), "");
             base.increment(name);
             base.increment(MAtUtil.getPowerMetaAt(new BlockPos(x, y, z), ""));
-            thousand.increment(name);
+            if(thousand != null) {
+                thousand.increment(name);
+            }
         }
         
         if(blockOut != null) {
