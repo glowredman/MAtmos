@@ -25,8 +25,12 @@ import net.minecraft.client.Minecraft;
  */
 public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integer>>
 {
-	private int[] counts = new int[4096];
-	private TreeMap<Integer, Integer>[] metadatas = new TreeMap[4096];
+    private final int COUNT_LENGTH = 4096;
+    
+    private int[] oldCounts = new int[COUNT_LENGTH];
+	private int[] counts = new int[COUNT_LENGTH];
+	private int[] zeroCounts = new int[COUNT_LENGTH];
+	private TreeMap<Integer, Integer>[] metadatas = new TreeMap[COUNT_LENGTH];
 	
 	VirtualCountModule<Pair<Block, Integer>> thousand;
 	
@@ -95,15 +99,13 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
 	public void apply()
 	{
 		for(int i = 0; i < counts.length; i++) {
-			if(counts[i] > 0) {
+			if(counts[i] > 0 || oldCounts[i] > 0) {
 				String name = MAtUtil.nameOf(Block.getBlockById(i));
 				this.setValue(name, counts[i]);
 				if(thousand != null) {
 					float flaot = counts[i] / (float)blocksCounted * 1000f;
 					thousand.setValue(name, (int)Math.ceil(flaot));
 				}
-				
-				counts[i] = 0;
 			}
 			if(metadatas[i] != null) {
 				for(Entry<Integer, Integer> entry : metadatas[i].entrySet()) {
@@ -114,6 +116,10 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
 		}
 		
 		blocksCounted = 0;
+		
+		System.arraycopy(counts, 0, oldCounts, 0, counts.length);
+		System.arraycopy(zeroCounts, 0, counts, 0, counts.length);
+		
 	}
 	
 }

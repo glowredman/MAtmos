@@ -81,7 +81,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
             thousand = null;
         }
         
-        boolean useExternalStringCountModule = true;
+        boolean useExternalStringCountModule = false;
         
         if(useExternalStringCountModule) {
             this.base = new ExternalStringCountModule(data, baseName, true);
