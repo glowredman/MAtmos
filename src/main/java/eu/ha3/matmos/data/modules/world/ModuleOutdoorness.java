@@ -32,7 +32,7 @@ public class ModuleOutdoorness extends ModuleProcessor implements Module {
             // Temporary implementation for testing
             return w.canSeeSky(MAtUtil.getPlayerPos()) ? 1000 : 0;
         } else {
-            return scanner.getLastResult();
+            return scanner.getLastResult()/1000;
         }
     }
     
