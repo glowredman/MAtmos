@@ -41,7 +41,7 @@ import eu.ha3.matmos.data.modules.world.ModuleBiome;
 import eu.ha3.matmos.data.modules.world.ModuleCollission;
 import eu.ha3.matmos.data.modules.world.ModuleColumn;
 import eu.ha3.matmos.data.modules.world.ModuleLighting;
-import eu.ha3.matmos.data.modules.world.ModuleOutdoorness;
+import eu.ha3.matmos.data.modules.world.ModuleDebug;
 import eu.ha3.matmos.data.modules.world.ModulePosition;
 import eu.ha3.matmos.data.modules.world.ModuleWorld;
 import eu.ha3.matmos.data.scanners.Progress;
@@ -160,7 +160,7 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
                 ScanVolumetric.class, this.data, "_POM__scan_small", "scan_small", true, -1, 2 /*64*/, 16, 8, 16, 16 * 4 * 16));
         // Each ticks, check half of the small scan
 
-        addModule(new ModuleOutdoorness(data));
+        addModule(new ModuleDebug(data));
         
         Matmos.LOGGER.info("Modules initialized: " + Arrays.toString(new TreeSet<>(modules.keySet()).toArray()));
     }

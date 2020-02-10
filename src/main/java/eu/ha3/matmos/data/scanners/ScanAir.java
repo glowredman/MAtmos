@@ -1,10 +1,5 @@
 package eu.ha3.matmos.data.scanners;
 
-import java.util.ArrayDeque;
-import java.util.LinkedList;
-import java.util.Queue;
-
-import eu.ha3.matmos.data.modules.world.ModuleOutdoorness;
 import eu.ha3.matmos.util.ByteQueue;
 import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.block.Block;
