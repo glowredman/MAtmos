@@ -143,9 +143,6 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         addModule(new ModulePotionDuration(data));
         addModule(new ModulePotionStrength(data));
         addModule(new ModuleCollission(data));
-        
-        ModuleOutdoorness moduleOutdoorness = new ModuleOutdoorness(data);
-        addModule(moduleOutdoorness);
 
         //this.frequent.add(new MAtProcessorEntityDetector(
         //	this.mod, this.data, "DetectMinDist", "Detect", "_Deltas", ENTITYIDS_MAX, 2, 5, 10, 20, 50));
@@ -155,7 +152,7 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         addModule(largeScanner);
         
         this.mediumScanner = new ScannerModule(
-                ScanAir.class, moduleOutdoorness, this.data, "_POM__scan_medium", "scan_medium", true, -1, 20, 31, 31, 31, 31*31*4);
+                ScanAir.class, this.data, "_POM__scan_medium", "scan_medium", true, -1, 20, 31, 31, 31, 31*31*4);
         addModule(this.mediumScanner);
         
         // 16 * 4 * 16
@@ -163,6 +160,8 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
                 ScanVolumetric.class, this.data, "_POM__scan_small", "scan_small", true, -1, 2 /*64*/, 16, 8, 16, 16 * 4 * 16));
         // Each ticks, check half of the small scan
 
+        addModule(new ModuleOutdoorness(data));
+        
         Matmos.LOGGER.info("Modules initialized: " + Arrays.toString(new TreeSet<>(modules.keySet()).toArray()));
     }
 

@@ -107,6 +107,16 @@ public class VisualDebugger implements SupportsFrameEvents {
         if (scanDebug.startsWith("scan_")) {
             try {
                 Collections.sort(sort, (String o1, String o2) -> {
+                    boolean o1IsVar = o1.startsWith(".");
+                    boolean o2IsVar = o2.startsWith(".");
+                    if(o1IsVar && o2IsVar) {
+                        return o1.compareTo(o2);
+                    } else if(o1IsVar) { // variables are on top
+                        return 1;
+                    } else if(o2IsVar){
+                        return -1;
+                    }
+                    
                     Long l1 = Numbers.toLong(sheet.get(o1));
                     Long l2 = Numbers.toLong(sheet.get(o2));
 
@@ -163,40 +173,45 @@ public class VisualDebugger implements SupportsFrameEvents {
         for (String index : sort) {
             if (lineNumber <= 100 && !index.contains("^")) {
                 if (scanDebug.startsWith("scan_") || scanDebug.equals("block_contact")) {
-                    Long count = Numbers.toLong(sheet.get(index));
-                    if (count != null) {
-                        if (count > 0) {
-                            float scalar = (float)count / total;
-                            String percentage = !scanDebug.endsWith(ScannerModule.THOUSAND_SUFFIX) ? Float.toString(Math.round(scalar * 1000f) / 10f) : Integer.toString(Math.round(scalar * 100f));
-
-                            if (percentage.equals("0.0")) {
-                                percentage = "0";
+                    if(index.startsWith(".")) {
+                        fontRenderer.drawStringWithShadow(TextFormatting.AQUA + index + ": " + TextFormatting.YELLOW + sheet.get(index) + TextFormatting.RESET, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
+                        lineNumber += 1;
+                    } else {
+                        Long count = Numbers.toLong(sheet.get(index));
+                        if (count != null) {
+                            if (count > 0) {
+                                float scalar = (float)count / total;
+                                String percentage = !scanDebug.endsWith(ScannerModule.THOUSAND_SUFFIX) ? Float.toString(Math.round(scalar * 1000f) / 10f) : Integer.toString(Math.round(scalar * 100f));
+    
+                                if (percentage.equals("0.0")) {
+                                    percentage = "0";
+                                }
+    
+                                int fill = Math.round(scalar * ALL * 2 /* * 2*/);
+                                int superFill = 0;
+    
+                                if (fill > ALL * 2) {
+                                    fill = ALL * 2;
+                                }
+    
+                                if (fill > ALL) {
+                                    superFill = fill - ALL;
+                                }
+    
+                                String bars = "";
+                                if (superFill > 0) {
+                                    bars += TextFormatting.YELLOW + StringUtils.repeat("|", superFill);
+                                }
+    
+                                bars += TextFormatting.RESET + StringUtils.repeat("|", fill - superFill * 2);
+    
+                                if (index.startsWith("minecraft:")) {
+                                    index = index.substring(10);
+                                }
+    
+                                fontRenderer.drawStringWithShadow(bars + (fill == ALL * 2 ? TextFormatting.YELLOW + "++" + TextFormatting.RESET : "") + " (" + count + ", " + percentage + "%) " + index, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
+                                lineNumber = lineNumber + 1;
                             }
-
-                            int fill = Math.round(scalar * ALL * 2 /* * 2*/);
-                            int superFill = 0;
-
-                            if (fill > ALL * 2) {
-                                fill = ALL * 2;
-                            }
-
-                            if (fill > ALL) {
-                                superFill = fill - ALL;
-                            }
-
-                            String bars = "";
-                            if (superFill > 0) {
-                                bars += TextFormatting.YELLOW + StringUtils.repeat("|", superFill);
-                            }
-
-                            bars += TextFormatting.RESET + StringUtils.repeat("|", fill - superFill * 2);
-
-                            if (index.startsWith("minecraft:")) {
-                                index = index.substring(10);
-                            }
-
-                            fontRenderer.drawStringWithShadow(bars + (fill == ALL * 2 ? TextFormatting.YELLOW + "++" + TextFormatting.RESET : "") + " (" + count + ", " + percentage + "%) " + index, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
-                            lineNumber = lineNumber + 1;
                         }
                     }
                 } else if (scanDebug.startsWith("detect_")) {

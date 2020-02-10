@@ -263,4 +263,13 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     public int getProgress_Total() {
         return scanner.getProgress_Total();
     }
+
+    @Override
+    public void setValue(String key, int value) {
+        if(!key.startsWith(".")) {
+            Matmos.LOGGER.error("Illegal scanner sheet key name: \"" + key + "\". Key must start with a '.' character.");
+        } else {
+            base.setValue(key, value);
+        }
+    }
 }

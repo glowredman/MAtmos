@@ -31,7 +31,6 @@ public class ScanAir extends Scan {
 	int nearest;
 	int nearestX, nearestY, nearestZ;
 	
-	private int lastResult;
 	private int score;
 	
 	enum Stage {AIR1, SOLID, AIR2, FINISH};
@@ -39,11 +38,6 @@ public class ScanAir extends Scan {
 	
 	private int AIR_COST, SOLID_COST, PANE_COST; // these are meant to be final, but for ease of development are non-final for now(?)
 	byte START_NEARNESS;
-	
-	public ScanAir() {}
-	public ScanAir(Object moduleOutdoorness) {
-	    ((ModuleOutdoorness)moduleOutdoorness).setScanner(this);
-	}
 	
 	@Override
 	void initScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn)
@@ -210,9 +204,9 @@ public class ScanAir extends Scan {
 				// We could scan the rest of the region here (expanding from finalQueue), with the ultimate
 				// goal of outsourcing scanning it to us in scan_large's stead, avoiding scanning it twice.
 				// But I'm not sure if it's worth the trouble for the optimization gain.
-				
-				lastResult = score;
+			    
 				progress = 1;
+				pipeline.setValue(".outdoorness_score", score);
 				break;
 			}
 		}
@@ -227,9 +221,5 @@ public class ScanAir extends Scan {
 	private boolean setVisited(int x, int y, int z, boolean newValue) {
 		visited[x * scanSize * scanSize + y * scanSize + z] = newValue;
 		return true;
-	}
-	
-	public int getLastResult() {
-	    return lastResult;
 	}
 }
