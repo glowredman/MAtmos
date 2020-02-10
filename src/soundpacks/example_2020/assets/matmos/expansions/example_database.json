@@ -1,0 +1,28 @@
+{
+  "condition": {
+    "Outdoorness >80k": {
+      "sheet": "scan_medium",
+      "index": ".outdoorness_score",
+      "symbol": "GREATER",
+      "value": "80000"
+    },
+    "Outdoorness <=80k": {
+      "sheet": "scan_medium",
+      "index": ".outdoorness_score",
+      "symbol": "LESSER_OR_EQUAL",
+      "value": "80000"
+    }
+  },
+  "set": {
+    "Indoor": {
+      "yes": [
+        "Outdoorness <=80k"
+      ]
+    },
+    "Outdoor": {
+      "yes": [
+        "Outdoorness >80k"
+      ]
+    }
+  }
+}

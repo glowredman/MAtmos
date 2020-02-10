@@ -2,7 +2,7 @@
 	"type"	: "pack_matmos",
 	"engineversion"	: 0,
 	"metadata"	: {
-		"name"	: "MAtmos default pack",
+		"name"	: "MAtmos example pack showing 2020 features",
 		"author"	: "Ha3",
 		"website"	: "http://matmos.ha3.eu"
 	}
