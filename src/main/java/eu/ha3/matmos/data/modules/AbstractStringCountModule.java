@@ -13,7 +13,7 @@ import eu.ha3.matmos.core.sheet.DataPackage;
  *
  * @author Hurry
  */
-public abstract class AbstractStringCountModule extends ModuleProcessor implements Module {
+public abstract class AbstractStringCountModule extends AbstractThingCountModule<String> {
     private Set<String> oldThings = new LinkedHashSet<>();
     private Set<String> newThings = new LinkedHashSet<>();
 

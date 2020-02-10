@@ -7,6 +7,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.block.Block;
@@ -21,19 +23,19 @@ import net.minecraft.client.Minecraft;
  * 
  * @author Hurry
  */
-public class BlockCountModule extends ModuleProcessor implements Module
+public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integer>>
 {
 	private int[] counts = new int[4096];
 	private TreeMap<Integer, Integer>[] metadatas = new TreeMap[4096];
 	
-	ModuleProcessor thousand;
+	VirtualCountModule<Pair<Block, Integer>> thousand;
 	
 	public BlockCountModule(DataPackage data, String name)
 	{
 		this(data, name, false, null);
 	}
 	
-	public BlockCountModule(DataPackage data, String name, boolean doNotUseDelta, ModuleProcessor thousand)
+	public BlockCountModule(DataPackage data, String name, boolean doNotUseDelta, VirtualCountModule<Pair<Block, Integer>> thousand)
 	{
 		super(data, name, doNotUseDelta);
 		
@@ -55,8 +57,11 @@ public class BlockCountModule extends ModuleProcessor implements Module
 	
 	int blocksCounted = 0;
 	
-	public void increment(Block block, int meta)
+	public void increment(Pair<Block, Integer> blockMeta)
 	{	
+	    Block block = blockMeta.getLeft();
+	    int meta = blockMeta.getRight();
+	    
 		int id = Block.getIdFromBlock(block);
 		
 		counts[id]++;
@@ -73,7 +78,10 @@ public class BlockCountModule extends ModuleProcessor implements Module
 	}
 	
 	// for debugging
-	public int get(Block block, int meta) {
+	public int get(Pair<Block, Integer> blockMeta) {
+	    Block block = blockMeta.getLeft();
+        int meta = blockMeta.getRight();
+        
 		int id=Block.getIdFromBlock(block);
 		if(meta == -1) {
 			return counts[id];
@@ -82,7 +90,7 @@ public class BlockCountModule extends ModuleProcessor implements Module
 		}
 	}
 	
-	protected void count() {}
+	public void count() {}
 	
 	public void apply()
 	{

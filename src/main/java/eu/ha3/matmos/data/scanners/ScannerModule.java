@@ -4,12 +4,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.sheet.DataPackage;
+import eu.ha3.matmos.data.modules.AbstractThingCountModule;
 import eu.ha3.matmos.data.modules.BlockCountModule;
 import eu.ha3.matmos.data.modules.ExternalStringCountModule;
 import eu.ha3.matmos.data.modules.PassOnceModule;
 import eu.ha3.matmos.data.modules.ThousandStringCountModule;
+import eu.ha3.matmos.data.modules.VirtualCountModule;
 import eu.ha3.matmos.data.modules.VirtualModuleProcessor;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.matmos.util.math.MAtMutableBlockPos;
@@ -32,8 +36,8 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     private final int zS;
     private final int blocksPerCall;
 
-    private final BlockCountModule base;
-    private final VirtualModuleProcessor thousand;
+    private final AbstractThingCountModule base;
+    private final VirtualCountModule thousand;
 
     private final Set<String> subModules = new HashSet<>();
 
@@ -70,14 +74,20 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
 
         if (requireThousand) {
             String thousandName = baseName + THOUSAND_SUFFIX;
-            thousand = new VirtualModuleProcessor(data, thousandName, true);
+            thousand = new VirtualCountModule(data, thousandName, true);
             subModules.add(thousandName);
             data.getSheet(thousandName).setDefaultValue("0");
         } else {
             thousand = null;
         }
         
-        this.base = new BlockCountModule(data, baseName, true, thousand);
+        boolean useExternalStringCountModule = true;
+        
+        if(useExternalStringCountModule) {
+            this.base = new ExternalStringCountModule(data, baseName, true);
+        } else {
+            this.base = new BlockCountModule(data, baseName, true, thousand);
+        }
         this.subModules.add(baseName);
         data.getSheet(baseName).setDefaultValue("0");
 
@@ -231,9 +241,21 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     
     /** Not sure if this optimization is necessary */
     public void inputAndReturnBlockMeta(int x, int y, int z, Block[] blockOut, int[] metaOut) {
-        Block block = MAtUtil.getBlockAt(new BlockPos(x, y, z));
-        int meta = MAtUtil.getMetaAt(new BlockPos(x, y, z), -1);
-        base.increment(block, meta);
+        Block block = null;
+        int meta = -1;
+        if(base instanceof BlockCountModule || blockOut != null || metaOut != null) {
+            block = MAtUtil.getBlockAt(new BlockPos(x, y, z));
+            meta = MAtUtil.getMetaAt(new BlockPos(x, y, z), -1);
+        }
+        
+        if(base instanceof BlockCountModule) {
+            base.increment(Pair.of(block, meta));
+        } else if(base instanceof ExternalStringCountModule) {
+            String name = MAtUtil.getNameAt(new BlockPos(x, y, z), "");
+            base.increment(name);
+            base.increment(MAtUtil.getPowerMetaAt(new BlockPos(x, y, z), ""));
+            thousand.increment(name);
+        }
         
         if(blockOut != null) {
             blockOut[0] = block;
