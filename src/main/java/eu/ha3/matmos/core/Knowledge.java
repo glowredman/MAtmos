@@ -190,9 +190,9 @@ public class Knowledge implements Evaluated, Simulated {
     public static List<Named> getBuiltins(ProviderCollection providers) {
         return Arrays.asList(
                 new Condition("_RAYCAST_SCAN_OUTDOORS", providers.getSheetCommander(),
-                        new SheetEntry("scan_raycast", ".outdoorness_score"), Operator.GREATER, "2500"),
+                        new SheetEntry("scan_raycast", ".is_outdoors"), Operator.EQUAL, "1"),
                 new Condition("_FLOOD_SCAN_DEEP_INDOORS", providers.getSheetCommander(),
-                        new SheetEntry("scan_medium", ".outdoorness_score"), Operator.LESSER, "200"),
+                        new SheetEntry("scan_medium", ".is_near_surface"), Operator.EQUAL, "0"),
                 new Junction("_DEEP_INDOORS", providers.getCondition(),
                         Arrays.asList("_FLOOD_SCAN_DEEP_INDOORS"), Arrays.asList()),
                 new Junction("_INDOORS", providers.getCondition(),

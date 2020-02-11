@@ -35,8 +35,10 @@ public class ScanAir extends Scan {
 	enum Stage {AIR1, SOLID, AIR2, FINISH};
 	Stage stage = Stage.AIR1;
 	
-	private int AIR_COST, SOLID_COST, PANE_COST; // these are meant to be final, but for ease of development are non-final for now(?)
+	// these are meant to be final, but for ease of development are non-final for now(?)
+	private int AIR_COST, SOLID_COST, PANE_COST; 
 	byte START_NEARNESS;
+	private int SCORE_THRESHOLD = 200; 
 	
 	@Override
 	void initScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn)
@@ -157,7 +159,7 @@ public class ScanAir extends Scan {
     						if(block instanceof BlockAir) {
     							if(w.canBlockSeeSky(new BlockPos(wx, wy, wz))) {
     								score += newN;
-    								if(score > 4000) {
+    								if(score > SCORE_THRESHOLD) {
     								    stage = Stage.FINISH;
     								}
     								//stage = Stage.FINISH;
@@ -216,7 +218,7 @@ public class ScanAir extends Scan {
 				// But I'm not sure if it's worth the trouble for the optimization gain.
 			    
 				progress = 1;
-				pipeline.setValue(".outdoorness_score", score);
+				pipeline.setValue(".is_near_surface", score > SCORE_THRESHOLD ? 1 : 0);
 				break;
 			}
 		}

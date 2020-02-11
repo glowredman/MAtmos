@@ -22,6 +22,8 @@ public class ScanRaycast extends Scan {
     int raysToCast;
     int score;
     
+    private int THRESHOLD_SCORE;
+    
     @Override
     void initScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn) {
         startX = x;
@@ -40,13 +42,14 @@ public class ScanRaycast extends Scan {
         finalProgress = 1;
         
         score = 0;
+        THRESHOLD_SCORE = 25000;
     }
 
     @Override
     protected boolean doRoutine() {
         opspercall = 20;
         raysToCast = opspercall * 20;
-        for(int ops = 0; ops < opspercall && raysCast < raysToCast; ops++) {
+        for(int ops = 0; ops < opspercall && raysCast < raysToCast && score <= THRESHOLD_SCORE; ops++) {
             
             Vec3d v = Vec3d.fromPitchYaw(rnd.nextFloat() * 360f, rnd.nextFloat() * 360f);
             
@@ -54,10 +57,10 @@ public class ScanRaycast extends Scan {
             
             raysCast++;
         }
-        if(raysCast >= raysToCast) {
+        if(score > THRESHOLD_SCORE || raysCast >= raysToCast) {
             progress = 1;
             
-            pipeline.setValue(".outdoorness_score", score/10000);
+            pipeline.setValue(".is_outdoors", score > THRESHOLD_SCORE ? 1 : 0);
         }
         return true;
     }
@@ -117,7 +120,7 @@ public class ScanRaycast extends Scan {
                         int distanceSq = dx*dx + dy*dy + dz*dz;
                         //int hitScore = Math.max(100*100 - distanceSq, 0);
                         int hitScore = nearness;
-                        score += hitScore*1000;
+                        score += hitScore;
                     }
                 }
             }

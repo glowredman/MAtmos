@@ -24,7 +24,7 @@ public class ModuleDebug extends ModuleProcessor implements Module {
 
     @Override
     protected void doProcess() {
-        setValue("raycast_medium", scanMedium.get(".outdoorness_score"));
-        setValue("raycast_oudoorness", scanRaycast.get(".outdoorness_score"));
+        setValue("is_near_surface", scanMedium.get(".is_near_surface"));
+        setValue("is_outdoors", scanRaycast.get(".is_outdoors"));
     }
 }
