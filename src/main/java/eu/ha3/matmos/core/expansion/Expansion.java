@@ -119,6 +119,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
         }
 
         knowledge.cacheSounds(identity);
+        knowledge.compile();
     }
 
     public void playSample() {
