@@ -4,6 +4,9 @@ import eu.ha3.matmos.util.ByteQueue;
 import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockGlass;
+import net.minecraft.block.BlockPane;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
@@ -21,6 +24,7 @@ public class ScanAir extends Scan {
 	private boolean[] visited;
 	ByteQueue floodQueue;
 	ByteQueue solidQueue;
+	ByteQueue solidInfoQueue;
 	ByteQueue finalQueue;
 	
 	int nearest;
@@ -72,6 +76,11 @@ public class ScanAir extends Scan {
 		} else {
 			solidQueue.clear();
 		}
+		if(reallocate || solidInfoQueue == null) {
+            solidInfoQueue = new ByteQueue(scanDistance * scanDistance * 6);
+        } else {
+            solidInfoQueue.clear();
+        }
 		if(reallocate || finalQueue == null) {
 			finalQueue = new ByteQueue(scanDistance * scanDistance * 6 * 4);
 		} else {
@@ -83,9 +92,9 @@ public class ScanAir extends Scan {
 		nearest = -1;
 		stage = Stage.AIR1;
 		
-		AIR_COST = 3;
+		AIR_COST = 5;
 		SOLID_COST = 30;
-		PANE_COST = 20;
+		PANE_COST = 10;
 		START_NEARNESS = 80;
 		
 		finalProgress = 1; // TODO proper progress tracking. for now it just sets it to 1 when finished
@@ -148,6 +157,10 @@ public class ScanAir extends Scan {
     						if(block instanceof BlockAir) {
     							if(w.canBlockSeeSky(new BlockPos(wx, wy, wz))) {
     								score += newN;
+    								if(score > 4000) {
+    								    stage = Stage.FINISH;
+    								}
+    								//stage = Stage.FINISH;
     									
     								//finalQueue.push4(p[0], p[1], p[2], p[3]);
     							}
@@ -161,6 +174,7 @@ public class ScanAir extends Scan {
     							floodQueue.push4(p[0], 				p[1], 				(byte)(p[2] + 1),	newN);
     						} else {
     							(stage == Stage.AIR1 ? solidQueue : finalQueue).push4(p[0], p[1], p[2], p[3]);
+    							solidInfoQueue.push(isThinBlock(block) ? (byte)1 : (byte)0);
     						}
     						
     						setVisited(p[0], p[1], p[2], true);
@@ -176,11 +190,12 @@ public class ScanAir extends Scan {
 				break;
 			case SOLID:
 				if(solidQueue.pop4(p)) {
+				    boolean isThin = solidInfoQueue.pop() == 1;
 					int wy = startY - scanDistance + p[1];
 					if(MAtUtil.isWithinBounds(new BlockPos(0, wy, 0))) {
 						
 						// enqueue neighbors
-						byte newN = (byte)(p[3] - SOLID_COST);
+						byte newN = (byte)(p[3] - (isThin ? PANE_COST : SOLID_COST));
 						
 						floodQueue.push4((byte)(p[0] - 1), 	p[1], 				p[2],				newN);
 						floodQueue.push4((byte)(p[0] + 1), 	p[1],				p[2],				newN);
@@ -207,6 +222,10 @@ public class ScanAir extends Scan {
 		}
 		
 		return true;
+	}
+	
+	private boolean isThinBlock(Block block) {
+	    return block instanceof BlockDoor || block instanceof BlockGlass || block instanceof BlockPane;
 	}
 	
 	private boolean getVisited(int x, int y, int z) {

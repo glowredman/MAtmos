@@ -57,7 +57,7 @@ public class ScanRaycast extends Scan {
         if(raysCast >= raysToCast) {
             progress = 1;
             
-            pipeline.setValue(".outsideness_score", score/10000);
+            pipeline.setValue(".outdoorness_score", score/10000);
         }
         return true;
     }

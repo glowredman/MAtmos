@@ -196,6 +196,7 @@ public class JsonExpansions_EngineDeserializer {
             
             List<String> restrictList = asList(serial.restrict);
             if(!normal) {
+                restrictList.add("Deep indoors");
                 restrictList.add(indoor ? "Outdoor" : "Indoor");
             }
             

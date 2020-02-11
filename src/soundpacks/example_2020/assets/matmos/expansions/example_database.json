@@ -1,27 +1,42 @@
 {
   "condition": {
-    "Outdoorness >80k": {
-      "sheet": "scan_medium",
+    "Raycast scan outdoors": {
+      "sheet": "scan_raycast",
       "index": ".outdoorness_score",
       "symbol": "GREATER",
-      "value": "80000"
+      "value": "2500"
     },
-    "Outdoorness <=80k": {
+    "Flood scan deep indoors": {
       "sheet": "scan_medium",
       "index": ".outdoorness_score",
-      "symbol": "LESSER_OR_EQUAL",
-      "value": "80000"
+      "symbol": "LESSER",
+      "value": "200"
     }
   },
   "set": {
+    "Deep indoors": {
+      "yes": [
+        "Flood scan deep indoors"
+      ],
+      "no": [
+        
+      ]
+    },
     "Indoor": {
       "yes": [
-        "Outdoorness <=80k"
+      
+      ],
+      "no": [
+        "Raycast scan outdoors",
+        "Flood scan deep indoors"
       ]
     },
     "Outdoor": {
       "yes": [
-        "Outdoorness >80k"
+        "Raycast scan outdoors"
+      ],
+      "no": [
+        
       ]
     }
   }
