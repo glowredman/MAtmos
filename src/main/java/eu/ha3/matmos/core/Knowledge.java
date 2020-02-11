@@ -1,6 +1,7 @@
 package eu.ha3.matmos.core;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +17,7 @@ import eu.ha3.matmos.core.logic.Machine;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sheet.Sheet;
 import eu.ha3.matmos.core.sheet.SheetCommander;
+import eu.ha3.matmos.core.sheet.SheetEntry;
 import eu.ha3.matmos.core.sheet.SheetIndex;
 import eu.ha3.matmos.util.BetterStreams;
 import net.minecraft.client.resources.IResourcePack;
@@ -104,6 +106,20 @@ public class Knowledge implements Evaluated, Simulated {
             }
         }
     }
+    
+    public void addKnowledge(Knowledge other) {
+        LinkedList<Named> things = new LinkedList<>();
+        things.addAll(other.conditionMapped.values());
+        things.addAll(other.junctionMapped.values());
+        things.addAll(other.machineMapped.values());
+        things.addAll(other.eventMapped.values());
+        for(PossibilityList p : other.possibilityMapped.values()) {
+            things.add((Named)p);
+        }
+        things.addAll(other.dynamicMapped.values());
+        
+        addKnowledge(things);
+    }
 
     public void compile() {
         purge(machineMapped, junctionMapped, "junctions");
@@ -168,5 +184,21 @@ public class Knowledge implements Evaluated, Simulated {
         }
 
         BetterStreams.<Evaluated>of(conditionMapped, junctionMapped, machineMapped).forEach(Evaluated::evaluate);
+    }
+    
+    // might be nicer to have this read from a json file
+    public static List<Named> getBuiltins(ProviderCollection providers) {
+        return Arrays.asList(
+                new Condition("_RAYCAST_SCAN_OUTDOORS", providers.getSheetCommander(),
+                        new SheetEntry("scan_raycast", ".outdoorness_score"), Operator.GREATER, "2500"),
+                new Condition("_FLOOD_SCAN_DEEP_INDOORS", providers.getSheetCommander(),
+                        new SheetEntry("scan_medium", ".outdoorness_score"), Operator.LESSER, "200"),
+                new Junction("_DEEP_INDOORS", providers.getCondition(),
+                        Arrays.asList("_FLOOD_SCAN_DEEP_INDOORS"), Arrays.asList()),
+                new Junction("_INDOORS", providers.getCondition(),
+                        Arrays.asList(), Arrays.asList("_RAYCAST_SCAN_OUTDOORS", "_FLOOD_SCAN_DEEP_INDOORS")),
+                new Junction("_OUTDOORS", providers.getCondition(),
+                        Arrays.asList("_RAYCAST_SCAN_OUTDOORS"), Arrays.asList())
+                );
     }
 }

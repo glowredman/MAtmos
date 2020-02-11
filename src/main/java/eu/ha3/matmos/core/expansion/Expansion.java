@@ -103,13 +103,16 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
         }
 
         newKnowledge();
-
+        
         if (jsonAgent == null) {
             isSuccessfullyBuilt = agent.load(identity, knowledge);
         } else {
             isSuccessfullyBuilt = jsonAgent.load(identity, knowledge);
             jsonAgent = null;
         }
+        
+        // builtins can't be overridden, this allows the optimization of outdoorness scanners
+        knowledge.addKnowledge(Knowledge.getBuiltins(knowledge.obtainProviders()));
 
         if (!isSuccessfullyBuilt) {
             newKnowledge();

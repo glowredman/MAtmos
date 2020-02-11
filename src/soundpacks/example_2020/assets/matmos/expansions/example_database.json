@@ -1,12 +1,12 @@
 {
   "condition": {
-    "Raycast scan outdoors": {
+    "_RAYCAST_SCAN_OUTDOORS": {
       "sheet": "scan_raycast",
       "index": ".outdoorness_score",
       "symbol": "GREATER",
       "value": "2500"
     },
-    "Flood scan deep indoors": {
+    "_FLOOD_SCAN_DEEP_INDOORS": {
       "sheet": "scan_medium",
       "index": ".outdoorness_score",
       "symbol": "LESSER",
@@ -14,26 +14,26 @@
     }
   },
   "set": {
-    "Deep indoors": {
+    "_DEEP_INDOORS": {
       "yes": [
-        "Flood scan deep indoors"
+        "_FLOOD_SCAN_DEEP_INDOORS"
       ],
       "no": [
         
       ]
     },
-    "Indoor": {
+    "_INDOORS": {
       "yes": [
       
       ],
       "no": [
-        "Raycast scan outdoors",
-        "Flood scan deep indoors"
+        "_RAYCAST_SCAN_OUTDOORS",
+        "_FLOOD_SCAN_DEEP_INDOORS"
       ]
     },
-    "Outdoor": {
+    "_OUTDOORS": {
       "yes": [
-        "Raycast scan outdoors"
+        "_RAYCAST_SCAN_OUTDOORS"
       ],
       "no": [
         
