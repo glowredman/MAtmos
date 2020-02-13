@@ -161,7 +161,9 @@ public class JsonExpansions_EngineDeserializer {
     private void deserializeMachineFromLists(Entry<String, SerialMachine> entry, SerialMachine serial,
             List<SerialMachineEvent> serialEventList, List<SerialMachineStream> serialStreamList, MachineType type) {
         ArrayList<TimedEvent> events = new ArrayList<>();
-        serialEventList.forEach(x -> {events.add(new TimedEvent(providers.getEvent(), x));});
+        if(serialEventList != null) {
+            serialEventList.forEach(x -> {events.add(new TimedEvent(providers.getEvent(), x));});
+        }
         
         ArrayList<StreamInformation> streamList = new ArrayList<StreamInformation>();
         
