@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 
 public class ScanRaycast extends Scan {
     
-    private static final Random rnd = new Random(0);
+    private static final Random rnd = new Random();
     
     int startX, startY, startZ;
     Vec3d center;
@@ -47,9 +47,17 @@ public class ScanRaycast extends Scan {
         raysToCast = opspercall * 20;
         
         if(rays == null || rays.length != raysToCast) {
+            rnd.setSeed(0);
             rays = new Vec3d[raysToCast];
             for(int i = 0; i < raysToCast; i++) {
-                rays[i] = Vec3d.fromPitchYaw(rnd.nextFloat() * 360f, rnd.nextFloat() * 360f);
+                double vx = 0, vy = 0, vz = 0;
+                // avoid normalizing a vector of 0 length (impossible), or tiny length (numerically unstable)
+                while(vx * vx + vy * vy + vz * vz < 0.01) {
+                    vx = 2.0 * (rnd.nextDouble() - 0.5);
+                    vy = 2.0 * (rnd.nextDouble() - 0.5);
+                    vz = 2.0 * (rnd.nextDouble() - 0.5);
+                }
+                rays[i] = new Vec3d(vx, vy, vz).normalize();
             }
         }
         
