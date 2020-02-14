@@ -3,16 +3,19 @@ package eu.ha3.matmos.data.scanners;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class ScanRaycast extends Scan {
     
-    private static final Random rnd = new Random();
+    private static final Random rnd = new Random(0);
     
     int startX, startY, startZ;
     Vec3d center;
@@ -23,6 +26,8 @@ public class ScanRaycast extends Scan {
     int score;
     
     private int THRESHOLD_SCORE;
+    
+    private Vec3d[] rays;
     
     @Override
     void initScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn) {
@@ -37,23 +42,33 @@ public class ScanRaycast extends Scan {
         zSize = zsizeIn;
         
         raysCast = 0;
-        raysToCast = 100;
+        
+        opspercall = 20;
+        raysToCast = opspercall * 20;
+        
+        if(rays == null || rays.length != raysToCast) {
+            rays = new Vec3d[raysToCast];
+            for(int i = 0; i < raysToCast; i++) {
+                rays[i] = Vec3d.fromPitchYaw(rnd.nextFloat() * 360f, rnd.nextFloat() * 360f);
+            }
+        }
+        
         
         finalProgress = 1;
         
         score = 0;
         THRESHOLD_SCORE = 25000;
     }
+    
+    private Vec3d getRay(int index) {
+        return rays[index];
+    }
 
     @Override
     protected boolean doRoutine() {
-        opspercall = 20;
-        raysToCast = opspercall * 20;
-        for(int ops = 0; ops < opspercall && raysCast < raysToCast && score <= THRESHOLD_SCORE; ops++) {
+        for(int ops = 0; ops < opspercall && raysCast < raysToCast && score <= THRESHOLD_SCORE; ops++) { 
             
-            Vec3d v = Vec3d.fromPitchYaw(rnd.nextFloat() * 360f, rnd.nextFloat() * 360f);
-            
-            castRay(v);
+            castRay(getRay(raysCast));
             
             raysCast++;
         }
@@ -101,7 +116,13 @@ public class ScanRaycast extends Scan {
                     
                     BlockPos blockPos = new BlockPos(pos[0], pos[1], pos[2]);
                     
-                    boolean solid = w.getBlockState(blockPos).getCollisionBoundingBox(w, blockPos) != Block.NULL_AABB;
+                    IBlockState blockState = w.getBlockState(blockPos);
+                    
+                    ((ScannerModule)pipeline).inputAndReturnBlockMeta(pos[0], pos[1], pos[2], blockBuf, metaBuf);
+                    Block block = blockBuf[0];
+                    
+                    boolean solid = blockState.getCollisionBoundingBox(w, blockPos) != Block.NULL_AABB &&
+                    !(block instanceof BlockLeaves);
                     
                     if(solid && offset == 0 && scanDir == 0) {
                         centerSolid = true;
@@ -111,7 +132,7 @@ public class ScanRaycast extends Scan {
                     
                     nearness -= solid ? solidPenalty : airPenalty;
                     
-                    ((ScannerModule)pipeline).inputAndReturnBlockMeta(pos[0], pos[1], pos[2], blockBuf, metaBuf);
+                    
                     
                     if(nearness > 0 && !solid && w.canBlockSeeSky(blockPos)){
                         int dx = startX - pos[0];

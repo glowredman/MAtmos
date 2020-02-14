@@ -158,7 +158,7 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         
         // 16 * 4 * 16
         addModule(new ScannerModule(
-                ScanVolumetric.class, this.data, "_POM__scan_small", "scan_small", true, -1, 2 /*64*/, 16, 8, 16, 16 * 4 * 16));
+                ScanVolumetric.class, this.data, "_POM__scan_small", "scan_small", true, -1, 2 /*64*/, 16, 16, 16, 16 * 4 * 16));
         // Each ticks, check half of the small scan
 
         addModule(new ScannerModule(
