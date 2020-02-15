@@ -93,7 +93,9 @@ public class ScanRaycast extends Scan {
         
         World w = Minecraft.getMinecraft().world;
         
-        RayTraceResult result = Minecraft.getMinecraft().world.rayTraceBlocks(center, center.add(dir.scale(maxRange)), true, false, true);
+        RayTraceResult result = Minecraft.getMinecraft().world.rayTraceBlocks(center, center.add(dir.scale(maxRange)), true, true, true);
+        
+        int startNearness = 60;
         if(result != null) {
             BlockPos hit = result.getBlockPos();
             
@@ -103,7 +105,7 @@ public class ScanRaycast extends Scan {
             
             boolean centerSolid = false;
             
-            int startNearness = 60;
+            
             
             int airPenalty = 0;
             int solidPenalty = 55;
@@ -152,6 +154,10 @@ public class ScanRaycast extends Scan {
                         score += hitScore;
                     }
                 }
+            }
+        } else {
+            if(dir.y > 0) {
+                score += startNearness * 13;
             }
         }
     }
