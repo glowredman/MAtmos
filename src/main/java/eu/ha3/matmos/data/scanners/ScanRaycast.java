@@ -4,14 +4,14 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class ScanRaycast extends Scan {
@@ -85,7 +85,9 @@ public class ScanRaycast extends Scan {
             progress = 1;
             
             pipeline.setValue(".is_outdoors", score > THRESHOLD_SCORE ? 1 : 0);
+            pipeline.setValue(".score", score);
         }
+        
         return true;
     }
     
@@ -98,12 +100,31 @@ public class ScanRaycast extends Scan {
         //return maxRange * maxRange - distanceSquared;
     }
     
+    private static boolean rayShouldPass(IBlockState bs, IBlockAccess blockAccess, BlockPos pos) {
+        // stop on liquids, don't stop on leaves
+        return !bs.getBlock().canCollideCheck(bs, true) ||
+                (!(bs.getBlock() instanceof BlockLiquid) && (bs.getCollisionBoundingBox(blockAccess, pos) == Block.NULL_AABB  || bs.getBlock() instanceof BlockLeaves));
+    }
+    
+    public static RayTraceResult rayTraceNonSolid(Vec3d start, Vec3d dir, double maxRange) {
+        World w = Minecraft.getMinecraft().world;
+        Vec3d end = start.add(dir.scale(maxRange));
+        RayTraceResult result = w.rayTraceBlocks(start, end, true, false, true);
+        
+        Vec3d delta = dir.scale(0.01);
+        
+        while(result != null && rayShouldPass(w.getBlockState(result.getBlockPos()), w, result.getBlockPos())) {
+            result = w.rayTraceBlocks(result.hitVec.add(delta), end, true, true, true); 
+        }
+        return result;
+    }
+    
     private void castRay(Vec3d dir) {
         int maxRange = 100;
         
         World w = Minecraft.getMinecraft().world;
         
-        RayTraceResult result = Minecraft.getMinecraft().world.rayTraceBlocks(center, center.add(dir.scale(maxRange)), true, true, true);
+        RayTraceResult result = rayTraceNonSolid(center, dir, maxRange);
         
         int startNearness = 60;
         if(result != null) {
