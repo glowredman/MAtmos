@@ -15,6 +15,7 @@ import eu.ha3.matmos.data.modules.PassOnceModule;
 import eu.ha3.matmos.data.modules.ThousandStringCountModule;
 import eu.ha3.matmos.data.modules.VirtualCountModule;
 import eu.ha3.matmos.data.modules.VirtualModuleProcessor;
+import eu.ha3.matmos.util.IDontKnowHowToCode;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.matmos.util.math.MAtMutableBlockPos;
 import net.minecraft.block.Block;
@@ -23,11 +24,13 @@ import net.minecraft.util.math.BlockPos;
 
 public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     public static final String THOUSAND_SUFFIX = "_p1k";
+    public static final String WEIGHTED_SUFFIX = "_w";
 
     private static final int WORLD_LOADING_DURATION = 100;
 
     private final String passOnceName;
     private final boolean requireThousand;
+    private final boolean requireWeighted;
     private final int movement;
     private final int pulse;
 
@@ -37,6 +40,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     private final int blocksPerCall;
 
     private final AbstractThingCountModule base;
+    private final AbstractThingCountModule weighted;
     private final VirtualCountModule thousand;
 
     private final Set<String> subModules = new HashSet<>();
@@ -60,10 +64,11 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
               
     private ScannerModule(Class<Scan> scannerClass, Object scannerArgument, boolean hasScannerArgument,
             DataPackage data, String passOnceName,
-            String baseName, boolean requireThousand,
+            String baseName, boolean requireThousand, boolean requireWeighted,
             int movement, int pulse, int xS, int yS, int zS, int blocksPerCall) {
         this.passOnceName = passOnceName;
         this.requireThousand = requireThousand;
+        this.requireWeighted = requireWeighted;
         this.movement = movement;
         this.pulse = pulse;
 
@@ -91,6 +96,14 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
         this.subModules.add(baseName);
         data.getSheet(baseName).setDefaultValue("0");
 
+        if(requireWeighted) {
+            String weightedName = baseName + WEIGHTED_SUFFIX;
+            this.weighted = new BlockCountModule(data, weightedName, true, null);
+            subModules.add(weightedName);
+            data.getSheet(weightedName).setDefaultValue("0");
+        } else {
+            this.weighted = null;
+        }
         
         Scan theScanner = null;
         
@@ -115,19 +128,19 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     
     /*** Constructor used to pass an argument to the to-be-instantiated scanner object */
     public ScannerModule(Class scannerClass, Object scannerArgument, DataPackage data, String passOnceName,
-            String baseName, boolean requireThousand,
+            String baseName, boolean requireThousand, boolean requireWeighted,
             int movement, int pulse, int xS, int yS, int zS, int blocksPerCall) {
         this(scannerClass, scannerArgument, true, data, passOnceName,
-                baseName, requireThousand,
+                baseName, requireThousand, requireWeighted,
                 movement, pulse, xS, yS, zS, blocksPerCall);
     }
     
     /*** Normal constructor */
     public ScannerModule(Class scannerClass, DataPackage data, String passOnceName,
-            String baseName, boolean requireThousand,
+            String baseName, boolean requireThousand, boolean requireWeighted,
             int movement, int pulse, int xS, int yS, int zS, int blocksPerCall) {
         this(scannerClass, null, false, data, passOnceName,
-                baseName, requireThousand,
+                baseName, requireThousand, requireWeighted,
                 movement, pulse, xS, yS, zS, blocksPerCall);
     }
 
@@ -234,11 +247,20 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     
     @Override
     public void input(int x, int y, int z) {
-        inputAndReturnBlockMeta(x, y, z, null, null);
+        inputAndReturnBlockMeta(x, y, z, 1, null, null);
+    }
+    
+    @Override
+    public void input(int x, int y, int z, int weight) {
+        inputAndReturnBlockMeta(x, y, z, weight, null, null);
+    }
+    
+    public void inputAndReturnBlockMeta(int x, int y, int z, Block[] blockOut, int[] metaOut) {
+        inputAndReturnBlockMeta(x, y, z, 1, blockOut, metaOut);
     }
     
     /** Not sure if this optimization is necessary */
-    public void inputAndReturnBlockMeta(int x, int y, int z, Block[] blockOut, int[] metaOut) {
+    public void inputAndReturnBlockMeta(int x, int y, int z, int weight, Block[] blockOut, int[] metaOut) {
         Block block = null;
         int meta = -1;
         if(base instanceof BlockCountModule || blockOut != null || metaOut != null) {
@@ -257,6 +279,12 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
             }
         }
         
+        if(weighted != null) {
+            weighted.increment(Pair.of(block, meta), weight);
+        } else if(weight != 1) {
+            IDontKnowHowToCode.warnOnce("Module " + getName() + " doesn't have a weighted counter, but the scanner tried to input a block with a weight.");
+        }
+        
         if(blockOut != null) {
             blockOut[0] = block;
         }
@@ -273,6 +301,12 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     @Override
     public void finish() {
         base.apply();
+        if(thousand != null) {
+            thousand.apply();
+        }
+        if(weighted != null) {
+            weighted.apply();
+        }
         workInProgress = false;
     }
 

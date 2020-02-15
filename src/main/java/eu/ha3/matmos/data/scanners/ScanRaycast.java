@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
@@ -88,6 +89,15 @@ public class ScanRaycast extends Scan {
         return true;
     }
     
+    private int calculateWeight(int dx, int dy, int dz, int maxRange) {
+        int distanceSquared = dx * dx + dy * dy + dz * dz;
+        float distanceScale = 4f; // a block this far away will have a weight of 1/2
+        float weight = MathHelper.clamp((1f / distanceScale) / distanceSquared, 0f, 1f);
+        return (int)(weight*1000000f);
+        
+        //return maxRange * maxRange - distanceSquared;
+    }
+    
     private void castRay(Vec3d dir) {
         int maxRange = 100;
         
@@ -128,7 +138,12 @@ public class ScanRaycast extends Scan {
                     
                     IBlockState blockState = w.getBlockState(blockPos);
                     
-                    ((ScannerModule)pipeline).inputAndReturnBlockMeta(pos[0], pos[1], pos[2], blockBuf, metaBuf);
+                    int dx = startX - pos[0];
+                    int dy = startY - pos[1];
+                    int dz = startZ - pos[2];
+                    
+                    ((ScannerModule)pipeline).inputAndReturnBlockMeta(pos[0], pos[1], pos[2], calculateWeight(dx, dy, dz, maxRange),
+                            blockBuf, metaBuf);
                     Block block = blockBuf[0];
                     
                     boolean solid = blockState.getCollisionBoundingBox(w, blockPos) != Block.NULL_AABB &&
@@ -145,9 +160,6 @@ public class ScanRaycast extends Scan {
                     
                     
                     if(nearness > 0 && !solid && w.canBlockSeeSky(blockPos)){
-                        int dx = startX - pos[0];
-                        int dy = startY - pos[1];
-                        int dz = startZ - pos[2];
                         int distanceSq = dx*dx + dy*dy + dz*dz;
                         //int hitScore = Math.max(100*100 - distanceSq, 0);
                         int hitScore = nearness;

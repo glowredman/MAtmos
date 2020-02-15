@@ -39,7 +39,11 @@ public abstract class AbstractStringCountModule extends AbstractThingCountModule
     }
 
     public void increment(String thing) {
-        things.put(thing, things.containsKey(thing) ? things.get(thing) + 1 : 1);
+        increment(thing, 1);
+    }
+    
+    public void increment(String thing, int amount) {
+        things.put(thing, things.containsKey(thing) ? things.get(thing) + amount : amount);
     }
     
     // for debugging

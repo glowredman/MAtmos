@@ -149,20 +149,20 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         //	this.mod, this.data, "DetectMinDist", "Detect", "_Deltas", ENTITYIDS_MAX, 2, 5, 10, 20, 50));
         // 16 * 8 * 16
         largeScanner = new ScannerModule(
-                ScanVolumetric.class, this.data, "_POM__scan_large", "scan_large", true, 8, 20 /*256*/, 64, 32, 64, 16 * 8 * 16/*64 * 64 * 2*/);
+                ScanVolumetric.class, this.data, "_POM__scan_large", "scan_large", true, false, 8, 20 /*256*/, 64, 32, 64, 16 * 8 * 16/*64 * 64 * 2*/);
         addModule(largeScanner);
         
         this.mediumScanner = new ScannerModule(
-                ScanAir.class, this.data, "_POM__scan_medium", "scan_medium", true, -1, 20, 31, 31, 31, 31*31*4);
+                ScanAir.class, this.data, "_POM__scan_medium", "scan_medium", true, false, -1, 20, 31, 31, 31, 31*31*4);
         addModule(this.mediumScanner);
         
         // 16 * 4 * 16
         addModule(new ScannerModule(
-                ScanVolumetric.class, this.data, "_POM__scan_small", "scan_small", true, -1, 2 /*64*/, 16, 16, 16, 16 * 4 * 16));
+                ScanVolumetric.class, this.data, "_POM__scan_small", "scan_small", true, false, -1, 2 /*64*/, 16, 8, 16, 16 * 4 * 16));
         // Each ticks, check half of the small scan
 
         addModule(new ScannerModule(
-                ScanRaycast.class, this.data, "_POM__scan_raycast", "scan_raycast", false, -1, 20, 100, 100, 100, 10));
+                ScanRaycast.class, this.data, "_POM__scan_raycast", "scan_raycast", false, true, -1, 20, 100, 100, 100, 10));
         
         
         addModule(new ModuleDebug(data));

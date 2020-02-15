@@ -15,6 +15,8 @@ public abstract class AbstractThingCountModule<T> extends ModuleProcessor {
 
     public abstract void increment(T thing);
     
+    public abstract void increment(T thing, int amount);
+    
     // for debugging
     public abstract int get(T thing);
 

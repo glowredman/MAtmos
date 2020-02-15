@@ -20,6 +20,11 @@ public class VirtualCountModule<T> extends AbstractThingCountModule<T> {
     public void increment(T thing) {
         
     }
+    
+    @Override
+    public void increment(T thing, int amount) {
+        
+    }
 
     @Override
     public int get(T thing) {

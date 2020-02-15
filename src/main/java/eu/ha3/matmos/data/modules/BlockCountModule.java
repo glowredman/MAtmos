@@ -61,24 +61,28 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
 	
 	int blocksCounted = 0;
 	
-	public void increment(Pair<Block, Integer> blockMeta)
+	public void increment(Pair<Block, Integer> blockMeta) {
+	    increment(blockMeta, 1);
+	}
+	
+	public void increment(Pair<Block, Integer> blockMeta, int amount)
 	{	
 	    Block block = blockMeta.getLeft();
 	    int meta = blockMeta.getRight();
 	    
 		int id = Block.getIdFromBlock(block);
 		
-		counts[id]++;
+		counts[id] += amount;
 		
 		if(meta != -1 && meta != 0) {
 			if(metadatas[id] == null) {
 				metadatas[id] = new TreeMap<Integer, Integer>();
 			}
 			Integer metaCount = metadatas[id].get(meta);
-			metadatas[id].put(meta, metaCount == null ? 0 : metaCount + 1);
+			metadatas[id].put(meta, metaCount == null ? 0 : metaCount + amount);
 		}
 		
-		blocksCounted++;
+		blocksCounted += amount;
 	}
 	
 	// for debugging
