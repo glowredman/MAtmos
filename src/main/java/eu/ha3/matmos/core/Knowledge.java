@@ -194,11 +194,11 @@ public class Knowledge implements Evaluated, Simulated {
                 new Condition("_FLOOD_SCAN_DEEP_INDOORS", providers.getSheetCommander(),
                         new SheetEntry("scan_medium", ".is_near_surface"), Operator.EQUAL, "0"),
                 new Junction("_DEEP_INDOORS", providers.getCondition(),
-                        Arrays.asList("_FLOOD_SCAN_DEEP_INDOORS"), Arrays.asList()),
+                        Arrays.asList("_FLOOD_SCAN_DEEP_INDOORS"), Arrays.asList("_RAYCAST_SCAN_OUTDOORS")),
                 new Junction("_INDOORS", providers.getCondition(),
                         Arrays.asList(), Arrays.asList("_RAYCAST_SCAN_OUTDOORS", "_FLOOD_SCAN_DEEP_INDOORS")),
                 new Junction("_OUTDOORS", providers.getCondition(),
-                        Arrays.asList("_RAYCAST_SCAN_OUTDOORS"), Arrays.asList())
+                        Arrays.asList("_RAYCAST_SCAN_OUTDOORS"), Arrays.asList("_FLOOD_SCAN_DEEP_INDOORS"))
                 );
     }
 }
