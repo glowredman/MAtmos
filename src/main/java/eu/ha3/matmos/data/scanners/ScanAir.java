@@ -27,8 +27,7 @@ public class ScanAir extends Scan {
 	ByteQueue solidInfoQueue;
 	ByteQueue finalQueue;
 	
-	int nearest;
-	int nearestX, nearestY, nearestZ;
+	int skylitXMin, skylitXMax, skylitYMin, skylitYMax, skylitZMin, skylitZMax;
 	
 	private int score;
 	
@@ -38,7 +37,7 @@ public class ScanAir extends Scan {
 	// these are meant to be final, but for ease of development are non-final for now(?)
 	private int AIR_COST, SOLID_COST, PANE_COST; 
 	byte START_NEARNESS;
-	private int SCORE_THRESHOLD = 200; 
+	private int SCORE_THRESHOLD = 200;
 	
 	@Override
 	void initScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn)
@@ -91,7 +90,9 @@ public class ScanAir extends Scan {
 		
 		floodQueue.push4((byte)scanDistance, (byte)scanDistance, (byte)scanDistance, START_NEARNESS);
 		
-		nearest = -1;
+		skylitXMin = skylitYMin = skylitZMin = Integer.MAX_VALUE;
+		skylitXMax = skylitYMax = skylitZMax = Integer.MIN_VALUE;
+		
 		stage = Stage.AIR1;
 		
 		AIR_COST = 5;
@@ -159,7 +160,15 @@ public class ScanAir extends Scan {
     						if(block instanceof BlockAir) {
     							if(w.canBlockSeeSky(new BlockPos(wx, wy, wz))) {
     								score += newN;
-    								if(score > SCORE_THRESHOLD) {
+    								
+    								skylitXMin = Math.min(skylitXMin, wx);
+    								skylitXMax = Math.max(skylitXMax, wx);
+    								skylitYMin = Math.min(skylitYMin, wy);
+                                    skylitYMax = Math.max(skylitYMax, wy);
+                                    skylitZMin = Math.min(skylitZMin, wz);
+                                    skylitZMax = Math.max(skylitZMax, wz);
+    								
+    								if(score > SCORE_THRESHOLD && !isTooHigh()) {
     								    stage = Stage.FINISH;
     								}
     								//stage = Stage.FINISH;
@@ -218,12 +227,33 @@ public class ScanAir extends Scan {
 				// But I'm not sure if it's worth the trouble for the optimization gain.
 			    
 				progress = 1;
-				pipeline.setValue(".is_near_surface", score > SCORE_THRESHOLD ? 1 : 0);
+				
+				pipeline.setValue(".__score", score);
+				int width = skylitXMax - skylitXMin;
+				int height = skylitYMax - skylitYMin;
+				int depth = skylitZMax - skylitZMin;
+				
+				pipeline.setValue(".__width", width);
+				pipeline.setValue(".__height", height);
+				pipeline.setValue(".__depth", depth);
+				
+				
+				boolean tooHigh = isTooHigh(); 
+				
+				pipeline.setValue(".is_near_surface", (score > SCORE_THRESHOLD && !tooHigh) ? 1 : 0);
 				break;
 			}
 		}
 		
 		return true;
+	}
+	
+	private boolean isTooHigh() {
+	    int width = skylitXMax - skylitXMin;
+        int height = skylitYMax - skylitYMin;
+        int depth = skylitZMax - skylitZMin;
+        
+        return width * depth < height * height  * 0.5f; 
 	}
 	
 	private boolean isThinBlock(Block block) {

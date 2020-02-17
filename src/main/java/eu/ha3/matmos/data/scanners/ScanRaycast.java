@@ -85,7 +85,7 @@ public class ScanRaycast extends Scan {
             progress = 1;
             
             pipeline.setValue(".is_outdoors", score > THRESHOLD_SCORE ? 1 : 0);
-            pipeline.setValue(".score", score);
+            pipeline.setValue(".__score", score);
         }
         
         return true;
