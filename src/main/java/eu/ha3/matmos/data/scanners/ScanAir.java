@@ -3,13 +3,15 @@ package eu.ha3.matmos.data.scanners;
 import eu.ha3.matmos.util.ByteQueue;
 import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockGlass;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockPane;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /** This scanner is used to determine whether the player should hear indoors or outdoors ambiance. */
@@ -156,9 +158,13 @@ public class ScanAir extends Scan {
     						Block block = blockBuf[0];
     						int meta = metaBuf[0];
     						
+    						IBlockState bs = block.getStateFromMeta(meta);
+                            BlockPos pos = new BlockPos(wx, wy, wz);
+    						
     						byte newN = (byte) (p[3] - AIR_COST);
-    						if(block instanceof BlockAir) {
-    							if(w.canBlockSeeSky(new BlockPos(wx, wy, wz))) {
+    						
+    						if(isTransparentToSound(bs, w, pos, false)) {
+    							if(w.canBlockSeeSky(pos)) {
     								score += newN;
     								
     								skylitXMin = Math.min(skylitXMin, wx);
@@ -255,6 +261,13 @@ public class ScanAir extends Scan {
         
         return width * depth < height * height  * 0.5f; 
 	}
+	
+	/** Returns true if the block doesn't impede the flow of sound
+	 * (i.e. it is the same as air with regards to sound propagation). */
+    public static boolean isTransparentToSound(IBlockState bs, IBlockAccess blockAccess, BlockPos pos, boolean hitIfLiquid) {
+        return !bs.getBlock().canCollideCheck(bs, hitIfLiquid) ||
+                (!hitIfLiquid || !(bs.getBlock() instanceof BlockLiquid) && (bs.getCollisionBoundingBox(blockAccess, pos) == Block.NULL_AABB  || bs.getBlock() instanceof BlockLeaves));
+    }
 	
 	private boolean isThinBlock(Block block) {
 	    return block instanceof BlockDoor || block instanceof BlockGlass || block instanceof BlockPane;
