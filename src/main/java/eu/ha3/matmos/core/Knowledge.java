@@ -122,6 +122,29 @@ public class Knowledge implements Evaluated, Simulated {
     }
 
     public void compile() {
+        Set<String> junctionsToInvert = new TreeSet<>();
+        LinkedList<Named> newStuff = new LinkedList<>();
+        
+        for(String machineName : machineMapped.keySet()) {
+            Machine m = machineMapped.get(machineName);
+            for(String dep: m.getDependencies()) {
+                if(dep.startsWith("!")) {
+                    junctionsToInvert.add(dep.substring(1));
+                }
+            }
+        }
+        for(String junctionName : junctionsToInvert) {
+            Junction junction = junctionMapped.get(junctionName);
+            if(junction != null) {
+                newStuff.add(junction.getInverted());
+            } else {
+                Matmos.LOGGER.warn("Missing junction: " + junctionName);
+            }
+            
+        }
+        addKnowledge(newStuff);
+        
+        
         purge(machineMapped, junctionMapped, "junctions");
         purge(junctionMapped, conditionMapped, "conditions");
     }

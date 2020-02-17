@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.Dependable;
 import eu.ha3.matmos.core.MultistateComponent;
+import eu.ha3.matmos.core.Named;
 import eu.ha3.matmos.core.Provider;
 
 public class Junction extends MultistateComponent implements Dependable, VisualizedSpecialDependencies {
@@ -18,23 +19,34 @@ public class Junction extends MultistateComponent implements Dependable, Visuali
     private final Provider<Condition> provider;
 
     private final Collection<String> dependencies;
+    
+    private final boolean inverted;
 
-    public Junction(String name, Provider<Condition> provider, List<String> yes, List<String> no) {
+    public Junction(String name, Provider<Condition> provider, List<String> yes, List<String> no, boolean inverted) {
         super(name);
         this.provider = provider;
 
         this.yes = yes;
         this.no = no;
+        this.inverted = inverted;
 
         dependencies = new TreeSet<>();
         dependencies.addAll(yes);
         dependencies.addAll(no);
     }
-
+    
+    public Junction(String name, Provider<Condition> provider, List<String> yes, List<String> no) {
+        this(name, provider, yes, no, false);
+    }
+    
     @Override
     public void evaluate() {
         boolean pre = isActive;
         isActive = testIfTrue();
+        
+        if(inverted) {
+            isActive = !isActive;
+        }
 
         if (pre != isActive) {
             Matmos.LOGGER.debug("S: " + getName() + " -> " + isActive);
@@ -87,5 +99,9 @@ public class Junction extends MultistateComponent implements Dependable, Visuali
         }
 
         return new HashSet<>();
+    }
+
+    public Named getInverted() {
+        return new Junction("!" + getName(), provider, yes, no, !inverted);
     }
 }
