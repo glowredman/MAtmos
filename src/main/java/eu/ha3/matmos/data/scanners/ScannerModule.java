@@ -2,6 +2,7 @@ package eu.ha3.matmos.data.scanners;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -11,6 +12,7 @@ import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.AbstractThingCountModule;
 import eu.ha3.matmos.data.modules.BlockCountModule;
 import eu.ha3.matmos.data.modules.ExternalStringCountModule;
+import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.PassOnceModule;
 import eu.ha3.matmos.data.modules.ThousandStringCountModule;
 import eu.ha3.matmos.data.modules.VirtualCountModule;
@@ -29,8 +31,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     private static final int WORLD_LOADING_DURATION = 100;
 
     private final String passOnceName;
-    private final boolean requireThousand;
-    private final boolean requireWeighted;
+    private final Set<Submodule> requiredSubmodules;
     private final int movement;
     private final int pulse;
 
@@ -55,6 +56,52 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     private int zz = Integer.MIN_VALUE;
 
     private final Scan scanner;
+    
+    public static enum Submodule {
+        BASE, THOUSAND, WEIGHTED
+    }
+    
+    private Module initSubmodule(Submodule sm, String baseName, DataPackage data) {
+        // XXX thousands with externalStringCountModule is broken. ExternalStringCountModule should either be fixed or removed. 
+        boolean useExternalStringCountModule = false;
+        
+        if(sm != Submodule.BASE && !requiredSubmodules.contains(sm)) {
+            return null;
+        }
+        Module result = null;
+        String submoduleName = baseName;
+        
+        
+        switch(sm) {
+        case BASE:
+            if(useExternalStringCountModule) {
+                result = new ExternalStringCountModule(data, baseName, true);
+            } else {
+                result = new BlockCountModule(data, baseName, true, (VirtualCountModule<Pair<Block,Integer>>)thousand);
+            }
+            break;
+        case THOUSAND:
+            submoduleName = baseName + THOUSAND_SUFFIX;
+            if(useExternalStringCountModule) {
+                result = new ThousandStringCountModule(data, submoduleName);
+            } else {
+                result = new VirtualCountModule<Pair<Block,Integer>>(data, submoduleName, true);
+            }
+            
+            break;
+        case WEIGHTED:
+            submoduleName = baseName + WEIGHTED_SUFFIX;
+            result = new BlockCountModule(data, submoduleName, true, null);
+            break;
+        }
+        
+        if(result != null) {
+            subModules.add(submoduleName);
+            data.getSheet(submoduleName).setDefaultValue("0");
+        }
+        
+        return result;
+    }
 
     /**
      * Movement: Requires the player to move to another block to trigger a new scan. If movement is
@@ -62,13 +109,12 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
      * hasn't moved.
      */
               
-    private ScannerModule(Class<Scan> scannerClass, Object scannerArgument, boolean hasScannerArgument,
+    private ScannerModule(Class<? extends Scan> scannerClass, Object scannerArgument, boolean hasScannerArgument,
             DataPackage data, String passOnceName,
-            String baseName, boolean requireThousand, boolean requireWeighted,
+            String baseName, List<Submodule> requiredSubmodules,
             int movement, int pulse, int xS, int yS, int zS, int blocksPerCall) {
         this.passOnceName = passOnceName;
-        this.requireThousand = requireThousand;
-        this.requireWeighted = requireWeighted;
+        this.requiredSubmodules = new HashSet<Submodule>(requiredSubmodules);
         this.movement = movement;
         this.pulse = pulse;
 
@@ -76,39 +122,10 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
         this.yS = yS;
         this.zS = zS;
         this.blocksPerCall = blocksPerCall;
-
-        // XXX thousands with externalStringCountModule is broken. ExternalStringCountModule should either be fixed or removed. 
-        boolean useExternalStringCountModule = false;
         
-        if (requireThousand) {
-            String thousandName = baseName + THOUSAND_SUFFIX;
-            if(useExternalStringCountModule) {
-                thousand = new ThousandStringCountModule(data, thousandName);
-            } else {
-                thousand = new VirtualCountModule<Pair<Block,Integer>>(data, thousandName, true);
-            }
-            subModules.add(thousandName);
-            data.getSheet(thousandName).setDefaultValue("0");
-        } else {
-            thousand = null;
-        }
-        
-        if(useExternalStringCountModule) {
-            this.base = new ExternalStringCountModule(data, baseName, true);
-        } else {
-            this.base = new BlockCountModule(data, baseName, true, (VirtualCountModule<Pair<Block,Integer>>)thousand);
-        }
-        this.subModules.add(baseName);
-        data.getSheet(baseName).setDefaultValue("0");
-
-        if(requireWeighted) {
-            String weightedName = baseName + WEIGHTED_SUFFIX;
-            this.weighted = new BlockCountModule(data, weightedName, true, null);
-            subModules.add(weightedName);
-            data.getSheet(weightedName).setDefaultValue("0");
-        } else {
-            this.weighted = null;
-        }
+        thousand = (AbstractThingCountModule) initSubmodule(Submodule.THOUSAND, baseName, data);
+        weighted = (AbstractThingCountModule) initSubmodule(Submodule.WEIGHTED, baseName, data);
+        base = (AbstractThingCountModule) initSubmodule(Submodule.BASE, baseName, data);
         
         Scan theScanner = null;
         
@@ -132,20 +149,20 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     }
     
     /*** Constructor used to pass an argument to the to-be-instantiated scanner object */
-    public ScannerModule(Class scannerClass, Object scannerArgument, DataPackage data, String passOnceName,
-            String baseName, boolean requireThousand, boolean requireWeighted,
+    public ScannerModule(Class<? extends Scan> scannerClass, Object scannerArgument, DataPackage data, String passOnceName,
+            String baseName, List<Submodule> requiredSubmodules,
             int movement, int pulse, int xS, int yS, int zS, int blocksPerCall) {
         this(scannerClass, scannerArgument, true, data, passOnceName,
-                baseName, requireThousand, requireWeighted,
+                baseName, requiredSubmodules,
                 movement, pulse, xS, yS, zS, blocksPerCall);
     }
     
     /*** Normal constructor */
-    public ScannerModule(Class scannerClass, DataPackage data, String passOnceName,
-            String baseName, boolean requireThousand, boolean requireWeighted,
+    public ScannerModule(Class<? extends Scan> scannerClass, DataPackage data, String passOnceName,
+            String baseName, List<Submodule> requiredSubmodules,
             int movement, int pulse, int xS, int yS, int zS, int blocksPerCall) {
         this(scannerClass, null, false, data, passOnceName,
-                baseName, requireThousand, requireWeighted,
+                baseName, requiredSubmodules,
                 movement, pulse, xS, yS, zS, blocksPerCall);
     }
 
