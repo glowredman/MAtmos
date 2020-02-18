@@ -128,7 +128,7 @@ public class MAtUtil {
     }
 
     private static void playSound(float x, float y, float z, String soundName, float volume, float pitch) {
-        PositionedSoundRecord positionedsoundrecord = new PositionedSoundRecord(new ResourceLocation(soundName), SoundCategory.MASTER, volume, pitch, false, 0, ISound.AttenuationType.LINEAR, x, y, z);
+        PositionedSoundRecord positionedsoundrecord = new PositionedSoundRecord(new ResourceLocation(soundName), SoundCategory.AMBIENT, volume, pitch, false, 0, ISound.AttenuationType.LINEAR, x, y, z);
         Minecraft.getMinecraft().getSoundHandler().playSound(positionedsoundrecord);
     }
 
