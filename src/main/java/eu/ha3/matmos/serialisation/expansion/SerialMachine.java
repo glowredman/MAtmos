@@ -37,4 +37,7 @@ public class SerialMachine {
     
     @Expose
     public SerialMachineStreamPair stream_pair;
+    
+    @Expose
+    public boolean play_deep_indoors;
 }

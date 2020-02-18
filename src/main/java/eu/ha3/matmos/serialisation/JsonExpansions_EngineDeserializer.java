@@ -192,14 +192,20 @@ public class JsonExpansions_EngineDeserializer {
 
         if (tie != null || streamList != null) {
             List<String> allowList = asList(serial.allow);
-            /*if(!normal) {
-                allowList.add(indoor ? "Indoor" : "Outdoor");
-            }*/
             
             List<String> restrictList = asList(serial.restrict);
             if(!normal) {
-                restrictList.add("_DEEP_INDOORS");
-                restrictList.add(indoor ? "_OUTDOORS" : "_INDOORS");
+                if(!serial.play_deep_indoors) {
+                    restrictList.add("_DEEP_INDOORS");
+                    restrictList.add(indoor ? "_OUTDOORS" : "_INDOORS");
+                } else {
+                    if(indoor) {
+                        restrictList.add("_OUTDOORS");
+                    } else {
+                        restrictList.add("_INDOORS");
+                        restrictList.add("_DEEP_INDOORS");
+                    }
+                }
             }
             
             Named element = new Machine(machineName, providers.getJunction(), allowList, restrictList, tie, streamList);
