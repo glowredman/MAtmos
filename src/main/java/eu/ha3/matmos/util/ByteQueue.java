@@ -9,9 +9,11 @@ public class ByteQueue {
 	int length; // amount of elements stored
 	int capacity; // length of backing array, max amount of elements that can be held
 	int initialCapacity;
+	boolean dynamicSize;
 	
 	public ByteQueue(int capacity){
 		this.capacity = this.initialCapacity = capacity;
+		this.dynamicSize = false;
 		data = new byte[capacity];
 		clear();
 	}
@@ -23,7 +25,7 @@ public class ByteQueue {
 	}
 	
 	public void push(byte b) {
-		if(length >= capacity && capacity * 2 >= initialCapacity) {
+		if(dynamicSize && length >= capacity && capacity * 2 >= initialCapacity) {
 			setCapacity(capacity * 2);
 		}
 		head = (head + 1) % capacity;
@@ -48,7 +50,7 @@ public class ByteQueue {
 		tail = (tail + 1) % capacity;
 		length--;
 		
-		if(length <= capacity / 2 && capacity / 2 >= initialCapacity) {
+		if(dynamicSize && length <= capacity / 2 && capacity / 2 >= initialCapacity) {
 			setCapacity(capacity / 2);
 		}
 		
