@@ -62,6 +62,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     private boolean isListenerInstalled;
     private Optional<Simulacrum> simulacrum = Optional.empty();
     private boolean isUnderwaterMode;
+    private boolean isDebugMode;
 
     // Components
     private UserControl userControl;
@@ -389,10 +390,12 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     }
 
     public boolean isDebugMode() {
-        return config.getInteger("debug.mode") > 0;
+        return isDebugMode;
     }
 
     public void changedDebugMode() {
+        isDebugMode = config.getInteger("debug.mode") > 0;
+        
         if (isDebugMode()) {
             getChatter().printChat(TextFormatting.GOLD, "Dev/Editor mode enabled.");
             getChatter().printChatShort("Enabling this mode may cause Minecraft to run slower.");
