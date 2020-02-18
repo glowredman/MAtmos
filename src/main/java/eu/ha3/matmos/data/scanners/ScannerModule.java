@@ -41,7 +41,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
 
     private final AbstractThingCountModule base;
     private final AbstractThingCountModule weighted;
-    private final VirtualCountModule thousand;
+    private final AbstractThingCountModule thousand;
 
     private final Set<String> subModules = new HashSet<>();
 
@@ -77,21 +77,26 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
         this.zS = zS;
         this.blocksPerCall = blocksPerCall;
 
+        // XXX thousands with externalStringCountModule is broken. ExternalStringCountModule should either be fixed or removed. 
+        boolean useExternalStringCountModule = false;
+        
         if (requireThousand) {
             String thousandName = baseName + THOUSAND_SUFFIX;
-            thousand = new VirtualCountModule(data, thousandName, true);
+            if(useExternalStringCountModule) {
+                thousand = new ThousandStringCountModule(data, thousandName);
+            } else {
+                thousand = new VirtualCountModule<Pair<Block,Integer>>(data, thousandName, true);
+            }
             subModules.add(thousandName);
             data.getSheet(thousandName).setDefaultValue("0");
         } else {
             thousand = null;
         }
         
-        boolean useExternalStringCountModule = false;
-        
         if(useExternalStringCountModule) {
             this.base = new ExternalStringCountModule(data, baseName, true);
         } else {
-            this.base = new BlockCountModule(data, baseName, true, thousand);
+            this.base = new BlockCountModule(data, baseName, true, (VirtualCountModule<Pair<Block,Integer>>)thousand);
         }
         this.subModules.add(baseName);
         data.getSheet(baseName).setDefaultValue("0");
