@@ -27,6 +27,8 @@ import net.minecraft.util.math.BlockPos;
 public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     public static final String THOUSAND_SUFFIX = "_p1k";
     public static final String WEIGHTED_SUFFIX = "_w";
+    public static final String ABOVE_SUFFIX = "_above";
+    public static final String BELOW_SUFFIX = "_below";
 
     private static final int WORLD_LOADING_DURATION = 100;
 
@@ -41,8 +43,10 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     private final int blocksPerCall;
 
     private final AbstractThingCountModule base;
-    private final AbstractThingCountModule weighted;
+    private final BlockCountModule weighted;
     private final AbstractThingCountModule thousand;
+    private final BlockCountModule above;
+    private final BlockCountModule below;
 
     private final Set<String> subModules = new HashSet<>();
 
@@ -58,7 +62,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     private final Scan scanner;
     
     public static enum Submodule {
-        BASE, THOUSAND, WEIGHTED
+        BASE, THOUSAND, WEIGHTED, ABOVE, BELOW
     }
     
     private Module initSubmodule(Submodule sm, String baseName, DataPackage data) {
@@ -93,6 +97,14 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
             submoduleName = baseName + WEIGHTED_SUFFIX;
             result = new BlockCountModule(data, submoduleName, true, null);
             break;
+        case ABOVE:
+            submoduleName = baseName + ABOVE_SUFFIX;
+            result = new BlockCountModule(data, submoduleName, true, null);
+            break;
+        case BELOW:
+            submoduleName = baseName + BELOW_SUFFIX;
+            result = new BlockCountModule(data, submoduleName, true, null);
+            break;
         }
         
         if(result != null) {
@@ -124,8 +136,10 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
         this.blocksPerCall = blocksPerCall;
         
         thousand = (AbstractThingCountModule) initSubmodule(Submodule.THOUSAND, baseName, data);
-        weighted = (AbstractThingCountModule) initSubmodule(Submodule.WEIGHTED, baseName, data);
+        weighted = (BlockCountModule) initSubmodule(Submodule.WEIGHTED, baseName, data);
         base = (AbstractThingCountModule) initSubmodule(Submodule.BASE, baseName, data);
+        above = (BlockCountModule) initSubmodule(Submodule.ABOVE, baseName, data);
+        below = (BlockCountModule) initSubmodule(Submodule.BELOW, baseName, data);
         
         Scan theScanner = null;
         
@@ -307,6 +321,12 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
             IDontKnowHowToCode.warnOnce("Module " + getName() + " doesn't have a weighted counter, but the scanner tried to input a block with a weight.");
         }
         
+        if(above != null && y >= yy) {
+            above.increment(Pair.of(block, meta));
+        } else if(below != null && y < yy) {
+            below.increment(Pair.of(block, meta));
+        }
+        
         if(blockOut != null) {
             blockOut[0] = block;
         }
@@ -328,6 +348,12 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
         }
         if(weighted != null) {
             weighted.apply();
+        }
+        if(above != null) {
+            above.apply();
+        }
+        if(below != null) {
+            below.apply();
         }
         workInProgress = false;
     }

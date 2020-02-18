@@ -149,7 +149,8 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         //	this.mod, this.data, "DetectMinDist", "Detect", "_Deltas", ENTITYIDS_MAX, 2, 5, 10, 20, 50));
         // 16 * 8 * 16
         largeScanner = new ScannerModule(
-                ScanVolumetric.class, this.data, "_POM__scan_large", "scan_large", Arrays.asList(ScannerModule.Submodule.THOUSAND),
+                ScanVolumetric.class, this.data, "_POM__scan_large", "scan_large",
+                Arrays.asList(ScannerModule.Submodule.THOUSAND, ScannerModule.Submodule.ABOVE, ScannerModule.Submodule.BELOW),
                 8, 20 /*256*/, 64, 32, 64, 16 * 8 * 16/*64 * 64 * 2*/);
         addModule(largeScanner);
         
@@ -160,7 +161,8 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         
         // 16 * 4 * 16
         addModule(new ScannerModule(
-                ScanVolumetric.class, this.data, "_POM__scan_small", "scan_small", Arrays.asList(ScannerModule.Submodule.THOUSAND),
+                ScanVolumetric.class, this.data, "_POM__scan_small", "scan_small", 
+                Arrays.asList(ScannerModule.Submodule.THOUSAND),
                 -1, 2 /*64*/, 16, 8, 16, 16 * 4 * 16));
         // Each ticks, check half of the small scan
 
