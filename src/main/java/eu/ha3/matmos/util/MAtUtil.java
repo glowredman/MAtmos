@@ -31,7 +31,7 @@ public class MAtUtil {
     }
 
     public static int getPlayerY() {
-        return (int)Math.floor(getPlayer().posY);
+        return (int)Math.floor(getPlayer().posY + getPlayer().getEyeHeight());
     }
 
     public static int getPlayerZ() {
@@ -39,10 +39,7 @@ public class MAtUtil {
     }
     
     public static BlockPos getPlayerPos() {
-        Vec3d doublePos = getPlayer().getPositionVector();
-        return new BlockPos(  MathHelper.floor(doublePos.x),
-                              MathHelper.floor(doublePos.y),
-                              MathHelper.floor(doublePos.z));
+        return new BlockPos(getPlayerX(), getPlayerY(), getPlayerZ());
     }
 
     public static boolean isUnderwaterAnyGamemode() {

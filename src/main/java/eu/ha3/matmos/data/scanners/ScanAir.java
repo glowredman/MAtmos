@@ -45,7 +45,7 @@ public class ScanAir extends Scan {
 	void initScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn)
 	{
 		startX = x;
-		startY = y + 1;
+		startY = y;
 		startZ = z;
 		
 		xx = 0;

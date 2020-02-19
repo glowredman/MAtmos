@@ -31,7 +31,7 @@ public class ScanRaycast extends Scan {
     @Override
     void initScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn) {
         startX = x;
-        startY = y + 1;
+        startY = y;
         startZ = z;
         
         center = new Vec3d(startX + 0.5, startY + 0.5, startZ + 0.5);

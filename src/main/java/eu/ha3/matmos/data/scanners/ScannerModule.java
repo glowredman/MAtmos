@@ -321,10 +321,10 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
             IDontKnowHowToCode.warnOnce("Module " + getName() + " doesn't have a weighted counter, but the scanner tried to input a block with a weight.");
         }
         
-        // yy is the block the player is standing on.. so yy + 2 is the block the player's head is in
-        if(above != null && y >= yy + 2) {
+        // yy is the block the player player's head is in
+        if(above != null && y >= yy) {
             above.increment(Pair.of(block, meta));
-        } else if(below != null && y < yy + 2) {
+        } else if(below != null && y < yy) {
             below.increment(Pair.of(block, meta));
         }
         
