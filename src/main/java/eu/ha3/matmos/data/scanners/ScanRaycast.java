@@ -46,7 +46,7 @@ public class ScanRaycast extends Scan {
         raysToCast = opspercall * 20;
         
         if(rays == null || rays.length != raysToCast) {
-            rnd.setSeed(0);
+            rnd.setSeed(1);
             rays = new Vec3d[raysToCast];
             for(int i = 0; i < raysToCast; i++) {
                 double vx = 0, vy = 0, vz = 0;
@@ -64,7 +64,7 @@ public class ScanRaycast extends Scan {
         finalProgress = 1;
         
         score = 0;
-        THRESHOLD_SCORE = 25000;
+        THRESHOLD_SCORE = 20000;
     }
     
     private Vec3d getRay(int index) {
