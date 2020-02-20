@@ -23,6 +23,7 @@ public class ScanRaycast extends Scan {
     int raysCast = 0;
     int raysToCast;
     int score;
+    int distanceSqSum;
     
     private int THRESHOLD_SCORE;
     
@@ -41,6 +42,7 @@ public class ScanRaycast extends Scan {
         zSize = zsizeIn;
         
         raysCast = 0;
+        distanceSqSum = 0;
         
         opspercall = 20;
         raysToCast = opspercall * 20;
@@ -84,6 +86,7 @@ public class ScanRaycast extends Scan {
             
             pipeline.setValue(".is_outdoors", score > THRESHOLD_SCORE ? 1 : 0);
             pipeline.setValue(".__score", score);
+            pipeline.setValue(".spaciousness", distanceSqSum);
         }
         
         return true;
@@ -121,6 +124,8 @@ public class ScanRaycast extends Scan {
         int startNearness = 60;
         if(result != null) {
             BlockPos hit = result.getBlockPos();
+            
+            distanceSqSum += hit.distanceSq(center.x, center.y, center.z);
             
             Block[] blockBuf = new Block[1];
             int[] metaBuf = new int[1];
@@ -181,6 +186,7 @@ public class ScanRaycast extends Scan {
                 }
             }
         } else {
+            distanceSqSum += maxRange * maxRange;
             if(dir.y > 0) {
                 score += startNearness * 13;
             }
