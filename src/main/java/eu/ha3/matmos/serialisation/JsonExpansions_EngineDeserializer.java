@@ -197,7 +197,14 @@ public class JsonExpansions_EngineDeserializer {
             if(!normal) {
                 if(!serial.play_deep_indoors) {
                     restrictList.add("_DEEP_INDOORS");
-                    restrictList.add(indoor ? "_OUTDOORS" : "_INDOORS");
+                    if(indoor) {
+                        restrictList.add("_OUTDOORS");
+                        restrictList.add("!_INDOORS");
+                    } else {
+                        restrictList.add("!_OUTDOORS");
+                        restrictList.add("_INDOORS");
+                    }
+                    
                 } else {
                     if(indoor) {
                         restrictList.add("_OUTDOORS");
