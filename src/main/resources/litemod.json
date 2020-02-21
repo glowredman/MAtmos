@@ -7,6 +7,6 @@
 	"url": "${url}",
 	"description": "${description}",
 	"mixinConfigs": [
-        "matmos.mixin.json"
+        "haddon.mixin.json"
 	]
 }

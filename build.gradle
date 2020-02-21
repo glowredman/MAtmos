@@ -31,7 +31,7 @@ project(':forge') {
 
 project(':liteloader') {
 	apply plugin: 'net.minecraftforge.gradle.liteloader'
-	apply plugin: 'org.spongepowered.mixin'
+	
 	
 	minecraft {
 		version = "${project.mcVersion}"
@@ -39,6 +39,11 @@ project(':liteloader') {
 }
 
 subprojects {
+	apply plugin: 'org.spongepowered.mixin'
+	
+	mixin {
+		defaultObfuscationEnv notch
+	}
 	
 	configurations {
 		embed
@@ -68,9 +73,7 @@ subprojects {
 		replace '@DESCRIPTION@', project.description
 	}
 
-	/*mixin {
-		defaultObfuscationEnv notch
-	}*/
+	
 
 	sourceCompatibility = 1.8
 	targetCompatibility = 1.8
@@ -95,6 +98,9 @@ subprojects {
 			compileClasspath += main.compileClasspath
 		}
 		main {
+			java {
+				srcDir "$rootDir/src/main"
+			}
 			compileClasspath += commons.output
 		}
 		dev {

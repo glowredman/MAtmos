@@ -1,6 +1,7 @@
 package eu.ha3.matmos.gui;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -29,7 +30,8 @@ public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
     }
 
     private void computeBiomes() {
-        for (Biome i : Biome.REGISTRY) {
+        Biome i = null;
+        for (Iterator<Biome> it = Biome.REGISTRY.iterator(); it.hasNext(); i = it.next()) {
             validBiomes.add(Biome.REGISTRY.getIDForObject(i));
         }
     }
@@ -99,7 +101,8 @@ public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
     private int calculateMaxBiomes() {
         int max = 0;
 
-        for (Biome i : Biome.REGISTRY) {
+        Biome i = null;
+        for (Iterator<Biome> it = Biome.REGISTRY.iterator(); it.hasNext(); i = it.next()) {
             int id = Biome.REGISTRY.getIDForObject(i);
 
             if (id > max) {
