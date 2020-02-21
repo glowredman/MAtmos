@@ -1,0 +1,6 @@
+rootProject.name = 'MAtmos'
+
+include 'forge', 'liteloader'
+
+project(":forge").projectDir = file("projects/forge")
+project(":liteloader").projectDir = file("projects/liteloader")

@@ -1,121 +1,141 @@
 buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven {
-            name 'forge'
-            url 'http://files.minecraftforge.net/maven/'
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
-        maven {
-            name = 'sponge'
-            url = 'http://repo.spongepowered.org/maven'
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:' + project.forgeGradleVersion
-        classpath 'org.spongepowered:mixingradle:' + project.mixinGradleVersion
-    }
-}
-configurations {
-	embed
-	compile.extendsFrom(embed)
-}
-dependencies {
-	embed 'net.sf.practicalxml:practicalxml:1.1.19'
-}
-apply plugin: 'net.minecraftforge.gradle.liteloader'
-apply plugin: 'org.spongepowered.mixin'
-
-def ver = "${project.mcVersion}.${project.buildVersion}-${project.buildType}"
-
-version = ver
-group = project.group
-description = project.name
-archivesBaseName = 'presencefootsteps'
-ext.revision = "0"
-
-minecraft {
-    version = project.mcVersion
-    mappings = project.mcMappings
-    runDir = 'run'
-    replace '@MODID@', project.modid
-    replace '@NAME@', project.name
-    replace '@AUTHOR@', project.author
-    replace '@VERSION@', ver
-    replace '@DESCRIPTION@', project.description
+	repositories {
+		mavenCentral()
+		jcenter()
+		maven {
+			name 'forge'
+			url 'http://files.minecraftforge.net/maven/'
+		}
+		maven {
+			name = "sonatype"
+			url = "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+		maven {
+			name = 'sponge'
+			url = 'http://repo.spongepowered.org/maven'
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:' + project.forgeGradleVersion
+		classpath 'org.spongepowered:mixingradle:' + project.mixinGradleVersion
+	}
 }
 
-mixin {
-    defaultObfuscationEnv notch
+project(':forge') {
+	apply plugin: 'net.minecraftforge.gradle.forge'
+	
+	minecraft {
+		version = "${project.mcVersion}-${project.forgeVersion}"
+	}
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+project(':liteloader') {
+	apply plugin: 'net.minecraftforge.gradle.liteloader'
+	apply plugin: 'org.spongepowered.mixin'
+	
+	minecraft {
+		version = "${project.mcVersion}"
+	}
+}
 
-def expensionPacks = [
-    default: 'Matmos Default Resourcepack 1.10',
-    air: 'MAtmos default 2012 pack Air',
-    breeze: 'MAtmos default 2014 pack Breeze'
-]
+subprojects {
+	
+	configurations {
+		embed
+		compile.extendsFrom(embed)
+	}
+	dependencies {
+		embed 'net.sf.practicalxml:practicalxml:1.1.19'
+	}
 
-sourceSets {
-	soundpacks {
-        resources {
-            srcDirs "src/soundpacks"
-        }
-    }
-	commons {
-		java {
-			srcDir "lib/MC-Commons/mc-src"
+
+
+	def ver = "${project.mcVersion}.${project.buildVersion}-${project.buildType}"
+
+	version = ver
+	group = project.group
+	description = project.name
+	archivesBaseName = project.modid
+	ext.revision = "0"
+
+	minecraft {
+		mappings = project.mcMappings
+		runDir = 'run'
+		replace '@MODID@', project.modid
+		replace '@NAME@', project.name
+		replace '@AUTHOR@', project.author
+		replace '@VERSION@', ver
+		replace '@DESCRIPTION@', project.description
+	}
+
+	/*mixin {
+		defaultObfuscationEnv notch
+	}*/
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+
+	def expensionPacks = [
+		default: 'Matmos Default Resourcepack 1.10',
+		air: 'MAtmos default 2012 pack Air',
+		breeze: 'MAtmos default 2014 pack Breeze'
+	]
+
+	sourceSets {
+		soundpacks {
+			resources {
+				srcDirs "$rootDir/src/soundpacks"
+			}
+		}
+		commons {
+			java {
+				srcDir "$rootDir/lib/MC-Commons/mc-src"
+			}
+
+			compileClasspath += main.compileClasspath
+		}
+		main {
+			compileClasspath += commons.output
+		}
+		dev {
+			compileClasspath += main.output
+		}
+	}
+
+	jar {
+		def props = [
+			modid: project.modid,
+			name: project.name,
+			description: project.description,
+			version: ver,
+			revision: project.buildRevision,
+			mcversion: project.mcVersion,
+			author: project.author,
+			url: project.url
+		]
+		inputs.properties props
+
+		from(sourceSets.main.output) {
+			exclude 'litemod.json'
+		}
+		from(sourceSets.main.output) {
+			include 'litemod.json'
+			expand props
 		}
 
-        compileClasspath += main.compileClasspath
+		from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
 	}
-	main {
-		compileClasspath += commons.output
+
+	task allPacks { }
+
+	expensionPacks.each {k, v ->
+		def pack = task "${k}"(type: Zip) {
+			baseName v
+			from(sourceSets.soundpacks) {
+				include k
+				include 'common'
+			}
+		}
+		allPacks.dependsOn pack
 	}
-	dev {
-		compileClasspath += main.output
-	}
-}
-
-jar {
-    def props = [
-        modid: project.modid,
-        name: project.name,
-        description: project.description,
-        version: ver,
-        revision: project.buildRevision,
-        mcversion: project.mcVersion,
-        author: project.author,
-        url: project.url
-    ]
-    inputs.properties props
-
-    from(sourceSets.main.output) {
-        exclude 'litemod.json'
-    }
-    from(sourceSets.main.output) {
-        include 'litemod.json'
-        expand props
-    }
-
-    from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
-}
-
-task allPacks { }
-
-expensionPacks.each {k, v ->
-    def pack = task "${k}"(type: Zip) {
-        baseName v
-        from(sourceSets.soundpacks) {
-            include k
-            include 'common'
-        }
-    }
-    allPacks.dependsOn pack
 }
