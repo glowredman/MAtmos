@@ -26,6 +26,7 @@ project(':forge') {
 	
 	minecraft {
 		version = "${project.mcVersion}-${project.forgeVersion}"
+		coreMod = 'eu.ha3.mc.haddon.forge.MixinLoaderForge'
 	}
 }
 
@@ -40,7 +41,7 @@ project(':liteloader') {
 
 subprojects {
 	apply plugin: 'org.spongepowered.mixin'
-	
+
 	mixin {
 		defaultObfuscationEnv notch
 	}
@@ -51,7 +52,9 @@ subprojects {
 	}
 	dependencies {
 		embed 'net.sf.practicalxml:practicalxml:1.1.19'
+		embed 'org.spongepowered:mixin:0.8'
 	}
+
 
 
 
@@ -73,7 +76,7 @@ subprojects {
 		replace '@DESCRIPTION@', project.description
 	}
 
-	
+
 
 	sourceCompatibility = 1.8
 	targetCompatibility = 1.8
@@ -84,23 +87,53 @@ subprojects {
 		breeze: 'MAtmos default 2014 pack Breeze'
 	]
 
+	compileJava {
+
+		doFirst {
+			println "time to print the sourceSets!"
+			for(sourceSet in sourceSets){
+				println "\nname:  " + sourceSet.name
+				println "allSource: " + sourceSet.allSource
+				println "output: " + sourceSet.output.files
+				println "java.outputDir: " + sourceSet.java.outputDir
+				println "java.srcDirs: " + sourceSet.java.srcDirs
+			}
+		}
+	}
+
+
 	sourceSets {
 		soundpacks {
 			resources {
-				srcDirs "$rootDir/src/soundpacks"
+				srcDirs = ["${rootDir}/src/soundpacks/resources"]
 			}
 		}
 		commons {
 			java {
-				srcDir "$rootDir/lib/MC-Commons/mc-src"
+				srcDirs = ["${rootDir}/lib/MC-Commons/mc-src"]
+				exclude 'eu/ha3/mc/haddon/litemod/**'
+				//exclude 'eu/ha3/mc/haddon/forge/**'
 			}
+			resources {
+				srcDirs = ["${rootDir}/lib/MC-Commons/mc-src/resources"]
+				exclude '**/haddon_core.mixin.json'
+			}
+
+			refMap = "haddon_core.mixin.refmap.json"
 
 			compileClasspath += main.compileClasspath
 		}
 		main {
 			java {
-				srcDir "$rootDir/src/main"
+				srcDirs = ["${rootDir}/src/main/java"]
+				exclude '**/LiteModMAtmos.java'
+				//exclude '**/ForgeMatmos.java'
 			}
+			resources {
+				srcDirs = ["${rootDir}/src/main/resources", commons.resources.srcDirs]
+			}
+			refMap = "haddon.mixin.refmap.json"
+
 			compileClasspath += commons.output
 		}
 		dev {
@@ -109,27 +142,70 @@ subprojects {
 	}
 
 	jar {
-		def props = [
-			modid: project.modid,
-			name: project.name,
-			description: project.description,
-			version: ver,
-			revision: project.buildRevision,
-			mcversion: project.mcVersion,
-			author: project.author,
-			url: project.url
-		]
-		inputs.properties props
+		manifest {
+			attributes (
+				'FMLCorePlugin': 'eu.ha3.mc.haddon.forge.MixinLoaderForge',
+				'FMLCorePluginContainsFMLMod': 'true',
 
-		from(sourceSets.main.output) {
+				'MixinConfigs': 'haddon.mixin.json,haddon_core.mixin.json',
+				'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+				'TweakOrder': 0,
+				'ForceLoadAsMod': 'true'
+			)
+		}
+
+		from(sourceSets.commons.output);
+
+		/*from(sourceSets.main.output) {
 			exclude 'litemod.json'
 		}
 		from(sourceSets.main.output) {
 			include 'litemod.json'
-			expand props
-		}
+			//expand props
+		}*/
 
-		from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
+
+
+		// embed libraries in jar
+		// TODO shadow to avoid conflicts?
+		from configurations.embed.collect {
+			exclude '**/LICENSE.txt'
+			it.isDirectory() ? it : zipTree(it)
+		}
+	}
+	
+	extractAnnotationsJar.doFirst {
+		println "main:"
+		    sourceSets.main.output.resourcesDir.listFiles().each {
+				System.out.println('Resources: ' + it.absolutePath)
+			}
+			sourceSets.main.output.classesDir.listFiles().each {
+				System.out.println('Classes: ' + it.absolutePath)
+			}
+			
+		println "commons:"
+		    sourceSets.commons.output.resourcesDir.listFiles().each {
+				System.out.println('Resources: ' + it.absolutePath)
+			}
+			sourceSets.commons.output.classesDir.listFiles().each {
+				System.out.println('Classes: ' + it.absolutePath)
+			}
+			
+		println "soundpacks:"
+		    sourceSets.soundpacks.output.resourcesDir.listFiles().each {
+				System.out.println('Resources: ' + it.absolutePath)
+			}
+			sourceSets.soundpacks.output.classesDir.listFiles().each {
+				System.out.println('Classes: ' + it.absolutePath)
+			}
+			
+		println "dev:"
+		    sourceSets.dev.output.resourcesDir.listFiles().each {
+				System.out.println('Resources: ' + it.absolutePath)
+			}
+			sourceSets.dev.output.classesDir.listFiles().each {
+				System.out.println('Classes: ' + it.absolutePath)
+			}
 	}
 
 	task allPacks { }
@@ -143,5 +219,48 @@ subprojects {
 			}
 		}
 		allPacks.dependsOn pack
+	}
+
+	processResources {
+		// this will ensure that this task is redone when the versions change.
+		inputs.property "version", project.version
+		inputs.property "mcversion", project.minecraft.version
+
+
+		println("sourceSets.main.resources: " + sourceSets.main.resources)
+		println("sourceSets.main.resources.srcDirs: " + sourceSets.main.resources.srcDirs)
+
+		// replace stuff in mcmod.info, nothing else
+		from(sourceSets.main.resources.srcDirs) {
+			include 'mcmod.info'
+
+			// replace version and mcversion
+			expand 'version':project.version, 'mcversion':project.minecraft.version
+		}
+
+		def props = [
+				modid: project.modid,
+				name: project.name,
+				description: project.description,
+				version: ver,
+				revision: project.buildRevision,
+				mcversion: project.mcVersion,
+				author: project.author,
+				url: project.url
+		]
+		inputs.properties props
+
+		// replace stuff in litemod.json, nothing else
+		from(sourceSets.main.resources.srcDirs) {
+			include 'litemod.json'
+
+			// replace props
+			expand props
+		}
+
+		// copy everything else except the mcmod.info
+		from(sourceSets.main.resources.srcDirs) {
+			exclude(['mcmod.info', 'litemod.json'])
+		}
 	}
 }

@@ -2,7 +2,7 @@
     "required": true,
     "minVersion": "0.7",
     "package": "eu.ha3.matmos.core.mixin",
-    "refmap": "matmos.mixin.refmap.json",
+    "refmap": "haddon.mixin.refmap.json",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
         "IEntity",
