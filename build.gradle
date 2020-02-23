@@ -21,21 +21,50 @@ buildscript {
 	}
 }
 
+subprojects {
+	configurations {
+		embed
+		compile.extendsFrom(embed)
+	}
+}
+
 project(':forge') {
 	apply plugin: 'net.minecraftforge.gradle.forge'
-	
+
 	minecraft {
 		version = "${project.mcVersion}-${project.forgeVersion}"
 		coreMod = 'eu.ha3.mc.haddon.forge.MixinLoaderForge'
+	}
+
+	dependencies {
+		embed 'org.spongepowered:mixin:0.8'
+	}
+
+	sourceSets {
+		commons.java.exclude 'eu/ha3/mc/haddon/litemod/**'
+
+		main.java.exclude '**/LiteModMAtmos.java'
+
+		main.resources.exclude '**/litemod.json'
 	}
 }
 
 project(':liteloader') {
 	apply plugin: 'net.minecraftforge.gradle.liteloader'
-	
-	
+
 	minecraft {
 		version = "${project.mcVersion}"
+	}
+
+	sourceSets {
+		commons.java.exclude 'eu/ha3/mc/haddon/forge/**'
+
+		commons.resources.exclude '**/haddon_core.mixin.json'
+
+		main.java.exclude '**/ForgeMatmos.java'
+
+		main.resources.exclude '**/mcmod.info'
+		main.resources.exclude '**/pack.mcmeta'
 	}
 }
 
@@ -46,17 +75,10 @@ subprojects {
 		defaultObfuscationEnv notch
 	}
 	
-	configurations {
-		embed
-		compile.extendsFrom(embed)
-	}
+
 	dependencies {
 		embed 'net.sf.practicalxml:practicalxml:1.1.19'
-		embed 'org.spongepowered:mixin:0.8'
 	}
-
-
-
 
 	def ver = "${project.mcVersion}.${project.buildVersion}-${project.buildType}"
 
@@ -76,8 +98,6 @@ subprojects {
 		replace '@DESCRIPTION@', project.description
 	}
 
-
-
 	sourceCompatibility = 1.8
 	targetCompatibility = 1.8
 
@@ -86,21 +106,6 @@ subprojects {
 		air: 'MAtmos default 2012 pack Air',
 		breeze: 'MAtmos default 2014 pack Breeze'
 	]
-
-	compileJava {
-
-		doFirst {
-			println "time to print the sourceSets!"
-			for(sourceSet in sourceSets){
-				println "\nname:  " + sourceSet.name
-				println "allSource: " + sourceSet.allSource
-				println "output: " + sourceSet.output.files
-				println "java.outputDir: " + sourceSet.java.outputDir
-				println "java.srcDirs: " + sourceSet.java.srcDirs
-			}
-		}
-	}
-
 
 	sourceSets {
 		soundpacks {
@@ -111,12 +116,9 @@ subprojects {
 		commons {
 			java {
 				srcDirs = ["${rootDir}/lib/MC-Commons/mc-src"]
-				exclude 'eu/ha3/mc/haddon/litemod/**'
-				//exclude 'eu/ha3/mc/haddon/forge/**'
 			}
 			resources {
 				srcDirs = ["${rootDir}/lib/MC-Commons/mc-src/resources"]
-				exclude '**/haddon_core.mixin.json'
 			}
 
 			refMap = "haddon_core.mixin.refmap.json"
@@ -126,11 +128,10 @@ subprojects {
 		main {
 			java {
 				srcDirs = ["${rootDir}/src/main/java"]
-				exclude '**/LiteModMAtmos.java'
-				//exclude '**/ForgeMatmos.java'
+
 			}
 			resources {
-				srcDirs = ["${rootDir}/src/main/resources", commons.resources.srcDirs]
+				srcDirs = ["${rootDir}/src/main/resources"]
 			}
 			refMap = "haddon.mixin.refmap.json"
 
@@ -156,56 +157,12 @@ subprojects {
 
 		from(sourceSets.commons.output);
 
-		/*from(sourceSets.main.output) {
-			exclude 'litemod.json'
-		}
-		from(sourceSets.main.output) {
-			include 'litemod.json'
-			//expand props
-		}*/
-
-
-
 		// embed libraries in jar
 		// TODO shadow to avoid conflicts?
 		from configurations.embed.collect {
 			exclude '**/LICENSE.txt'
 			it.isDirectory() ? it : zipTree(it)
 		}
-	}
-	
-	extractAnnotationsJar.doFirst {
-		println "main:"
-		    sourceSets.main.output.resourcesDir.listFiles().each {
-				System.out.println('Resources: ' + it.absolutePath)
-			}
-			sourceSets.main.output.classesDir.listFiles().each {
-				System.out.println('Classes: ' + it.absolutePath)
-			}
-			
-		println "commons:"
-		    sourceSets.commons.output.resourcesDir.listFiles().each {
-				System.out.println('Resources: ' + it.absolutePath)
-			}
-			sourceSets.commons.output.classesDir.listFiles().each {
-				System.out.println('Classes: ' + it.absolutePath)
-			}
-			
-		println "soundpacks:"
-		    sourceSets.soundpacks.output.resourcesDir.listFiles().each {
-				System.out.println('Resources: ' + it.absolutePath)
-			}
-			sourceSets.soundpacks.output.classesDir.listFiles().each {
-				System.out.println('Classes: ' + it.absolutePath)
-			}
-			
-		println "dev:"
-		    sourceSets.dev.output.resourcesDir.listFiles().each {
-				System.out.println('Resources: ' + it.absolutePath)
-			}
-			sourceSets.dev.output.classesDir.listFiles().each {
-				System.out.println('Classes: ' + it.absolutePath)
-			}
 	}
 
 	task allPacks { }
@@ -225,10 +182,6 @@ subprojects {
 		// this will ensure that this task is redone when the versions change.
 		inputs.property "version", project.version
 		inputs.property "mcversion", project.minecraft.version
-
-
-		println("sourceSets.main.resources: " + sourceSets.main.resources)
-		println("sourceSets.main.resources.srcDirs: " + sourceSets.main.resources.srcDirs)
 
 		// replace stuff in mcmod.info, nothing else
 		from(sourceSets.main.resources.srcDirs) {
