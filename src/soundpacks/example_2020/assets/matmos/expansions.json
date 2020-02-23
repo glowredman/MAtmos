@@ -1,9 +1,0 @@
-{
-	"expansions" : [
-		{
-			"uniquename" : "eu.ha3.example.expansion1",
-			"friendlyname" : "Example 2020: Expansion 1",
-			"pointer" : "expansions/example_database.json"
-		}
-	]
-}
