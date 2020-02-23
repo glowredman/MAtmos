@@ -43,6 +43,7 @@ public class ForgeMatmos extends ForgeBase
     
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        super.init(event);
+        super.init(event, MODID, NAME, VERSION);
     }
+    
 }
