@@ -44,4 +44,8 @@ public class ResourcePackDealer {
     public InputStream openExpansionsPointerFile(IResourcePack pack) throws IOException {
         return pack.getInputStream(expansions);
     }
+    
+    public InputStream openMatPackPointerFile(IResourcePack pack) throws IOException {
+        return pack.getInputStream(mat_pack);
+    }
 }

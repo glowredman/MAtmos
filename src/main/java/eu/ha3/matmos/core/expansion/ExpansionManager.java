@@ -1,8 +1,11 @@
 package eu.ha3.matmos.core.expansion;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.IOUtils;
 
@@ -30,6 +33,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     private final File userconfigFolder;
 
     private final ResourcePackDealer dealer = new ResourcePackDealer();
+    private final List<SoundpackIdentity> soundpackIdentities = new ArrayList<SoundpackIdentity>();
     private final Map<String, Expansion> expansions = new HashMap<>();
 
     private DataPackage data;
@@ -50,31 +54,44 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     public void loadExpansions() {
         dispose();
 
-        dealer.findResourcePacks().forEach(this::readExpansionsFile);
+        dealer.findResourcePacks().forEach(this::readSoundPack);
     }
-
-    private void readExpansionsFile(IResourcePack pack) {
-        try {
-            InputStream is = dealer.openExpansionsPointerFile(pack);
-            String jasonString = IOUtils.toString(is, "UTF-8");
-
-            JsonObject jason = new JsonParser().parse(jasonString).getAsJsonObject();
-            JsonArray expansions = jason.get("expansions").getAsJsonArray();
-
-            for (JsonElement element : expansions) {
-                JsonObject o = element.getAsJsonObject();
-                String uniqueName = MAtUtil.sanitizeUniqueName(o.get("uniquename").getAsString());
-                String friendlyName = o.get("friendlyname").getAsString();
-                String pointer = o.get("pointer").getAsString();
-                ResourceLocation location = new ResourceLocation("matmos", pointer);
-                if (pack.resourceExists(location)) {
-                    addExpansion(new ExpansionIdentity(uniqueName, friendlyName, pack, location));
-                } else {
-                    Matmos.LOGGER.warn("An expansion pointer doesn't exist: " + pointer);
-                }
+    
+    private void readSoundPack(IResourcePack pack) {
+        try (   InputStream matPackStream = dealer.openMatPackPointerFile(pack);
+                InputStream expansionsStream = dealer.openExpansionsPointerFile(pack)){
+            String matPackJSONString = IOUtils.toString(matPackStream, "UTF-8");
+            String expansionsJSONString = IOUtils.toString(expansionsStream, "UTF-8");
+            
+            if(readMatPackFile(new JsonParser().parse(matPackJSONString).getAsJsonObject())) {
+                readExpansionsFile(new JsonParser().parse(expansionsJSONString).getAsJsonObject(), pack);
             }
         } catch (Exception e) {
             Matmos.LOGGER.warn(pack + " " + "has failed with an error: " + e.getMessage());
+        }
+    }
+    
+    /*** Returns false if reading the pack should be cancelled */ 
+    private boolean readMatPackFile(JsonObject matPackRoot) {
+        soundpackIdentities.add(new SoundpackIdentity(matPackRoot));
+        
+        return true;
+    }
+    
+    private void readExpansionsFile(JsonObject expansionsRoot, IResourcePack pack) {
+        JsonArray expansions = expansionsRoot.get("expansions").getAsJsonArray();
+
+        for (JsonElement element : expansions) {
+            JsonObject o = element.getAsJsonObject();
+            String uniqueName = MAtUtil.sanitizeUniqueName(o.get("uniquename").getAsString());
+            String friendlyName = o.get("friendlyname").getAsString();
+            String pointer = o.get("pointer").getAsString();
+            ResourceLocation location = new ResourceLocation("matmos", pointer);
+            if (pack.resourceExists(location)) {
+                addExpansion(new ExpansionIdentity(uniqueName, friendlyName, pack, location));
+            } else {
+                Matmos.LOGGER.warn("An expansion pointer doesn't exist: " + pointer);
+            }
         }
     }
 
