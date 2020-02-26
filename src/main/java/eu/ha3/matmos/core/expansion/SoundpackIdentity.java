@@ -105,4 +105,14 @@ public class SoundpackIdentity implements UpdatableIdentity {
     public int hashCode() {
         return Objects.hash(type, engineVersion, name, author, website, uniqueName, version, updateJson);
     }
+
+    @Override
+    public String getPlatformName() {
+        return "the MAtmos sound engine";
+    }
+    
+    @Override
+    public HaddonVersion getPlatformVersion() {
+        return new HaddonVersion(0);
+    }
 }
