@@ -402,6 +402,12 @@
       "symbol": "LESSER",
       "value": "40"
     },
+    "Random 1mins 50%": {
+      "sheet": "timed_random",
+      "index": "timed_random_01mins",
+      "symbol": "LESSER",
+      "value": "50"
+    },
     "Y>100": {
       "sheet": "cb_pos",
       "index": "y",
@@ -425,6 +431,11 @@
     "Random 1mins 20%": {
       "yes": [
         "Random 1mins 20%"
+      ]
+    },
+    "Random 1mins 50%": {
+      "yes": [
+        "Random 1mins 50%"
       ]
     },
     "Nether main": {
@@ -489,9 +500,9 @@
         "Nearby land (L)"
       ]
     },
-    "Random 1mins 40%": {
+    "Random 1mins 50%": {
       "yes": [
-        "Random 1mins 40%"
+        "Random 1mins 50%"
       ]
     },
     "Sea": {
@@ -1277,7 +1288,7 @@
         "indoor": [
           {
             "path": "matmos_hl/loop/torch.ogg",
-            "vol": 0.26,
+            "vol": 0.16,
             "pitch": 1.0,
             "looping": true,
             "pause": false
@@ -1294,22 +1305,45 @@
         ]
       }
     },
-    "Cave": {
+    "Cave A": {
       "allow": [
         "_DEEP_INDOORS"
       ],
       "restrict": [
         "_INDOORS",
         "_OUTDOORS",
-        "The End"
+        "The End",
+        "!Random 1mins 50%"
       ],
       "fadein": 2.0,
       "fadeout": 2.0,
       "delay_fadein": 0.0,
       "delay_fadeout": 0.0,
       "stream": {
-            "path": "matmos_hl/loop/cave.ogg",
-            "vol": 0.4,
+            "path": "matmos_hl/loop/cave_a.ogg",
+            "vol": 0.45,
+            "pitch": 1.0,
+            "looping": true,
+            "pause": false
+      }
+    },
+    "Cave B": {
+      "allow": [
+        "_DEEP_INDOORS"
+      ],
+      "restrict": [
+        "_INDOORS",
+        "_OUTDOORS",
+        "The End",
+        "Random 1mins 50%"
+      ],
+      "fadein": 2.0,
+      "fadeout": 2.0,
+      "delay_fadein": 0.0,
+      "delay_fadeout": 0.0,
+      "stream": {
+            "path": "matmos_hl/loop/cave_b.ogg",
+            "vol": 0.45,
             "pitch": 1.0,
             "looping": true,
             "pause": false
