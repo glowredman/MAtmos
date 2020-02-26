@@ -2,8 +2,11 @@
 	"type"	: "pack_matmos",
 	"engineversion"	: 0,
 	"metadata"	: {
-		"name"	: "Seamless loops and indoors/outdoors variations!",
-		"author"	: "makamys",
-		"website"	: "http://matmos.ha3.eu"
-	}
+		"name"	     : "MAt2020",
+		"author"	   : "makamys",
+		"website"	   : "http://matmos.ha3.eu"
+	},
+  "uniquename" : "makamys.mat2020",
+  "version"    : "1.0",
+  "updatejson": "http://localhost:8000/update_mat2020.json"
 }

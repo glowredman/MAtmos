@@ -120,6 +120,10 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     public Map<String, Expansion> getExpansions() {
         return expansions;
     }
+    
+    public List<SoundpackIdentity> getSoundpackIdentities(){
+        return soundpackIdentities;
+    }
 
     private void synchronizeStable(Expansion expansion) {
         if (expansion == null) {

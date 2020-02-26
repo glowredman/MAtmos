@@ -25,6 +25,7 @@ import eu.ha3.matmos.game.user.VisualDebugger;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.haddon.Identity;
 import eu.ha3.mc.haddon.OperatorCaster;
+import eu.ha3.mc.haddon.UpdatableIdentity;
 import eu.ha3.mc.haddon.implem.HaddonIdentity;
 import eu.ha3.mc.haddon.implem.HaddonImpl;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
@@ -56,7 +57,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     // NotifiableHaddon and UpdateNotifier
     private final ConfigProperty config = new ConfigProperty();
     private final Chatter chatter = new Chatter(this, "<MAtmos> ");
-    private final UpdateNotifier updateNotifier = new UpdateNotifier(this, "http://q.mc.ha3.eu/query/matmos-main-version-vn.json?ver=%d");
+    private final UpdateNotifier updateNotifier = new UpdateNotifier(this, "http://localhost:8000/matmos_update.json");
 
     // State
     private boolean isListenerInstalled;
@@ -372,6 +373,14 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         if (isActivated()) {
             simulacrum.get().saveConfig();
         }
+    }
+    
+    public void addUpdateNotifierJob(UpdatableIdentity id) {
+        updateNotifier.addJob(id);
+    }
+    
+    public void attemptUpdateNotifier() {
+        updateNotifier.attempt();
     }
 
     public VisualDebugger getVisualDebugger() {

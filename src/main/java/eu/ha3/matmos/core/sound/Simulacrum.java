@@ -9,6 +9,7 @@ import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.ResourcePackDealer;
 import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.ExpansionManager;
+import eu.ha3.matmos.core.expansion.SoundpackIdentity;
 import eu.ha3.matmos.core.expansion.VolumeUpdatable;
 import eu.ha3.matmos.data.modules.ModuleRegistry;
 import eu.ha3.matmos.game.user.VisualDebugger;
@@ -45,6 +46,10 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
             if (dealer.findResourcePacks().count() == 0) {
                 hasResourcePacks = false;
                 hasDisabledResourcePacks = dealer.findDisabledResourcePacks().size() > 0;
+            }
+        } else {
+            for(SoundpackIdentity id : expansionManager.getSoundpackIdentities()) {
+                mod.addUpdateNotifierJob(id);
             }
         }
 
