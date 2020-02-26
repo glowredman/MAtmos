@@ -121,7 +121,7 @@ subprojects {
 				srcDirs = ["${rootDir}/lib/MC-Commons/mc-src/resources"]
 			}
 
-			refMap = "haddon_core.mixin.refmap.json"
+			ext.refMap = "haddon_core.mixin.refmap.json"
 
 			compileClasspath += main.compileClasspath
 		}
@@ -133,7 +133,7 @@ subprojects {
 			resources {
 				srcDirs = ["${rootDir}/src/main/resources"]
 			}
-			refMap = "haddon.mixin.refmap.json"
+			ext.refMap = "haddon.mixin.refmap.json"
 
 			compileClasspath += commons.output
 		}
