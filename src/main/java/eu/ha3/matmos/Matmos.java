@@ -29,6 +29,7 @@ import eu.ha3.mc.haddon.UpdatableIdentity;
 import eu.ha3.mc.haddon.implem.HaddonIdentity;
 import eu.ha3.mc.haddon.implem.HaddonImpl;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
+import eu.ha3.mc.haddon.supporting.SupportsInGameChangeEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
 import eu.ha3.mc.quick.chat.Chatter;
 import eu.ha3.mc.quick.update.NotifiableHaddon;
@@ -42,7 +43,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import paulscode.sound.SoundSystemConfig;
 
-public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, NotifiableHaddon, IResourceManagerReloadListener, Stable {
+public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, SupportsInGameChangeEvents, NotifiableHaddon, IResourceManagerReloadListener, Stable {
     private static final boolean _COMPILE_IS_UNSTABLE = true;
 
     public static final Logger LOGGER = LogManager.getLogger();
@@ -122,9 +123,6 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         userControl.load();
 
         LOGGER.info("Took " + timeMeasure.getSecondsAsString(3) + " seconds to setup MAtmos base.");
-        if (config.getBoolean("start.enabled")) {
-            start();
-        }
     }
 
     private void resetAmbientVolume() {
@@ -423,5 +421,16 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
             return Optional.empty();
         }
         return Optional.of(simulacrum.get().getExpansions().get(expansionName));
+    }
+
+    @Override
+    public void onInGameChange(boolean inGame) {
+        if(inGame) {
+            if (config.getBoolean("start.enabled")) {
+                start();
+            }
+        } else {
+            deactivate();
+        }
     }
 }
