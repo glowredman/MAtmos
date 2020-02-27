@@ -222,6 +222,8 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
             }
         }
 
+        capabilities.activate();
+
         isActive = true;
 
     }
@@ -235,6 +237,8 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
         if (collector != null) {
             collector.removeModuleStack(identity.getUniqueName());
         }
+        
+        capabilities.deactivate();
 
         isActive = false;
     }

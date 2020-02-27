@@ -4,18 +4,21 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import eu.ha3.matmos.Matmos;
+import eu.ha3.matmos.core.expansion.Stable;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-public class SoundHelper implements SoundCapabilities {
+public class SoundHelper implements SoundCapabilities, Stable {
 
     protected final Map<String, NoAttenuationMovingSound> streaming = new LinkedHashMap<>();
 
     private float volumeModulator;
 
     private boolean isInterrupt;
+    
+    private boolean isActivated;
 
     @Override
     public void playMono(String event, double xx, double yy, double zz, float volume, float pitch) {
@@ -111,8 +114,11 @@ public class SoundHelper implements SoundCapabilities {
     @Override
     public void applyVolume(float volumeMod) {
         volumeModulator = volumeMod;
-        for (StreamingSound sound : streaming.values()) {
-            sound.applyVolume(volumeMod);
+        
+        if(isActivated || volumeMod == 0) {
+            for (StreamingSound sound : streaming.values()) {
+                sound.applyVolume(volumeMod);
+            }
         }
     }
 
@@ -131,6 +137,32 @@ public class SoundHelper implements SoundCapabilities {
             sound.dispose();
         }
         streaming.clear();
+    }
+    
+    @Override
+    public boolean isActivated() {
+        return isActivated;
+    }
+
+    @Override
+    public void activate() {
+        if(isActivated) return;
+        
+        applyVolume(volumeModulator);
+        isActivated = true;
+    }
+
+    @Override
+    public void deactivate() {
+        if(!isActivated) return;
+        
+        applyVolume(0);
+        isActivated = false;
+    }
+
+    @Override
+    public void dispose() {
+        cleanUp();
     }
 
 }
