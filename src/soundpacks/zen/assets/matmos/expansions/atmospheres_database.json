@@ -276,11 +276,17 @@
       "symbol": "GREATER",
       "value": "100"
     },
-    "Plains 1% (L)": {
+    "Grass 2% (L)": {
       "sheet": "scan_large_p1k",
       "index": "minecraft:grass",
       "symbol": "GREATER",
-      "value": "10"
+      "value": "19"
+    },
+    "Grass 8% (S)": {
+      "sheet": "scan_small_p1k",
+      "index": "minecraft:grass",
+      "symbol": "GREATER",
+      "value": "80"
     },
     "Receive Sunlight": {
       "sheet": "cb_light",
@@ -607,7 +613,7 @@
     "Forest": {
       "yes": [
         "Air 30% (L)",
-        "Plains 1% (L)",
+        "Grass 2% (L)",
         "Trees 512 (L)"
       ],
       "no": []
@@ -818,11 +824,16 @@
         
       ]
     },
-    "Plains": {
+    "Plains (L)": {
       "yes": [
         "Air 30% (L)",
-        "Plains 1% (L)",
-        "Nearby grass (1)"
+        "Grass 2% (L)"
+      ],
+      "no": []
+    },
+    "Plains (S)": {
+      "yes": [
+        "Grass 8% (S)"
       ],
       "no": []
     },
@@ -969,7 +980,8 @@
         "ZZZ DEBUG TRUE"
       ],
       "restrict": [
-        "Plains",
+        "Plains (S)",
+        "Plains (L)",
         "Leaves (S)",
         "Leaves (L)",
         "Outdoors at night",
@@ -1016,7 +1028,8 @@
         "ZZZ DEBUG TRUE"
       ],
       "restrict": [
-        "Plains",
+        "Plains (S)",
+        "Plains (L)",
         "Leaves (S)",
         "Leaves (L)",
         "Not outdoors",
@@ -1044,7 +1057,8 @@
     },
     "Surface, vegetation": {
       "allow": [
-        "Plains",
+        "Plains (S)",
+        "Plains (L)",
         "Leaves (S)",
         "Leaves (L)",
         "Forest"
@@ -1103,7 +1117,8 @@
     },
     "Surface, vegetation, night": {
       "allow": [
-        "Plains",
+        "Plains (S)",
+        "Plains (L)",
         "Leaves (S)",
         "Leaves (L)",
         "Forest",
