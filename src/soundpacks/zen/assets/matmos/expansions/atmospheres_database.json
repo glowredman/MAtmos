@@ -439,6 +439,11 @@
         "Random 1mins 20%"
       ]
     },
+    "Random 1mins 40%": {
+      "yes": [
+        "Random 1mins 40%"
+      ]
+    },
     "Random 1mins 50%": {
       "yes": [
         "Random 1mins 50%"
@@ -1238,7 +1243,9 @@
         "High altitude",
         "Is Underwater Directly",
         "Is Underwater Indirectly (S)",
-        "Is Underwater Indirectly (L)"
+        "Is Underwater Indirectly (L)",
+        "_INDOORS",
+        "_DEEP_INDOORS"
       ],
       "fadein": 3.0,
       "fadeout": 3.0,
@@ -1257,13 +1264,15 @@
       "restrict": [
         "Is Underwater Directly",
         "Is Underwater Indirectly (S)",
-        "Is Underwater Indirectly (L)"
+        "Is Underwater Indirectly (L)",
+        "_INDOORS",
+        "_DEEP_INDOORS"
       ],
       "fadein": 3.0,
       "fadeout": 3.0,
       "stream": {
             "path": "matmos_hl/loop/mountain_wind.ogg",
-            "vol": 0.17,
+            "vol": 0.07,
             "pitch": 1.0,
             "looping": true,
             "pause": false
