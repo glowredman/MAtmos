@@ -16,6 +16,7 @@ import eu.ha3.matmos.util.IDontKnowHowToCode;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.world.BossInfo.Color;
 
 public class VisualExpansionDebugging implements SupportsFrameEvents {
     private final Matmos mod;
@@ -42,19 +43,26 @@ public class VisualExpansionDebugging implements SupportsFrameEvents {
         }
 
         try {
-            ProviderCollection providers = mod.getExpansionList().get(ex).obtainProvidersForDebugging();
-            Distances condition = distances(providers.getCondition());
-            Distances junction = distances(providers.getJunction());
-            Distances machine = distances(providers.getMachine());
-
-            int yyBase = 30;
-
-            scrub(condition, 20, yyBase);
-            scrub(junction, 400, yyBase);
-            scrub(machine, 600, yyBase);
-
-            //link(condition, 0, 0, junction, 40, 0);
-            //link(junction, 40, 0, machine, 80, 0);
+            Exception loadException = mod.getExpansionList().get(ex).getLoadException();
+            
+            if(loadException == null) {
+                ProviderCollection providers = mod.getExpansionList().get(ex).obtainProvidersForDebugging();
+                Distances condition = distances(providers.getCondition());
+                Distances junction = distances(providers.getJunction());
+                Distances machine = distances(providers.getMachine());
+    
+                int yyBase = 30;
+    
+                scrub(condition, 20, yyBase);
+                scrub(junction, 400, yyBase);
+                scrub(machine, 600, yyBase);
+    
+                //link(condition, 0, 0, junction, 40, 0);
+                //link(junction, 40, 0, machine, 80, 0);
+            } else {
+                mc.fontRenderer.drawStringWithShadow("There was an error loading the file:", 10, 30, 0xFFFF00);
+                mc.fontRenderer.drawStringWithShadow(loadException.getMessage(), 10, 40, 0xFFFF00);
+            }
         } catch (Exception e) {
             IDontKnowHowToCode.whoops__printExceptionToChat(mod.getChatter(), e, this);
         }

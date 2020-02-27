@@ -50,6 +50,8 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
 
     private LoadingAgent agent;
     private LoadingAgent jsonAgent;
+    
+    private Exception loadException;
 
     public Expansion(ExpansionIdentity identity, DataPackage data, IDataCollector collector, ISoundHandler accessor, VolumeContainer masterVolume, File configurationSource) {
         this.identity = identity;
@@ -106,12 +108,15 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
         
         knowledge.addKnowledge(Knowledge.getBuiltins(knowledge.obtainProviders()));
         
+        loadException = null;
+        
         if (jsonAgent == null) {
-            isSuccessfullyBuilt = agent.load(identity, knowledge);
+            loadException = agent.load(identity, knowledge);
         } else {
-            isSuccessfullyBuilt = jsonAgent.load(identity, knowledge);
+            loadException = jsonAgent.load(identity, knowledge);
             jsonAgent = null;
         }
+        isSuccessfullyBuilt = loadException == null;
 
         if (!isSuccessfullyBuilt) {
             newKnowledge();
@@ -138,6 +143,10 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
 
     public String getFriendlyName() {
         return identity.getFriendlyName();
+    }
+    
+    public Exception getLoadException() {
+        return loadException;
     }
 
     public void saveConfig() {

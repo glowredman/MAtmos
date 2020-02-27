@@ -33,7 +33,7 @@ public class LegacyXMLLoadingAgent implements LoadingAgent {
     }
 
     @Override
-    public boolean load(ExpansionIdentity identity, Knowledge knowledge) {
+    public Exception load(ExpansionIdentity identity, Knowledge knowledge) {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = dbf.newDocumentBuilder();
@@ -54,10 +54,10 @@ public class LegacyXMLLoadingAgent implements LoadingAgent {
             }
             new JsonExpansions_EngineDeserializer().loadSerial(root, identity, knowledge);
 
-            return true;
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return e;
         }
     }
 }

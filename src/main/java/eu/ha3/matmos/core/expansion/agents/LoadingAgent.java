@@ -10,7 +10,7 @@ public interface LoadingAgent {
      *
      * @param  identity
      * @param  knowledge
-     * @return
+     * @return The exception that occured while loading, or null if there was no exception.
      */
-    boolean load(ExpansionIdentity identity, Knowledge knowledge);
+    Exception load(ExpansionIdentity identity, Knowledge knowledge);
 }

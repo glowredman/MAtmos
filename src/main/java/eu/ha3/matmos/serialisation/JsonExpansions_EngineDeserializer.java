@@ -46,13 +46,13 @@ public class JsonExpansions_EngineDeserializer {
 
     private String UID;
 
-    public boolean loadJson(String jasonString, ExpansionIdentity identity, Knowledge knowledge) {
+    public Exception loadJson(String jasonString, ExpansionIdentity identity, Knowledge knowledge) {
         try {
             parseJsonUnsafe(jasonString, identity, knowledge);
-            return true;
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return e;
         }
     }
 
