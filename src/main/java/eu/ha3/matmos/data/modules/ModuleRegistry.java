@@ -151,25 +151,25 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         largeScanner = new ScannerModule(
                 ScanVolumetric.class, this.data, "_POM__scan_large", "scan_large",
                 Arrays.asList(ScannerModule.Submodule.THOUSAND, ScannerModule.Submodule.ABOVE, ScannerModule.Submodule.BELOW),
-                8, 20 /*256*/, 64, 32, 64, 16 * 8 * 16/*64 * 64 * 2*/);
+                8, 10, 20 /*256*/, 64, 32, 64, 16 * 8 * 16/*64 * 64 * 2*/);
         addModule(largeScanner);
         
         this.mediumScanner = new ScannerModule(
                 ScanAir.class, this.data, "_POM__scan_medium", "scan_medium", Arrays.asList(ScannerModule.Submodule.THOUSAND),
-                -1, 20, 31, 31, 31, 31*31*4);
+                -1, -1, 20, 31, 31, 31, 31*31*4);
         addModule(this.mediumScanner);
         
         // 16 * 4 * 16
         addModule(new ScannerModule(
                 ScanVolumetric.class, this.data, "_POM__scan_small", "scan_small", 
                 Arrays.asList(ScannerModule.Submodule.THOUSAND),
-                -1, 2 /*64*/, 16, 8, 16, 16 * 4 * 16));
+                -1, -1, 2 /*64*/, 16, 8, 16, 16 * 4 * 16));
         // Each ticks, check half of the small scan
 
         addModule(new ScannerModule(
                 ScanRaycast.class, this.data, "_POM__scan_raycast", "scan_raycast", 
                 Arrays.asList(ScannerModule.Submodule.WEIGHTED, ScannerModule.Submodule.ABOVE, ScannerModule.Submodule.BELOW),
-                -1, 20, 100, 100, 100, 10));
+                -1, -1, 20, 100, 100, 100, 10));
         
         addModule(new ModuleDebug(data));
         

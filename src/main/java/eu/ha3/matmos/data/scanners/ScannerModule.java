@@ -2,6 +2,7 @@ package eu.ha3.matmos.data.scanners;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -35,6 +36,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     private final String passOnceName;
     private final Set<Submodule> requiredSubmodules;
     private final int movement;
+    private final int passivePulse;
     private final int pulse;
 
     private final int xS;
@@ -53,6 +55,8 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     private int ticksSinceBoot;
     private boolean firstScan;
     private boolean workInProgress;
+    
+    private int lastScanTime = -1;
 
     private int dimension = Integer.MIN_VALUE;
     private int xx = Integer.MIN_VALUE;
@@ -119,15 +123,18 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
      * Movement: Requires the player to move to another block to trigger a new scan. If movement is
      * zero, no scan until the player moves. If movement is negative, always scan even if the player
      * hasn't moved.
+     * Passive pulse: if this many pulses have elapsed since the last scan and the player has moved,
+     * the scan will run even if the movement condition hasn't been satisfied.
      */
               
     private ScannerModule(Class<? extends Scan> scannerClass, Object scannerArgument, boolean hasScannerArgument,
             DataPackage data, String passOnceName,
             String baseName, List<Submodule> requiredSubmodules,
-            int movement, int pulse, int xS, int yS, int zS, int blocksPerCall) {
+            int movement, int passivePulse, int pulse, int xS, int yS, int zS, int blocksPerCall) {
         this.passOnceName = passOnceName;
         this.requiredSubmodules = new HashSet<Submodule>(requiredSubmodules);
         this.movement = movement;
+        this.passivePulse = passivePulse;
         this.pulse = pulse;
 
         this.xS = xS;
@@ -165,19 +172,19 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     /*** Constructor used to pass an argument to the to-be-instantiated scanner object */
     public ScannerModule(Class<? extends Scan> scannerClass, Object scannerArgument, DataPackage data, String passOnceName,
             String baseName, List<Submodule> requiredSubmodules,
-            int movement, int pulse, int xS, int yS, int zS, int blocksPerCall) {
+            int movement, int passivePulse, int pulse, int xS, int yS, int zS, int blocksPerCall) {
         this(scannerClass, scannerArgument, true, data, passOnceName,
                 baseName, requiredSubmodules,
-                movement, pulse, xS, yS, zS, blocksPerCall);
+                movement, passivePulse, pulse, xS, yS, zS, blocksPerCall);
     }
     
     /*** Normal constructor */
     public ScannerModule(Class<? extends Scan> scannerClass, DataPackage data, String passOnceName,
             String baseName, List<Submodule> requiredSubmodules,
-            int movement, int pulse, int xS, int yS, int zS, int blocksPerCall) {
+            int movement, int passivePulse, int pulse, int xS, int yS, int zS, int blocksPerCall) {
         this(scannerClass, null, false, data, passOnceName,
                 baseName, requiredSubmodules,
-                movement, pulse, xS, yS, zS, blocksPerCall);
+                movement, passivePulse, pulse, xS, yS, zS, blocksPerCall);
     }
 
     @Override
@@ -263,14 +270,16 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
 
                 int max = Math.max(Math.abs(xx - x), Math.abs(yy - y));
                 max = Math.max(max, Math.abs(zz - z));
-
-                go = max > movement;
+                
+                go = max > movement ||
+                        (passivePulse >= 0 && max > 0 && lastScanTime != -1 && (ticksSinceBoot - lastScanTime) / pulse > passivePulse);
             } else {
                 go = true;
             }
 
             if (go) {
                 workInProgress = true;
+                lastScanTime = ticksSinceBoot;
 
                 xx = MAtUtil.getPlayerX();
                 yy = MAtUtil.clampToBounds(MAtUtil.getPlayerY());
