@@ -17,11 +17,12 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
     private float desiredVolume;
     private float desiredPitch;
     private float volumeMod;
+    private boolean underwater;
     
     private boolean notYetPlayed = true;
 
-    protected NoAttenuationMovingSound(ResourceLocation myResource, float volume, float pitch, boolean isLooping, boolean usesPause) {
-        super(SoundEvents.AMBIENT_CAVE, SoundCategory.AMBIENT);
+    protected NoAttenuationMovingSound(ResourceLocation myResource, float volume, float pitch, boolean isLooping, boolean usesPause, boolean underwater) {
+        super(SoundEvents.AMBIENT_CAVE, underwater ? SoundCategory.MASTER : SoundCategory.AMBIENT);
 
         positionedSoundLocation = myResource;
         attenuationType = ISound.AttenuationType.NONE;
@@ -34,10 +35,11 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
         this.pitch = pitch;
 
         this.usesPause = usesPause;
+        this.underwater = underwater;
     }
 
     public NoAttenuationMovingSound copy() {
-        return new NoAttenuationMovingSound(getSoundLocation(), desiredVolume, desiredPitch, repeat, usesPause);
+        return new NoAttenuationMovingSound(getSoundLocation(), desiredVolume, desiredPitch, repeat, usesPause, underwater);
     }
 
     @Override

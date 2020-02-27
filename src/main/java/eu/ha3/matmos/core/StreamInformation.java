@@ -12,7 +12,8 @@ public class StreamInformation extends MultistateComponent implements Simulated 
     private float fadeOutTime;
     private boolean isLooping;
     private boolean usesPause;
-
+    private boolean normalVolumeUnderwater;
+    
     private final String machineName;
     private final Provider<Machine> provider;
     private final ReferenceTime time;
@@ -25,7 +26,7 @@ public class StreamInformation extends MultistateComponent implements Simulated 
     private long startTime;
     private long stopTime;
 
-    public StreamInformation(String machineName, Provider<Machine> provider, ReferenceTime time, SoundRelay relay, String path, float volume, float pitch, float delayBeforeFadeIn, float delayBeforeFadeOut, float fadeInTime, float fadeOutTime, boolean isLooping, boolean usesPause) {
+    public StreamInformation(String machineName, Provider<Machine> provider, ReferenceTime time, SoundRelay relay, String path, float volume, float pitch, float delayBeforeFadeIn, float delayBeforeFadeOut, float fadeInTime, float fadeOutTime, boolean isLooping, boolean usesPause, boolean underwater) {
         super("_STREAM:" + machineName);
 
         this.machineName = machineName;
@@ -42,6 +43,7 @@ public class StreamInformation extends MultistateComponent implements Simulated 
         this.fadeOutTime = fadeOutTime;
         this.isLooping = isLooping;
         this.usesPause = usesPause;
+        this.normalVolumeUnderwater = underwater;
 
         token = -1;
     }
@@ -85,7 +87,7 @@ public class StreamInformation extends MultistateComponent implements Simulated 
                 if (!initialized) {
                     token = relay.getNewStreamingToken();
 
-                    if (relay.setupStreamingToken(token, path, volume, pitch, isLooping, usesPause)) {
+                    if (relay.setupStreamingToken(token, path, volume, pitch, isLooping, usesPause, normalVolumeUnderwater)) {
                         initialized = true;
                         relay.startStreaming(token, fadeInTime);
                     }

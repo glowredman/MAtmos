@@ -9,7 +9,7 @@ public interface SoundRelay {
 
     int getNewStreamingToken();
 
-    boolean setupStreamingToken(int token, String path, float volume, float pitch, boolean isLooping, boolean usesPause);
+    boolean setupStreamingToken(int token, String path, float volume, float pitch, boolean isLooping, boolean usesPause, boolean underwater);
 
     void startStreaming(int token, float fadeDuration);
 

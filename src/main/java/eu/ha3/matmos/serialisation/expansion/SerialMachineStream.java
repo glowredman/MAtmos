@@ -17,4 +17,7 @@ public class SerialMachineStream {
 
     @Expose
     public boolean pause;
+    
+    @Expose
+    public boolean underwater;
 }

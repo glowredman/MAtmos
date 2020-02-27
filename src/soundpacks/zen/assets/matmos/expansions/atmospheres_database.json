@@ -1512,10 +1512,11 @@
       "delay_fadeout": 0.0,
       "stream": {
             "path": "matmos_hl/loop/underwater_direct.ogg",
-            "vol": 50.0,
+            "vol": 0.4,
             "pitch": 1.0,
             "looping": true,
-            "pause": false
+            "pause": false,
+            "underwater": true
       }
     },
     "Rain outdoors": {

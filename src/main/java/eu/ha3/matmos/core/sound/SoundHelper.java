@@ -48,13 +48,13 @@ public class SoundHelper implements SoundCapabilities, Stable {
     }
 
     @Override
-    public void registerStreaming(String customName, String path, float volume, float pitch, boolean isLooping, boolean usesPause) {
+    public void registerStreaming(String customName, String path, float volume, float pitch, boolean isLooping, boolean usesPause, boolean underwater) {
         if (isInterrupt) {
             return;
         }
 
         String loc = path.replace(".ogg", "").replace('/', '.').replaceAll("[0-9]", "");
-        NoAttenuationMovingSound nams = new NoAttenuationMovingSound(new ResourceLocation(loc), volume, pitch, isLooping, usesPause);
+        NoAttenuationMovingSound nams = new NoAttenuationMovingSound(new ResourceLocation(loc), volume, pitch, isLooping, usesPause, underwater);
 
         streaming.put(customName, nams);
     }

@@ -180,7 +180,7 @@ public class JsonExpansions_EngineDeserializer {
                         providers.getMachine(), providers.getReferenceTime(), providers.getSoundRelay(),
                         sms.path, sms.vol, sms.pitch,
                         serial.delay_fadein, serial.delay_fadeout, serial.fadein, serial.fadeout,
-                        sms.looping, sms.pause));
+                        sms.looping, sms.pause, sms.underwater));
                 
             }
         }

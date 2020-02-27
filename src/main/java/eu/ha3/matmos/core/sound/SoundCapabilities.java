@@ -14,7 +14,7 @@ public interface SoundCapabilities {
     /**
      * Registers a streaming sound.
      */
-    void registerStreaming(String customName, String path, float volume, float pitch, boolean isLooping, boolean usesPause);
+    void registerStreaming(String customName, String path, float volume, float pitch, boolean isLooping, boolean usesPause, boolean underwater);
 
     /**
      * Plays a streaming sound, fading in if it's greater than zero. Fading unit is in seconds.
