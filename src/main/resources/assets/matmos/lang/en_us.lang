@@ -27,7 +27,7 @@ mat.options.ambience.low=Low-altitude ambiences
 mat.options.ambience.high=High-altitude ambiences
 mat.options.reverse=
 mat.options.editor=Open in Editor...
-mat.options.editor.disabled
+mat.options.editor.disabled=§7Editor unavailable
 
 mat.true=ON
 mat.false=OFF
