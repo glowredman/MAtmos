@@ -1,9 +1,0 @@
-{
-	"expansions" : [
-		{
-			"uniquename" : "eu.ha3.mat2020.atmospheres",
-			"friendlyname" : "MAt2020: Atmospheres",
-			"pointer" : "expansions/atmospheres_database.json"
-		}
-	]
-}

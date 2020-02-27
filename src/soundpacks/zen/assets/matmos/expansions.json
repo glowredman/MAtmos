@@ -1,0 +1,9 @@
+{
+	"expansions" : [
+		{
+			"uniquename" : "makamys.zen.atmospheres",
+			"friendlyname" : "Zen 2020: Atmospheres",
+			"pointer" : "expansions/atmospheres_database.json"
+		}
+	]
+}

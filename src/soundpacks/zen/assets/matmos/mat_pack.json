@@ -2,11 +2,11 @@
 	"type"	: "pack_matmos",
 	"engineversion"	: 0,
 	"metadata"	: {
-		"name"	     : "MAt2020",
+		"name"	     : "MAtmos 2020 Zen",
 		"author"	   : "makamys",
 		"website"	   : "http://matmos.ha3.eu"
 	},
-  "uniquename" : "makamys.mat2020",
+  "uniquename" : "makamys.zen",
   "version"    : "1.0",
   "updatejson": "http://localhost:8000/update_mat2020.json"
 }
