@@ -115,10 +115,8 @@ public class SoundHelper implements SoundCapabilities, Stable {
     public void applyVolume(float volumeMod) {
         volumeModulator = volumeMod;
         
-        if(isActivated || volumeMod == 0) {
-            for (StreamingSound sound : streaming.values()) {
-                sound.applyVolume(volumeMod);
-            }
+        for (StreamingSound sound : streaming.values()) {
+            sound.applyVolume(volumeMod);
         }
     }
 
@@ -148,7 +146,6 @@ public class SoundHelper implements SoundCapabilities, Stable {
     public void activate() {
         if(isActivated) return;
         
-        applyVolume(volumeModulator);
         isActivated = true;
     }
 
@@ -156,7 +153,7 @@ public class SoundHelper implements SoundCapabilities, Stable {
     public void deactivate() {
         if(!isActivated) return;
         
-        applyVolume(0);
+        streaming.keySet().forEach(s -> {stopStreaming(s, 2);});
         isActivated = false;
     }
 
