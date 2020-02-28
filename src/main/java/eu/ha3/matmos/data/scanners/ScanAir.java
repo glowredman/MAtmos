@@ -3,6 +3,7 @@ package eu.ha3.matmos.data.scanners;
 import eu.ha3.matmos.util.ByteQueue;
 import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockGlass;
 import net.minecraft.block.BlockLeaves;
@@ -164,7 +165,7 @@ public class ScanAir extends Scan {
     						byte newN = (byte) (p[3] - AIR_COST);
     						
     						if(isTransparentToSound(bs, w, pos, false)) {
-    							if(w.canBlockSeeSky(pos)) {
+    							if(w.canBlockSeeSky(pos) && block instanceof BlockAir) {
     								score += newN;
     								
     								skylitXMin = Math.min(skylitXMin, wx);

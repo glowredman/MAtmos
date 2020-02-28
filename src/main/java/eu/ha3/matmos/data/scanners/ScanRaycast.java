@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -197,7 +198,7 @@ public class ScanRaycast extends Scan {
                         
                         
                         
-                        if(nearness > 0 && !solid && w.canBlockSeeSky(blockPos)){
+                        if(nearness > 0 && block instanceof BlockAir && w.canBlockSeeSky(blockPos)){
                             int distanceSq = dx*dx + dy*dy + dz*dz;
                             //int hitScore = Math.max(100*100 - distanceSq, 0);
                             int hitScore = nearness;
@@ -206,10 +207,16 @@ public class ScanRaycast extends Scan {
                     }
                 }
             }
-        } else {
+        } else { // ray didn't hit anything
             distanceSqSum += maxRange * maxRange;
-            if(dir.y > 0) {
-                score += startNearness * 13;
+            
+            if(dir.y > 0) { // and it's because we hit the sky, probably
+                Vec3d rayEnd = center.add(dir.scale(maxRange));
+                BlockPos rayEndBlockPos = new BlockPos(MathHelper.floor(rayEnd.x), MathHelper.floor(rayEnd.y), MathHelper.floor(rayEnd.z));
+                
+                if(w.canSeeSky(rayEndBlockPos)) {
+                    score += startNearness * 13;
+                }
             }
         }
     }
