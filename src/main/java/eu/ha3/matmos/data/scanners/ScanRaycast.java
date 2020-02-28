@@ -1,9 +1,13 @@
 package eu.ha3.matmos.data.scanners;
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
@@ -29,6 +33,15 @@ public class ScanRaycast extends Scan {
     
     private Vec3d[] rays;
     
+    private Set<BlockPos> scanned;
+    
+    public ScanRaycast() {
+        opspercall = 20;
+        raysToCast = opspercall * 20;
+        
+        scanned = new HashSet<BlockPos>(raysToCast + 1, 1);
+    }
+    
     @Override
     void initScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn) {
         startX = x;
@@ -43,9 +56,6 @@ public class ScanRaycast extends Scan {
         
         raysCast = 0;
         distanceSqSum = 0;
-        
-        opspercall = 20;
-        raysToCast = opspercall * 20;
         
         if(rays == null || rays.length != raysToCast) {
             rnd.setSeed(1);
@@ -67,6 +77,8 @@ public class ScanRaycast extends Scan {
         
         score = 0;
         THRESHOLD_SCORE = 20000;
+        
+        scanned.clear();
     }
     
     private Vec3d getRay(int index) {
@@ -154,34 +166,42 @@ public class ScanRaycast extends Scan {
                     
                     BlockPos blockPos = new BlockPos(pos[0], pos[1], pos[2]);
                     
-                    IBlockState blockState = w.getBlockState(blockPos);
-                    
-                    int dx = startX - pos[0];
-                    int dy = startY - pos[1];
-                    int dz = startZ - pos[2];
-                    
-                    ((ScannerModule)pipeline).inputAndReturnBlockMeta(pos[0], pos[1], pos[2], calculateWeight(dx, dy, dz, maxRange),
-                            blockBuf, metaBuf);
-                    Block block = blockBuf[0];
-                    
-                    boolean solid = blockState.getCollisionBoundingBox(w, blockPos) != Block.NULL_AABB &&
-                    !(block instanceof BlockLeaves);
-                    
-                    if(solid && offset == 0 && scanDir == 0) {
-                        centerSolid = true;
-                    } else if(centerSolid && scanDir != 0 && offset == 1){
-                        nearness -= centerSolid ? solidPenalty : airPenalty;
-                    }
-                    
-                    nearness -= solid ? solidPenalty : airPenalty;
-                    
-                    
-                    
-                    if(nearness > 0 && !solid && w.canBlockSeeSky(blockPos)){
-                        int distanceSq = dx*dx + dy*dy + dz*dz;
-                        //int hitScore = Math.max(100*100 - distanceSq, 0);
-                        int hitScore = nearness;
-                        score += hitScore;
+                    if(!scanned.contains(blockPos)) {
+                        scanned.add(blockPos);
+                        
+                        IBlockState blockState = w.getBlockState(blockPos);
+                        
+                        int dx = startX - pos[0];
+                        int dy = startY - pos[1];
+                        int dz = startZ - pos[2];
+                        
+                        ((ScannerModule)pipeline).inputAndReturnBlockMeta(pos[0], pos[1], pos[2], calculateWeight(dx, dy, dz, maxRange),
+                                blockBuf, metaBuf);
+                        Block block = blockBuf[0];
+                        
+                        if(block instanceof BlockLiquid) {
+                            //System.out.println(blockPos);
+                        }
+                        
+                        boolean solid = blockState.getCollisionBoundingBox(w, blockPos) != Block.NULL_AABB &&
+                        !(block instanceof BlockLeaves);
+                        
+                        if(solid && offset == 0 && scanDir == 0) {
+                            centerSolid = true;
+                        } else if(centerSolid && scanDir != 0 && offset == 1){
+                            nearness -= centerSolid ? solidPenalty : airPenalty;
+                        }
+                        
+                        nearness -= solid ? solidPenalty : airPenalty;
+                        
+                        
+                        
+                        if(nearness > 0 && !solid && w.canBlockSeeSky(blockPos)){
+                            int distanceSq = dx*dx + dy*dy + dz*dz;
+                            //int hitScore = Math.max(100*100 - distanceSq, 0);
+                            int hitScore = nearness;
+                            score += hitScore;
+                        }
                     }
                 }
             }
