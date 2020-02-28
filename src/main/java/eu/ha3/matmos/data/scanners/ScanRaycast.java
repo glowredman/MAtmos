@@ -63,7 +63,8 @@ public class ScanRaycast extends Scan {
             for(int i = 0; i < raysToCast; i++) {
                 double vx = 0, vy = 0, vz = 0;
                 // avoid normalizing a vector of 0 length (impossible), or tiny length (numerically unstable)
-                while(vx * vx + vy * vy + vz * vz < 0.01) {
+                double squareDist;
+                while((squareDist = vx * vx + vy * vy + vz * vz) < 0.01 || squareDist > 1) {
                     vx = 2.0 * (rnd.nextDouble() - 0.5);
                     vy = 2.0 * (rnd.nextDouble() - 0.5);
                     vz = 2.0 * (rnd.nextDouble() - 0.5);
