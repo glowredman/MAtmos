@@ -91,7 +91,11 @@ public class SoundHelper implements SoundCapabilities, Stable {
         Matmos.LOGGER.debug("playStreaming " + newSound.getSoundLocation() + " (reuse=" + reuse + ", notYetPlayed = " + notYetPlayed + ", isSoundPlaying=" + isSoundPlaying + ")");
         
         if(notYetPlayed || !isSoundPlaying) {
-            Minecraft.getMinecraft().getSoundHandler().playSound(newSound);
+            try {
+                Minecraft.getMinecraft().getSoundHandler().playSound(newSound);
+            } catch (Exception e) {
+                Matmos.LOGGER.warn("There was an exception when trying to start stream " + newSound.getSoundLocation() + ": " + e.getMessage());
+            }
         }
     }
 
