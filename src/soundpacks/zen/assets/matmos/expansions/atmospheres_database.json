@@ -262,7 +262,7 @@
       "sheet": "scan_raycast",
       "index": "minecraft:water",
       "symbol": "GREATER",
-      "value": "80"
+      "value": "72"
     },
     "Large water (S)": {
       "sheet": "scan_small_p1k",
@@ -274,7 +274,7 @@
       "sheet": "scan_large_p1k",
       "index": "minecraft:water",
       "symbol": "GREATER",
-      "value": "100"
+      "value": "60"
     },
     "Grass 2% (L)": {
       "sheet": "scan_large_p1k",
@@ -471,6 +471,11 @@
       "yes": [
         "In Nether",
         "Y>127"
+      ]
+    },
+    "Nether": {
+      "yes": [
+        "In Nether"
       ]
     },
     "The End": {
@@ -1102,7 +1107,7 @@
         "outdoor": [
           {
             "path": "matmos_hl/loop/wind_forest.ogg",
-            "vol": 0.08,
+            "vol": 0.075,
             "pitch": 1.0,
             "looping": true,
             "pause": false
@@ -1144,7 +1149,7 @@
       "fadeout": 3.0,
       "stream": {
             "path": "matmos_hl/loop/wind_forest_night.ogg",
-            "vol": 0.05,
+            "vol": 0.046,
             "pitch": 1.0,
             "looping": true,
             "pause": false
@@ -1295,7 +1300,7 @@
       "fadeout": 5.0,
       "stream": {
         "path": "matmos_hl/loop/cricketz_night.ogg",
-        "vol": 0.016,
+        "vol": 0.013,
         "pitch": 1.0,
         "looping": true,
         "pause": false
@@ -1337,6 +1342,7 @@
         "_INDOORS",
         "_OUTDOORS",
         "The End",
+        "Nether",
         "!Random 1mins 50%"
       ],
       "fadein": 2.0,
@@ -1359,6 +1365,7 @@
         "_INDOORS",
         "_OUTDOORS",
         "The End",
+        "Nether",
         "Random 1mins 50%"
       ],
       "fadein": 2.0,
@@ -1382,7 +1389,7 @@
         "Sea",
         "Is Underwater Directly",
         "Is Underwater Indirectly (S)",
-"Is Underwater Indirectly (L)"
+        "Is Underwater Indirectly (L)"
       ],
       "fadein": 2.0,
       "fadeout": 2.0,
@@ -1410,7 +1417,7 @@
       "stream": [
         {
           "path": "matmos_hl/loop/water_medium.ogg",
-          "vol": 0.06,
+          "vol": 0.065,
           "pitch": 1.0,
           "looping": true,
           "pause": false
@@ -1493,7 +1500,7 @@
       "delay_fadeout": 0.0,
       "stream": {
             "path": "matmos_hl/loop/underwater_indirect.ogg",
-            "vol": 0.3,
+            "vol": 0.26,
             "pitch": 1.0,
             "looping": true,
             "pause": false
@@ -1512,7 +1519,7 @@
       "delay_fadeout": 0.0,
       "stream": {
             "path": "matmos_hl/loop/underwater_direct.ogg",
-            "vol": 0.4,
+            "vol": 0.5,
             "pitch": 1.0,
             "looping": true,
             "pause": false,
@@ -1651,7 +1658,7 @@
       "fadeout": 2.0,
       "stream": {
             "path": "matmos_hl/loop/nether.ogg",
-            "vol": 0.14,
+            "vol": 0.08,
             "pitch": 1.0,
             "looping": true,
             "pause": false
@@ -1668,7 +1675,7 @@
       "fadeout": 2.0,
       "stream": {
             "path": "matmos_hl/loop/nether_indoors.ogg",
-            "vol": 0.14,
+            "vol": 0.1,
             "pitch": 1.0,
             "looping": true,
             "pause": false
