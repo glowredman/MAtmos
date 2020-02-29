@@ -8,6 +8,7 @@ import java.util.Objects;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import eu.ha3.matmos.Matmos;
 import eu.ha3.mc.haddon.UpdatableIdentity;
 import eu.ha3.mc.haddon.implem.HaddonIdentity;
 import eu.ha3.mc.haddon.implem.HaddonVersion;
@@ -108,11 +109,11 @@ public class SoundpackIdentity implements UpdatableIdentity {
 
     @Override
     public String getPlatformName() {
-        return "the MAtmos sound engine";
+        return "MAtmos";
     }
     
     @Override
     public HaddonVersion getPlatformVersion() {
-        return new HaddonVersion(0);
+        return new HaddonVersion(Matmos.identity.getHaddonVersion().getMajorVersion());
     }
 }

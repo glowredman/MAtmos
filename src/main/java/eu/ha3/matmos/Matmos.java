@@ -3,6 +3,7 @@ package eu.ha3.matmos;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -30,6 +31,8 @@ import eu.ha3.mc.haddon.OperatorCaster;
 import eu.ha3.mc.haddon.UpdatableIdentity;
 import eu.ha3.mc.haddon.implem.HaddonIdentity;
 import eu.ha3.mc.haddon.implem.HaddonImpl;
+import eu.ha3.mc.haddon.implem.HaddonVersion;
+import eu.ha3.mc.haddon.implem.UpdatableHaddonIdentity;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsInGameChangeEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
@@ -51,11 +54,11 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     public static final Logger LOGGER = LogManager.getLogger("matmos");
 
     // Identity
-    protected final String NAME = "MAtmos";
-    protected final int VERSION = 33;
-    protected final String FOR = "1.12.2";
-    protected final String ADDRESS = "http://matmos.ha3.eu";
-    protected final Identity identity = new HaddonIdentity(NAME, VERSION, FOR, ADDRESS);
+    protected static final String NAME = "MAtmos";
+    protected static final String VERSION = "33";
+    protected static final String FOR = "1.12.2";
+    protected static final String ADDRESS = "http://matmos.ha3.eu";
+    public static final Identity identity = new HaddonIdentity(NAME, VERSION, FOR, ADDRESS);
 
     // NotifiableHaddon and UpdateNotifier
     private final ConfigProperty config = new ConfigProperty();
@@ -233,9 +236,9 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
             hasFirstTickPassed = true;
             updateNotifier.attempt();
             if (_COMPILE_IS_UNSTABLE) {
-                int lastVersion = config.getInteger("version.last");
+                String lastVersion = config.getString("version.last");
                 int warns = config.getInteger("version.warnunstable");
-                if (lastVersion != VERSION) {
+                if (!lastVersion.equals(VERSION)) {
                     warns = 3;
                     config.setProperty("version.last", VERSION);
                 }
