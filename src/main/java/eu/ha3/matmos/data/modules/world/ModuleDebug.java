@@ -14,17 +14,17 @@ import eu.ha3.matmos.data.modules.ModuleProcessor;
  */
 
 public class ModuleDebug extends ModuleProcessor implements Module {
-    Sheet scanMedium, scanRaycast;
+    //Sheet scanMedium, scanRaycast;
     
     public ModuleDebug(DataPackage data) {
         super(data, "__DEBUG");
-        scanMedium = data.getSheet("scan_medium");
-        scanRaycast = data.getSheet("scan_raycast");
+        //scanMedium = data.getSheet("scan_medium");
+        //scanRaycast = data.getSheet("scan_raycast");
     }
 
     @Override
     protected void doProcess() {
-        setValue("is_near_surface", scanMedium.get(".is_near_surface"));
-        setValue("is_outdoors", scanRaycast.get(".is_outdoors"));
+        //setValue("is_near_surface", scanMedium.get(".is_near_surface"));
+        //setValue("is_outdoors", scanRaycast.get(".is_outdoors"));
     }
 }

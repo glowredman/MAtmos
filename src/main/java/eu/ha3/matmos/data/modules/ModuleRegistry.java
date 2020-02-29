@@ -155,7 +155,7 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         addModule(largeScanner);
         
         this.mediumScanner = new ScannerModule(
-                ScanAir.class, this.data, "_POM__scan_medium", "scan_medium", Arrays.asList(ScannerModule.Submodule.THOUSAND),
+                ScanAir.class, this.data, "_POM__scan_air", "scan_air", Arrays.asList(ScannerModule.Submodule.THOUSAND),
                 -1, -1, 20, 31, 31, 31, 31*31*4);
         addModule(this.mediumScanner);
         
