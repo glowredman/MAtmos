@@ -22,7 +22,9 @@ public class StreamInformation extends MultistateComponent implements Simulated 
     private boolean initialized;
     private int token;
 
-    private boolean isPlaying;
+    /** If this is false, the stream is not playing. If it's true, the stream is supposed to be playing, but maybe it's not.
+     * (For example, interdimensional travel can result in the stream stopping after this has been set to true.) */
+    private boolean commandedToBePlaying;
     private long startTime;
     private long stopTime;
 
@@ -80,9 +82,9 @@ public class StreamInformation extends MultistateComponent implements Simulated 
             return; // FIXME: A non-looping sound cannot use the pause scheme.
         }
 
-        if (isActive && !isPlaying) {
+        if (isActive && (!commandedToBePlaying || !relay.isPlaying(token))) {
             if (time.getMilliseconds() > startTime) {
-                isPlaying = true;
+                commandedToBePlaying = true;
 
                 if (!initialized) {
                     token = relay.getNewStreamingToken();
@@ -95,9 +97,9 @@ public class StreamInformation extends MultistateComponent implements Simulated 
                     relay.startStreaming(token, fadeInTime);
                 }
             }
-        } else if (!isActive && isPlaying) {
+        } else if (!isActive && commandedToBePlaying) {
             if (time.getMilliseconds() > stopTime) {
-                isPlaying = false;
+                commandedToBePlaying = false;
                 relay.stopStreaming(token, fadeOutTime);
             }
         }

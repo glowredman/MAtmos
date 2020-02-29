@@ -61,4 +61,9 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
     @Override
     public void eraseStreamingToken(int token) {
     }
+
+    @Override
+    public boolean isPlaying(int token) {
+        return Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(streaming.get(String.valueOf(token)));
+    }
 }

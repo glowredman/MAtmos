@@ -73,22 +73,17 @@ public class SoundHelper implements SoundCapabilities, Stable {
         NoAttenuationMovingSound previous = streaming.get(customName);
         NoAttenuationMovingSound newSound = null;
         
-        boolean reuse = false;
-        
         if(previous.isDonePlaying()) {
             newSound = previous.copy();
             streaming.put(customName, newSound);
         } else {
             newSound = previous; // reuse previous sound
-            reuse = true;
         }
         newSound.play(fadeIn);
         newSound.applyVolume(volumeModulator);
         
         boolean notYetPlayed = newSound.notYetPlayed();
         boolean isSoundPlaying = Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(newSound);
-        
-        Matmos.LOGGER.info("playStreaming " + newSound.getSoundLocation() + " (reuse=" + reuse + ", notYetPlayed = " + notYetPlayed + ", isSoundPlaying=" + isSoundPlaying + ")");
         
         if(notYetPlayed || !isSoundPlaying) {
             Minecraft.getMinecraft().getSoundHandler().playSound(newSound);
@@ -105,10 +100,6 @@ public class SoundHelper implements SoundCapabilities, Stable {
             IDontKnowHowToCode.warnOnce("Tried to stop missing stream " + customName);
             return;
         }
-        
-        NoAttenuationMovingSound sound = streaming.get(customName);
-        
-        Matmos.LOGGER.info("stopStreaming " + sound.getSoundLocation());
 
         streaming.get(customName).stop(fadeOut);
     }

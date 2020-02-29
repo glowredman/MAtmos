@@ -16,5 +16,7 @@ public interface SoundRelay {
     void stopStreaming(int token, float fadeDuration);
 
     void eraseStreamingToken(int token);
+    
+    boolean isPlaying(int token);
 
 }
