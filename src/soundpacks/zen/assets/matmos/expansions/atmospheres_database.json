@@ -12,12 +12,6 @@
       "symbol": "GREATER",
       "value": "100000"
     },
-    "Air <1800 (R)": {
-      "sheet": "scan_raycast",
-      "index": "minecraft:air",
-      "symbol": "LESSER",
-      "value": "1800"
-    },
     "Water 200 (S)": {
       "sheet": "scan_small",
       "index": "minecraft:water",
@@ -48,53 +42,17 @@
       "symbol": "GREATER",
       "value": "0"
     },
-    "Nearby grass (1)": {
-      "sheet": "scan_small",
-      "index": "minecraft:grass",
-      "symbol": "GREATER",
-      "value": "0"
-    },
     "Nearby land (L)": {
       "sheet": "_DYNAMIC",
       "index": "Ground (Large)",
       "symbol": "GREATER",
       "value": "10"
     },
-    "Water 1% (L)": {
-      "sheet": "scan_large",
-      "index": "minecraft:water",
-      "symbol": "GREATER",
-      "value": "10"
-    },
-    "Raycast scan outdoors": {
-      "sheet": "scan_raycast",
-      "index": ".outdoorness_score",
-      "symbol": "GREATER",
-      "value": "2500"
-    },
-    "Flood scan deep indoors": {
-      "sheet": "scan_medium",
-      "index": ".outdoorness_score",
-      "symbol": "LESSER",
-      "value": "200"
-    },
     "Air 30% (L)": {
       "sheet": "scan_large_p1k",
       "index": "minecraft:air",
       "symbol": "GREATER",
       "value": "300"
-    },
-    "Air is tight 35%": {
-      "sheet": "scan_small_p1k",
-      "index": "minecraft:air",
-      "symbol": "LESSER",
-      "value": "350"
-    },
-    "Big fire (30 L)": {
-      "sheet": "scan_large",
-      "index": "minecraft:fire",
-      "symbol": "GREATER",
-      "value": "30"
     },
     "Can rain on": {
       "sheet": "cb_column",
@@ -105,12 +63,6 @@
     "Biome can rain": {
       "sheet": "w_general",
       "index": "biome_can_rain",
-      "symbol": "EQUAL",
-      "value": "1"
-    },
-    "Biome is snowy": {
-      "sheet": "w_general",
-      "index": "biome_is_snowy",
       "symbol": "EQUAL",
       "value": "1"
     },
@@ -132,36 +84,6 @@
       "symbol": "GREATER",
       "value": "5"
     },
-    "Deep (16)": {
-      "sheet": "cb_pos",
-      "index": "y",
-      "symbol": "LESSER",
-      "value": "16"
-    },
-    "Deep (32)": {
-      "sheet": "cb_pos",
-      "index": "y",
-      "symbol": "LESSER",
-      "value": "32"
-    },
-    "Highlands (96)": {
-      "sheet": "_DYNAMIC",
-      "index": "Highands (96)",
-      "symbol": "GREATER",
-      "value": "0"
-    },
-    "Highplains (80)": {
-      "sheet": "_DYNAMIC",
-      "index": "Highplains (80)",
-      "symbol": "GREATER",
-      "value": "0"
-    },
-    "In Aether (Assumption)": {
-      "sheet": "w_general",
-      "index": "dimension",
-      "symbol": "EQUAL",
-      "value": "3"
-    },
     "In Nether": {
       "sheet": "legacy",
       "index": "world_nether",
@@ -179,12 +101,6 @@
       "index": "thunder",
       "symbol": "EQUAL",
       "value": "1"
-    },
-    "Is Exposed to the Sky": {
-      "sheet": "cb_light",
-      "index": "see_sky",
-      "symbol": "NOT_EQUAL",
-      "value": "0"
     },
     "Is Raining": {
       "sheet": "w_general",
@@ -209,36 +125,6 @@
       "index": "minecraft:water",
       "symbol": "GREATER",
       "value": "15000"
-    },
-    "Lava": {
-      "sheet": "_DYNAMIC",
-      "index": "Lava (Small)",
-      "symbol": "GREATER",
-      "value": "12"
-    },
-    "Manmade Town": {
-      "sheet": "_DYNAMIC",
-      "index": "Manmade Structures (Small)",
-      "symbol": "GREATER",
-      "value": "64"
-    },
-    "Nearby fire (1)": {
-      "sheet": "scan_small",
-      "index": "minecraft:fire",
-      "symbol": "GREATER",
-      "value": "0"
-    },
-    "Nearby fire (12)": {
-      "sheet": "scan_small",
-      "index": "minecraft:fire",
-      "symbol": "GREATER",
-      "value": "11"
-    },
-    "Nearby fire (7)": {
-      "sheet": "scan_small",
-      "index": "minecraft:fire",
-      "symbol": "GREATER",
-      "value": "6"
     },
     "Nearby water (S)": {
       "sheet": "_DYNAMIC",
@@ -288,54 +174,6 @@
       "symbol": "GREATER",
       "value": "80"
     },
-    "Receive Sunlight": {
-      "sheet": "cb_light",
-      "index": "sky",
-      "symbol": "GREATER",
-      "value": "1"
-    },
-    "Rocks (24 S)": {
-      "sheet": "_DYNAMIC",
-      "index": "Rocks (Small)",
-      "symbol": "GREATER",
-      "value": "24"
-    },
-    "Gravel 12% (S)": {
-      "sheet": "scan_small_p1k",
-      "index": "minecraft:gravel",
-      "symbol": "GREATER",
-      "value": "120"
-    },
-    "Sand 4.5% (L)": {
-      "sheet": "scan_large_p1k",
-      "index": "minecraft:sand",
-      "symbol": "GREATER",
-      "value": "45"
-    },
-    "Sand closeby (10%)": {
-      "sheet": "scan_small_p1k",
-      "index": "minecraft:sand",
-      "symbol": "GREATER",
-      "value": "100"
-    },
-    "Sunlight Maximum 15/15": {
-      "sheet": "cb_light",
-      "index": "sky",
-      "symbol": "EQUAL",
-      "value": "15"
-    },
-    "Sunlight lower than 10/15": {
-      "sheet": "cb_light",
-      "index": "sky",
-      "symbol": "LESSER",
-      "value": "10"
-    },
-    "Sunlight lower than 5/15": {
-      "sheet": "cb_light",
-      "index": "sky",
-      "symbol": "LESSER",
-      "value": "5"
-    },
     "Time (0 - 12000)": {
       "sheet": "w_general",
       "index": "time_modulo24k",
@@ -383,18 +221,6 @@
       "index": "minecraft:water",
       "symbol": "GREATER",
       "value": "100"
-    },
-    "Water 5% (L)": {
-      "sheet": "scan_large_p1k",
-      "index": "minecraft:water",
-      "symbol": "GREATER",
-      "value": "50"
-    },
-    "Water 5% (S)": {
-      "sheet": "scan_small_p1k",
-      "index": "minecraft:water",
-      "symbol": "GREATER",
-      "value": "50"
     },
     "Windows (8)": {
       "sheet": "_DYNAMIC",
@@ -532,44 +358,6 @@
         "Nearby torch (1)"
       ]
     },
-    "Abundant water": {
-      "yes": [
-        "Water 10% (L)"
-      ],
-      "no": []
-    },
-    "Gravelly": {
-      "yes": [
-        "Gravel 12% (S)"
-      ],
-      "no": []
-    },
-    "Beach": {
-      "yes": [
-        "Air 30% (L)",
-        "Sand 4.5% (L)",
-        "Sand closeby (10%)",
-        "Water 5% (L)",
-        "Water 5% (S)"
-      ],
-      "no": []
-    },
-    "Big fire (30), In Nether": {
-      "yes": [
-        "Air is tight 35%",
-        "Big fire (30 L)",
-        "In Nether"
-      ],
-      "no": []
-    },
-    "Big fire (30), Not Nether": {
-      "yes": [
-        "Big fire (30 L)"
-      ],
-      "no": [
-        "In Nether"
-      ]
-    },
     "Cold area": {
       "yes": [
         "Air 30% (L)",
@@ -577,48 +365,6 @@
         "Cold world (S)"
       ],
       "no": []
-    },
-    "Deep cave (16)": {
-      "yes": [
-        "Deep (16)"
-      ],
-      "no": [
-        "In Aether (Assumption)",
-        "In Nether",
-        "Receive Sunlight"
-      ]
-    },
-    "Deep cave (32)": {
-      "yes": [
-        "Deep (32)"
-      ],
-      "no": [
-        "In Aether (Assumption)",
-        "In Nether",
-        "Receive Sunlight"
-      ]
-    },
-    "Digging in the Nether": {
-      "yes": [
-        "In Nether",
-        "Rocks (24 S)"
-      ],
-      "no": []
-    },
-    "Digging safely in Nether": {
-      "yes": [
-        "Air is tight 35%",
-        "In Nether"
-      ],
-      "no": []
-    },
-    "Digging unsafely in Nether": {
-      "yes": [
-        "In Nether"
-      ],
-      "no": [
-        "Air is tight 35%"
-      ]
     },
     "Forest": {
       "yes": [
@@ -642,39 +388,6 @@
       ],
       "no": []
     },
-    "Highlands (96, Visible)": {
-      "yes": [
-        "Air 30% (L)",
-        "Highlands (96)"
-      ],
-      "no": [
-        "Sunlight lower than 5/15"
-      ]
-    },
-    "In Aether": {
-      "yes": [
-        "In Aether (Assumption)"
-      ],
-      "no": []
-    },
-    "In Nether": {
-      "yes": [
-        "In Nether"
-      ],
-      "no": []
-    },
-    "Incave": {
-      "yes": [],
-      "no": [
-        "Receive Sunlight"
-      ]
-    },
-    "Is Raining": {
-      "yes": [
-        "Is Raining"
-      ],
-      "no": []
-    },
     "Is Underwater Directly": {
       "yes": [
         "Is Underwater Directly"
@@ -695,57 +408,6 @@
       ],
       "no": [
         "No water above (R)"
-      ]
-    },
-    "Lava nearby": {
-      "yes": [
-        "Lava"
-      ],
-      "no": []
-    },
-    "Manmade Town": {
-      "yes": [
-        "Manmade Town"
-      ],
-      "no": []
-    },
-    "Nearby fire (1) Firecamp": {
-      "yes": [
-        "Manmade Town",
-        "Nearby fire (1)"
-      ],
-      "no": [
-        "Nearby fire (12)"
-      ]
-    },
-    "Nearby fire (1) Not firecamp": {
-      "yes": [
-        "Nearby fire (1)"
-      ],
-      "no": [
-        "Manmade Town"
-      ]
-    },
-    "Nearby fire (12) Dimensions": {
-      "yes": [
-        "Nearby fire (12)"
-      ],
-      "no": []
-    },
-    "Nearby fire (7) In Nether": {
-      "yes": [
-        "Air is tight 35%",
-        "In Nether",
-        "Nearby fire (7)"
-      ],
-      "no": []
-    },
-    "Nearby fire (7) Not Nether": {
-      "yes": [
-        "Nearby fire (7)"
-      ],
-      "no": [
-        "In Nether"
       ]
     },
     "Small water (S)": {
@@ -779,12 +441,6 @@
         "_RAYCAST_SCAN_OUTDOORS"
       ],
       "no": ["_FLOOD_SCAN_DEEP_INDOORS"]
-    },
-    "Huge amount of water": {
-      "yes": [
-        "Nearby huge water"
-      ],
-      "no": []
     },
     "Rain in biome": {
       "yes": [
@@ -858,35 +514,6 @@
         "Can rain on",
         "_FLOOD_SCAN_DEEP_INDOORS",
         "_RAYCAST_SCAN_OUTDOORS"
-      ]
-    },
-    "Rock shelter": {
-      "yes": [
-        "Rocks (24 S)"
-      ],
-      "no": [
-        "Deep (32)",
-        "Is Exposed to the Sky"
-      ]
-    },
-    "Thunderstorm indoor": {
-      "yes": [
-        "Air 30% (L)",
-        "In Thunderstorm",
-        "Is Raining",
-        "Receive Sunlight",
-        "Sunlight lower than 5/15"
-      ],
-      "no": []
-    },
-    "Thunderstorm outdoor": {
-      "yes": [
-        "Air 30% (L)",
-        "In Thunderstorm",
-        "Is Raining"
-      ],
-      "no": [
-        "Sunlight lower than 5/15"
       ]
     },
     "Time (0 - 6000)": {
@@ -968,14 +595,6 @@
       "no": [
         "In Nether"
       ]
-    },
-    "Wet cave": {
-      "yes": [
-        "Air is tight 35%",
-        "Nearby water",
-        "Rocks (24 S)"
-      ],
-      "no": []
     },
     "ZZZ DEBUG TRUE": {
       "yes": [
@@ -1759,368 +1378,10 @@
     }
   },
   "event": {
-    "Bad events": {
-      "vol_min": 1.0,
-      "vol_max": 1.0,
-      "pitch_min": 0.5,
-      "pitch_max": 0.7,
-      "distance": 32,
-      "path": [
-        "matmos_hl/atmosphere/citadeloutsidefx1.ogg",
-        "matmos_hl/atmosphere/citadeloutsidefx2.ogg",
-        "matmos_hl/atmosphere/citadeloutsidefx3.ogg",
-        "matmos_hl/atmosphere/citadeloutsidefx4.ogg",
-        "matmos_hl/atmosphere/citadeloutsidefx5.ogg",
-        "matmos_hl/atmosphere/citadeloutsidefx6.ogg",
-        "matmos_hl/atmosphere/citadeloutsidefx7.ogg",
-        "matmos_hl/atmosphere/citadeloutsidefx8.ogg",
-        "matmos_hl/atmosphere/citadeloutsidefx9.ogg"
-      ]
-    },
-    "Bad wind": {
-      "vol_min": 0.4,
-      "vol_max": 0.5,
-      "pitch_min": 0.1,
-      "pitch_max": 0.7,
-      "distance": 0,
-      "path": [
-        "matmos_hl/wind/wind_moan1.ogg",
-        "matmos_hl/wind/wind_moan2.ogg",
-        "matmos_hl/wind/wind_moan3.ogg"
-      ]
-    },
-    "Beach waves": {
-      "vol_min": 1.0,
-      "vol_max": 1.0,
-      "pitch_min": 0.9,
-      "pitch_max": 1.1,
-      "distance": 0,
-      "path": [
-        "matmos_hl/water/wave1.ogg",
-        "matmos_hl/water/wave2.ogg",
-        "matmos_hl/water/wave3.ogg",
-        "matmos_hl/water/wave4.ogg",
-        "matmos_hl/water/wave5.ogg",
-        "matmos_hl/water/wave6.ogg"
-      ]
-    },
-    "Birds": {
-      "vol_min": 1.0,
-      "vol_max": 1.0,
-      "pitch_min": 0.9,
-      "pitch_max": 1.1,
-      "distance": 32,
-      "path": [
-        "matmos_hl/wildlife/chicka1.ogg",
-        "matmos_hl/wildlife/chicka2.ogg",
-        "matmos_hl/wildlife/chicka3.ogg",
-        "matmos_hl/wildlife/chirp1.ogg",
-        "matmos_hl/wildlife/chirp2.ogg",
-        "matmos_hl/wildlife/chirp3.ogg",
-        "matmos_hl/wildlife/flit1.ogg",
-        "matmos_hl/wildlife/squeek1.ogg",
-        "matmos_hl/wildlife/squeek2.ogg",
-        "matmos_hl/wildlife/squeek3.ogg"
-      ]
-    },
-    "Cave rumble": {
-      "vol_min": 0.3,
-      "vol_max": 0.6,
-      "pitch_min": 0.9,
-      "pitch_max": 1.1,
-      "distance": 0,
-      "path": [
-        "matmos_hl/cave/rumble1.ogg",
-        "matmos_hl/cave/rumble2.ogg",
-        "matmos_hl/cave/rumble3.ogg"
-      ]
-    },
-    "Clock tick A": {
-      "vol_min": 1.0,
-      "vol_max": 1.0,
-      "pitch_min": 0.9,
-      "pitch_max": 0.9,
-      "distance": 0,
-      "path": [
-        "note/snare.ogg"
-      ]
-    },
-    "Clock tick B": {
-      "vol_min": 1.0,
-      "vol_max": 1.0,
-      "pitch_min": 0.85,
-      "pitch_max": 0.85,
-      "distance": 0,
-      "path": [
-        "note/snare.ogg"
-      ]
-    },
-    "Coastbirds": {
-      "vol_min": 1.0,
-      "vol_max": 1.0,
-      "pitch_min": 0.9,
-      "pitch_max": 1.1,
-      "distance": 32,
-      "path": [
-        "matmos_hl/wildlife/coastbird1.ogg",
-        "matmos_hl/wildlife/coastbird2.ogg",
-        "matmos_hl/wildlife/coastbird3.ogg",
-        "matmos_hl/wildlife/coastbird4.ogg",
-        "matmos_hl/wildlife/coastbird5.ogg",
-        "matmos_hl/wildlife/coastbird6.ogg",
-        "matmos_hl/wildlife/coastbird7.ogg"
-      ]
-    },
-    "Debugger": {
-      "vol_min": 1.0,
-      "vol_max": 1.0,
-      "pitch_min": 1.5,
-      "pitch_max": 1.5,
-      "distance": 0,
-      "path": [
-        "note/harp.ogg"
-      ]
-    },
-    "Drops": {
-      "vol_min": 0.7,
-      "vol_max": 1.0,
-      "pitch_min": 0.9,
-      "pitch_max": 1.3,
-      "distance": 0,
-      "path": [
-        "matmos_hl/water/rain_drip1.ogg",
-        "matmos_hl/water/rain_drip2.ogg",
-        "matmos_hl/water/rain_drip3.ogg",
-        "matmos_hl/water/rain_drip4.ogg"
-      ]
-    },
-    "Fire (Big)": {
-      "vol_min": 0.5,
-      "vol_max": 0.7,
-      "pitch_min": 0.3,
-      "pitch_max": 0.5,
-      "distance": 0,
-      "path": [
-        "matmos_hl/atmosphere/flame_thrower_fire_hit.ogg"
-      ]
-    },
-    "Fire (Small)": {
-      "vol_min": 1.0,
-      "vol_max": 0.7,
-      "pitch_min": 0.7,
-      "pitch_max": 0.9,
-      "distance": 0,
-      "path": [
-        "matmos_hl/atmosphere/flame_thrower_fire_hit.ogg"
-      ]
-    },
-    "Lake": {
-      "vol_min": 0.5,
-      "vol_max": 1.0,
-      "pitch_min": 0.9,
-      "pitch_max": 1.3,
-      "distance": 0,
-      "path": [
-        "matmos_hl/water/lake1.ogg",
-        "matmos_hl/water/lake2.ogg",
-        "matmos_hl/water/lake3.ogg"
-      ]
-    },
-    "Nightbirds": {
-      "vol_min": 0.5,
-      "vol_max": 1.0,
-      "pitch_min": 1.0,
-      "pitch_max": 1.0,
-      "distance": 32,
-      "path": [
-        "matmos_hl/wildlife/critter1.ogg",
-        "matmos_hl/wildlife/critter2.ogg",
-        "matmos_hl/wildlife/critter3.ogg",
-        "matmos_hl/wildlife/critter4.ogg",
-        "matmos_hl/wildlife/critter5.ogg",
-        "matmos_hl/wildlife/critter6.ogg",
-        "matmos_hl/wildlife/critter7.ogg",
-        "matmos_hl/wildlife/critter8.ogg"
-      ]
-    },
-    "Rain hitting windows": {
-      "vol_min": 1.0,
-      "vol_max": 1.0,
-      "pitch_min": 0.95,
-      "pitch_max": 1.0,
-      "distance": 0,
-      "path": [
-        "matmos_hl/weather/rainonwindow1.ogg",
-        "matmos_hl/weather/rainonwindow2.ogg",
-        "matmos_hl/weather/rainonwindow3.ogg",
-        "matmos_hl/weather/rainonwindow4.ogg",
-        "matmos_hl/weather/rainonwindow5.ogg",
-        "matmos_hl/weather/rainonwindow6.ogg"
-      ]
-    },
-    "Scary cave": {
-      "vol_min": 1.0,
-      "vol_max": 0.7,
-      "pitch_min": 0.9,
-      "pitch_max": 1.1,
-      "distance": 32,
-      "path": [
-        "matmos_hl/stereo/huhuhu.ogg"
-      ]
-    },
-    "Scary cave, bass sounds": {
-      "vol_min": 1.0,
-      "vol_max": 0.7,
-      "pitch_min": 0.4,
-      "pitch_max": 0.9,
-      "distance": 32,
-      "path": [
-        "matmos_hl/atmosphere/cave_hit1.ogg",
-        "matmos_hl/atmosphere/cave_hit2.ogg",
-        "matmos_hl/atmosphere/cave_hit3.ogg",
-        "matmos_hl/atmosphere/cave_hit4.ogg",
-        "matmos_hl/atmosphere/cave_hit5.ogg",
-        "matmos_hl/atmosphere/cave_hit6.ogg"
-      ]
-    },
-    "Seagulls": {
-      "vol_min": 1.0,
-      "vol_max": 1.0,
-      "pitch_min": 0.9,
-      "pitch_max": 1.1,
-      "distance": 48,
-      "path": [
-        "matmos_hl/wildlife/seagulls_ambient1.ogg",
-        "matmos_hl/wildlife/seagulls_ambient2.ogg",
-        "matmos_hl/wildlife/seagulls_ambient3.ogg",
-        "matmos_hl/wildlife/seagulls_ambient4.ogg",
-        "matmos_hl/wildlife/seagulls_ambient5.ogg"
-      ]
-    },
-    "Thunderstorm": {
-      "vol_min": 0.4,
-      "vol_max": 0.7,
-      "pitch_min": 0.7,
-      "pitch_max": 1.5,
-      "distance": 128,
-      "path": [
-        "matmos_hl/weather/thunder1.ogg",
-        "matmos_hl/weather/thunder2.ogg",
-        "matmos_hl/weather/thunder3.ogg",
-        "matmos_hl/weather/thunder4.ogg"
-      ]
-    },
-    "Wind, town": {
-      "vol_min": 0.2,
-      "vol_max": 0.6,
-      "pitch_min": 0.9,
-      "pitch_max": 1.1,
-      "distance": 0,
-      "path": [
-        "matmos_hl/atmosphere/plaza_amb.ogg"
-      ]
-    },
-    "Wind, trees": {
-      "vol_min": 0.7,
-      "vol_max": 0.5,
-      "pitch_min": 0.9,
-      "pitch_max": 1.1,
-      "distance": 0,
-      "path": [
-        "matmos_hl/wind/treewind1.ogg",
-        "matmos_hl/wind/treewind2.ogg",
-        "matmos_hl/wind/treewind3.ogg",
-        "matmos_hl/wind/treewind4.ogg"
-      ]
-    },
-    "Wind, very strong": {
-      "vol_min": 0.2,
-      "vol_max": 0.5,
-      "pitch_min": 0.8,
-      "pitch_max": 1.1,
-      "distance": 0,
-      "path": [
-        "matmos_hl/wind/wind_hit1.ogg",
-        "matmos_hl/wind/wind_hit2.ogg",
-        "matmos_hl/wind/wind_hit3.ogg"
-      ]
-    },
-    "Wind, very variable": {
-      "vol_min": 0.8,
-      "vol_max": 1.0,
-      "pitch_min": 0.8,
-      "pitch_max": 1.7,
-      "distance": 0,
-      "path": [
-        "matmos_hl/wind/windmill_wind_loop1.ogg"
-      ]
-    },
-    "ZZZ DEBUGGER A": {
-      "vol_min": 1.0,
-      "vol_max": 1.0,
-      "pitch_min": 0.9,
-      "pitch_max": 0.5,
-      "distance": 0,
-      "path": [
-        "note/pling.ogg"
-      ]
-    },
-    "ZZZ DEBUGGER B": {
-      "vol_min": 1.0,
-      "vol_max": 1.0,
-      "pitch_min": 0.6,
-      "pitch_max": 0.5,
-      "distance": 0,
-      "path": [
-        "note/pling.ogg"
-      ]
-    },
-    "__SAMPLE": {
-      "vol_min": 1.0,
-      "vol_max": 1.0,
-      "pitch_min": 0.9,
-      "pitch_max": 1.1,
-      "distance": 0,
-      "path": [
-        "matmos_hl/wildlife/chirp1.ogg",
-        "matmos_hl/wildlife/chirp2.ogg",
-        "matmos_hl/wildlife/chirp3.ogg",
-        "matmos_hl/wildlife/chirp1.ogg",
-        "matmos_hl/wildlife/chirp2.ogg",
-        "matmos_hl/wildlife/chirp3.ogg",
-        "matmos_hl/wildlife/flit1.ogg",
-        "matmos_hl/wildlife/squeek1.ogg",
-        "matmos_hl/wildlife/squeek2.ogg",
-        "matmos_hl/wildlife/squeek3.ogg"
-      ]
-    }
+  
   },
   "list": {},
   "dynamic": {
-    "Highands (96)": {
-      "entries": [
-        {
-          "sheet": "cb_pos",
-          "index": "y"
-        },
-        {
-          "sheet": "legacy_configvars",
-          "index": "1"
-        }
-      ]
-    },
-    "Highplains (80)": {
-      "entries": [
-        {
-          "sheet": "legacy_configvars",
-          "index": "0"
-        },
-        {
-          "sheet": "cb_pos",
-          "index": "y"
-        }
-      ]
-    },
     "Iceland (Large)": {
       "entries": [
         {
@@ -2145,18 +1406,6 @@
         }
       ]
     },
-    "Lava (Small)": {
-      "entries": [
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:flowing_lava"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:lava"
-        }
-      ]
-    },
     "Ice (Small)": {
       "entries": [
         {
@@ -2166,86 +1415,6 @@
         {
           "sheet": "scan_small",
           "index": "minecraft:packed_ice"
-        }
-      ]
-    },
-    "Manmade Structures (Small)": {
-      "entries": [
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:cobblestone"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:planks"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:wool"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:gold_block"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:iron_block"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:stone_slab"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:double_stone_slab"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:brick_block"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:bookshelf"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:oak_stairs"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:diamond_block"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:stone_stairs"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:sandstone"
-        }
-      ]
-    },
-    "Rocks (Small)": {
-      "entries": [
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:stone"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:cobblestone"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:mossy_cobblestone"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:netherrack"
-        },
-        {
-          "sheet": "scan_small",
-          "index": "minecraft:birch_fence"
         }
       ]
     },
