@@ -1,7 +1,6 @@
 package eu.ha3.matmos.data.modules.world;
 
 import eu.ha3.matmos.core.sheet.DataPackage;
-import eu.ha3.matmos.core.sheet.Sheet;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 
@@ -14,17 +13,17 @@ import eu.ha3.matmos.data.modules.ModuleProcessor;
  */
 
 public class ModuleDebug extends ModuleProcessor implements Module {
-    //Sheet scanMedium, scanRaycast;
+    
+    DataPackage data;
     
     public ModuleDebug(DataPackage data) {
         super(data, "__DEBUG");
-        //scanMedium = data.getSheet("scan_medium");
-        //scanRaycast = data.getSheet("scan_raycast");
+        this.data = data;
     }
 
     @Override
     protected void doProcess() {
-        //setValue("is_near_surface", scanMedium.get(".is_near_surface"));
-        //setValue("is_outdoors", scanRaycast.get(".is_outdoors"));
+        setValue("water", data.getSheet("scan_raycast").get("minecraft:water"));
+        setValue("water_w", data.getSheet("scan_raycast_w").get("minecraft:water"));
     }
 }

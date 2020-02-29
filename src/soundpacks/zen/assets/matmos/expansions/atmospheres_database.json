@@ -136,13 +136,13 @@
       "sheet": "scan_raycast_w",
       "index": "minecraft:water",
       "symbol": "GREATER",
-      "value": "20000"
+      "value": "250"
     },
     "Large water nearby (R)": {
       "sheet": "scan_raycast_w",
       "index": "minecraft:water",
       "symbol": "GREATER",
-      "value": "100000"
+      "value": "2500"
     },
     "Large water (R)": {
       "sheet": "scan_raycast",
@@ -1060,7 +1060,7 @@
       "stream": [
         {
           "path": "matmos_hl/loop/water_large.ogg",
-          "vol": 0.13,
+          "vol": 0.08,
           "pitch": 1.0,
           "looping": true,
           "pause": false

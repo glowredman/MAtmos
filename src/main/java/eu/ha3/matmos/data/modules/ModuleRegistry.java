@@ -169,7 +169,7 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         addModule(new ScannerModule(
                 ScanRaycast.class, this.data, "_POM__scan_raycast", "scan_raycast", 
                 Arrays.asList(ScannerModule.Submodule.WEIGHTED, ScannerModule.Submodule.ABOVE, ScannerModule.Submodule.BELOW),
-                -1, -1, 20, 100, 100, 100, 10));
+                -1, -1, -1, 100, 100, 100, 10));
         
         addModule(new ModuleDebug(data));
         

@@ -36,13 +36,6 @@ public class ScanRaycast extends Scan {
     
     private Set<BlockPos> scanned;
     
-    public ScanRaycast() {
-        opspercall = 20;
-        raysToCast = opspercall * 20;
-        
-        scanned = new HashSet<BlockPos>(raysToCast + 1, 1);
-    }
-    
     @Override
     void initScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn) {
         startX = x;
@@ -55,6 +48,7 @@ public class ScanRaycast extends Scan {
         ySize = ysizeIn;
         zSize = zsizeIn;
         
+        raysToCast = opspercall * 20;
         raysCast = 0;
         distanceSqSum = 0;
         
@@ -74,11 +68,14 @@ public class ScanRaycast extends Scan {
             }
         }
         
+        if(scanned == null) {
+            scanned = new HashSet<BlockPos>(raysToCast + 1, 1);
+        }
         
         finalProgress = 1;
         
         score = 0;
-        THRESHOLD_SCORE = 20000;
+        THRESHOLD_SCORE = 10000;
         
         scanned.clear();
     }
@@ -89,13 +86,12 @@ public class ScanRaycast extends Scan {
 
     @Override
     protected boolean doRoutine() {
-        for(int ops = 0; ops < opspercall && raysCast < raysToCast && score <= THRESHOLD_SCORE; ops++) { 
-            
+        for(int ops = 0; ops < opspercall && raysCast < raysToCast; ops++) { 
             castRay(getRay(raysCast));
             
             raysCast++;
         }
-        if(score > THRESHOLD_SCORE || raysCast >= raysToCast) {
+        if(raysCast >= raysToCast) {
             progress = 1;
             
             pipeline.setValue(".is_outdoors", score > THRESHOLD_SCORE ? 1 : 0);
@@ -108,11 +104,9 @@ public class ScanRaycast extends Scan {
     
     private int calculateWeight(int dx, int dy, int dz, int maxRange) {
         int distanceSquared = dx * dx + dy * dy + dz * dz;
-        float distanceScale = 4f; // a block this far away will have a weight of 1/2
-        float weight = MathHelper.clamp((1f / distanceScale) / distanceSquared, 0f, 1f);
-        return (int)(weight*1000000f);
-        
-        //return maxRange * maxRange - distanceSquared;
+        float distanceScale = 1f; // a block this^2 far away will have a weight of 1/2
+        float weight = MathHelper.clamp(1f / (1 + (distanceSquared / distanceScale)), 0f, 1f);
+        return (int)(weight*1000f);
     }
     
     public static RayTraceResult rayTraceNonSolid(Vec3d start, Vec3d dir, double maxRange) {
@@ -181,10 +175,6 @@ public class ScanRaycast extends Scan {
                                 blockBuf, metaBuf);
                         Block block = blockBuf[0];
                         
-                        if(block instanceof BlockLiquid) {
-                            //System.out.println(blockPos);
-                        }
-                        
                         boolean solid = blockState.getCollisionBoundingBox(w, blockPos) != Block.NULL_AABB &&
                         !(block instanceof BlockLeaves);
                         
@@ -195,8 +185,6 @@ public class ScanRaycast extends Scan {
                         }
                         
                         nearness -= solid ? solidPenalty : airPenalty;
-                        
-                        
                         
                         if(nearness > 0 && block instanceof BlockAir && w.canBlockSeeSky(blockPos)){
                             int distanceSq = dx*dx + dy*dy + dz*dz;
