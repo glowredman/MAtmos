@@ -304,6 +304,13 @@
         "In Nether"
       ]
     },
+    "Expansive space": {
+      "yes": [
+        "Expansive space"
+      ],
+      "no": [
+      ]
+    },
     "The End": {
       "yes": [
         "In The End"
@@ -1311,41 +1318,44 @@
       "fadeout": 2.0,
       "stream": {
             "path": "matmos_hl/loop/raw_wind.ogg",
-            "vol": 0.25,
+            "vol": 0.12,
             "pitch": 1.0,
             "looping": true,
             "pause": false
       }
     },
-    "The End": {
+    "The End main": {
       "allow": [
         "The End"
       ],
       "restrict": [
-        
+        "!Expansive space"
       ],
       "fadein": 2.0,
       "fadeout": 2.0,
-      "play_deep_indoors": true,
-      "stream_pair": {
-        "indoor": [
-          {
+      "stream": {
             "path": "matmos_hl/loop/end_wind.ogg",
-            "vol": 0.2,
+            "vol": 0.12,
             "pitch": 1.0,
             "looping": true,
             "pause": false
-          }
-        ],
-        "outdoor": [
-          {
+      }
+    },
+    "The End tight": {
+      "allow": [
+        "The End"
+      ],
+      "restrict": [
+        "Expansive space"
+      ],
+      "fadein": 2.0,
+      "fadeout": 2.0,
+      "stream": {
             "path": "matmos_hl/loop/end_wind_indoors.ogg",
-            "vol": 0.2,
+            "vol": 0.35,
             "pitch": 1.0,
             "looping": true,
             "pause": false
-          }
-        ]
       }
     },
     "ZZZ DEBUGGER": {
