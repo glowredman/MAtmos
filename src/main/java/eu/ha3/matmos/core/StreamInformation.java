@@ -1,5 +1,6 @@
 package eu.ha3.matmos.core;
 
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.logic.Machine;
 
 public class StreamInformation extends MultistateComponent implements Simulated {
@@ -83,6 +84,9 @@ public class StreamInformation extends MultistateComponent implements Simulated 
         }
 
         if (isActive && (!commandedToBePlaying || !relay.isPlaying(token))) {
+            if(commandedToBePlaying) {
+                Matmos.LOGGER.debug("StreamInformation's state got desynced for sound " + path + ", restarting stream");
+            }
             if (time.getMilliseconds() > startTime) {
                 commandedToBePlaying = true;
 
