@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 
-@Mod(modid = ForgeMatmos.MODID, name = ForgeMatmos.NAME, version = ForgeMatmos.VERSION)
+@Mod(modid = ForgeMatmos.MODID, name = ForgeMatmos.NAME, version = ForgeMatmos.VERSION, updateJSON = Matmos.UPDATE_JSON)
 public class ForgeMatmos extends ForgeBase
 {
     public static final String MODID = "matmos";

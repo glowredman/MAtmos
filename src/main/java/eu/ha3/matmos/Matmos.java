@@ -57,13 +57,14 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     protected static final String NAME = "MAtmos";
     protected static final String VERSION = "34";
     protected static final String FOR = "1.12.2";
-    protected static final String ADDRESS = "http://matmos.ha3.eu";
+    protected static final String ADDRESS = "https://github.com/makamys/MAtmos";
+    protected static final String UPDATE_JSON = "https://raw.githubusercontent.com/makamys/MAtmos/master/updatejson/update-matmos.json";
     public static final Identity identity = new HaddonIdentity(NAME, VERSION, FOR, ADDRESS);
 
     // NotifiableHaddon and UpdateNotifier
     private final ConfigProperty config = new ConfigProperty();
     private final Chatter chatter = new Chatter(this, "<MAtmos> ");
-    private final UpdateNotifier updateNotifier = new UpdateNotifier(this, "http://localhost:8000/matmos_update.json");
+    private final UpdateNotifier updateNotifier = new UpdateNotifier(this, UPDATE_JSON);
 
     // State
     private boolean isListenerInstalled;

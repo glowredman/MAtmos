@@ -8,5 +8,5 @@
 	},
   "uniquename" : "makamys.zen",
   "version"    : "1.0",
-  "updatejson": "http://localhost:8000/update_mat2020.json"
+  "updatejson": "https://raw.githubusercontent.com/makamys/MAtmos/master/updatejson/update-mat_zen.json"
 }
