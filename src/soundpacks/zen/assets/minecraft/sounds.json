@@ -17,7 +17,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/wind_novege",
+        "name": "loop/wind_novege",
       "stream": true
       }
     ]
@@ -26,16 +26,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/wind_novege_night",
-      "stream": true
-      }
-    ]
-  },
-  "matmos_hl.loop.crickets_night": {
-    "category": "ambient",
-    "sounds": [
-      {
-        "name": "matmos_hl/loop/crickets_night",
+        "name": "loop/wind_novege_night",
       "stream": true
       }
     ]
@@ -44,7 +35,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/cricketz_night",
+        "name": "loop/cricketz_night",
       "stream": true
       }
     ]
@@ -53,7 +44,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/mountain_wind",
+        "name": "loop/mountain_wind",
       "stream": true
       }
     ]
@@ -62,7 +53,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/wind_winter",
+        "name": "loop/wind_winter",
       "stream": true
       }
     ]
@@ -71,7 +62,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/wind_novege_indoors",
+        "name": "loop/wind_novege_indoors",
       "stream": true
       }
     ]
@@ -80,7 +71,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/wind_forest",
+        "name": "loop/wind_forest",
       "stream": true
       }
     ]
@@ -89,7 +80,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/wind_forest_night",
+        "name": "loop/wind_forest_night",
       "stream": true
       }
     ]
@@ -98,7 +89,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/wind_forest_indoors",
+        "name": "loop/wind_forest_indoors",
       "stream": true
       }
     ]
@@ -107,7 +98,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/torch",
+        "name": "loop/torch",
       "stream": true
       }
     ]
@@ -116,7 +107,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/torch_nobass",
+        "name": "loop/torch_nobass",
       "stream": true
       }
     ]
@@ -125,7 +116,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/ice",
+        "name": "loop/ice",
       "stream": true
       }
     ]
@@ -134,7 +125,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/sand",
+        "name": "loop/sand",
       "stream": true
       }
     ]
@@ -143,7 +134,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/cave_a",
+        "name": "loop/cave_a",
       "stream": true
       }
     ]
@@ -152,24 +143,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/cave_b",
-      "stream": true
-      }
-    ]
-  },
-  "matmos_hl.stereo.huhuhu": {
-    "category": "ambient",
-    "sounds": [
-	  {
-	    "name": "matmos_hl/stereo/huhuhu"
-	  }
-    ]
-  },
-  "matmos_hl.loop.water_small": {
-    "category": "ambient",
-    "sounds": [
-      {
-        "name": "matmos_hl/loop/water_small",
+        "name": "loop/cave_b",
       "stream": true
       }
     ]
@@ -178,7 +152,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/water_medium",
+        "name": "loop/water_medium",
       "stream": true
       }
     ]
@@ -187,16 +161,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/water_large",
-      "stream": true
-      }
-    ]
-  },
-  "matmos_hl.loop.waves_tiny": {
-    "category": "ambient",
-    "sounds": [
-      {
-        "name": "matmos_hl/loop/waves_tiny",
+        "name": "loop/water_large",
       "stream": true
       }
     ]
@@ -205,16 +170,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/waves_medium",
-      "stream": true
-      }
-    ]
-  },
-  "matmos_hl.loop.waves_sea": {
-    "category": "ambient",
-    "sounds": [
-      {
-        "name": "matmos_hl/loop/waves_sea",
+        "name": "loop/waves_medium",
       "stream": true
       }
     ]
@@ -223,7 +179,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/underwater_direct",
+        "name": "loop/underwater_direct",
       "stream": true
       }
     ]
@@ -232,7 +188,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/underwater_indirect",
+        "name": "loop/underwater_indirect",
       "stream": true
       }
     ]
@@ -241,7 +197,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/rain",
+        "name": "loop/rain",
       "stream": true
       }
     ]
@@ -250,7 +206,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/rain_indoors",
+        "name": "loop/rain_indoors",
       "stream": true
       }
     ]
@@ -259,7 +215,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/rain_lake",
+        "name": "loop/rain_lake",
       "stream": true
       }
     ]
@@ -268,7 +224,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/rain_window",
+        "name": "loop/rain_window",
       "stream": true
       }
     ]
@@ -277,7 +233,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/rain_thunder",
+        "name": "loop/rain_thunder",
       "stream": true
       }
     ]
@@ -286,7 +242,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/rain_thunder_indoors",
+        "name": "loop/rain_thunder_indoors",
       "stream": true
       }
     ]
@@ -295,7 +251,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/snow",
+        "name": "loop/snow",
       "stream": true
       }
     ]
@@ -304,7 +260,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/nether",
+        "name": "loop/nether",
       "stream": true
       }
     ]
@@ -313,7 +269,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/nether_indoors",
+        "name": "loop/nether_indoors",
       "stream": true
       }
     ]
@@ -322,7 +278,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/raw_wind",
+        "name": "loop/raw_wind",
       "stream": true
       }
     ]
@@ -331,7 +287,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/end_wind",
+        "name": "loop/end_wind",
       "stream": true
       }
     ]
@@ -340,7 +296,7 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "matmos_hl/loop/end_wind_indoors",
+        "name": "loop/end_wind_indoors",
       "stream": true
       }
     ]
