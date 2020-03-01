@@ -85,10 +85,11 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
             JsonObject o = element.getAsJsonObject();
             String uniqueName = MAtUtil.sanitizeUniqueName(o.get("uniquename").getAsString());
             String friendlyName = o.get("friendlyname").getAsString();
+            float volumeModifier = o.has("volumemodifier") ? o.get("volumemodifier").getAsFloat() : 1;
             String pointer = o.get("pointer").getAsString();
             ResourceLocation location = new ResourceLocation("matmos", pointer);
             if (pack.resourceExists(location)) {
-                addExpansion(new ExpansionIdentity(uniqueName, friendlyName, pack, location));
+                addExpansion(new ExpansionIdentity(uniqueName, friendlyName, pack, location, volumeModifier));
             } else {
                 Matmos.LOGGER.warn("An expansion pointer doesn't exist: " + pointer);
             }
