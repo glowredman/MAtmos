@@ -55,7 +55,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     // Identity
     protected static final String NAME = "MAtmos";
-    protected static final String VERSION = "33";
+    protected static final String VERSION = "34";
     protected static final String FOR = "1.12.2";
     protected static final String ADDRESS = "http://matmos.ha3.eu";
     public static final Identity identity = new HaddonIdentity(NAME, VERSION, FOR, ADDRESS);

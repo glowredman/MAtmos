@@ -80,7 +80,7 @@ subprojects {
 		embed 'net.sf.practicalxml:practicalxml:1.1.19'
 	}
 
-	def ver = "${project.mcVersion}.${project.buildVersion}-${project.buildType}"
+	def ver = "${project.mcVersion}-${project.buildVersion}"
 
 	version = ver
 	group = project.group
