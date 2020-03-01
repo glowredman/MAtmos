@@ -1,11 +1,11 @@
 [
 {
-  "modid": "matmos",
-  "name": "MAtmos",
-  "description": "MAtmos",
+  "modid": "${modid}",
+  "name": "${name}",
+  "description": "${description}",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "https://minecraft.ha3.eu/matmos/",
+  "url": "${url}",
   "authorList": ["Hurricaaane (Ha3)", "Dag_", "Sollace", "makamys"]
 }
 ]

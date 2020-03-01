@@ -84,7 +84,7 @@ subprojects {
 
 	version = ver
 	group = project.group
-	description = project.name
+	description = project.description
 	archivesBaseName = project.modid
 	ext.revision = "0"
 
@@ -92,7 +92,7 @@ subprojects {
 		mappings = project.mcMappings
 		runDir = 'run'
 		replace '@MODID@', project.modid
-		replace '@NAME@', project.name
+		replace '@NAME@', project.modname
 		replace '@AUTHOR@', project.author
 		replace '@VERSION@', ver
 		replace '@DESCRIPTION@', project.description
@@ -181,19 +181,14 @@ subprojects {
 	processResources {
 		// this will ensure that this task is redone when the versions change.
 		inputs.property "version", project.version
+		inputs.property "name", project.modname
+		inputs.property "description", project.description
+		inputs.property "modid", project.modid
 		inputs.property "mcversion", project.minecraft.version
-
-		// replace stuff in mcmod.info, nothing else
-		from(sourceSets.main.resources.srcDirs) {
-			include 'mcmod.info'
-
-			// replace version and mcversion
-			expand 'version':project.version, 'mcversion':project.minecraft.version
-		}
 
 		def props = [
 				modid: project.modid,
-				name: project.name,
+				name: project.modname,
 				description: project.description,
 				version: ver,
 				revision: project.buildRevision,
@@ -202,6 +197,16 @@ subprojects {
 				url: project.url
 		]
 		inputs.properties props
+		
+		// replace stuff in mcmod.info, nothing else
+		from(sourceSets.main.resources.srcDirs) {
+			include 'mcmod.info'
+
+			// replace version and mcversion
+			expand props
+		}
+
+		
 
 		// replace stuff in litemod.json, nothing else
 		from(sourceSets.main.resources.srcDirs) {
