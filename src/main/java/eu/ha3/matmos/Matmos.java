@@ -49,7 +49,7 @@ import net.minecraft.util.text.TextFormatting;
 import paulscode.sound.SoundSystemConfig;
 
 public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, SupportsInGameChangeEvents, NotifiableHaddon, IResourceManagerReloadListener, Stable {
-    private static final boolean _COMPILE_IS_UNSTABLE = true;
+    private static final boolean _COMPILE_IS_UNSTABLE = false;
 
     public static final Logger LOGGER = LogManager.getLogger("matmos");
 
