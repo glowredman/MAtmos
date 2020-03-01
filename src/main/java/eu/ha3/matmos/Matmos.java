@@ -64,7 +64,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     // NotifiableHaddon and UpdateNotifier
     private final ConfigProperty config = new ConfigProperty();
     private final Chatter chatter = new Chatter(this, "<MAtmos> ");
-    private final UpdateNotifier updateNotifier = new UpdateNotifier(this, UPDATE_JSON);
+    private final UpdateNotifier updateNotifier = new UpdateNotifier(this, new HaddonVersion(FOR + "-" + VERSION), UPDATE_JSON);
 
     // State
     private boolean isListenerInstalled;
