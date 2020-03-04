@@ -2,3 +2,6 @@
 	path = lib/MC-Commons
 	url = https://github.com/makamys/MC-Commons.git
 	branch = master
+[submodule "src/soundpacks/zen"]
+	path = src/soundpacks/zen
+	url = https://github.com/makamys/MAtmos-2020-Zen.git
