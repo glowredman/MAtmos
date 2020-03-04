@@ -1,0 +1,224 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		jcenter()
+		maven {
+			name 'forge'
+			url 'http://files.minecraftforge.net/maven/'
+		}
+		maven {
+			name = "sonatype"
+			url = "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+		maven {
+			name = 'sponge'
+			url = 'http://repo.spongepowered.org/maven'
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:' + project.forgeGradleVersion
+		classpath 'org.spongepowered:mixingradle:' + project.mixinGradleVersion
+	}
+}
+
+subprojects {
+	configurations {
+		embed
+		compile.extendsFrom(embed)
+	}
+}
+
+project(':forge') {
+	apply plugin: 'net.minecraftforge.gradle.forge'
+
+	minecraft {
+		version = "${project.mcVersion}-${project.forgeVersion}"
+		coreMod = 'eu.ha3.mc.haddon.forge.MixinLoaderForge'
+	}
+
+	dependencies {
+		embed 'org.spongepowered:mixin:0.8'
+	}
+
+	sourceSets {
+		commons.java.exclude 'eu/ha3/mc/haddon/litemod/**'
+
+		main.java.exclude '**/LiteModMAtmos.java'
+
+		main.resources.exclude '**/litemod.json'
+	}
+}
+
+project(':liteloader') {
+	apply plugin: 'net.minecraftforge.gradle.liteloader'
+
+	minecraft {
+		version = "${project.mcVersion}"
+	}
+
+	sourceSets {
+		commons.java.exclude 'eu/ha3/mc/haddon/forge/**'
+
+		commons.resources.exclude '**/haddon_core.mixin.json'
+
+		main.java.exclude '**/ForgeMatmos.java'
+
+		main.resources.exclude '**/mcmod.info'
+		main.resources.exclude '**/pack.mcmeta'
+	}
+}
+
+subprojects {
+	apply plugin: 'org.spongepowered.mixin'
+
+	mixin {
+		defaultObfuscationEnv notch
+	}
+	
+
+	dependencies {
+		embed 'net.sf.practicalxml:practicalxml:1.1.19'
+	}
+
+	def ver = "${project.mcVersion}-${project.buildVersion}"
+
+	version = ver
+	group = project.group
+	description = project.description
+	archivesBaseName = project.modid
+	ext.revision = "0"
+
+	minecraft {
+		mappings = project.mcMappings
+		runDir = 'run'
+		replace '@MODID@', project.modid
+		replace '@NAME@', project.modname
+		replace '@AUTHOR@', project.author
+		replace '@VERSION@', ver
+		replace '@DESCRIPTION@', project.description
+	}
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+
+	def expensionPacks = [
+		default: 'Matmos Default Resourcepack 1.10',
+		air: 'MAtmos default 2012 pack Air',
+		breeze: 'MAtmos default 2014 pack Breeze'
+	]
+
+	sourceSets {
+		soundpacks {
+			resources {
+				srcDirs = ["${rootDir}/src/soundpacks/resources"]
+			}
+		}
+		commons {
+			java {
+				srcDirs = ["${rootDir}/lib/MC-Commons/mc-src"]
+			}
+			resources {
+				srcDirs = ["${rootDir}/lib/MC-Commons/mc-src/resources"]
+			}
+
+			ext.refMap = "haddon_core.mixin.refmap.json"
+
+			compileClasspath += main.compileClasspath
+		}
+		main {
+			java {
+				srcDirs = ["${rootDir}/src/main/java"]
+
+			}
+			resources {
+				srcDirs = ["${rootDir}/src/main/resources"]
+			}
+			ext.refMap = "haddon.mixin.refmap.json"
+
+			compileClasspath += commons.output
+		}
+		dev {
+			compileClasspath += main.output
+		}
+	}
+
+	jar {
+		manifest {
+			attributes (
+				'FMLCorePlugin': 'eu.ha3.mc.haddon.forge.MixinLoaderForge',
+				'FMLCorePluginContainsFMLMod': 'true',
+
+				'MixinConfigs': 'haddon.mixin.json,haddon_core.mixin.json',
+				'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+				'TweakOrder': 0,
+				'ForceLoadAsMod': 'true'
+			)
+		}
+
+		from(sourceSets.commons.output);
+
+		// embed libraries in jar
+		// TODO shadow to avoid conflicts?
+		from configurations.embed.collect {
+			exclude '**/LICENSE.txt'
+			it.isDirectory() ? it : zipTree(it)
+		}
+	}
+
+	task allPacks { }
+
+	expensionPacks.each {k, v ->
+		def pack = task "${k}"(type: Zip) {
+			baseName v
+			from(sourceSets.soundpacks) {
+				include k
+				include 'common'
+			}
+		}
+		allPacks.dependsOn pack
+	}
+
+	processResources {
+		// this will ensure that this task is redone when the versions change.
+		inputs.property "version", project.version
+		inputs.property "name", project.modname
+		inputs.property "description", project.description
+		inputs.property "modid", project.modid
+		inputs.property "mcversion", project.minecraft.version
+
+		def props = [
+				modid: project.modid,
+				name: project.modname,
+				description: project.description,
+				version: ver,
+				revision: project.buildRevision,
+				mcversion: project.mcVersion,
+				author: project.author,
+				url: project.url
+		]
+		inputs.properties props
+		
+		// replace stuff in mcmod.info, nothing else
+		from(sourceSets.main.resources.srcDirs) {
+			include 'mcmod.info'
+
+			// replace version and mcversion
+			expand props
+		}
+
+		
+
+		// replace stuff in litemod.json, nothing else
+		from(sourceSets.main.resources.srcDirs) {
+			include 'litemod.json'
+
+			// replace props
+			expand props
+		}
+
+		// copy everything else except the mcmod.info
+		from(sourceSets.main.resources.srcDirs) {
+			exclude(['mcmod.info', 'litemod.json'])
+		}
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"name": "MAtmos",
+	"mcversion": "${mcversion}",
+	"version": "${version}",
+	"revision": "${revision}",
+	"author": "${author}",
+	"url": "${url}",
+	"description": "${description}",
+	"mixinConfigs": [
+        "haddon.mixin.json"
+	]
+}
