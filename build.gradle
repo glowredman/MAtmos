@@ -71,9 +71,9 @@ project(':liteloader') {
 subprojects {
 	apply plugin: 'org.spongepowered.mixin'
 
-	mixin {
+	/*mixin {
 		defaultObfuscationEnv notch
-	}
+	}*/
 	
 
 	dependencies {
@@ -145,7 +145,6 @@ subprojects {
 	jar {
 		manifest {
 			attributes (
-				'FMLCorePlugin': 'eu.ha3.mc.haddon.forge.MixinLoaderForge',
 				'FMLCorePluginContainsFMLMod': 'true',
 
 				'MixinConfigs': 'haddon.mixin.json,haddon_core.mixin.json',
