@@ -1,6 +1,6 @@
 package eu.ha3.matmos.util.math;
 
-import net.minecraft.util.math.BlockPos;
+import eu.ha3.matmos.util.BlockPos;
 
 /**
  * @author dags_ <dags@dags.me>

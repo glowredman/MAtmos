@@ -18,7 +18,7 @@ public class ModuleRiding extends ModuleProcessor implements Module {
 
     @Override
     protected void doProcess() {
-        Entity ride = getPlayer().getRidingEntity();
+        Entity ride = getPlayer().ridingEntity;
 
         setValue("minecart", ride instanceof EntityMinecart);
         setValue("boat", ride instanceof EntityBoat);

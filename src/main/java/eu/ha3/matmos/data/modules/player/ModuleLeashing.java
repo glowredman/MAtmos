@@ -7,7 +7,7 @@ import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 
 /**
  * Processing module for the total entities a player has leashed and withing range. (default 20
@@ -24,13 +24,13 @@ public class ModuleLeashing extends ModuleProcessor implements Module {
     protected void doProcess() {
         EntityPlayer player = getPlayer();
 
-        List<EntityLiving> entities = player.getEntityWorld().getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(
+        List<EntityLiving> entities = player.getEntityWorld().getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox(
                 player.posX - RADIUS, player.posY - RADIUS,
                 player.posZ - RADIUS, player.posX + RADIUS,
                 player.posY + RADIUS, player.posZ + RADIUS));
 
         setValue("total", entities.stream().filter(entity -> {
-            return entity.getLeashed() && entity.getLeashHolder() == player;
+            return entity.getLeashed() && entity.getLeashedToEntity() == player;
         }).count());
     }
 }

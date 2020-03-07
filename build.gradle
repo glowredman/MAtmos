@@ -10,14 +10,9 @@ buildscript {
 			name = "sonatype"
 			url = "https://oss.sonatype.org/content/repositories/snapshots/"
 		}
-		maven {
-			name = 'sponge'
-			url = 'http://repo.spongepowered.org/maven'
-		}
 	}
 	dependencies {
 		classpath 'net.minecraftforge.gradle:ForgeGradle:' + project.forgeGradleVersion
-		classpath 'org.spongepowered:mixingradle:' + project.mixinGradleVersion
 	}
 }
 
@@ -26,18 +21,24 @@ subprojects {
 		embed
 		compile.extendsFrom(embed)
 	}
+	
+	repositories {
+		maven { // this has to be here and not in buildscript.repositories, otherwise Gradle won't find mixin <0.8 for some reason
+			name = 'sponge'
+			url = 'https://repo.spongepowered.org/maven/'
+		}
+	}
 }
 
 project(':forge') {
-	apply plugin: 'net.minecraftforge.gradle.forge'
+	apply plugin: 'forge'
 
 	minecraft {
 		version = "${project.mcVersion}-${project.forgeVersion}"
-		coreMod = 'eu.ha3.mc.haddon.forge.MixinLoaderForge'
 	}
 
 	dependencies {
-		embed 'org.spongepowered:mixin:0.8'
+		embed 'org.spongepowered:mixin:0.7+'
 	}
 
 	sourceSets {
@@ -49,32 +50,7 @@ project(':forge') {
 	}
 }
 
-project(':liteloader') {
-	apply plugin: 'net.minecraftforge.gradle.liteloader'
-
-	minecraft {
-		version = "${project.mcVersion}"
-	}
-
-	sourceSets {
-		commons.java.exclude 'eu/ha3/mc/haddon/forge/**'
-
-		commons.resources.exclude '**/haddon_core.mixin.json'
-
-		main.java.exclude '**/ForgeMatmos.java'
-
-		main.resources.exclude '**/mcmod.info'
-		main.resources.exclude '**/pack.mcmeta'
-	}
-}
-
 subprojects {
-	apply plugin: 'org.spongepowered.mixin'
-
-	mixin {
-		defaultObfuscationEnv notch
-	}
-	
 
 	dependencies {
 		embed 'net.sf.practicalxml:practicalxml:1.1.19'
@@ -121,8 +97,6 @@ subprojects {
 				srcDirs = ["${rootDir}/lib/MC-Commons/mc-src/resources"]
 			}
 
-			ext.refMap = "haddon_core.mixin.refmap.json"
-
 			compileClasspath += main.compileClasspath
 		}
 		main {
@@ -133,7 +107,6 @@ subprojects {
 			resources {
 				srcDirs = ["${rootDir}/src/main/resources"]
 			}
-			ext.refMap = "haddon.mixin.refmap.json"
 
 			compileClasspath += commons.output
 		}
@@ -141,11 +114,12 @@ subprojects {
 			compileClasspath += main.output
 		}
 	}
+	
+	def outRefMapFile = tasks.compileJava.temporaryDir.toString() + "/example.mixin.refmap.json" // 1.7.10 mixin compatibility
 
 	jar {
 		manifest {
 			attributes (
-				'FMLCorePlugin': 'eu.ha3.mc.haddon.forge.MixinLoaderForge',
 				'FMLCorePluginContainsFMLMod': 'true',
 
 				'MixinConfigs': 'haddon.mixin.json,haddon_core.mixin.json',
@@ -157,6 +131,8 @@ subprojects {
 
 		from(sourceSets.commons.output);
 
+		from outRefMapFile; // 1.7.10 mixin
+		
 		// embed libraries in jar
 		// TODO shadow to avoid conflicts?
 		from configurations.embed.collect {
@@ -164,6 +140,18 @@ subprojects {
 			it.isDirectory() ? it : zipTree(it)
 		}
 	}
+	
+	// 1.7.10 mixin compatibility
+	def outSrgFile = tasks.compileJava.temporaryDir.toString() + "/outSrg.srg"
+
+	afterEvaluate {
+		tasks.compileJava.options.compilerArgs += ["-AreobfSrgFile=${tasks.reobf.srg}", "-AoutSrgFile=${outSrgFile}", "-AoutRefMapFile=${outRefMapFile}"];
+	}
+
+	reobf {
+		addExtraSrgFile outSrgFile
+	}
+	// end of mixin stuff
 
 	task allPacks { }
 

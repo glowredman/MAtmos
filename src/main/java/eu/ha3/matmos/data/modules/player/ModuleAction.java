@@ -16,7 +16,7 @@ public class ModuleAction extends ModuleProcessor implements Module {
 
     @Override
     protected void doProcess() {
-        EntityPlayerSP player = Minecraft.getMinecraft().player;
+        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
 
         setValue("swing_progress16", (int)Math.floor(player.swingProgress * 16));
         setValue("swinging", player.swingProgress != 0);

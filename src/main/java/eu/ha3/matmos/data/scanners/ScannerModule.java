@@ -18,12 +18,12 @@ import eu.ha3.matmos.data.modules.PassOnceModule;
 import eu.ha3.matmos.data.modules.ThousandStringCountModule;
 import eu.ha3.matmos.data.modules.VirtualCountModule;
 import eu.ha3.matmos.data.modules.VirtualModuleProcessor;
+import eu.ha3.matmos.util.BlockPos;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.matmos.util.math.MAtMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.BlockPos;
 
 public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     public static final String THOUSAND_SUFFIX = "_p1k";
@@ -222,7 +222,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
         int y = MAtUtil.clampToBounds(MAtUtil.getPlayerY());
         int z = MAtUtil.getPlayerZ();
 
-        if (Minecraft.getMinecraft().player.dimension != dimension) {
+        if (Minecraft.getMinecraft().thePlayer.dimension != dimension) {
             reboot();
             return true;
         }
@@ -245,7 +245,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
         ticksSinceBoot = 0;
         firstScan = true;
 
-        dimension = Minecraft.getMinecraft().player.dimension;
+        dimension = Minecraft.getMinecraft().thePlayer.dimension;
         xx = MAtUtil.getPlayerX();
         yy = MAtUtil.clampToBounds(MAtUtil.getPlayerY());
         zz = MAtUtil.getPlayerZ();

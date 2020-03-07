@@ -59,6 +59,6 @@ public abstract class ModuleProcessor extends ProcessorModel implements EntryBas
     }
 
     protected EntityPlayer getPlayer() {
-        return Minecraft.getMinecraft().player;
+        return Minecraft.getMinecraft().thePlayer;
     }
 }

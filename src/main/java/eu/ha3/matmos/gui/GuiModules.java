@@ -78,7 +78,7 @@ public class GuiModules extends GuiScreen {
     }
 
     @Override
-    protected void mouseClicked(int par1, int par2, int par3) throws IOException {
+    protected void mouseClicked(int par1, int par2, int par3) {
         if (buttonId < 0) {
             super.mouseClicked(par1, par2, par3);
         }
@@ -87,7 +87,7 @@ public class GuiModules extends GuiScreen {
     @Override
     public void drawScreen(int par1, int par2, float par3) {
         drawGradientRect(0, 0, width, height, 0xC0C06000, 0x60C06000);
-        drawCenteredString(fontRenderer, I18n.format("mat.title.devmode.display"), width / 2, 1, 0xffffff);
+        drawCenteredString(fontRendererObj, I18n.format("mat.title.devmode.display"), width / 2, 1, 0xffffff);
 
         mod.getVisualDebugger().onFrame(-1f);
 

@@ -19,7 +19,8 @@ public class ResourcePackDealer {
 
     public Stream<IResourcePack> findResourcePacks() {
         return Stream.concat(
-                Minecraft.getMinecraft().getResourcePackRepository().getRepositoryEntries().stream().map(ResourcePackRepository.Entry::getResourcePack),
+                ((List<ResourcePackRepository.Entry>)(Minecraft.getMinecraft().getResourcePackRepository().getRepositoryEntries()))
+                .stream().map(ResourcePackRepository.Entry::getResourcePack),
                 ((IMinecraft)Minecraft.getMinecraft()).defaultResourcePacks().stream()
             ).filter(this::checkCompatible)
              .distinct();

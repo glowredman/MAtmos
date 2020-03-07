@@ -22,7 +22,7 @@ public class ScanVolumetric extends Scan
 	
 	protected void initScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn) //throws MAtScannerTooLargeException
 	{	
-		int worldHeight = Minecraft.getMinecraft().world.getHeight();
+		int worldHeight = Minecraft.getMinecraft().theWorld.getHeight();
 		
 		if (ysizeIn > worldHeight)
 		{
@@ -58,7 +58,7 @@ public class ScanVolumetric extends Scan
 	
 	protected boolean doRoutine()
 	{	
-		Minecraft.getMinecraft().profiler.startSection("scan_do_routine");
+		Minecraft.getMinecraft().mcProfiler.startSection("scan_do_routine");
 		long ops = 0;
 		while (ops < this.opspercall && this.progress < this.finalProgress)
 		{
@@ -82,7 +82,7 @@ public class ScanVolumetric extends Scan
 			this.progress++;
 			
 		}
-		Minecraft.getMinecraft().profiler.endSection();
+		Minecraft.getMinecraft().mcProfiler.endSection();
 		return true;
 	}
 	

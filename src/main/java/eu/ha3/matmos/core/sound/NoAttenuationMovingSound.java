@@ -5,11 +5,9 @@ import eu.ha3.matmos.util.math.HelperFadeCalculator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.MovingSound;
-import net.minecraft.client.audio.Sound;
+import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 
 public class NoAttenuationMovingSound extends MovingSound implements StreamingSound {
     private boolean usesPause;
@@ -22,9 +20,8 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
     private boolean notYetPlayed = true;
 
     protected NoAttenuationMovingSound(ResourceLocation myResource, float volume, float pitch, boolean isLooping, boolean usesPause, boolean underwater) {
-        super(SoundEvents.AMBIENT_CAVE, underwater ? SoundCategory.MASTER : SoundCategory.AMBIENT);
+        super(myResource);
 
-        positionedSoundLocation = myResource;
         attenuationType = ISound.AttenuationType.NONE;
         repeat = isLooping;
         repeatDelay = 0;
@@ -44,7 +41,7 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
 
     @Override
     public void update() {
-        Entity e = Minecraft.getMinecraft().player;
+        Entity e = Minecraft.getMinecraft().thePlayer;
 
         xPosF = (float)e.posX;
         yPosF = (float)e.posY;
@@ -94,13 +91,17 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
         donePlaying = true;
     }
     
-    @Override
+    /*@Override
     public Sound getSound() {
         notYetPlayed = false;
         return super.getSound();
-    }
+    }*/
     
-    public boolean notYetPlayed() {
-        return notYetPlayed;
+    public boolean popNotYetPlayed() {
+        boolean wasNotYetPlayed = notYetPlayed;
+        if(notYetPlayed) {
+            notYetPlayed = false;
+        }
+        return wasNotYetPlayed;
     }
 }

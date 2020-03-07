@@ -1,37 +1,39 @@
 package eu.ha3.matmos.util;
 
+import eu.ha3.matmos.core.sound.NoAttenuationSound;
+import eu.ha3.matmos.core.sound.PositionedSound;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class MAtUtil {
 
     public static EntityPlayer getPlayer() {
-        return Minecraft.getMinecraft().player;
+        return Minecraft.getMinecraft().thePlayer;
     }
 
     public static World getWorld() {
-        return Minecraft.getMinecraft().world;
+        return Minecraft.getMinecraft().theWorld;
     }
 
     public static int getPlayerX() {
         return (int)Math.floor(getPlayer().posX);
     }
 
+    /**
+     * Returns the player's eye pos.
+     * @return
+     */
     public static int getPlayerY() {
-        return (int)Math.floor(getPlayer().posY + getPlayer().getEyeHeight());
+        return (int)Math.floor(getPlayer().posY); // TODO is this working in 1.7.10 correctly?
     }
 
     public static int getPlayerZ() {
@@ -43,7 +45,7 @@ public class MAtUtil {
     }
 
     public static boolean isUnderwaterAnyGamemode() {
-        return getPlayer().isInsideOfMaterial(Material.WATER);
+        return getPlayer().isInsideOfMaterial(Material.water);
     }
 
     /**
@@ -65,7 +67,7 @@ public class MAtUtil {
      * locations in undefined space.
      */
     public static Block getBlockAt(BlockPos pos) {
-        return getWorld().getBlockState(pos).getBlock();
+        return getWorld().getBlock(pos.getX(), pos.getY(), pos.getZ());
     }
 
     /**
@@ -85,7 +87,7 @@ public class MAtUtil {
      * Gets the unique name of a given block, defined by its interoperability identifier.
      */
     public static String nameOf(Block block) {
-        return Block.REGISTRY.getNameForObject(block).toString();
+        return Block.blockRegistry.getNameForObject(block).toString();
     }
 
     /**
@@ -99,7 +101,7 @@ public class MAtUtil {
      * Gets the unique name of a given item.
      */
     public static String nameOf(Item item) {
-        return Item.REGISTRY.getNameForObject(item).toString();
+        return Item.itemRegistry.getNameForObject(item).toString();
     }
 
     public static boolean isSoundMasterEnabled() {
@@ -125,7 +127,7 @@ public class MAtUtil {
     }
 
     private static void playSound(float x, float y, float z, String soundName, float volume, float pitch) {
-        PositionedSoundRecord positionedsoundrecord = new PositionedSoundRecord(new ResourceLocation(soundName), SoundCategory.AMBIENT, volume, pitch, false, 0, ISound.AttenuationType.LINEAR, x, y, z);
+        PositionedSound positionedsoundrecord = new PositionedSound(new ResourceLocation(soundName), volume, pitch, false, 0, ISound.AttenuationType.LINEAR, x, y, z);
         Minecraft.getMinecraft().getSoundHandler().playSound(positionedsoundrecord);
     }
 
@@ -138,8 +140,16 @@ public class MAtUtil {
             return defaultIfFail;
         }
 
-        IBlockState state = Minecraft.getMinecraft().world.getBlockState(pos);
-        return asPowerMeta(state.getBlock(), state.getBlock().getMetaFromState(state));
+        try
+        {
+            return asPowerMeta(
+                getNameAt(pos, ""),
+                Minecraft.getMinecraft().theWorld.getBlockMetadata(pos.getX(), pos.getY(), pos.getZ()));
+        }
+        catch (Exception e)
+        {
+            return defaultIfFail;
+        }
     }
 
     /**
@@ -167,8 +177,17 @@ public class MAtUtil {
      * Returns the metadata of a certain block at the specified coordinates.
      */
     public static int getMetaAt(BlockPos pos, int defaultIdFail) {
-        IBlockState state = getWorld().getBlockState(pos);
-        return state.getBlock().getMetaFromState(state);
+        if (!isWithinBounds(pos))
+            return defaultIdFail;
+        
+        try
+        {
+            return Minecraft.getMinecraft().theWorld.getBlockMetadata(pos.getX(), pos.getY(), pos.getZ());
+        }
+        catch (Exception e)
+        {
+            return defaultIdFail;
+        }
     }
 
     /**
@@ -186,17 +205,21 @@ public class MAtUtil {
      * Returns the legacy number value of an item stack.
      */
     public static int legacyOf(ItemStack itemStack) {
-        return Item.REGISTRY.getIDForObject(itemStack.getItem());
+        return Item.itemRegistry.getIDForObject(itemStack.getItem());
     }
 
     /**
      * Returns the legacy number value of a block.
      */
     public static int legacyOf(Block block) {
-        return Block.REGISTRY.getIDForObject(block);
+        return Block.blockRegistry.getIDForObject(block);
     }
 
     public static String sanitizeUniqueName(String name) {
         return name.replaceAll("[^a-zA-Z0-9.-_]", "");
+    }
+    
+    public static boolean canSeeSky(BlockPos pos) {
+        return getWorld().canBlockSeeTheSky(pos.getX(), pos.getY(), pos.getZ());
     }
 }

@@ -3,8 +3,8 @@ package eu.ha3.matmos.data.modules.legacy;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
+import eu.ha3.matmos.util.BlockPos;
 import eu.ha3.matmos.util.MAtUtil;
-import net.minecraft.util.math.BlockPos;
 
 public class ModuleLegacyColumn extends ModuleProcessor implements Module {
     public ModuleLegacyColumn(DataPackage data) {

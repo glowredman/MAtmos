@@ -4,10 +4,10 @@ import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
+import eu.ha3.matmos.util.BlockPos;
 import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public class ModuleBiome extends ModuleProcessor implements Module {
     private final Matmos mod;
@@ -22,19 +22,20 @@ public class ModuleBiome extends ModuleProcessor implements Module {
         int biomej = mod.getConfig().getInteger("useroptions.biome.override");
 
         if (biomej <= -1) {
-            Biome biome = calculateBiome();
-            setValue("id", Biome.getIdForBiome(biome));
-            setValue("biome_name", biome.getBiomeName());
+            BiomeGenBase biome = calculateBiome();
+            setValue("id", biome.biomeID);
+            setValue("biome_name", biome.biomeName);
         } else {
             setValue("id", biomej);
             setValue("biome_name", "");
         }
     }
 
-    private Biome calculateBiome() {
+    private BiomeGenBase calculateBiome() {
         Minecraft mc = Minecraft.getMinecraft();
         BlockPos playerPos = MAtUtil.getPlayerPos();
 
-        return mc.world.getChunk(playerPos).getBiome(playerPos, mc.world.getBiomeProvider());
+        return mc.theWorld.getChunkFromBlockCoords(playerPos.getX(), playerPos.getZ())
+                .getBiomeGenForWorldCoords(playerPos.getX() & 15, playerPos.getZ() & 15, mc.theWorld.getWorldChunkManager());
     }
 }

@@ -15,7 +15,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.EnumChatFormatting;
 
 public class GuiExpansionDetails extends GuiScreen {
     private final GuiMatMenu parentScreen;
@@ -34,7 +34,7 @@ public class GuiExpansionDetails extends GuiScreen {
     public void drawScreen(int par1, int par2, float par3) {
         drawGradientRect(0, 0, width, height, 0xF0000000, 0x90000000);
 
-        drawCenteredString(fontRenderer, I18n.format("mat.mode.dev", expansion.getFriendlyName(), expansion.getName()), width / 2, 4, 0xffffff);
+        drawCenteredString(fontRendererObj, I18n.format("mat.mode.dev", expansion.getFriendlyName(), expansion.getName()), width / 2, 4, 0xffffff);
 
         debug.onFrame(0f);
 
@@ -48,7 +48,7 @@ public class GuiExpansionDetails extends GuiScreen {
 
     @Override
     public void initGui() {
-        int h = new ScaledResolution(mc).getScaledHeight() - 22;
+        int h = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight).getScaledHeight() - 22;
 
         buttonList.add(new GuiButton(200, 2, h, 70, 20, I18n.format("mat.options.close")));
         buttonList.add(new GuiButton(201, 4 + 70, h, 70, 20, I18n.format("mat.options.osd")));
@@ -81,11 +81,11 @@ public class GuiExpansionDetails extends GuiScreen {
 
                     if (debugUnit instanceof JsonExpansionDebugUnit) {
                         // XXX Read only mode
-                        mod.getChatter().printChat(TextFormatting.RED, I18n.format("mat.zip.unsupported"));
-                        mod.getChatter().printChatShort(TextFormatting.RED, I18n.format("mat.zip.unzip"));
+                        mod.getChatter().printChat(EnumChatFormatting.RED, I18n.format("mat.zip.unsupported"));
+                        mod.getChatter().printChatShort(EnumChatFormatting.RED, I18n.format("mat.zip.unzip"));
                     }
                 } else {
-                    mod.getChatter().printChat(TextFormatting.RED, "Could not start editor for an unknown reason.");
+                    mod.getChatter().printChat(EnumChatFormatting.RED, "Could not start editor for an unknown reason.");
                 }
             }
         } else if (button.id == 204) {
@@ -112,10 +112,10 @@ public class GuiExpansionDetails extends GuiScreen {
                             IDontKnowHowToCode.whoops__printExceptionToChat(mod.getChatter(), e, this);
                         }
                     } else {
-                        mod.getChatter().printChat(TextFormatting.RED, I18n.format("mat.folders.sounds"));
+                        mod.getChatter().printChat(EnumChatFormatting.RED, I18n.format("mat.folders.sounds"));
                     }
                 } else {
-                    mod.getChatter().printChat(TextFormatting.RED, I18n.format("mat.folders.mc"));
+                    mod.getChatter().printChat(EnumChatFormatting.RED, I18n.format("mat.folders.mc"));
                 }
             }
         }

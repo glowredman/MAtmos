@@ -18,7 +18,7 @@ public class ModuleArmour extends ModuleProcessor implements Module {
         EntityPlayer player = getPlayer();
 
         for (int i = 0; i < 4; i++) {
-            ItemProcessorHelper.setValue(this, player.inventory.armorInventory.get(i), Integer.toString(i));
+            ItemProcessorHelper.setValue(this, player.inventory.armorInventory[i], Integer.toString(i));
         }
     }
 }

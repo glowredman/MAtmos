@@ -15,7 +15,7 @@ import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.EnumChatFormatting;
 
 public class UserControl implements Ha3HoldActions, SupportsTickEvents, SupportsFrameEvents {
     private final Matmos mod;
@@ -78,16 +78,16 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 
     private void printUnusualMessages() {
         if (!mod.isInitialized()) {
-            mod.getChatter().printChat(TextFormatting.RED, "Unknown error: MAtmos isn't initialized");
+            mod.getChatter().printChat(EnumChatFormatting.RED, "Unknown error: MAtmos isn't initialized");
         } else {
             if (!MAtUtil.isSoundMasterEnabled()) {
                 mod.getChatter().printChat(
-                        TextFormatting.RED, "Warning: ", TextFormatting.WHITE,
+                        EnumChatFormatting.RED, "Warning: ", EnumChatFormatting.WHITE,
                         "Sounds are turned off in your game settings!");
             }
             if (!MAtUtil.isSoundAmbientEnabled()) {
                 mod.getChatter().printChat(
-                        TextFormatting.RED, "Warning: ", TextFormatting.WHITE,
+                        EnumChatFormatting.RED, "Warning: ", EnumChatFormatting.WHITE,
                         "Ambient sounds are at 0% volume in the advanced MAtmos options menu!");
             }
         }
@@ -128,17 +128,17 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
         if (mod.isActivated()) {
             mod.deactivate();
             mod.getChatter().printChat(
-                    TextFormatting.YELLOW, "Stopped. Press ", TextFormatting.WHITE,
-                    getKeyBindingMainFriendlyName(), TextFormatting.YELLOW, " to re-enable.");
+                    EnumChatFormatting.YELLOW, "Stopped. Press ", EnumChatFormatting.WHITE,
+                    getKeyBindingMainFriendlyName(), EnumChatFormatting.YELLOW, " to re-enable.");
 
         } else if (mod.isInitialized()) {
             if (loadingCount != 0) {
-                mod.getChatter().printChat(TextFormatting.GREEN, "Loading...");
+                mod.getChatter().printChat(EnumChatFormatting.GREEN, "Loading...");
             } else {
                 mod.getChatter().printChat(
-                        TextFormatting.GREEN, "Loading...", TextFormatting.YELLOW, " (Hold ",
-                        TextFormatting.WHITE, getKeyBindingMainFriendlyName() + " down",
-                        TextFormatting.YELLOW, " to tweak the volume)");
+                        EnumChatFormatting.GREEN, "Loading...", EnumChatFormatting.YELLOW, " (Hold ",
+                        EnumChatFormatting.WHITE, getKeyBindingMainFriendlyName() + " down",
+                        EnumChatFormatting.YELLOW, " to tweak the volume)");
             }
 
             loadingCount++;
@@ -157,7 +157,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 
         TimeStatistic stat = new TimeStatistic();
         mod.start();
-        mod.getChatter().printChat(TextFormatting.GREEN, "Loading for the first time (" + stat.getSecondsAsString(2) + "s)");
+        mod.getChatter().printChat(EnumChatFormatting.GREEN, "Loading for the first time (" + stat.getSecondsAsString(2) + "s)");
     }
 
     private void whenWantsForcing() {
@@ -165,7 +165,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
             TimeStatistic stat = new TimeStatistic();
             mod.refresh();
             mod.activate();
-            mod.getChatter().printChat(TextFormatting.GREEN, "Reloading expansions (" + stat.getSecondsAsString(2) + "s)");
+            mod.getChatter().printChat(EnumChatFormatting.GREEN, "Reloading expansions (" + stat.getSecondsAsString(2) + "s)");
         } else if (!mod.isInitialized()) {
             whenUninitializedAction();
         }

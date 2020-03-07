@@ -298,11 +298,11 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
                 String folderName = frp.getPackName();
                 // XXX: getPackName might not be specified to return the folder name?
 
-                final File folder = new File(Minecraft.getMinecraft().gameDir, "resourcepacks/" + folderName);
+                final File folder = new File(Minecraft.getMinecraft().mcDataDir, "resourcepacks/" + folderName);
 
                 if (folder.exists() && folder.isDirectory()) {
-                    System.out.println(identity.getLocation().getPath());
-                    final File file = new File(folder, "assets/matmos/" + identity.getLocation().getPath());
+                    System.out.println(identity.getLocation().getResourcePath());
+                    final File file = new File(folder, "assets/matmos/" + identity.getLocation().getResourcePath());
 
                     return new FolderExpansionDebugUnit() {
                         @Override

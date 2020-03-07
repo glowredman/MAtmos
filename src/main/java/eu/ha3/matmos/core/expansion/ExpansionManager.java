@@ -100,7 +100,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
         Expansion expansion = new Expansion(identity, data, collector, accessor, this, new File(userconfigFolder, identity.getUniqueName() + ".cfg"));
         expansions.put(identity.getUniqueName(), expansion);
 
-        if (identity.getLocation().getPath().endsWith(".xml")) {
+        if (identity.getLocation().getResourcePath().endsWith(".xml")) {
             File folder = new File(userconfigFolder, "DO NOT EDIT UNLESS COPIED/");
             if (!folder.exists()) {
                 folder.mkdirs();
@@ -151,9 +151,9 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
 
     @Override
     public void onTick() {
-        Minecraft.getMinecraft().profiler.startSection("expansionmanager");
+        Minecraft.getMinecraft().mcProfiler.startSection("expansionmanager");
         expansions.values().forEach(Expansion::evaluate);
-        Minecraft.getMinecraft().profiler.endSection();
+        Minecraft.getMinecraft().mcProfiler.endSection();
     }
 
     public void setData(DataPackage data) {

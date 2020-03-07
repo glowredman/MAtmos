@@ -390,7 +390,7 @@ public class LegacyXMLExpansions_Engine1 {
     private String recomputeBlockName(String index) {
         Long l = Numbers.toLong(index);
         if (l != null && l < 256) {
-            Object o = Block.REGISTRY.getObjectById((int)(long)l);
+            Object o = Block.blockRegistry.getObjectById((int)(long)l);
             if (o != null && o instanceof Block) {
                 index = MAtUtil.nameOf((Block)o);
             } else {

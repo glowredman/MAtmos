@@ -19,11 +19,12 @@ abstract class MixinSoundManager implements ISoundManager {
 
     private SoundSystem __sndSystem;
     
-    @Shadow
+    // 1.12.2
+    /*@Shadow
     private List<String> pausedChannels;
     
     @Shadow
-    private boolean loaded;
+    private boolean loaded;*/
     
     @Inject(method = "<init>*", at = @At("RETURN"))
     private void onConstructed(CallbackInfo ci) {
@@ -34,7 +35,8 @@ abstract class MixinSoundManager implements ISoundManager {
     }
     
     /** Applies Forge's fix for MC-35856. Required for LiteLoader. Redundant if we're using Forge, but should be harmless. */
-    @Inject(method = "stopAllSounds", at = @At("RETURN"))
+    // 1.12.2
+    /*@Inject(method = "stopAllSounds", at = @At("RETURN"))
     public void stopAllSounds(CallbackInfo ci)
     {
         Matmos.LOGGER.debug("Running mixin for SoundManager.stopAllSounds!");
@@ -42,7 +44,7 @@ abstract class MixinSoundManager implements ISoundManager {
         {
             this.pausedChannels.clear(); //Forge: MC-35856 Fixed paused sounds repeating when switching worlds
         }
-    }
+    }*/
 
     @Override
     public SoundSystem getSoundSystem() {

@@ -6,7 +6,6 @@ import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -30,16 +29,11 @@ public class ModulePlayerStats extends ModuleProcessor implements Module {
         setValue("in_web", ((IEntity)player).isInWeb());
         setValue("on_ladder", player.isOnLadder());
 
-        ItemStack held = player.getHeldItemMainhand();
-        if (held == null) {
-            held = player.getHeldItemOffhand();
-        }
-
-        setValue("blocking", player.isHandActive() && held != null && held.getItem() instanceof ItemShield);
+        setValue("blocking", player.isBlocking());
         setValue("sprinting", player.isSprinting());
         setValue("sneaking", player.isSneaking());
         setValue("airborne", player.isAirBorne);
-        setValue("using_item", player.isHandActive());
+        setValue("using_item", player.isUsingItem());
         setValue("riding", player.isRiding());
         setValue("creative", player.capabilities.isCreativeMode);
         setValue("flying", player.capabilities.isFlying);

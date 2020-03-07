@@ -16,7 +16,6 @@ import eu.ha3.matmos.util.IDontKnowHowToCode;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.world.BossInfo.Color;
 
 public class VisualExpansionDebugging implements SupportsFrameEvents {
     private final Matmos mod;
@@ -32,7 +31,7 @@ public class VisualExpansionDebugging implements SupportsFrameEvents {
     @Override
     public void onFrame(float semi) {
         Minecraft mc = Minecraft.getMinecraft();
-        int fac = new ScaledResolution(mc).getScaleFactor();
+        int fac = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight).getScaleFactor();
         float scale = 1f / fac;
         GL11.glPushMatrix();
         GL11.glScalef(scale, scale, 1.0F);
@@ -60,8 +59,8 @@ public class VisualExpansionDebugging implements SupportsFrameEvents {
                 //link(condition, 0, 0, junction, 40, 0);
                 //link(junction, 40, 0, machine, 80, 0);
             } else {
-                mc.fontRenderer.drawStringWithShadow("There was an error loading the file:", 10, 30, 0xFFFF00);
-                mc.fontRenderer.drawStringWithShadow(loadException.getMessage(), 10, 40, 0xFFFF00);
+                mc.fontRendererObj.drawStringWithShadow("There was an error loading the file:", 10, 30, 0xFFFF00);
+                mc.fontRendererObj.drawStringWithShadow(loadException.getMessage(), 10, 40, 0xFFFF00);
             }
         } catch (Exception e) {
             IDontKnowHowToCode.whoops__printExceptionToChat(mod.getChatter(), e, this);
@@ -94,7 +93,7 @@ public class VisualExpansionDebugging implements SupportsFrameEvents {
 
         Minecraft mc = Minecraft.getMinecraft();
 
-        mc.fontRenderer.drawStringWithShadow(name + "(" + feed + ")", x, y, isActive ? 0x0099FF : 0xFF0000);
+        mc.fontRendererObj.drawStringWithShadow(name + "(" + feed + ")", x, y, isActive ? 0x0099FF : 0xFF0000);
 
         // PAINT
     }

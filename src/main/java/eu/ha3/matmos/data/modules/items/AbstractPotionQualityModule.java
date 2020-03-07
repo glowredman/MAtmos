@@ -6,6 +6,7 @@ import java.util.Set;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
 import eu.ha3.matmos.data.modules.RegistryBasedModule;
+import eu.ha3.matmos.util.IDontKnowHowToCode;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
@@ -39,12 +40,18 @@ abstract class AbstractPotionQualityModule extends ModuleProcessor implements Re
 
         oldThings.clear();
 
-        for (PotionEffect effect : getPlayer().getActivePotionEffects()) {
-            int id = Potion.getIdFromPotion(effect.getPotion());
+        for (Object effectObj : getPlayer().getActivePotionEffects()) {
+            if(effectObj instanceof PotionEffect) {
+                PotionEffect effect = (PotionEffect)effectObj;
+                int id = effect.getPotionID();
 
-            setValue(Integer.toString(id), getQuality(effect));
+                setValue(Integer.toString(id), getQuality(effect));
 
-            oldThings.add(Integer.toString(id));
+                oldThings.add(Integer.toString(id));
+            } else {
+                IDontKnowHowToCode.warnOnce("getActivePotionEffects() contained a " + effectObj.getClass() + ", (" + effectObj + "), expected PotionEffect");
+            }
+            
         }
     }
 

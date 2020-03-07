@@ -17,6 +17,6 @@ public class ModuleArmourEnchantment extends AbstractEnchantmentModule {
 
     @Override
     protected ItemStack getItem(EntityPlayer player) {
-        return player.inventory.armorInventory.get(slot);
+        return player.inventory.armorInventory[slot];
     }
 }

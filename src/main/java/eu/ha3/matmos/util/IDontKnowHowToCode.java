@@ -5,7 +5,7 @@ import java.util.Set;
 
 import eu.ha3.matmos.Matmos;
 import eu.ha3.mc.quick.chat.Chatter;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.EnumChatFormatting;
 
 public class IDontKnowHowToCode {
     private static Set<Integer> crash = new HashSet<>();
@@ -38,16 +38,16 @@ public class IDontKnowHowToCode {
         }
         crash.add(crashToken);
 
-        chatter.printChat(TextFormatting.RED, "MAtmos is crashing: ", TextFormatting.WHITE, e.getClass().getName(), ": ", e.getCause());
+        chatter.printChat(EnumChatFormatting.RED, "MAtmos is crashing: ", EnumChatFormatting.WHITE, e.getClass().getName(), ": ", e.getCause());
 
         int i = 0;
         for (StackTraceElement x : e.getStackTrace()) {
             if (i <= 5 || x.toString().contains("MAt") || x.toString().contains("eu.ha3.matmos.")) {
-                chatter.printChat(TextFormatting.WHITE, x.toString());
+                chatter.printChat(EnumChatFormatting.WHITE, x.toString());
             }
             i++;
         }
 
-        chatter.printChat(TextFormatting.RED, "Please report this issue :(");
+        chatter.printChat(EnumChatFormatting.RED, "Please report this issue :(");
     }
 }

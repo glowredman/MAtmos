@@ -14,7 +14,7 @@ public class ModuleHorse extends ModuleProcessor implements Module {
 
     @Override
     protected void doProcess() {
-        Entity xride = getPlayer().getRidingEntity();
+        Entity xride = getPlayer().ridingEntity;
 
         if (xride == null || !(xride instanceof EntityHorse)) {
             setValue("jumping", false);
@@ -55,26 +55,27 @@ public class ModuleHorse extends ModuleProcessor implements Module {
         setValue("name_tag", ride.getCustomNameTag());
 
         setValue("health1k", (int)(ride.getHealth() * 1000));
-        setValue("leashed_to_player", ride.getLeashed() && ride.getLeashHolder() instanceof EntityPlayer);
+        setValue("leashed_to_player", ride.getLeashed() && ride.getLeashedToEntity() instanceof EntityPlayer);
+        // XXX aren't these two bugged?
         setValue("ridden_by_owner",
-                ride.getControllingPassenger() instanceof EntityPlayer
-                        && ride.getOwnerUniqueId() != null
-                        && ride.getOwnerUniqueId().equals(((EntityPlayer)ride.getControllingPassenger()).getGameProfile().getId()));
+                ride.riddenByEntity instanceof EntityPlayer
+                        && ride.func_152119_ch() != null
+                        && ride.func_152119_ch().equals(((EntityPlayer)ride.riddenByEntity).getGameProfile().getId()));
         setValue("leashed_to_owner",
-                ride.getLeashHolder() instanceof EntityPlayer
-                        && !ride.getOwnerUniqueId().toString().equals("")
-                        && ride.getOwnerUniqueId().equals(((EntityPlayer)ride.getLeashHolder()).getGameProfile().getId()));
+                ride.getLeashedToEntity() instanceof EntityPlayer
+                        && ride.func_152119_ch() != null // TODO forwardport this null check to 1.12.2
+                        && ride.func_152119_ch().equals(((EntityPlayer)ride.getLeashedToEntity()).getGameProfile().getId()));
 
-        if (ride.getLeashed() && ride.getLeashHolder() != null) {
-            setValue("leash_distance", (int)(ride.getLeashHolder().getDistance(ride) * 1000));
+        if (ride.getLeashed() && ride.getLeashedToEntity() != null) {
+            setValue("leash_distance", (int)(ride.getLeashedToEntity().getDistanceToEntity(ride) * 1000));
         } else {
             setValue("leash_distance", 0);
         }
 
         // Server only?
         setValue("temper", ride.getTemper());
-        setValue("owner_uuid", ride.getOwnerUniqueId().toString());
-        setValue("reproduced", ride.isBreeding());
+        setValue("owner_uuid", String.valueOf(ride.func_152119_ch()));
+        setValue("reproduced", ride.getHasReproduced());
         setValue("bred", ride.isEatingHaystack());
     }
 }

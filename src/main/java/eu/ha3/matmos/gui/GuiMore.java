@@ -5,11 +5,12 @@ import java.io.IOException;
 import eu.ha3.matmos.Matmos;
 import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
+import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextFormatting;
+
+import net.minecraft.util.EnumChatFormatting;
 
 public class GuiMore extends GuiScreen {
     private final int IDS_PER_PAGE = 5;
@@ -90,7 +91,7 @@ public class GuiMore extends GuiScreen {
             toggleOption("useroptions.altitudes.high", "mat.options.ambience.high", button);
         } else if (button.id == 215) {
             mod.getConfig().setProperty("debug.mode", mod.getConfig().getInteger("debug.mode") == 0 ? 1 : 0);
-            button.displayString = mod.getConfig().getInteger("debug.mode") == 1 ? TextFormatting.GOLD + "Dev/Editor mode: ON" : "Dev/Editor mode: OFF";
+            button.displayString = mod.getConfig().getInteger("debug.mode") == 1 ? EnumChatFormatting.GOLD + "Dev/Editor mode: ON" : "Dev/Editor mode: OFF";
             mod.changedDebugMode();
             mod.saveConfig();
         }
@@ -114,7 +115,7 @@ public class GuiMore extends GuiScreen {
     }
 
     @Override
-    protected void mouseClicked(int par1, int par2, int par3) throws IOException {
+    protected void mouseClicked(int par1, int par2, int par3) {
         if (buttonId < 0) {
             super.mouseClicked(par1, par2, par3);
         }
@@ -129,12 +130,12 @@ public class GuiMore extends GuiScreen {
 
         if (!mod.isDebugMode()) {
             drawGradientRect(0, 0, width, height, 0xC0000000, 0x60000000);
-            drawCenteredString(fontRenderer, I18n.format("mat.title.advanced"), width / 2, 8, 0xffffff);
+            drawCenteredString(fontRendererObj, I18n.format("mat.title.advanced"), width / 2, 8, 0xffffff);
         } else {
             drawGradientRect(0, 0, width, height, 0xC0C06000, 0x60C06000);
-            drawCenteredString(fontRenderer, I18n.format("mat.title.advanced") + "(Dev mode)", width / 2, 8, 0xffffff);
+            drawCenteredString(fontRendererObj, I18n.format("mat.title.advanced") + "(Dev mode)", width / 2, 8, 0xffffff);
 
-            drawCenteredString(fontRenderer, I18n.format("mat.title.devmode"), width / 2, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3) - 9, 0xffffff);
+            drawCenteredString(fontRendererObj, I18n.format("mat.title.devmode"), width / 2, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3) - 9, 0xffffff);
         }
 
         mod.util().prepareDrawString();

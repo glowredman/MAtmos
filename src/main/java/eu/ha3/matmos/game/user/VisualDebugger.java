@@ -18,7 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.EnumChatFormatting;
 
 public class VisualDebugger implements SupportsFrameEvents {
     private final Matmos mod;
@@ -59,7 +59,7 @@ public class VisualDebugger implements SupportsFrameEvents {
         if (mod.isDebugMode()) {
             mod.util().prepareDrawString();
             mod.util().drawString(
-                    TextFormatting.GRAY.toString() + mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0, 0, '3', 0, 0, 0,
+                    EnumChatFormatting.GRAY.toString() + mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0, 0, '3', 0, 0, 0,
                     0, true);
         }
 
@@ -95,7 +95,7 @@ public class VisualDebugger implements SupportsFrameEvents {
 
     private void debugScanWithSheet(final Sheet sheet, boolean isDeltaPass) {
         Minecraft mc = Minecraft.getMinecraft();
-        int fac = new ScaledResolution(mc).getScaleFactor();
+        int fac = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight).getScaleFactor();
         float scale = 2f / fac;
         GL11.glPushMatrix();
         GL11.glScalef(scale, scale, 1.0F);
@@ -152,7 +152,7 @@ public class VisualDebugger implements SupportsFrameEvents {
             }
         }
 
-        FontRenderer fontRenderer = mc.fontRenderer;
+        FontRenderer fontRenderer = mc.fontRendererObj;
 
         int lineNumber = 0;
 
@@ -162,7 +162,7 @@ public class VisualDebugger implements SupportsFrameEvents {
 
             fontRenderer.drawStringWithShadow(
                     "Scan ["
-                            + mc.world.getHeight() + "]: " + StringUtils.repeat("|", (int)(100 * progress)) + " ("
+                            + mc.theWorld.getHeight() + "]: " + StringUtils.repeat("|", (int)(100 * progress)) + " ("
                             + (int)(progress * 100) + "%)", 20, 2 + 9 * lineNumber, 0xFFFFCC);
         }
 
@@ -174,7 +174,7 @@ public class VisualDebugger implements SupportsFrameEvents {
             if (lineNumber <= 100 && !index.contains("^")) {
                 if (scanDebug.startsWith("scan_") || scanDebug.equals("block_contact")) {
                     if(index.startsWith(".")) {
-                        fontRenderer.drawStringWithShadow(TextFormatting.AQUA + index + ": " + TextFormatting.YELLOW + sheet.get(index) + TextFormatting.RESET, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
+                        fontRenderer.drawStringWithShadow(EnumChatFormatting.AQUA + index + ": " + EnumChatFormatting.YELLOW + sheet.get(index) + EnumChatFormatting.RESET, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
                         lineNumber += 1;
                     } else {
                         Long count = Numbers.toLong(sheet.get(index));
@@ -200,16 +200,16 @@ public class VisualDebugger implements SupportsFrameEvents {
     
                                 String bars = "";
                                 if (superFill > 0) {
-                                    bars += TextFormatting.YELLOW + StringUtils.repeat("|", superFill);
+                                    bars += EnumChatFormatting.YELLOW + StringUtils.repeat("|", superFill);
                                 }
     
-                                bars += TextFormatting.RESET + StringUtils.repeat("|", fill - superFill * 2);
+                                bars += EnumChatFormatting.RESET + StringUtils.repeat("|", fill - superFill * 2);
     
                                 if (index.startsWith("minecraft:")) {
                                     index = index.substring(10);
                                 }
     
-                                fontRenderer.drawStringWithShadow(bars + (fill == ALL * 2 ? TextFormatting.YELLOW + "++" + TextFormatting.RESET : "") + " (" + count + ", " + percentage + "%) " + index, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
+                                fontRenderer.drawStringWithShadow(bars + (fill == ALL * 2 ? EnumChatFormatting.YELLOW + "++" + EnumChatFormatting.RESET : "") + " (" + count + ", " + percentage + "%) " + index, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
                                 lineNumber = lineNumber + 1;
                             }
                         }

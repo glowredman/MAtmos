@@ -15,8 +15,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 
 public class ModuleEntity implements IDataGatherer, PassOnceModule {
     private final Set<String> submodules;
@@ -68,7 +68,7 @@ public class ModuleEntity implements IDataGatherer, PassOnceModule {
             entityCount[i] = new HashMap<>();
         }
 
-        bbox = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
+        bbox = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
     }
 
     private void refresh() {
@@ -105,16 +105,16 @@ public class ModuleEntity implements IDataGatherer, PassOnceModule {
 
         Minecraft mc = Minecraft.getMinecraft();
 
-        double x = mc.player.posX;
-        double y = mc.player.posY;
-        double z = mc.player.posZ;
+        double x = mc.thePlayer.posX;
+        double y = mc.thePlayer.posY;
+        double z = mc.thePlayer.posZ;
 
-        bbox = new AxisAlignedBB(x - maxel, y - maxel, z - maxel, x + maxel, y + maxel, z + maxel);
+        bbox = AxisAlignedBB.getBoundingBox(x - maxel, y - maxel, z - maxel, x + maxel, y + maxel, z + maxel);
 
-        List<Entity> entityList = mc.world.getEntitiesWithinAABB(Entity.class, bbox);
+        List<Entity> entityList = mc.theWorld.getEntitiesWithinAABB(Entity.class, bbox);
 
         for (Entity e : entityList) {
-            if (e != null && e != mc.player) {
+            if (e != null && e != mc.thePlayer) {
                 double dx = e.posX - x;
                 double dy = e.posY - y;
                 double dz = e.posZ - z;
@@ -124,10 +124,10 @@ public class ModuleEntity implements IDataGatherer, PassOnceModule {
                 if (e instanceof EntityPlayer) {
                     reportDistance("minecraft:player", distance);
                 } else {
-                    ResourceLocation eID = EntityList.getKey(e);
+                    int eID = EntityList.getEntityID(e);
 
-                    if (eID != null) {
-                        reportDistance(eID.toString(), distance);
+                    if (eID != 0) {
+                        reportDistance(String.valueOf(eID), distance);
                     }
                 }
 
@@ -138,11 +138,11 @@ public class ModuleEntity implements IDataGatherer, PassOnceModule {
                         // If something is within 1 meter, it certainly also is within 5 meters:
                         // expand now and exit the loop.
                         if (!(e instanceof EntityPlayer)) {
-                            ResourceLocation eID = EntityList.getKey(e);
+                            int eID = EntityList.getEntityID(e);
 
-                            if (eID != null) {
+                            if (eID != 0) {
                                 for (int above = i; above < radiusValuesSorted.length; above++) {
-                                    addToEntityCount(above, eID.toString(), 1);
+                                    addToEntityCount(above, String.valueOf(eID), 1);
                                 }
                             }
                         }

@@ -11,6 +11,6 @@ public class ModuleHeldEnchantment extends AbstractEnchantmentModule {
 
     @Override
     protected ItemStack getItem(EntityPlayer player) {
-        return player.getActiveItemStack();
+        return player.getHeldItem();
     }
 }

@@ -36,7 +36,7 @@ public class SoundHelper implements SoundCapabilities, Stable {
         }
 
         // Play the sound 2048 blocks above the player to keep support of mono sounds
-        Entity e = Minecraft.getMinecraft().player;
+        Entity e = Minecraft.getMinecraft().thePlayer;
         playUnattenuatedSound(e.posX, e.posY + 2048, e.posZ, event, volume * volumeModulator, pitch);
     }
 
@@ -85,7 +85,7 @@ public class SoundHelper implements SoundCapabilities, Stable {
         newSound.play(fadeIn);
         newSound.applyVolume(volumeModulator);
         
-        boolean notYetPlayed = newSound.notYetPlayed();
+        boolean notYetPlayed = newSound.popNotYetPlayed();
         boolean isSoundPlaying = Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(newSound);
         
         Matmos.LOGGER.debug("playStreaming " + newSound.getSoundLocation() + " (reuse=" + reuse + ", notYetPlayed = " + notYetPlayed + ", isSoundPlaying=" + isSoundPlaying + ")");

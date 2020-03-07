@@ -41,11 +41,11 @@ import eu.ha3.mc.quick.update.NotifiableHaddon;
 import eu.ha3.mc.quick.update.UpdateNotifier;
 import eu.ha3.util.property.simple.ConfigProperty;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.EnumChatFormatting;
 import paulscode.sound.SoundSystemConfig;
 
 public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, SupportsInGameChangeEvents, NotifiableHaddon, IResourceManagerReloadListener, Stable {
@@ -192,18 +192,18 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void onFrame(float semi) {
-        Minecraft.getMinecraft().profiler.startSection("onframe");
+        Minecraft.getMinecraft().mcProfiler.startSection("onframe");
         if (!isActivated() || util().isGamePaused()) {
             return;
         }
         simulacrum.get().onFrame(semi);
         userControl.onFrame(semi);
-        Minecraft.getMinecraft().profiler.endSection();
+        Minecraft.getMinecraft().mcProfiler.endSection();
     }
 
     @Override
     public void onTick() {
-        Minecraft.getMinecraft().profiler.startSection("ontick");
+        Minecraft.getMinecraft().mcProfiler.startSection("ontick");
         
         userControl.onTick();
         if (isActivated()) {
@@ -247,12 +247,12 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
                     warns--;
                     config.setProperty("version.warnunstable", warns);
                     getChatter().printChat(
-                            TextFormatting.RED, "You are using an ", TextFormatting.YELLOW, "Unofficial Beta", TextFormatting.RED, " version of MAtmos.");
+                            EnumChatFormatting.RED, "You are using an ", EnumChatFormatting.YELLOW, "Unofficial Beta", EnumChatFormatting.RED, " version of MAtmos.");
                     getChatter().printChatShort("By using this version, you understand that this mod isn't intended for " +
                             "actual game sessions, MAtmos may not work, might crash, the sound ambience is incomplete, etc. Use at your own risk. ");
                     getChatter().printChatShort("Please check regularly for updates and resource pack updates.");
                     if (warns > 0) {
-                        getChatter().printChatShort("This message will appear ", TextFormatting.YELLOW, warns, " more times.");
+                        getChatter().printChatShort("This message will appear ", EnumChatFormatting.YELLOW, warns, " more times.");
                     }
                 }
                 if (config.commit()) {
@@ -261,27 +261,27 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
             }
 
             if (isDebugMode()) {
-                getChatter().printChat(TextFormatting.GOLD, "Developer mode is enabled in the Advanced options.");
+                getChatter().printChat(EnumChatFormatting.GOLD, "Developer mode is enabled in the Advanced options.");
                 getChatter().printChatShort("This affects performance. Your game may run slower.");
             }
 
             if (!simulacrum.get().hasResourcePacks()) {
                 hasResourcePacks_FixMe = true;
                 if (simulacrum.get().hasDisabledResourcePacks()) {
-                    chatter.printChat(TextFormatting.RED, "Resource Pack not enabled yet!");
-                    chatter.printChatShort(TextFormatting.WHITE, "You need to activate \"MAtmos Resource Pack\" in the Minecraft Options menu for it to run.");
+                    chatter.printChat(EnumChatFormatting.RED, "Resource Pack not enabled yet!");
+                    chatter.printChatShort(EnumChatFormatting.WHITE, "You need to activate \"MAtmos Resource Pack\" in the Minecraft Options menu for it to run.");
                 } else {
-                    chatter.printChat(TextFormatting.RED, "Resource Pack missing from resourcepacks/!");
-                    chatter.printChatShort(TextFormatting.WHITE, "You may have forgotten to put the Resource Pack file into your resourcepacks/ folder.");
+                    chatter.printChat(EnumChatFormatting.RED, "Resource Pack missing from resourcepacks/!");
+                    chatter.printChatShort(EnumChatFormatting.WHITE, "You may have forgotten to put the Resource Pack file into your resourcepacks/ folder.");
                 }
             }
         }
 
         if (isActivated() && hasResourcePacks_FixMe && simulacrum.get().hasResourcePacks()) {
             hasResourcePacks_FixMe = false;
-            chatter.printChat(TextFormatting.GREEN, "It should work now!");
+            chatter.printChat(EnumChatFormatting.GREEN, "It should work now!");
         }
-        Minecraft.getMinecraft().profiler.endSection();
+        Minecraft.getMinecraft().mcProfiler.endSection();
     }
 
     @Override
@@ -406,10 +406,10 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         isDebugMode = config.getInteger("debug.mode") > 0;
         
         if (isDebugMode()) {
-            getChatter().printChat(TextFormatting.GOLD, "Dev/Editor mode enabled.");
+            getChatter().printChat(EnumChatFormatting.GOLD, "Dev/Editor mode enabled.");
             getChatter().printChatShort("Enabling this mode may cause Minecraft to run slower.");
         } else {
-            getChatter().printChat(TextFormatting.GOLD, "Dev/Editor mode disabled.");
+            getChatter().printChat(EnumChatFormatting.GOLD, "Dev/Editor mode disabled.");
         }
         refresh();
     }

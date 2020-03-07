@@ -12,7 +12,7 @@ import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.StringUtils;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
     final protected Matmos mod;
@@ -30,9 +30,10 @@ public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
     }
 
     private void computeBiomes() {
-        Biome i = null;
-        for (Iterator<Biome> it = Biome.REGISTRY.iterator(); it.hasNext(); i = it.next()) {
-            validBiomes.add(Biome.REGISTRY.getIDForObject(i));
+        for (BiomeGenBase i : BiomeGenBase.getBiomeGenArray()) {
+            if(i != null) {
+                validBiomes.add(i.biomeID);
+            }
         }
     }
 
@@ -65,17 +66,17 @@ public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
     @Nullable
     protected String getDescriptorString() {
         if (definedBiomeID >= 0 && definedBiomeID <= maxBiomes) {
-            Biome biome = Biome.getBiomeForId(definedBiomeID);
+            BiomeGenBase biome = BiomeGenBase.getBiome(definedBiomeID);
 
             if (biome == null) {
                 return I18n.format("mat.biome.undef", definedBiomeID);
             }
 
-            if (StringUtils.isNullOrEmpty(biome.getBiomeName())) {
+            if (StringUtils.isNullOrEmpty(biome.biomeName)) {
                 return I18n.format("mat.biome.unamed", definedBiomeID);
             }
 
-            return I18n.format("mat.biome.biome", biome.getBiomeName(), definedBiomeID);
+            return I18n.format("mat.biome.biome", biome.biomeName, definedBiomeID);
         }
 
         if (definedBiomeID == -1) {
@@ -101,12 +102,13 @@ public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
     private int calculateMaxBiomes() {
         int max = 0;
 
-        Biome i = null;
-        for (Iterator<Biome> it = Biome.REGISTRY.iterator(); it.hasNext(); i = it.next()) {
-            int id = Biome.REGISTRY.getIDForObject(i);
-
-            if (id > max) {
-                max = id;
+        for (BiomeGenBase i : BiomeGenBase.getBiomeGenArray()) {
+            if(i != null) {
+                int id = i.biomeID;
+    
+                if (id > max) {
+                    max = id;
+                }
             }
         }
 

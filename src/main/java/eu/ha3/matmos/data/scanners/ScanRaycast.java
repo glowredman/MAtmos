@@ -3,18 +3,16 @@ package eu.ha3.matmos.data.scanners;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.TreeSet;
 
+import eu.ha3.matmos.util.BlockPos;
+import eu.ha3.matmos.util.MAtUtil;
+import eu.ha3.matmos.util.Vec3d;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class ScanRaycast extends Scan {
@@ -91,6 +89,7 @@ public class ScanRaycast extends Scan {
             
             raysCast++;
         }
+        
         if(raysCast >= raysToCast) {
             progress = 1;
             
@@ -105,19 +104,21 @@ public class ScanRaycast extends Scan {
     private int calculateWeight(int dx, int dy, int dz, int maxRange) {
         int distanceSquared = dx * dx + dy * dy + dz * dz;
         float distanceScale = 1f; // a block this^2 far away will have a weight of 1/2
-        float weight = MathHelper.clamp(1f / (1 + (distanceSquared / distanceScale)), 0f, 1f);
+        float weight = MathHelper.clamp_float(1f / (1 + (distanceSquared / distanceScale)), 0f, 1f);
         return (int)(weight*1000f);
     }
     
-    public static RayTraceResult rayTraceNonSolid(Vec3d start, Vec3d dir, double maxRange) {
-        World w = Minecraft.getMinecraft().world;
+    public static MovingObjectPosition rayTraceNonSolid(Vec3d start, Vec3d dir, double maxRange) {
+        World w = Minecraft.getMinecraft().theWorld;
         Vec3d end = start.add(dir.scale(maxRange));
-        RayTraceResult result = w.rayTraceBlocks(start, end, true, false, true);
+        // Vec3d is immutable in 1.12.2 but Vec3 is not in 1.7.10
+        MovingObjectPosition result = w.rayTraceBlocks(start.clone(), end.clone(), true, false, true);
         
         Vec3d delta = dir.scale(0.01);
         
-        while(result != null && ScanAir.isTransparentToSound(w.getBlockState(result.getBlockPos()), w, result.getBlockPos(), true)) {
-            result = w.rayTraceBlocks(result.hitVec.add(delta), end, true, true, true); 
+        while(result != null && ScanAir.isTransparentToSound(MAtUtil.getBlockAt(
+                new BlockPos(result.hitVec)), MAtUtil.getMetaAt(new BlockPos(result.hitVec), -1), w, new BlockPos(result.hitVec), true)) {
+            result = w.rayTraceBlocks(delta.add(result.hitVec), end, true, true, true);
         }
         return result;
     }
@@ -125,15 +126,15 @@ public class ScanRaycast extends Scan {
     private void castRay(Vec3d dir) {
         int maxRange = 100;
         
-        World w = Minecraft.getMinecraft().world;
+        World w = Minecraft.getMinecraft().theWorld;
         
-        RayTraceResult result = rayTraceNonSolid(center, dir, maxRange);
+        MovingObjectPosition result = rayTraceNonSolid(center, dir, maxRange);
         
         int startNearness = 60;
         if(result != null) {
-            BlockPos hit = result.getBlockPos();
+            BlockPos hit = new BlockPos(result.blockX, result.blockY, result.blockZ);
             
-            distanceSqSum += hit.distanceSq(center.x, center.y, center.z);
+            distanceSqSum += hit.distanceSq(center.xCoord, center.yCoord, center.zCoord);
             
             Block[] blockBuf = new Block[1];
             int[] metaBuf = new int[1];
@@ -165,17 +166,16 @@ public class ScanRaycast extends Scan {
                     if(!scanned.contains(blockPos)) {
                         scanned.add(blockPos);
                         
-                        IBlockState blockState = w.getBlockState(blockPos);
-                        
                         int dx = startX - pos[0];
                         int dy = startY - pos[1];
                         int dz = startZ - pos[2];
                         
                         ((ScannerModule)pipeline).inputAndReturnBlockMeta(pos[0], pos[1], pos[2], calculateWeight(dx, dy, dz, maxRange),
                                 blockBuf, metaBuf);
+                        
                         Block block = blockBuf[0];
                         
-                        boolean solid = blockState.getCollisionBoundingBox(w, blockPos) != Block.NULL_AABB &&
+                        boolean solid = block.getCollisionBoundingBoxFromPool(w, blockPos.getX(), blockPos.getY(), blockPos.getZ()) != null &&
                         !(block instanceof BlockLeaves);
                         
                         if(solid && offset == 0 && scanDir == 0) {
@@ -186,9 +186,7 @@ public class ScanRaycast extends Scan {
                         
                         nearness -= solid ? solidPenalty : airPenalty;
                         
-                        if(nearness > 0 && block instanceof BlockAir && w.canBlockSeeSky(blockPos)){
-                            int distanceSq = dx*dx + dy*dy + dz*dz;
-                            //int hitScore = Math.max(100*100 - distanceSq, 0);
+                        if(nearness > 0 && block instanceof BlockAir && MAtUtil.canSeeSky(blockPos)){
                             int hitScore = nearness;
                             score += hitScore;
                         }
@@ -198,11 +196,11 @@ public class ScanRaycast extends Scan {
         } else { // ray didn't hit anything
             distanceSqSum += maxRange * maxRange;
             
-            if(dir.y > 0) { // and it's because we hit the sky, probably
+            if(dir.yCoord > 0) { // and it's because we hit the sky, probably
                 Vec3d rayEnd = center.add(dir.scale(maxRange));
-                BlockPos rayEndBlockPos = new BlockPos(MathHelper.floor(rayEnd.x), MathHelper.floor(rayEnd.y), MathHelper.floor(rayEnd.z));
+                BlockPos rayEndBlockPos = new BlockPos(MathHelper.floor_double(rayEnd.xCoord), MathHelper.floor_double(rayEnd.yCoord), MathHelper.floor_double(rayEnd.zCoord));
                 
-                if(w.canSeeSky(rayEndBlockPos)) {
+                if(MAtUtil.canSeeSky(rayEndBlockPos)) {
                     score += startNearness * 13;
                 }
             }

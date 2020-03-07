@@ -3,9 +3,9 @@ package eu.ha3.matmos.data.modules.world;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
+import eu.ha3.matmos.util.BlockPos;
 import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ModuleColumn extends ModuleProcessor implements Module {
@@ -23,10 +23,10 @@ public class ModuleColumn extends ModuleProcessor implements Module {
 
     @Override
     protected void doProcess() {
-        World w = Minecraft.getMinecraft().world;
+        World w = Minecraft.getMinecraft().theWorld;
 
         BlockPos pos = MAtUtil.getPlayerPos();
-        BlockPos topMostBlock = w.getTopSolidOrLiquidBlock(pos);
+        BlockPos topMostBlock = new BlockPos(pos.getX(), w.getTopSolidOrLiquidBlock(pos.getX(), pos.getZ()), pos.getZ());
 
         setValue("y-1", MAtUtil.getNameAt(pos.down(), NO_BLOCK_OUT_OF_BOUNDS));
         setValue("y-2", MAtUtil.getNameAt(pos.down(2), NO_BLOCK_OUT_OF_BOUNDS));
@@ -35,6 +35,6 @@ public class ModuleColumn extends ModuleProcessor implements Module {
 
         setValue("topmost_block", topMostBlock.getY());
         setValue("thickness_overhead", topMostBlock.getY() - pos.getY());
-        setValue("can_rain_reach", w.canSeeSky(pos) && !(topMostBlock.getY() > pos.getY()));
+        setValue("can_rain_reach", w.canBlockSeeTheSky(pos.getX(), pos.getY(), pos.getZ()) && !(topMostBlock.getY() > pos.getY()));
     }
 }

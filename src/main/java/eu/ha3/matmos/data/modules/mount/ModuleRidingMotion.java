@@ -12,7 +12,7 @@ public class ModuleRidingMotion extends ModuleProcessor implements Module {
 
     @Override
     protected void doProcess() {
-        Entity ride = getPlayer().getRidingEntity();
+        Entity ride = getPlayer().ridingEntity;
 
         if (ride != null) {
             int mxx = (int)Math.round(ride.motionX * 1000);

@@ -10,6 +10,7 @@
         "IMinecraft",
         "MixinSoundHandler",
         "MixinSoundManager",
-        "MixinSoundManager$1"
+        "MixinSoundManager$1",
+        "IBiomeGenBase"
     ]
 }

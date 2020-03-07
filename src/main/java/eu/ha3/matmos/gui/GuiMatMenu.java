@@ -16,7 +16,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiScreenResourcePacks;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.EnumChatFormatting;
 
 public class GuiMatMenu extends GuiScreen {
     private GuiScreen parentScreen;
@@ -128,7 +128,7 @@ public class GuiMatMenu extends GuiScreen {
                     display = display + (int)Math.floor(expansion.getVolume() * 100) + "%";
                 }
 
-                return TextFormatting.ITALIC + display;
+                return EnumChatFormatting.ITALIC + display;
             });
             sliderControl.updateDisplayString();
 
@@ -149,7 +149,7 @@ public class GuiMatMenu extends GuiScreen {
             } else {
                 buttonList.add(new GuiButton(Make.make(() -> {
                     mc.displayGuiScreen(new GuiExpansionDetails(this, mod, expansion));
-                }), _RIGHT - _UNIT, _MIX * (id + 1), _UNIT, _UNIT, TextFormatting.GOLD + "+"));
+                }), _RIGHT - _UNIT, _MIX * (id + 1), _UNIT, _UNIT, EnumChatFormatting.GOLD + "+"));
             }
 
             id++;
@@ -159,7 +159,7 @@ public class GuiMatMenu extends GuiScreen {
         if (!mod.isDebugMode()) {
             buttonList.add(new GuiButton(220, _RIGHT - _UNIT, _MIX * (IDS_PER_PAGE + 2), _UNIT, _UNIT, isAutopreviewEnabled() ? "^o^" : "^_^"));
         } else {
-            buttonList.add(new GuiButton(230, _RIGHT - _UNIT, _MIX * (IDS_PER_PAGE + 2), 40, _UNIT, TextFormatting.GOLD + "OSD"));
+            buttonList.add(new GuiButton(230, _RIGHT - _UNIT, _MIX * (IDS_PER_PAGE + 2), 40, _UNIT, EnumChatFormatting.GOLD + "OSD"));
         }
 
         if (pageFromZero != 0) {
@@ -170,7 +170,7 @@ public class GuiMatMenu extends GuiScreen {
         }
 
         buttonList.add(new GuiButton(210, _LEFT, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3), _AWID, _UNIT, I18n.format("mat.options.start." + mod.getConfig().getBoolean("start.enabled"))));
-        buttonList.add(new GuiButton(211, _LEFT + _AWID + _GAP, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3), _AWID, _UNIT, (mod.isDebugMode() ? TextFormatting.GOLD : "") + I18n.format("mat.options.advanced")));
+        buttonList.add(new GuiButton(211, _LEFT + _AWID + _GAP, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3), _AWID, _UNIT, (mod.isDebugMode() ? EnumChatFormatting.GOLD : "") + I18n.format("mat.options.advanced")));
 
         final int _TURNOFFWIDTH = _ELEMENT_WIDTH / 5;
 
@@ -232,7 +232,7 @@ public class GuiMatMenu extends GuiScreen {
     }
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (buttonId < 0) {
             super.mouseClicked(mouseX, mouseY, mouseButton);
         }
@@ -247,25 +247,25 @@ public class GuiMatMenu extends GuiScreen {
 
         if (!mod.isDebugMode()) {
             drawGradientRect(0, 0, width, height, 0xC0000000, 0x60000000);
-            drawCenteredString(fontRenderer, I18n.format("mat.title.expansions"), width / 2, 8, 0xffffff);
+            drawCenteredString(fontRendererObj, I18n.format("mat.title.expansions"), width / 2, 8, 0xffffff);
         } else {
             drawGradientRect(0, 0, width, height, 0xC0C06000, 0x60C06000);
-            drawCenteredString(fontRenderer, I18n.format("mat.title.expansions") + TextFormatting.GOLD + "(Dev mode)", width / 2, 8, 0xffffff);
-            drawCenteredString(fontRenderer, I18n.format("mat.title.devmode"), width / 2, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3) - 9, 0xffffff);
+            drawCenteredString(fontRendererObj, I18n.format("mat.title.expansions") + EnumChatFormatting.GOLD + "(Dev mode)", width / 2, 8, 0xffffff);
+            drawCenteredString(fontRendererObj, I18n.format("mat.title.devmode"), width / 2, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3) - 9, 0xffffff);
         }
         
-        drawCenteredString(fontRenderer, I18n.format("mat.title.reloadhint"), width / 2, _SEPARATOR + _MIX * (IDS_PER_PAGE + 5), 0xffffff);
+        drawCenteredString(fontRendererObj, I18n.format("mat.title.reloadhint"), width / 2, _SEPARATOR + _MIX * (IDS_PER_PAGE + 5), 0xffffff);
 
         mod.util().prepareDrawString();
         mod.util().drawString(I18n.format("mat.resources.lag", mod.getLag().getMilliseconds()), 1f, 1f, 0, 0, '3', 0, 0, 0, 0, true);
 
         if (!mod.hasResourcePacksLoaded()) {
             if (mod.hasNonethelessResourcePacksInstalled()) {
-                drawCenteredString(fontRenderer, I18n.format("mat.resources.off.1"), width / 2, 10 + 22 * 6 - 40 + 20, 0xff0000);
-                drawCenteredString(fontRenderer, I18n.format("mat.resources.off.2"), width / 2, 10 + 22 * 6 - 40 + 28, 0xff0000);
+                drawCenteredString(fontRendererObj, I18n.format("mat.resources.off.1"), width / 2, 10 + 22 * 6 - 40 + 20, 0xff0000);
+                drawCenteredString(fontRendererObj, I18n.format("mat.resources.off.2"), width / 2, 10 + 22 * 6 - 40 + 28, 0xff0000);
             } else {
-                drawCenteredString(fontRenderer, I18n.format("mat.resources.none.1"), width / 2, 10 + 22 * 6 - 40 + 20, 0xff0000);
-                drawCenteredString(fontRenderer, I18n.format("mat.resources.none.2"), width / 2, 10 + 22 * 6 - 40 + 28, 0xff0000);
+                drawCenteredString(fontRendererObj, I18n.format("mat.resources.none.1"), width / 2, 10 + 22 * 6 - 40 + 20, 0xff0000);
+                drawCenteredString(fontRendererObj, I18n.format("mat.resources.none.2"), width / 2, 10 + 22 * 6 - 40 + 28, 0xff0000);
             }
         }
 
