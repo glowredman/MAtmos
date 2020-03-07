@@ -115,7 +115,8 @@ subprojects {
 		}
 	}
 	
-	def outRefMapFile = tasks.compileJava.temporaryDir.toString() + "/example.mixin.refmap.json" // 1.7.10 mixin compatibility
+	def outRefMapCommons = tasks.compileCommonsJava.temporaryDir.toString() + "/haddon_core.mixin.refmap.json" // 1.7.10 mixin compatibility
+	def outRefMapMain = tasks.compileJava.temporaryDir.toString() + "/haddon.mixin.refmap.json" // 1.7.10 mixin compatibility
 
 	jar {
 		manifest {
@@ -131,7 +132,8 @@ subprojects {
 
 		from(sourceSets.commons.output);
 
-		from outRefMapFile; // 1.7.10 mixin
+		from outRefMapCommons; // 1.7.10 mixin
+		from outRefMapMain; // 1.7.10 mixin
 		
 		// embed libraries in jar
 		// TODO shadow to avoid conflicts?
@@ -145,7 +147,8 @@ subprojects {
 	def outSrgFile = tasks.compileJava.temporaryDir.toString() + "/outSrg.srg"
 
 	afterEvaluate {
-		tasks.compileJava.options.compilerArgs += ["-AreobfSrgFile=${tasks.reobf.srg}", "-AoutSrgFile=${outSrgFile}", "-AoutRefMapFile=${outRefMapFile}"];
+		tasks.compileCommonsJava.options.compilerArgs += ["-AreobfSrgFile=${tasks.reobf.srg}", "-AoutSrgFile=${outSrgFile}", "-AoutRefMapFile=${outRefMapCommons}"];
+		tasks.compileJava.options.compilerArgs += ["-AreobfSrgFile=${tasks.reobf.srg}", "-AoutSrgFile=${outSrgFile}", "-AoutRefMapFile=${outRefMapMain}"];
 	}
 
 	reobf {
