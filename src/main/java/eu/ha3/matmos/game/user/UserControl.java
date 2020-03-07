@@ -88,7 +88,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
             if (!MAtUtil.isSoundAmbientEnabled()) {
                 mod.getChatter().printChat(
                         EnumChatFormatting.RED, "Warning: ", EnumChatFormatting.WHITE,
-                        "Ambient sounds are at 0% volume in the advanced MAtmos options menu!");
+                        "Ambient sounds are at 0%% volume in the Minecraft options menu!");
             }
         }
     }
