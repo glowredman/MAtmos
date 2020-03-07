@@ -33,7 +33,6 @@ project(':forge') {
 
 	minecraft {
 		version = "${project.mcVersion}-${project.forgeVersion}"
-		coreMod = 'eu.ha3.mc.haddon.forge.MixinLoaderForge'
 	}
 
 	dependencies {
