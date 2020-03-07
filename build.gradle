@@ -54,6 +54,7 @@ subprojects {
 
 	dependencies {
 		embed 'net.sf.practicalxml:practicalxml:1.1.19'
+		embed 'com.paulscode:soundsystem:+'
 	}
 
 	def ver = "${project.mcVersion}-${project.buildVersion}"
