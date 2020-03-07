@@ -50,6 +50,10 @@ project(':forge') {
 }
 
 project(':liteloader') {
+	dependencies {
+		embed 'com.paulscode:soundsystem:+'
+	}
+
 	apply plugin: 'net.minecraftforge.gradle.liteloader'
 
 	minecraft {
