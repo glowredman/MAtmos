@@ -74,11 +74,6 @@ project(':liteloader') {
 subprojects {
 	apply plugin: 'org.spongepowered.mixin'
 
-	/*mixin {
-		defaultObfuscationEnv notch
-	}*/
-	
-
 	dependencies {
 		embed 'net.sf.practicalxml:practicalxml:1.1.19'
 	}
@@ -222,5 +217,11 @@ subprojects {
 		from(sourceSets.main.resources.srcDirs) {
 			exclude(['mcmod.info', 'litemod.json'])
 		}
+	}
+}
+
+project(':liteloader') {
+	mixin {
+		defaultObfuscationEnv notch
 	}
 }
