@@ -253,8 +253,6 @@ public class GuiMatMenu extends GuiScreen {
             drawCenteredString(fontRenderer, I18n.format("mat.title.expansions") + TextFormatting.GOLD + "(Dev mode)", width / 2, 8, 0xffffff);
             drawCenteredString(fontRenderer, I18n.format("mat.title.devmode"), width / 2, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3) - 9, 0xffffff);
         }
-        
-        drawCenteredString(fontRenderer, I18n.format("mat.title.reloadhint"), width / 2, _SEPARATOR + _MIX * (IDS_PER_PAGE + 5), 0xffffff);
 
         mod.util().prepareDrawString();
         mod.util().drawString(I18n.format("mat.resources.lag", mod.getLag().getMilliseconds()), 1f, 1f, 0, 0, '3', 0, 0, 0, 0, true);
