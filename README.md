@@ -18,26 +18,32 @@ Whenever you join a multiplayer server or single-player world, MAtmos will searc
 MAtmos lets you create your own soundscapes using special resource packs called **soundpacks**. Some of the ones that have been created are:
 
 
-### [MAtmos 2020 "Zen"](https://github.com/makamys/MAtmos-2020-Zen)
+### MAtmos 2020 "Zen"
 [![](http://img.youtube.com/vi/3F85g3e2_MY/0.jpg)](http://www.youtube.com/watch?v=3F85g3e2_MY "")
 
 A default soundpack for MAtmos featuring seamless loops and indoors/outdoors variations for ambiences. It aims to add high quality sounds that enhance the atmosphere without being too oppressive. (MAtmos 34 or higher required.)
 
+**[(Website with downloads)](https://github.com/makamys/MAtmos-2020-Zen)**
+
 *(by makamys)*
 
-### [Minecraft Sound Improvement](https://github.com/makamys/MSI-Conversion)
+### Minecraft Sound Improvement
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/OnUeix34Qc4/0.jpg)](https://www.youtube.com/watch?v=OnUeix34Qc4)
 
 The MSI expansion features a large variety of new sounds for every biome, striving to create a very unique atmosphere for each of them.
 
+**[(Website with downloads)](https://github.com/makamys/MSI-Conversion)**
+
 *(by [Colonel_Oneill](http://www.minecraftforum.net/members/Colonel_Oneill))*
 
-### [Default soundpack](https://github.com/Sollace/MAtmos/releases) (+introduction)
+### Default soundpack (+introduction)
 
 [![](http://img.youtube.com/vi/Z4Zu4kvyDHU/0.jpg)](http://www.youtube.com/watch?v=Z4Zu4kvyDHU "")
 
 The original soundpack from 2011.
+
+**[(Website with downloads)](https://github.com/Sollace/MAtmos/releases)** (look for the Matmos.Default.Resourcepack zip)
 
 *(by Hurricaaane)*
 
@@ -48,9 +54,15 @@ Pressing F7 opens the MAtmos settings menu which can be used to adjust the volum
 
 <img src="docs/matmos_menu.png" width="600">
 
-## More soundpacks and info
+## Downloads
 
-Sollace's old wiki: https://github.com/Sollace/MAtmos/wiki
+Releases for **MAtmos** are available on [the releases tab](https://github.com/makamys/MAtmos/releases). There are both Forge and LiteLoader releases available for most versions. Choose the one that matches the modloader you're using.
+
+For **soundpack** downloads, see the *Featured soundpacks* section above.
+
+Want even **more soundpacks**, or more info? See Sollace's old wiki: https://github.com/Sollace/MAtmos/wiki
+
+## Additional info
 
 ## Contributing
 The project can be built using Gradle.
