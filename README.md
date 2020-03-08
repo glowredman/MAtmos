@@ -62,8 +62,6 @@ For **soundpack** downloads, see the *Featured soundpacks* section above.
 
 Want even **more soundpacks**, or more info? See Sollace's old wiki: https://github.com/Sollace/MAtmos/wiki
 
-## Additional info
-
 ## Contributing
 The project can be built using Gradle.
 
