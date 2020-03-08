@@ -9,28 +9,28 @@ Whenever you join a multiplayer server or single-player world, MAtmos will searc
 MAtmos lets you create your own soundscapes using special resource packs called **soundpacks**. Some of the ones that have been created are:
 
 
-### MAtmos 2020 "Zen"
+### [MAtmos 2020 "Zen"](https://github.com/makamys/MAtmos-2020-Zen)
 [![](http://img.youtube.com/vi/3F85g3e2_MY/0.jpg)](http://www.youtube.com/watch?v=3F85g3e2_MY "")
 
 A default soundpack for MAtmos featuring seamless loops and indoors/outdoors variations for ambiences. It aims to add high quality sounds that enhance the atmosphere without being too oppressive. (MAtmos 34 or higher required.)
 
-(by makamys)
+*(by makamys)*
 
-### Minecraft Sound Improvement
+### [Minecraft Sound Improvement](https://github.com/makamys/MSI-Conversion)
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/OnUeix34Qc4/0.jpg)](https://www.youtube.com/watch?v=OnUeix34Qc4)
 
 The MSI expansion features a large variety of new sounds for every biome, striving to create a very unique atmosphere for each of them.
 
-(by **[Colonel_Oneill](http://www.minecraftforum.net/members/Colonel_Oneill)**)
+*(by [Colonel_Oneill](http://www.minecraftforum.net/members/Colonel_Oneill))*
 
-### Default soundpack (+introduction)
+### [Default soundpack](https://github.com/Sollace/MAtmos/releases) (+introduction)
 
 [![](http://img.youtube.com/vi/Z4Zu4kvyDHU/0.jpg)](http://www.youtube.com/watch?v=Z4Zu4kvyDHU "")
 
 The original soundpack from 2011.
 
-(by Hurricaaane)
+*(by Hurricaaane)*
 
 ## Usage
 By default, MAtmos does not include any sounds. To get started, move the soundpacks you want to your resource packs folder an enable them.
@@ -41,7 +41,7 @@ Pressing F7 opens the MAtmos settings menu which can be used to adjust the volum
 
 ## More soundpacks and info
 
-https://github.com/Sollace/MAtmos/wiki
+Sollace's old wiki: https://github.com/Sollace/MAtmos/wiki
 
 ## Contributing
 The project can be built using Gradle.
