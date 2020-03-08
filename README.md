@@ -3,7 +3,16 @@ MAtmos
 
 MAtmos is a sound atmosphere generator for Minecraft 1.12 and [1.7.10](https://github.com/makamys/MAtmos/tree/1_7_10).
 
-Whenever you join a multiplayer server or single-player world, MAtmos will search your surroundings and generates a soundscape of natural noises to match, filling out that perpetual silence of Minecraft. What kind of soundscapes, you ask?
+Whenever you join a multiplayer server or single-player world, MAtmos will search your surroundings and generates a soundscape of natural noises to match, filling out that perpetual silence of Minecraft.
+
+#### What's new?
+```
+* New system for detecting when the player is outdoors, indoors, or deep indoors
+* A new soundpack making use of the new features: Matmos 2020 "Zen"
+* Update checking for sound packs which support it
+* Versions are now also built for Forge
+* Many bug fixes and performance improvements
+```
 
 ## Featured soundpacks
 MAtmos lets you create your own soundscapes using special resource packs called **soundpacks**. Some of the ones that have been created are:
