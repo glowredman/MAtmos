@@ -37,6 +37,8 @@ By default, MAtmos does not include any sounds. To get started, move the soundpa
 
 Pressing F7 opens the MAtmos settings menu which can be used to adjust the volume levels of the individual expansions that make up soundpacks. You can even combine different expansions from different soundpacks! Customize your experience to exactly the way you want it.
 
+![](docs/matmos_menu.png)
+
 ## More soundpacks and info
 
 https://github.com/Sollace/MAtmos/wiki
