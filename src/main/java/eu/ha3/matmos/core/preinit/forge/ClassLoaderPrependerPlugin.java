@@ -1,7 +1,7 @@
 package eu.ha3.matmos.core.preinit.forge;
 
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import eu.ha3.matmos.core.preinit.ClassLoaderPrepender;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 import java.util.Map;
 

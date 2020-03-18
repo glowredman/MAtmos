@@ -65,6 +65,7 @@ project(':liteloader') {
 		commons.resources.exclude '**/haddon_core.mixin.json'
 
 		main.java.exclude '**/ForgeMatmos.java'
+		main.java.exclude 'eu/ha3/matmos/core/preinit/forge/**'
 
 		main.resources.exclude '**/mcmod.info'
 		main.resources.exclude '**/pack.mcmeta'
@@ -196,22 +197,25 @@ subprojects {
 		]
 		inputs.properties props
 		
-		// replace stuff in mcmod.info, nothing else
-		from(sourceSets.main.resources.srcDirs) {
-			include 'mcmod.info'
+		project(':forge') {
+			// replace stuff in mcmod.info, nothing else
+			from(sourceSets.main.resources.srcDirs) {
+				include 'mcmod.info'
 
-			// replace version and mcversion
-			expand props
+				// replace version and mcversion
+				expand props
+			}
 		}
 
 		
+		project(':liteloader') {
+			// replace stuff in litemod.json, nothing else
+			from(sourceSets.main.resources.srcDirs) {
+				include 'litemod.json'
 
-		// replace stuff in litemod.json, nothing else
-		from(sourceSets.main.resources.srcDirs) {
-			include 'litemod.json'
-
-			// replace props
-			expand props
+				// replace props
+				expand props
+			}
 		}
 
 		// copy everything else except the mcmod.info

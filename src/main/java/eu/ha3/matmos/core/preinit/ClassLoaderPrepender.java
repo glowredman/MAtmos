@@ -10,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import eu.ha3.matmos.Matmos;
-import eu.ha3.matmos.core.preinit.forge.ClassLoaderPrependerPlugin;
 import net.minecraft.launchwrapper.Launch;
 import paulscode.sound.SoundSystemException;
 
@@ -66,7 +65,7 @@ public class ClassLoaderPrepender {
             URL result1 = null;
             URL result2 = null;
             try {
-                result1 = ClassLoaderPrependerPlugin.class.getClassLoader().getResource(toTry);
+                result1 = ClassLoaderPrepender.class.getClassLoader().getResource(toTry);
                 result2 = Launch.classLoader.findResource(toTry);
             } catch(Exception e) {
                 
