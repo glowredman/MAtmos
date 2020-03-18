@@ -21,6 +21,8 @@ import eu.ha3.matmos.core.ducks.ISoundHandler;
 import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.Stable;
 import eu.ha3.matmos.core.expansion.VolumeUpdatable;
+import eu.ha3.matmos.core.preinit.ClassLoaderPrepender;
+import eu.ha3.matmos.core.preinit.PreinitHelper;
 import eu.ha3.matmos.core.sound.Simulacrum;
 import eu.ha3.matmos.debug.Pluggable;
 import eu.ha3.matmos.game.user.UserControl;
@@ -88,6 +90,15 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void onLoad() {
+        String soundSystemTitle = PreinitHelper.getManifestAttributesOfClass("paulscode.sound.SoundSystem")
+                .getValue("Implementation-Title");
+        LOGGER.debug("SoundSystem implementation title: " + soundSystemTitle);
+        if("MAtmos".equals(soundSystemTitle)) {
+            LOGGER.info("Overriding SoundSystem was successful! (SoundSystem implementation title matches mod title.)");
+        } else {
+            LOGGER.info("Overriding SoundSystem probably failed! (SoundSystem implementation title doesn't match mod title!)");
+        }
+        
         this.<OperatorCaster>op().setTickEnabled(true);
         this.<OperatorCaster>op().setFrameEnabled(true);
 

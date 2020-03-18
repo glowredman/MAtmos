@@ -146,9 +146,10 @@ subprojects {
 				'FMLCorePluginContainsFMLMod': 'true',
 
 				'MixinConfigs': 'haddon.mixin.json,haddon_core.mixin.json',
-				'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+				'TweakClass': 'eu.ha3.matmos.core.preinit.ClassLoaderPrependerTweaker',
 				'TweakOrder': 0,
-				'ForceLoadAsMod': 'true'
+				'ForceLoadAsMod': 'true',
+				'Implementation-Title': 'MAtmos'
 			)
 		}
 
