@@ -123,11 +123,9 @@ subprojects {
 		manifest {
 			attributes (
 				'FMLCorePluginContainsFMLMod': 'true',
-				//'FMLCorePlugin': 'eu.ha3.matmos.core.preinit.forge.ClassLoaderReorderPlugin',
 
 				'MixinConfigs': 'haddon.mixin.json,haddon_core.mixin.json',
 				'TweakClass': 'eu.ha3.matmos.core.preinit.ClassLoaderPrependerTweaker',
-				//'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
 				'TweakOrder': 0,
 				'ForceLoadAsMod': 'true',
 				'Implementation-Title': 'MAtmos'
