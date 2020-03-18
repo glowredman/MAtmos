@@ -38,7 +38,7 @@ public class ClassLoaderPrepender {
             if(packageURL == null) {
                 logger.info("Couldn't find eu.ha3.matmos package in MAtmos jar. SoundSystem will not be overloaded.");
             } else {
-                logger.info("Resolving base jar URL from " + packageURL);
+                logger.debug("Resolving base jar URL from " + packageURL);
                 URL baseJarURL = PreinitHelper.getBaseJarURL(packageURL);
                 if(baseJarURL != null) {
                     logger.debug("Resolved base jar URL to " + baseJarURL);

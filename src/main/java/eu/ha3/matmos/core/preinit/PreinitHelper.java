@@ -66,8 +66,6 @@ public class PreinitHelper {
     public static Attributes getManifestAttributesOfClass(String clazz) {
         Logger logger = ClassLoaderPrepender.logger;
         
-        logger.debug("Attempting to get manifest attributes of: " + clazz);
-        
         URLClassLoader classLoader = null;
         try {
             classLoader = (URLClassLoader)Class.forName(clazz, false, Launch.classLoader).getClassLoader();
@@ -77,7 +75,7 @@ public class PreinitHelper {
             return null;
         }
         
-        System.out.println("using class loader: " + classLoader);
+        logger.debug("Attempting to get manifest attributes of: " + clazz + " using class loader: " + classLoader);
         
         URL packageURL = /*Launch.classLoader*/classLoader.findResource(clazz.replace('.', '/') + ".class");
         
