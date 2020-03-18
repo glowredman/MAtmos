@@ -1,30 +1,18 @@
 package eu.ha3.matmos.core.preinit;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.common.reflect.ClassPath;
-import com.google.common.reflect.ClassPath.ClassInfo;
-
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.preinit.forge.ClassLoaderPrependerPlugin;
 import net.minecraft.launchwrapper.Launch;
-import net.minecraft.launchwrapper.LaunchClassLoader;
 import paulscode.sound.SoundSystemException;
-import sun.misc.URLClassPath;
 
 /**
  * <p>This class hacks LaunchClassLoader to make it check this mod's jar first when loading
@@ -65,105 +53,8 @@ public class ClassLoaderPrepender {
         logger.info("Finished hacking LaunchClassLoader");
     }
     
-    enum ReorderMethod {
-        PARENT, // Change the LCL's parent to an own LCL subclass that 'paulscode' load requests get delegated to.
-        PROXY,  // Change the LCL to an own LCL subclass that delegates non-paulscode requests to the original
-                // Works with vanilla, but not with coremods such as CodeChickenCore.
-        JVMHACK // Apply JVM-specific hacks to change the search path of the LCL.
-                // Works in the Oracle JVM, but it's a very ugly solution.
-    };
-    
     private static void prependClassLoaderSources(List<URL> sources) {
-        ReorderMethod method = ReorderMethod.PARENT;
-        
-        switch(method) {
-        case PARENT:
-        case PROXY:
-            boolean parenty = method == ReorderMethod.PARENT;
-            
-            LaunchClassLoader newLCL;
-            
-            if(parenty) {
-                newLCL = ParentPrependedClassLoader.of(Launch.classLoader, sources, Arrays.asList("paulscode"));
-            } else {
-                newLCL = new ProxyPrependedClassLoader(Launch.classLoader.getSources().toArray(new URL[0]), Launch.classLoader);
-            }
-            
-            List<String> exceptions = Arrays.asList();
-            
-            if(!parenty) {
-                // this makes the fields of the original and the new LCL interlinked
-                PreinitHelper.copyObjectFieldsExcept(Launch.classLoader, newLCL, exceptions, false);
-            }
-            
-            try {
-                if(parenty) {
-                    
-                } else {
-                    Field cachedField = LaunchClassLoader.class.getDeclaredField("cachedClasses");
-                    cachedField.setAccessible(true);
-                    Map<String, Class<?>> cachedClasses = (Map<String, Class<?>>)cachedField.get(Launch.classLoader);
-                    for(String className : cachedClasses.keySet()) {
-                        String packageName = className.substring(0, className.lastIndexOf('.') + 1);
-                        
-                        ((ProxyPrependedClassLoader)newLCL).addAlreadyLoadedPackageExclusion(packageName);
-                    }
-                    ((ProxyPrependedClassLoader)newLCL).printAlreadyLoadedPackageExclusion();
-                }
-            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            
-            logger.debug("Current classLoader: " + Launch.classLoader);
-            logger.debug("Current context class loader: " + Thread.currentThread().getContextClassLoader());
-            
-            if(!parenty) {
-                Launch.classLoader = newLCL;
-                Thread.currentThread().setContextClassLoader(newLCL);
-            }
-            
-            break;
-        case JVMHACK:
-            Field ucpField;
-            try {
-                ucpField = URLClassLoader.class.getDeclaredField("ucp");
-                ucpField.setAccessible(true);
-                
-                URLClassPath ucp = (URLClassPath)ucpField.get(Launch.classLoader);
-                
-                Field pathField = URLClassPath.class.getDeclaredField("path");
-                pathField.setAccessible(true);
-                Field urlsField = URLClassPath.class.getDeclaredField("urls");
-                urlsField.setAccessible(true);
-                Field loadersField = URLClassPath.class.getDeclaredField("loaders");
-                loadersField.setAccessible(true);
-                
-                Class loaderClass = Class.forName("sun.misc.URLClassPath$Loader");
-                
-                List<URL> path = (List<URL>)pathField.get(ucp);
-                Stack<URL> urls = (Stack<URL>)urlsField.get(ucp);
-                List loaders = (List)loadersField.get(ucp);
-                
-                path.removeAll(sources);
-                path.addAll(0, sources);
-                urls.removeAll(sources);
-                urls.addAll(sources);
-                
-                Method getLoaderMethod = URLClassPath.class.getDeclaredMethod("getLoader", URL.class);
-                getLoaderMethod.setAccessible(true);
-                Object myLoader = getLoaderMethod.invoke(ucp, sources.get(0));
-                
-                System.out.println("loader already in? " + loaders.contains(myLoader)); // actually it is
-                
-                loaders.add(0, myLoader);
-                
-            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-            break;
-        }
+        ParentPrependedClassLoader.of(Launch.classLoader, sources, Arrays.asList("paulscode"));
     }
     
     public static void printDebugInfo() {

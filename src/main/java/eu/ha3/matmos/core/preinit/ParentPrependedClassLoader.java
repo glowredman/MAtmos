@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ClassInfo;
 
-import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
 /** <p>A class loader meant to be set as the parent of a LaunchClassLoader in order to get
