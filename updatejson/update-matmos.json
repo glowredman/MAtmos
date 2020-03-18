@@ -6,7 +6,8 @@
   },
   "1.7.10": {
     "1.7.10-34": "Backport of MAtmos 34.1 from 1.1.12 to 1.7.10.",
-    "1.7.10-34.1": "* Fixed paulscode SoundSystem not getting overloaded. This fixes streamed sounds sometimes going silent until the resources are reloaded."
+    "1.7.10-34.1": "* Fixed paulscode SoundSystem not getting overloaded. This fixes streamed sounds sometimes going silent until the resources are reloaded.",
+    "1.7.10-34.2": "* Fixed target version being 1.12.2. This fixes the update notifier wrongly checking for 1.12.2 versions."
   },
   "promos": {
     "1.12.2-latest": "1.12.2-34.1"
