@@ -10,6 +10,7 @@ run/
 *.iml
 *.launch
 /.nb-gradle/
+projects/
 
 /*Audio files*/
 *.ogg
