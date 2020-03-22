@@ -203,10 +203,10 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void onFrame(float semi) {
-        Minecraft.getMinecraft().profiler.startSection("onframe");
         if (!isActivated() || util().isGamePaused()) {
             return;
         }
+        Minecraft.getMinecraft().profiler.startSection("onframe");
         simulacrum.get().onFrame(semi);
         userControl.onFrame(semi);
         Minecraft.getMinecraft().profiler.endSection();

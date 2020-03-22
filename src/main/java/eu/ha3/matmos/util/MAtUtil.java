@@ -181,6 +181,10 @@ public class MAtUtil {
 
         return Integer.toString(getMetaAt(pos, 0));
     }
+    
+    public static boolean canSeeSky(BlockPos bs) {
+        return getWorld().canSeeSky(bs);
+    }
 
     /**
      * Returns the legacy number value of an item stack.

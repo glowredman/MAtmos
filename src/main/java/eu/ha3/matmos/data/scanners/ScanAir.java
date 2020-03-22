@@ -1,5 +1,6 @@
 package eu.ha3.matmos.data.scanners;
 
+import eu.ha3.matmos.core.sheet.Sheet;
 import eu.ha3.matmos.util.ByteQueue;
 import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.block.Block;
@@ -34,6 +35,8 @@ public class ScanAir extends Scan {
 	
 	private int score;
 	
+	private Sheet raycastSheet;
+	
 	enum Stage {AIR1, SOLID, AIR2, FINISH};
 	Stage stage = Stage.AIR1;
 	
@@ -41,6 +44,10 @@ public class ScanAir extends Scan {
 	private int AIR_COST, SOLID_COST, PANE_COST; 
 	byte START_NEARNESS;
 	private int SCORE_THRESHOLD = 200;
+	
+	public ScanAir(Object raycastSheetObj) {
+		raycastSheet = (Sheet)raycastSheetObj;
+	}
 	
 	@Override
 	void initScan(int x, int y, int z, int xsizeIn, int ysizeIn, int zsizeIn, int opspercallIn)
@@ -247,7 +254,10 @@ public class ScanAir extends Scan {
 				
 				boolean tooHigh = isTooHigh(); 
 				
-				pipeline.setValue(".is_near_surface", (score > SCORE_THRESHOLD && !tooHigh) ? 1 : 0);
+				boolean ownJudgement = (score > SCORE_THRESHOLD && !tooHigh);
+				pipeline.setValue("._is_near_surface_own", ownJudgement ? 1 : 0);
+				boolean raycastJudgement = Integer.parseInt(raycastSheet.get("._is_near_surface_own")) > 0;
+				pipeline.setValue(".is_near_surface", (ownJudgement | raycastJudgement) ? 1 : 0);
 				break;
 			}
 		}
@@ -266,8 +276,10 @@ public class ScanAir extends Scan {
 	/** Returns true if the block doesn't impede the flow of sound
 	 * (i.e. it is the same as air with regards to sound propagation). */
     public static boolean isTransparentToSound(IBlockState bs, IBlockAccess blockAccess, BlockPos pos, boolean hitIfLiquid) {
-        return !bs.getBlock().canCollideCheck(bs, hitIfLiquid) ||
-                (!hitIfLiquid || !(bs.getBlock() instanceof BlockLiquid) && (bs.getCollisionBoundingBox(blockAccess, pos) == Block.NULL_AABB  || bs.getBlock() instanceof BlockLeaves));
+        boolean result = !bs.getBlock().canCollideCheck(bs, hitIfLiquid) ||
+                ((!hitIfLiquid || !(bs.getBlock() instanceof BlockLiquid)) &&
+                        (bs.getCollisionBoundingBox(blockAccess, pos) == null || bs.getBlock() instanceof BlockLeaves));
+        return result;
     }
 	
 	private boolean isThinBlock(Block block) {
