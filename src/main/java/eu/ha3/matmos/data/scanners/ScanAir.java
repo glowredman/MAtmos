@@ -263,8 +263,10 @@ public class ScanAir extends Scan {
 	/** Returns true if the block doesn't impede the flow of sound
 	 * (i.e. it is the same as air with regards to sound propagation). */
     public static boolean isTransparentToSound(Block block, int meta, World world, BlockPos pos, boolean hitIfLiquid) {
-        return !block.canStopRayTrace(meta, hitIfLiquid) ||
-                (!hitIfLiquid || !(block instanceof BlockLiquid) && (block.getCollisionBoundingBoxFromPool(world, pos.getX(), pos.getY(), pos.getZ()) == null || block instanceof BlockLeaves));
+        boolean result = !block.canStopRayTrace(meta, hitIfLiquid) ||
+                ((!hitIfLiquid || !(block instanceof BlockLiquid)) &&
+                        (block.getCollisionBoundingBoxFromPool(world, pos.getX(), pos.getY(), pos.getZ()) == null || block instanceof BlockLeaves));
+        return result;
     }
 	
 	private boolean isThinBlock(Block block) {
