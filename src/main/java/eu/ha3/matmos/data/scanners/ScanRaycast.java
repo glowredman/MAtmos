@@ -11,11 +11,13 @@ import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.matmos.util.Vec3d;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
+import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
@@ -155,7 +157,8 @@ public class ScanRaycast extends Scan {
         double infNorm = Math.max(Math.abs(delta.xCoord), Math.max(Math.abs(delta.yCoord), Math.abs(delta.zCoord)));
         delta = delta.scale(0.01 / infNorm);
         
-        while(result != null && ScanAir.isTransparentToSound(MAtUtil.getBlockAt(
+        while(result != null && result.typeOfHit == MovingObjectType.BLOCK
+                && ScanAir.isTransparentToSound(MAtUtil.getBlockAt(
                 new BlockPos(result.blockX, result.blockY, result.blockZ)),
                 MAtUtil.getMetaAt(new BlockPos(result.hitVec), -1), w, new BlockPos(result.hitVec), true)) {
             result = w.rayTraceBlocks(delta.add(result.hitVec), end, true, true, true);
@@ -245,7 +248,7 @@ public class ScanRaycast extends Scan {
         Vec3d end = center.add(dir.scale(maxRange));
         MovingObjectPosition result = rayTraceNonSolid(center, end);
         
-        if(result != null) { // ray hit a solid block
+        if(result != null && result.typeOfHit == MovingObjectType.BLOCK) { // ray hit a solid block
             boolean foundSky = scanNearRayHit(result, 2, true);
             
             if(!foundSky) {

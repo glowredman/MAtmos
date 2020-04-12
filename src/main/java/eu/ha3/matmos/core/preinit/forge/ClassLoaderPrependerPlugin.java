@@ -5,7 +5,7 @@ import eu.ha3.matmos.core.preinit.ClassLoaderPrepender;
 
 import java.util.Map;
 
-/** FML coremod for bootstrapping the ClassLoaderPrepender. */
+/** FML coremod for bootstrapping the ClassLoaderPrepender. Used in Forge. */
 
 public class ClassLoaderPrependerPlugin implements IFMLLoadingPlugin {
     

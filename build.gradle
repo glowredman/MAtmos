@@ -124,12 +124,20 @@ subprojects {
 			attributes (
 				'FMLCorePluginContainsFMLMod': 'true',
 
-				'MixinConfigs': 'haddon.mixin.json,haddon_core.mixin.json',
-				'TweakClass': 'eu.ha3.matmos.core.preinit.ClassLoaderPrependerTweaker',
+				
 				'TweakOrder': 0,
 				'ForceLoadAsMod': 'true',
 				'Implementation-Title': 'MAtmos'
 			)
+			if(project.name == "forge"){
+				attributes (
+					'MixinConfigs': 'haddon.mixin.json,haddon_core.mixin.json',
+					'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+					'FMLCorePlugin': 'eu.ha3.matmos.core.preinit.forge.ClassLoaderPrependerPlugin'
+					// We must set the tweak class as MixinTweaker to be detected correctly
+					// by the mixin environment.
+				)
+			}
 		}
 
 		from(sourceSets.commons.output);
@@ -198,8 +206,6 @@ subprojects {
 			// replace version and mcversion
 			expand props
 		}
-
-		
 
 		// replace stuff in litemod.json, nothing else
 		from(sourceSets.main.resources.srcDirs) {

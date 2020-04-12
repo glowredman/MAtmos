@@ -141,8 +141,6 @@ public class GuiMore extends GuiScreen {
         mod.util().prepareDrawString();
         mod.util().drawString(I18n.format("mat.resources.lag", mod.getLag().getMilliseconds()), 1f, 1f, 0, 0, '3', 0, 0, 0, 0, true);
 
-        drawCenteredString(fontRendererObj, I18n.format("mat.title.reloadhint"), width / 2, _SEPARATOR + _MIX * (IDS_PER_PAGE + 5), 0xffffff);
-        
         super.drawScreen(par1, par2, par3);
 
     }
