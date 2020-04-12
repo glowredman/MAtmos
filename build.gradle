@@ -26,6 +26,13 @@ subprojects {
 		embed
 		compile.extendsFrom(embed)
 	}
+	
+	repositories {
+		maven {
+			name = 'sponge'
+			url = 'http://repo.spongepowered.org/maven'
+		}
+	}
 }
 
 project(':forge') {
@@ -36,7 +43,7 @@ project(':forge') {
 	}
 
 	dependencies {
-		embed 'org.spongepowered:mixin:0.8'
+		embed 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
 	}
 
 	sourceSets {
@@ -96,6 +103,10 @@ subprojects {
 		replace '@VERSION@', ver
 		replace '@DESCRIPTION@', project.description
 	}
+	
+	if(project.name == "forge"){
+		minecraft.coreMod = 'eu.ha3.matmos.core.preinit.forge.ClassLoaderPrependerPlugin'
+	}
 
 	sourceCompatibility = 1.8
 	targetCompatibility = 1.8
@@ -146,12 +157,25 @@ subprojects {
 			attributes (
 				'FMLCorePluginContainsFMLMod': 'true',
 
-				'MixinConfigs': 'haddon.mixin.json,haddon_core.mixin.json',
-				'TweakClass': 'eu.ha3.matmos.core.preinit.ClassLoaderPrependerTweaker',
+				
 				'TweakOrder': 0,
 				'ForceLoadAsMod': 'true',
 				'Implementation-Title': 'MAtmos'
 			)
+			if(project.name == "forge"){
+				attributes (
+					'MixinConfigs': 'haddon.mixin.json,haddon_core.mixin.json',
+					'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker'
+					// We must set the tweak class as MixinTweaker to be detected correctly
+					// by the mixin environment.
+				)
+			}
+			
+			if(project.name == "liteloader"){
+				attributes (
+					'TweakClass': 'eu.ha3.matmos.core.preinit.ClassLoaderPrependerTweaker'
+				)
+			}
 		}
 
 		from(sourceSets.commons.output);
@@ -197,7 +221,7 @@ subprojects {
 		]
 		inputs.properties props
 		
-		project(':forge') {
+		if(project.name == 'forge') {
 			// replace stuff in mcmod.info, nothing else
 			from(sourceSets.main.resources.srcDirs) {
 				include 'mcmod.info'
@@ -208,7 +232,7 @@ subprojects {
 		}
 
 		
-		project(':liteloader') {
+		if(project.name == 'liteloader') {
 			// replace stuff in litemod.json, nothing else
 			from(sourceSets.main.resources.srcDirs) {
 				include 'litemod.json'

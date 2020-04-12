@@ -5,7 +5,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 import java.util.Map;
 
-/** FML coremod for bootstrapping the ClassLoaderPrepender. */
+/** FML coremod for bootstrapping the ClassLoaderPrepender. Used in Forge. */
 
 public class ClassLoaderPrependerPlugin implements IFMLLoadingPlugin {
     
