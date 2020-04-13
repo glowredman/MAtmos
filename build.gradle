@@ -104,7 +104,10 @@ subprojects {
 		replace '@DESCRIPTION@', project.description
 	}
 	
-	if(project.name == "forge"){
+	def overrideSoundSystemForge = false;
+	// Overriding the sound system is unnecessary on 1.12.2 Forge,
+	// and doing so causes problems with Dynamic Surroundings.
+	if(overrideSoundSystemForge && project.name == "forge"){
 		minecraft.coreMod = 'eu.ha3.matmos.core.preinit.forge.ClassLoaderPrependerPlugin'
 	}
 
