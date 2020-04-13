@@ -96,7 +96,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         if("MAtmos".equals(soundSystemTitle)) {
             LOGGER.info("Overriding SoundSystem was successful! (SoundSystem implementation title matches mod title.)");
         } else {
-            LOGGER.info("Overriding SoundSystem probably failed! (SoundSystem implementation title doesn't match mod title!)");
+            LOGGER.info("SoundSystem was probably not overridden. (SoundSystem implementation title doesn't match mod title.)");
         }
         
         this.<OperatorCaster>op().setTickEnabled(true);
