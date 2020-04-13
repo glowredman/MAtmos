@@ -5,8 +5,10 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
+import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
+import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -116,7 +118,8 @@ public class ScanRaycast extends Scan {
         
         Vec3d delta = dir.scale(0.01);
         
-        while(result != null && ScanAir.isTransparentToSound(w.getBlockState(result.getBlockPos()), w, result.getBlockPos(), true)) {
+        while(result != null && result.typeOfHit == RayTraceResult.Type.BLOCK
+                && ScanAir.isTransparentToSound(w.getBlockState(result.getBlockPos()), w, result.getBlockPos(), true)) {
             result = w.rayTraceBlocks(result.hitVec.add(delta), end, true, true, true); 
         }
         return result;
@@ -130,7 +133,7 @@ public class ScanRaycast extends Scan {
         RayTraceResult result = rayTraceNonSolid(center, dir, maxRange);
         
         int startNearness = 60;
-        if(result != null) {
+        if(result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
             BlockPos hit = result.getBlockPos();
             
             distanceSqSum += hit.distanceSq(center.x, center.y, center.z);
