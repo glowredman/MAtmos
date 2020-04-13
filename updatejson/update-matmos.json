@@ -2,17 +2,19 @@
   "homepage": "https://github.com/makamys/MAtmos/releases",
   "1.12.2": {
     "1.12.2-34": "* New system for detecting when the player is outdoors, indoors, or deep indoors\n* A new soundpack making use of the new features: Matmos 2020 \"Zen\"\n* Update checking for sound packs\n* Versions are now also built for Forge\n* Made large_scanner more responsive\n* Many bug fixes and performance improvements",
-    "1.12.2-34.1": "* Fixed crash when opening MAtmos menu with the ambient volume set to 0%\n* Updated SoundSystem for LiteLoader builds (fixes sounds occasionally going silent until the resource packs are reloaded)\n* Moved hint about reloading resource packs to the Advanced menu"
+    "1.12.2-34.1": "* Fixed crash when opening MAtmos menu with the ambient volume set to 0%\n* Updated SoundSystem for LiteLoader builds (fixes sounds occasionally going silent until the resource packs are reloaded)\n* Moved hint about reloading resource packs to the Advanced menu",
+    "1.12.2-34.2": "+ Improved indoor scanning by raycast scanning through walls\n+ Moved F3+T hint back to menu\n+ LiteLoader: fixed SoundSystem not getting overridden\n\n* Fixed crashing or not getting detected when other Mixin mods are present\n* Fixed crash when profiler is opened while MAtmos is disabled\n* Fixed ScanAir.isTransparentToSound() logic"
   },
   "1.7.10": {
     "1.7.10-34": "Backport of MAtmos 34.1 from 1.1.12 to 1.7.10.",
     "1.7.10-34.1": "* Fixed paulscode SoundSystem not getting overloaded. This fixes streamed sounds sometimes going silent until the resources are reloaded.",
-    "1.7.10-34.2": "* Fixed target version being 1.12.2. This fixes the update notifier wrongly checking for 1.12.2 versions."
+    "1.7.10-34.2": "* Fixed target version being 1.12.2. This fixes the update notifier wrongly checking for 1.12.2 versions.",
+    "1.7.10-34.3": "+ Improved indoor scanning by raycast scanning through walls\n+ Moved F3+T hint back to menu\n\n* Fixed crashing or not getting detected when other Mixin mods are present\n* Fixed crash when profiler is opened while MAtmos is disabled\n* Fixed ScanAir.isTransparentToSound() logic"
   },
   "promos": {
-    "1.12.2-latest": "1.12.2-34.1"
+    "1.12.2-latest": "1.12.2-34.2"
   },
   "promos": {
-    "1.7.10-latest": "1.7.10-34.1"
+    "1.7.10-latest": "1.7.10-34.3"
   }
 }
