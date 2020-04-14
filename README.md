@@ -54,6 +54,14 @@ Pressing F7 opens the MAtmos settings menu which can be used to adjust the volum
 
 <img src="docs/matmos_menu.png" width="600">
 
+## Troubleshooting
+
+If adding MAtmos on 1.12.2 causes the game to **crash upon startup**, it's probably because you're using other, outdated mods that use version 0.7 of the Mixin library, while this mod uses version 0.8. This problem commonly occurs with old modpacks. There are 2 ways to resolve this:
+
+a) Update the other mods of the modpack
+
+b) Use the -mixin0.7 versions of MAtmos which are provided for compatibility.
+
 ## Downloads
 
 Releases for **MAtmos** are available on [the releases tab](https://github.com/makamys/MAtmos/releases). There are both Forge and LiteLoader releases available for most versions. Choose the one that matches the modloader you're using.
