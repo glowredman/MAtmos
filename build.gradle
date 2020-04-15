@@ -35,7 +35,18 @@ subprojects {
 	}
 	
 	def mixinVersion = project.name.endsWith("-mixin0.7") ? "0.7.+" : "0.8.+"
-
+	
+	// Should the SoundSystemReplacer be included in Forge builds?
+	// (it's completely unnecessary, this option is only included for testing)
+	def forgeIncludeSoundSystemReplacer = false;
+	
+	
+	if(project.name == "liteloader" || forgeIncludeSoundSystemReplacer){
+		dependencies {
+			embed 'com.paulscode:soundsystem:+'
+		}
+	}
+	
 	if(project.name.startsWith("forge")) {
 		apply plugin: 'net.minecraftforge.gradle.forge'
 
@@ -55,11 +66,9 @@ subprojects {
 			main.resources.exclude '**/litemod.json'
 		}
 	}
-
+	
 	if(project.name.startsWith("liteloader")) {
-		dependencies {
-			embed 'com.paulscode:soundsystem:+'
-		}
+		
 
 		apply plugin: 'net.minecraftforge.gradle.liteloader'
 
@@ -108,12 +117,12 @@ subprojects {
 		replace '@DESCRIPTION@', project.description
 	}
 	
-	def overrideSoundSystemForge = false;
 	// Overriding the sound system is unnecessary on 1.12.2 Forge,
 	// and doing so causes problems with Dynamic Surroundings.
-	if(overrideSoundSystemForge && project.name.startsWith("forge")){
-		minecraft.coreMod = 'eu.ha3.matmos.core.preinit.forge.ClassLoaderPrependerPlugin'
+	if(forgeIncludeSoundSystemReplacer && project.name.startsWith("forge")){
+		minecraft.coreMod = 'eu.ha3.matmos.core.preinit.forge.SoundSystemReplacerPlugin'
 	}
+	
 
 	sourceCompatibility = 1.8
 	targetCompatibility = 1.8
@@ -176,11 +185,16 @@ subprojects {
 					// We must set the tweak class as MixinTweaker to be detected correctly
 					// by the mixin environment.
 				)
+				if(forgeIncludeSoundSystemReplacer){
+					attributes (
+						'FMLCorePlugin': 'eu.ha3.matmos.core.preinit.forge.SoundSystemReplacerPlugin'
+					)
+				}
 			}
 			
 			if(project.name.startsWith("liteloader")){
 				attributes (
-					'TweakClass': 'eu.ha3.matmos.core.preinit.ClassLoaderPrependerTweaker'
+					'TweakClass': 'eu.ha3.matmos.core.preinit.SoundSystemReplacerTweaker'
 				)
 			}
 		}

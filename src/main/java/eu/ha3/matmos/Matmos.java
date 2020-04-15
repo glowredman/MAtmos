@@ -21,8 +21,8 @@ import eu.ha3.matmos.core.ducks.ISoundHandler;
 import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.Stable;
 import eu.ha3.matmos.core.expansion.VolumeUpdatable;
-import eu.ha3.matmos.core.preinit.ClassLoaderPrepender;
-import eu.ha3.matmos.core.preinit.PreinitHelper;
+import eu.ha3.matmos.core.preinit.SoundSystemReplacer;
+import eu.ha3.matmos.core.preinit.SoundSystemReplacerTransformer;
 import eu.ha3.matmos.core.sound.Simulacrum;
 import eu.ha3.matmos.debug.Pluggable;
 import eu.ha3.matmos.game.user.UserControl;
@@ -64,7 +64,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     public static final Identity identity = new HaddonIdentity(NAME, VERSION, FOR, ADDRESS);
 
     // NotifiableHaddon and UpdateNotifier
-    private final ConfigProperty config = new ConfigProperty();
+    private final ConfigProperty config = ConfigManager.getConfig();
     private final Chatter chatter = new Chatter(this, "<MAtmos> ");
     private final UpdateNotifier updateNotifier = new UpdateNotifier(this, new HaddonVersion(FOR + "-" + VERSION), UPDATE_JSON);
 
@@ -90,13 +90,10 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void onLoad() {
-        String soundSystemTitle = PreinitHelper.getManifestAttributesOfClass("paulscode.sound.SoundSystem")
-                .getValue("Implementation-Title");
-        LOGGER.debug("SoundSystem implementation title: " + soundSystemTitle);
-        if("MAtmos".equals(soundSystemTitle)) {
-            LOGGER.info("Overriding SoundSystem was successful! (SoundSystem implementation title matches mod title.)");
+        if(SoundSystemReplacerTransformer.hasMadeChanges()) {
+            LOGGER.info("Overriding SoundSystem was successful!");
         } else {
-            LOGGER.info("SoundSystem was probably not overridden. (SoundSystem implementation title doesn't match mod title.)");
+            LOGGER.info("SoundSystem was not overridden.");
         }
         
         this.<OperatorCaster>op().setTickEnabled(true);
@@ -104,33 +101,11 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
         TimeStatistic timeMeasure = new TimeStatistic(Locale.ENGLISH);
         userControl = new UserControl(this);
-
-        // Create default configuration
+        
         updateNotifier.fillDefaults(config);
-        config.setProperty("world.height", 256);
-        config.setProperty("dump.sheets.enabled", false);
-        config.setProperty("start.enabled", true);
-        config.setProperty("reversed.controls", false);
-        config.setProperty("sound.autopreview", true);
-        config.setProperty("globalvolume.scale", 1f);
-        config.setProperty("key.code", 65);
-        config.setProperty("useroptions.altitudes.high", true);
-        config.setProperty("useroptions.altitudes.low", true);
-        config.setProperty("useroptions.biome.override", -1);
-        config.setProperty("debug.mode", 0);
-        config.setProperty("minecraftsound.ambient.volume", 1f);
         config.setProperty("version.last", VERSION);
         config.setProperty("version.warnunstable", 3);
         config.commit();
-
-        // Load configuration from source
-        try {
-            config.setSource(new File(util().getMcFolder(), "matmos/userconfig.cfg").getCanonicalPath());
-            config.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error caused config not to work: " + e.getMessage());
-        }
 
         resetAmbientVolume();
 
@@ -141,6 +116,8 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
         LOGGER.info("Took " + timeMeasure.getSecondsAsString(3) + " seconds to setup MAtmos base.");
     }
+    
+    
 
     private void resetAmbientVolume() {
         setSoundLevelAmbient(config.getFloat("minecraftsound.ambient.volume"));
@@ -345,7 +322,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public ConfigProperty getConfig() {
-        return config;
+        return ConfigManager.getConfig();
     }
 
     @Override

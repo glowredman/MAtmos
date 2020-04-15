@@ -6,12 +6,12 @@ import java.util.List;
 import net.minecraft.launchwrapper.ITweaker;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
-/** Tweaker for bootstrapping the ClassLoaderPrepender. Used in LiteLoader. */
+/** Tweaker for bootstrapping the SoundSystemReplacer. Used in LiteLoader. */
 
-public class ClassLoaderPrependerTweaker implements ITweaker {
+public class SoundSystemReplacerTweaker implements ITweaker {
 
-    public ClassLoaderPrependerTweaker(){
-        ClassLoaderPrepender.run();
+    public SoundSystemReplacerTweaker(){
+        SoundSystemReplacer.run();
         
     }
     
