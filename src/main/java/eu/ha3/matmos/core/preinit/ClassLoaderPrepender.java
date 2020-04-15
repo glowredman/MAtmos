@@ -1,7 +1,10 @@
 package eu.ha3.matmos.core.preinit;
 
+import java.lang.reflect.Field;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,7 +14,9 @@ import org.apache.logging.log4j.Logger;
 
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.preinit.forge.ClassLoaderPrependerPlugin;
+import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraft.launchwrapper.LaunchClassLoader;
 import paulscode.sound.SoundSystemException;
 
 /**
@@ -43,7 +48,22 @@ public class ClassLoaderPrepender {
                 if(baseJarURL != null) {
                     logger.debug("Resolved base jar URL to " + baseJarURL);
                     
-                    prependClassLoaderSources(Arrays.asList(baseJarURL));
+                    try {
+                        LaunchClassLoader lcl = (LaunchClassLoader)Launch.classLoader;
+                        
+                        Field transformersField = LaunchClassLoader.class.getDeclaredField("transformers");
+                        
+                        transformersField.setAccessible(true);
+                        
+                        List<IClassTransformer> transformers = (List<IClassTransformer>)transformersField.get(lcl);
+                        
+                        // Our transformer has to modify the SoundSystem before any other transformers,
+                        // otherwise it would erase the work of previous transformers.
+                        transformers.add(0, (IClassTransformer)new SoundSystemReplacer(baseJarURL));
+                    } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 } else {
                     logger.info("Failed to extract base jar url from " + packageURL + ". SoundSystem will not be overloaded.");
                 }
