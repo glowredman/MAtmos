@@ -63,7 +63,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     public static final Identity identity = new HaddonIdentity(NAME, VERSION, FOR, ADDRESS);
 
     // NotifiableHaddon and UpdateNotifier
-    private final ConfigProperty config = new ConfigProperty();
+    private final ConfigProperty config = ConfigManager.getConfig();
     private final Chatter chatter = new Chatter(this, "<MAtmos> ");
     private final UpdateNotifier updateNotifier = new UpdateNotifier(this, new HaddonVersion(FOR + "-" + VERSION), UPDATE_JSON);
 
@@ -100,33 +100,11 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
         TimeStatistic timeMeasure = new TimeStatistic(Locale.ENGLISH);
         userControl = new UserControl(this);
-
-        // Create default configuration
+        
         updateNotifier.fillDefaults(config);
-        config.setProperty("world.height", 256);
-        config.setProperty("dump.sheets.enabled", false);
-        config.setProperty("start.enabled", true);
-        config.setProperty("reversed.controls", false);
-        config.setProperty("sound.autopreview", true);
-        config.setProperty("globalvolume.scale", 1f);
-        config.setProperty("key.code", 65);
-        config.setProperty("useroptions.altitudes.high", true);
-        config.setProperty("useroptions.altitudes.low", true);
-        config.setProperty("useroptions.biome.override", -1);
-        config.setProperty("debug.mode", 0);
-        config.setProperty("minecraftsound.ambient.volume", 1f);
         config.setProperty("version.last", VERSION);
         config.setProperty("version.warnunstable", 3);
         config.commit();
-
-        // Load configuration from source
-        try {
-            config.setSource(new File(util().getMcFolder(), "matmos/userconfig.cfg").getCanonicalPath());
-            config.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error caused config not to work: " + e.getMessage());
-        }
 
         resetAmbientVolume();
 
@@ -137,6 +115,8 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
         LOGGER.info("Took " + timeMeasure.getSecondsAsString(3) + " seconds to setup MAtmos base.");
     }
+    
+    
 
     private void resetAmbientVolume() {
         setSoundLevelAmbient(config.getFloat("minecraftsound.ambient.volume"));
@@ -341,7 +321,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public ConfigProperty getConfig() {
-        return config;
+        return ConfigManager.getConfig();
     }
 
     @Override

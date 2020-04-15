@@ -3,11 +3,15 @@ package eu.ha3.matmos.core.preinit;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import eu.ha3.matmos.ConfigManager;
+import eu.ha3.matmos.Matmos;
+import eu.ha3.util.property.simple.ConfigProperty;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
@@ -19,12 +23,41 @@ public class SoundSystemReplacer {
     
     public static final Logger logger = LogManager.getLogger("matmos-preinit");
     
+    public static ConfigProperty preinitConfig;
+    
+    private static List<String> findModsWithConflicts() {
+        List<String> conflicts = new ArrayList<>();
+        
+        if(Launch.classLoader.getResource("org/blockartistry/mod/DynSurround") != null) {
+            conflicts.add("Dynamic Surroundings");
+        }
+        
+        return conflicts;
+    }
+    
     public static void run() {
-        boolean shouldOverloadSoundSystem = true; // TODO make configurable
+        String option = ConfigManager.getConfig().getString("coremod.replacesoundsystem");
         
-        if(!shouldOverloadSoundSystem) return;
+        boolean shouldReplace = false;
         
-        if(shouldOverloadSoundSystem) {
+        switch(option) {
+        case "always":
+            shouldReplace = true;
+            break;
+        case "auto":
+            List<String> conflicts = findModsWithConflicts();
+            if(!conflicts.isEmpty()) {
+                logger.info("SoundSystem won't be replaced, because these conflicting mods were found: " + conflicts);
+            } else {
+                shouldReplace = true;
+            }
+            break;
+        case "never":
+            logger.info("SoundSystem won't be replaced, because it was disabled in the config.");
+            break;
+        }
+        
+        if(shouldReplace) {
             logger.info("Initializing SoundSystem replacer transformer");
             URL packageURL = SoundSystemReplacer.class.getClassLoader().getResource("eu/ha3/matmos");
             if(packageURL == null) {
