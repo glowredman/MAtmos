@@ -1,16 +1,16 @@
 package eu.ha3.matmos.core.preinit.forge;
 
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
-import eu.ha3.matmos.core.preinit.ClassLoaderPrepender;
+import eu.ha3.matmos.core.preinit.SoundSystemReplacer;
 
 import java.util.Map;
 
-/** FML coremod for bootstrapping the ClassLoaderPrepender. Used in Forge. */
+/** FML coremod for bootstrapping the SoundSystemReplacer. Used in Forge. */
 
-public class ClassLoaderPrependerPlugin implements IFMLLoadingPlugin {
+public class SoundSystemReplacerPlugin implements IFMLLoadingPlugin {
     
-    public ClassLoaderPrependerPlugin(){
-        ClassLoaderPrepender.run();
+    public SoundSystemReplacerPlugin(){
+        SoundSystemReplacer.run();
     }
 
     @Override

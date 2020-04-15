@@ -133,7 +133,7 @@ subprojects {
 				attributes (
 					'MixinConfigs': 'haddon.mixin.json,haddon_core.mixin.json',
 					'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
-					'FMLCorePlugin': 'eu.ha3.matmos.core.preinit.forge.ClassLoaderPrependerPlugin'
+					'FMLCorePlugin': 'eu.ha3.matmos.core.preinit.forge.SoundSystemReplacerPlugin'
 					// We must set the tweak class as MixinTweaker to be detected correctly
 					// by the mixin environment.
 				)

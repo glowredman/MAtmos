@@ -1,73 +1,87 @@
 package eu.ha3.matmos.core.preinit;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
+import java.lang.reflect.Field;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.List;
 
-import org.apache.commons.compress.utils.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.launchwrapper.IClassTransformer;
+import net.minecraft.launchwrapper.Launch;
+import net.minecraft.launchwrapper.LaunchClassLoader;
 
-public class SoundSystemReplacer implements IClassTransformer{
+/**
+ * This class prepares SoundSystemReplacerTransformer. 
+ */ 
+public class SoundSystemReplacer {
     
-    private static final Logger logger = LogManager.getLogger("matmos-preinit");
+    public static final Logger logger = LogManager.getLogger("matmos-preinit");
     
-    Map<String, byte[]> classData;
-    
-    public SoundSystemReplacer(URL baseJarURL) {
-        classData = readClassesFrom(baseJarURL);
-    }
-    
-    private Map<String, byte[]> readClassesFrom(URL baseJarURL) {
-        HashMap<String, byte[]> data = new HashMap<>();
+    public static void run() {
+        boolean shouldOverloadSoundSystem = true; // TODO make configurable
         
-        try (ZipFile zipFile = new ZipFile(new File(baseJarURL.toURI()))){
-            
-            Enumeration<? extends ZipEntry> entries = zipFile.entries();
-            while(entries.hasMoreElements()) {
-                ZipEntry entry = entries.nextElement();
-                
-                if(entry.getName().startsWith("paulscode/") && entry.getName().endsWith(".class")) {
-                    InputStream is = zipFile.getInputStream(entry);
-                    byte[] buf = IOUtils.toByteArray(is);
+        if(!shouldOverloadSoundSystem) return;
+        
+        if(shouldOverloadSoundSystem) {
+            logger.info("Initializing SoundSystem replacer transformer");
+            URL packageURL = SoundSystemReplacer.class.getClassLoader().getResource("eu/ha3/matmos");
+            if(packageURL == null) {
+                logger.info("Couldn't find eu.ha3.matmos package in MAtmos jar. SoundSystem will not be overloaded.");
+            } else {
+                logger.debug("Resolving base jar URL from " + packageURL);
+                URL baseJarURL = getBaseJarURL(packageURL);
+                if(baseJarURL != null) {
+                    logger.debug("Resolved base jar URL to " + baseJarURL);
                     
-                    IOUtils.closeQuietly(is);
-                    
-                    if(entry.getSize() != buf.length) { // sanity check
-                        logger.warn("Class " + entry.getName() + " has a wrong size: " + buf.length + " (expected " + entry.getSize() + ")");
+                    try {
+                        LaunchClassLoader lcl = (LaunchClassLoader)Launch.classLoader;
+                        
+                        Field transformersField = LaunchClassLoader.class.getDeclaredField("transformers");
+                        
+                        transformersField.setAccessible(true);
+                        
+                        List<IClassTransformer> transformers = (List<IClassTransformer>)transformersField.get(lcl);
+                        
+                        // Our transformer has to modify the SoundSystem before any other transformers,
+                        // otherwise it would erase the work of previous transformers.
+                        transformers.add(0, (IClassTransformer)new SoundSystemReplacerTransformer(baseJarURL));
+                        
+                        logger.info("Finished initializing SoundSystem replacer transformer");
+                    } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+                        logger.warn("Exception registering SoundSystem replacer transformer. SoundSystem will not be overloaded.");
+                        e.printStackTrace();
                     }
-                    
-                    String className = entry.getName().substring(0, entry.getName().length() - 6).replaceAll("/", ".");
-                    
-                    data.put(className, buf);
+                } else {
+                    logger.warn("Failed to extract base jar url from " + packageURL + ". SoundSystem will not be overloaded.");
                 }
             }
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
         }
-        return data;
     }
     
-    @Override
-    public byte[] transform(String name, String transformedName, byte[] basicClass) {
-        if(name.startsWith("paulscode.")) {
-            return loadOverridenClass(name, transformedName).orElse(basicClass);
+    public static URL getBaseJarURL(URL packageURL) {
+        String newURLString = null;
+        
+        switch(packageURL.getProtocol()) {
+        case "jar":
+            String urlString = packageURL.getPath();
+            int lastExclamation = urlString.lastIndexOf('!');
+            newURLString = urlString.substring(0, lastExclamation);
+            break;
+        default:
+            SoundSystemReplacer.logger.info("The path to " + packageURL + " isn't in a jar; we're probably in a dev environment. " + 
+                                "You'll have to manually configure your dev environment if you want to override the SoundSystem.");
+            break;
         }
-        return basicClass;
+        
+        if(newURLString != null) {
+            try {
+                return new URL(newURLString);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
-    
-    private Optional<byte[]> loadOverridenClass(String name, String transformedName) {
-        return Optional.ofNullable(classData.get(name));
-    }
-
 }
