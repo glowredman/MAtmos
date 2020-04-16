@@ -56,7 +56,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     // Identity
     protected static final String NAME = "MAtmos";
-    protected static final String VERSION = "34.3";
+    protected static final String VERSION = "34.4";
     protected static final String FOR = "1.7.10";
     protected static final String ADDRESS = "https://github.com/makamys/MAtmos";
     protected static final String UPDATE_JSON = "https://raw.githubusercontent.com/makamys/MAtmos/master/updatejson/update-matmos.json";
