@@ -21,7 +21,7 @@ MAtmos lets you create your own soundscapes using special resource packs called 
 ### MAtmos 2020 "Zen"
 [![](http://img.youtube.com/vi/3F85g3e2_MY/0.jpg)](http://www.youtube.com/watch?v=3F85g3e2_MY "")
 
-A default soundpack for MAtmos featuring seamless loops and indoors/outdoors variations for ambiences. It aims to add high quality sounds that enhance the atmosphere without being too oppressive. (MAtmos 34 or higher required.)
+The flagship soundpack, featuring seamless loops and indoors/outdoors variations for ambiences. It aims to add high quality sounds that enhance the atmosphere without feeling out of place. (MAtmos 34 or higher required.)
 
 **[(Website with downloads)](https://github.com/makamys/MAtmos-2020-Zen)**
 
