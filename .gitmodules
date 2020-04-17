@@ -9,3 +9,6 @@
 	path = lib/MC-Commons
 	url = https://github.com/makamys/MC-Commons.git
 	branch = 1.7.10
+[submodule "src/soundpacks/default"]
+	path = src/soundpacks/default
+	url = https://github.com/makamys/MAtmos-2016-Default.git
