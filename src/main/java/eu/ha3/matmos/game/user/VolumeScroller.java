@@ -102,7 +102,7 @@ public class VolumeScroller extends Ha3Scroller {
 
             EntityPlayer ply = Minecraft.getMinecraft().player;
 
-            MAtUtil.playSound("random.click", (float)ply.posX, (float)ply.posY, (float)ply.posZ, hgn, res);
+            MAtUtil.playSound("ui.button.click", (float)ply.posX, (float)ply.posY, (float)ply.posZ, hgn, res);
 
         }
 
