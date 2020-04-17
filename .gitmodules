@@ -5,3 +5,6 @@
 [submodule "src/soundpacks/zen"]
 	path = src/soundpacks/zen
 	url = https://github.com/makamys/MAtmos-2020-Zen.git
+[submodule "src/soundpacks/default"]
+	path = src/soundpacks/default
+	url = https://github.com/makamys/MAtmos-2016-Default.git
