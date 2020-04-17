@@ -41,9 +41,9 @@ The MSI expansion features a large variety of new sounds for every biome, strivi
 
 [![](http://img.youtube.com/vi/Z4Zu4kvyDHU/0.jpg)](http://www.youtube.com/watch?v=Z4Zu4kvyDHU "")
 
-The original soundpack from 2011.
+The original MAtmos soundpack from 2012, updated to work on the latest version.
 
-**[(Website with downloads)](https://github.com/Sollace/MAtmos/releases)** (look for the Matmos.Default.Resourcepack zip)
+**[(Website with downloads)](https://github.com/makamys/MAtmos-2016-Default)**
 
 *(by Hurricaaane)*
 
