@@ -152,10 +152,8 @@ public class ScanRaycast extends Scan {
         double infNorm = Math.max(Math.abs(delta.x), Math.max(Math.abs(delta.y), Math.abs(delta.z)));
         delta = delta.scale(0.01 / infNorm);
         
-        IBlockState bs = w.getBlockState(result.getBlockPos());
-        
         while(result != null && result.typeOfHit == RayTraceResult.Type.BLOCK
-                && ScanAir.isTransparentToSound(bs, w, new BlockPos(result.hitVec), true)) {
+                && ScanAir.isTransparentToSound(w.getBlockState(result.getBlockPos()), w, new BlockPos(result.hitVec), true)) {
             result = w.rayTraceBlocks(delta.add(result.hitVec), end, true, true, true);
         }
         return result;
