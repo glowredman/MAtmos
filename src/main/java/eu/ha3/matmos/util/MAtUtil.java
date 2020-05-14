@@ -1,5 +1,8 @@
 package eu.ha3.matmos.util;
 
+import java.util.Random;
+
+import eu.ha3.matmos.core.sound.NoAttenuationSound;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -18,6 +21,8 @@ import net.minecraft.world.World;
 
 public class MAtUtil {
 
+    private static final Random random = new Random();
+    
     public static EntityPlayer getPlayer() {
         return Minecraft.getMinecraft().player;
     }
@@ -181,10 +186,6 @@ public class MAtUtil {
 
         return Integer.toString(getMetaAt(pos, 0));
     }
-    
-    public static boolean canSeeSky(BlockPos bs) {
-        return getWorld().canSeeSky(bs);
-    }
 
     /**
      * Returns the legacy number value of an item stack.
@@ -202,5 +203,13 @@ public class MAtUtil {
 
     public static String sanitizeUniqueName(String name) {
         return name.replaceAll("[^a-zA-Z0-9.-_]", "");
+    }
+    
+    public static boolean canSeeSky(BlockPos pos) {
+        return getWorld().canBlockSeeSky(pos);
+    }
+    
+    public static float randomFloatRange(float min, float max) {
+        return min + (max - min) * random.nextFloat();
     }
 }

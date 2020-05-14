@@ -1,12 +1,19 @@
 package eu.ha3.matmos.core.expansion;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.stream.Collectors;
+
 import org.apache.commons.io.IOUtils;
 
 import com.google.gson.JsonArray;
@@ -14,6 +21,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import eu.ha3.matmos.ConfigManager;
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.ResourcePackDealer;
 import eu.ha3.matmos.core.ducks.ISoundHandler;
@@ -21,9 +29,12 @@ import eu.ha3.matmos.core.expansion.agents.JsonLoadingAgent;
 import eu.ha3.matmos.core.expansion.agents.LegacyXMLLoadingAgent;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.IDataCollector;
+import eu.ha3.matmos.data.modules.BlockCountModule;
+import eu.ha3.matmos.util.BlockDealiaser;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.util.ResourceLocation;
@@ -35,20 +46,48 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     private final ResourcePackDealer dealer = new ResourcePackDealer();
     private final List<SoundpackIdentity> soundpackIdentities = new ArrayList<SoundpackIdentity>();
     private final Map<String, Expansion> expansions = new HashMap<>();
+    private static BlockDealiaser dealiasMap;
 
     private DataPackage data;
 
     private float volume = 1;
 
+    List<Integer> dimensionList;
+    boolean dimensionListIsWhitelist;
+    private Optional<Integer> lastDimension = Optional.empty();
+
     private IDataCollector collector;
 
-    public ExpansionManager(File userconfigFolder, ISoundHandler accessor) {
+    public ExpansionManager(File userconfigFolder, File aliasFile, ISoundHandler accessor) {
         this.userconfigFolder = userconfigFolder;
         this.accessor = accessor;
 
         if (!this.userconfigFolder.exists()) {
             this.userconfigFolder.mkdirs();
         }
+        
+        dealiasMap = new BlockDealiaser(aliasFile);
+        
+        if(dimensionList == null) {
+            buildDimensionList();
+        }
+    }
+    
+    private void buildDimensionList() {
+        dimensionList = new ArrayList<Integer>();
+        String dimensionListString = ConfigManager.getConfig().getString("dimensions.list");
+        
+        if(!dimensionListString.isEmpty()) {
+            Arrays.stream(dimensionListString.split(",")).forEach(o -> {
+                try {
+                    dimensionList.add(Integer.parseInt(o));
+                } catch(NumberFormatException e) {
+                    Matmos.LOGGER.warn("Ignoring invalid dimension number: " + o);
+                }
+            });
+        }
+        
+        dimensionListIsWhitelist = ConfigManager.getConfig().getString("dimensions.listtype").contentEquals("white");
     }
 
     public void loadExpansions() {
@@ -126,6 +165,10 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
         return soundpackIdentities;
     }
 
+    public static int dealiasID(int alias) {
+        return dealiasMap.dealiasID(alias);
+    }
+
     private void synchronizeStable(Expansion expansion) {
         if (expansion == null) {
             return;
@@ -152,8 +195,18 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     @Override
     public void onTick() {
         Minecraft.getMinecraft().profiler.startSection("expansionmanager");
+        if(!lastDimension.isPresent() || MAtUtil.getPlayer().dimension != lastDimension.get()) {
+            expansions.values().forEach(e -> e.setOverrideOff(!isDimensionAllowed(MAtUtil.getPlayer().dimension)));
+            lastDimension = Optional.of(MAtUtil.getPlayer().dimension);
+        }
+        
         expansions.values().forEach(Expansion::evaluate);
         Minecraft.getMinecraft().profiler.endSection();
+    }
+
+    private boolean isDimensionAllowed(int dimension) {
+        boolean inList = dimensionList.contains(dimension);
+        return dimensionListIsWhitelist ? inList : !inList;
     }
 
     public void setData(DataPackage data) {

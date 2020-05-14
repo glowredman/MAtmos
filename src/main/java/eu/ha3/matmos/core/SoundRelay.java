@@ -8,15 +8,15 @@ public interface SoundRelay {
     void playSound(String path, float volume, float pitch, int meta);
 
     int getNewStreamingToken();
+    int getStreamingTokenFor(String path, float volume, float pitch, boolean isLooping, boolean usesPause, boolean underwater);
 
-    boolean setupStreamingToken(int token, String path, float volume, float pitch, boolean isLooping, boolean usesPause, boolean underwater);
+    boolean setupStreamingToken(int token, String path, float pitch, boolean isLooping, boolean usesPause, boolean underwater);
 
-    void startStreaming(int token, float fadeDuration);
-
-    void stopStreaming(int token, float fadeDuration);
+    void setVolume(int token, float volume, float fadeDuration);
 
     void eraseStreamingToken(int token);
     
     boolean isPlaying(int token);
 
+    boolean isCommandedToBePlaying(int token);
 }

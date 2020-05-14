@@ -5,9 +5,12 @@ import eu.ha3.matmos.core.sheet.VirtualSheet;
 
 /**
  * Call commit() to apply the changes.
+ * 
+ * <p><b>Note:</b> This class is only kept around for regression testing. For counting blocks, use {@link BlockCountModule} instead.<p>
  *
  * @author Hurry
  */
+@Deprecated
 public class ExternalStringCountModule extends AbstractStringCountModule {
     public ExternalStringCountModule(DataPackage data, String name) {
         super(data, name);

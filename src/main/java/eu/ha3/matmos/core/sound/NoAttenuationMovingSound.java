@@ -1,5 +1,6 @@
 package eu.ha3.matmos.core.sound;
 
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.SystemClock;
 import eu.ha3.matmos.util.math.HelperFadeCalculator;
 import net.minecraft.client.Minecraft;
@@ -31,7 +32,7 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
 
         desiredVolume = volume;
         desiredPitch = pitch;
-        this.volume = volume;
+        this.volume = 0.00001f;
         this.pitch = pitch;
 
         this.usesPause = usesPause;
@@ -67,21 +68,25 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
 
     @Override
     public void play(float fadeIn) {
-        if(notYetPlayed) {
-            volume = 0.00001f; // fixes sounds sometimes being at full volume in the first moment while fading in
-            // (sounds with a volume of 0 are ignored, so it has to be >0)
-        }
-        helper.fadeIn((long)(fadeIn * 1000));
+        setVolume(desiredVolume, fadeIn);
     }
 
     @Override
     public void stop(float fadeOut) {
-        helper.fadeOut((long)(fadeOut * 1000));
+        setVolume(0, fadeOut);
+    }
+    
+    public void setVolume(float volume, float fadeTime) {
+        helper.fadeTo(volume / desiredVolume, (long)(fadeTime * 1000));
     }
 
     @Override
     public void applyVolume(float volumeMod) {
         this.volumeMod = volumeMod;
+    }
+
+    public float getTargetVolume() {
+        return helper.getTargetFade() * desiredVolume;
     }
 
     @Override
@@ -103,4 +108,13 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
     public boolean notYetPlayed() {
         return notYetPlayed;
     }
+    
+    public boolean popNotYetPlayed() {
+        boolean wasNotYetPlayed = notYetPlayed;
+        if(notYetPlayed) {
+            notYetPlayed = false;
+        }
+        return wasNotYetPlayed;
+    }
+
 }

@@ -1,24 +1,26 @@
 package eu.ha3.matmos.data.modules.world;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import eu.ha3.matmos.core.sheet.DataPackage;
-import eu.ha3.matmos.data.modules.AbstractStringCountModule;
+import eu.ha3.matmos.data.modules.BlockCountModule;
 import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.util.math.BlockPos;
 
-public class ModuleCollission extends AbstractStringCountModule {
+public class ModuleCollission extends BlockCountModule {
     private final BlockPos[] blocks = {
-            new BlockPos(0, -1, 0), // bottom
-            BlockPos.ORIGIN,
-            new BlockPos(0, 1, 0), // body
-            new BlockPos(0, 2, 0), // column
+            new BlockPos(0, -2, 0), // bottom
+            new BlockPos(0, -1, 0),
+            new BlockPos(0, 0, 0), // body
+            new BlockPos(0, 1, 0), // column
+            new BlockPos(-1, -1, 0),
+            new BlockPos(1, -1, 0), // x -- 0
+            new BlockPos(0, -1, -1),
+            new BlockPos(0, -1, 1), // z -- 0
             new BlockPos(-1, 0, 0),
-            new BlockPos(1, 0, 0), // x -- 0
+            new BlockPos(1, 0, 0), // x -- 1
             new BlockPos(0, 0, -1),
-            new BlockPos(0, 0, 1), // z -- 0
-            new BlockPos(-1, 1, 0),
-            new BlockPos(1, 1, 0), // x -- 1
-            new BlockPos(0, 1, -1),
-            new BlockPos(0, 1, 1), // z -- 1 
+            new BlockPos(0, 0, 1), // z -- 1
     };
 
     public ModuleCollission(DataPackage dataIn) {
@@ -27,11 +29,10 @@ public class ModuleCollission extends AbstractStringCountModule {
     }
 
     @Override
-    protected void count() {
+    public void count() {
         for (BlockPos triplet : blocks) {
             BlockPos center = triplet.add(MAtUtil.getPlayerPos());
-            increment(MAtUtil.getNameAt(center, ""));
-            increment(MAtUtil.getPowerMetaAt(center, ""));
+            increment(Pair.of(MAtUtil.getBlockAt(center), MAtUtil.getMetaAt(center, -1)));
         }
     }
 }

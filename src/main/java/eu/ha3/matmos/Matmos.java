@@ -1,19 +1,16 @@
 package eu.ha3.matmos;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.config.Configurator;
 
 import eu.ha3.easy.StopWatchStatistic;
 import eu.ha3.easy.TimeStatistic;
@@ -21,7 +18,6 @@ import eu.ha3.matmos.core.ducks.ISoundHandler;
 import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.Stable;
 import eu.ha3.matmos.core.expansion.VolumeUpdatable;
-import eu.ha3.matmos.core.preinit.SoundSystemReplacer;
 import eu.ha3.matmos.core.preinit.SoundSystemReplacerTransformer;
 import eu.ha3.matmos.core.sound.Simulacrum;
 import eu.ha3.matmos.debug.Pluggable;
@@ -34,23 +30,30 @@ import eu.ha3.mc.haddon.UpdatableIdentity;
 import eu.ha3.mc.haddon.implem.HaddonIdentity;
 import eu.ha3.mc.haddon.implem.HaddonImpl;
 import eu.ha3.mc.haddon.implem.HaddonVersion;
-import eu.ha3.mc.haddon.implem.UpdatableHaddonIdentity;
+import eu.ha3.mc.haddon.supporting.SupportsBlockChangeEvents;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsInGameChangeEvents;
+import eu.ha3.mc.haddon.supporting.SupportsSoundEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
+import eu.ha3.mc.haddon.supporting.event.BlockChangeEvent;
 import eu.ha3.mc.quick.chat.Chatter;
 import eu.ha3.mc.quick.update.NotifiableHaddon;
 import eu.ha3.mc.quick.update.UpdateNotifier;
 import eu.ha3.util.property.simple.ConfigProperty;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
-import paulscode.sound.SoundSystemConfig;
 
-public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, SupportsInGameChangeEvents, NotifiableHaddon, IResourceManagerReloadListener, Stable {
+public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, SupportsInGameChangeEvents,
+                                        SupportsBlockChangeEvents, SupportsSoundEvents,
+                                        NotifiableHaddon, IResourceManagerReloadListener, Stable {
     private static final boolean _COMPILE_IS_UNSTABLE = false;
 
     public static final Logger LOGGER = LogManager.getLogger("matmos");
@@ -74,6 +77,10 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     private boolean isUnderwaterMode;
     private boolean isDebugMode;
 
+    private static List<SupportsBlockChangeEvents> blockChangeListeners = new LinkedList<>();
+    
+    public static final int MAX_ID;
+
     // Components
     private UserControl userControl;
 
@@ -88,6 +95,10 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     private List<Runnable> queue = new ArrayList<>();
     private boolean hasResourcePacks_FixMe;
 
+    static {
+        MAX_ID = ConfigManager.getConfig().getInteger("world.maxblockid");
+    }
+    
     @Override
     public void onLoad() {
         if(SoundSystemReplacerTransformer.hasMadeChanges()) {
@@ -147,7 +158,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     public void refresh() {
         deactivate();
-        activate();
+        activate(false);
     }
 
     @Override
@@ -157,11 +168,21 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void activate() {
+        activate(true);
+    }
+    
+    public void activate(boolean reloadConfigs) {
         if (isActivated()) {
             return;
         }
         LOGGER.info("Loading...");
+        
+        if(reloadConfigs) {
+            config.load();
+        }
+        
         simulacrum = Optional.of(new Simulacrum(this));
+        
         LOGGER.info("Loaded.");
     }
 
@@ -216,10 +237,6 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
                 isUnderwaterMode = false;
                 resetAmbientVolume();
             }
-        } else if (isUnderwaterMode) {
-            isUnderwaterMode = false;
-            resetAmbientVolume();
-        }
 
         if (!hasFirstTickPassed) {
             hasFirstTickPassed = true;
@@ -265,10 +282,16 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
             }
         }
 
-        if (isActivated() && hasResourcePacks_FixMe && simulacrum.get().hasResourcePacks()) {
+            if (hasResourcePacks_FixMe && simulacrum.get().hasResourcePacks()) {
             hasResourcePacks_FixMe = false;
             chatter.printChat(TextFormatting.GREEN, "It should work now!");
         }
+        } else if (isUnderwaterMode) {
+            isUnderwaterMode = false;
+            resetAmbientVolume();
+        }
+
+        
         Minecraft.getMinecraft().profiler.endSection();
     }
 
@@ -288,13 +311,9 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
-        LOGGER.warn("ResourceManager has changed. Unintended side-effects may happen.");
-        interrupt();
         // Initiate hot reload
         if (isActivated()) {
-            simulacrum.get().interruptBrutally();
-            deactivate();
-            activate();
+            refresh();
         }
     }
 
@@ -426,5 +445,27 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         } else {
             deactivate();
         }
+    }
+    
+    @Override
+    public void onBlockChanged(BlockChangeEvent event) {
+        blockChangeListeners.forEach(l -> l.onBlockChanged(event));
+    }
+    
+    public static void addBlockChangeListener(SupportsBlockChangeEvents l) {
+        blockChangeListeners.add(l);
+    }
+    
+    public static void removeBlockChangeListener(SupportsBlockChangeEvents l) {
+        blockChangeListeners.remove(l);
+    }
+
+    @Override
+    public boolean onSound(ISound sound, String name, SoundManager manager) {
+        boolean badSound = config.getBoolean("rain.suppress") 
+                && simulacrum.isPresent() && !simulacrum.get().getExpansions().isEmpty()
+                && Arrays.asList(config.getString("rain.soundlist").split(",")).contains(name);
+        
+        return !badSound;
     }
 }

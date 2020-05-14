@@ -3,6 +3,7 @@ package eu.ha3.matmos.data.modules.legacy;
 import java.io.File;
 import java.io.IOException;
 
+import eu.ha3.matmos.ConfigManager;
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
@@ -21,8 +22,9 @@ public class ModuleConfigVars extends ModuleProcessor implements Module {
         super(data, "legacy_configvars", true);
         this.mod = mod;
 
-        defaultsConfig = new File(mod.util().getModsFolder(), "matmos/dataconfigvars_defaults.cfg");
-        userConfig = new File(mod.util().getModsFolder(), "matmos/dataconfigvars.cfg");
+        defaultsConfig = new File(ConfigManager.getConfigFolder(), "dataconfigvars_defaults.cfg");
+        ConfigManager.createDefaultConfigFileIfMissing(defaultsConfig);
+        userConfig = new File(ConfigManager.getConfigFolder(), "dataconfigvars.cfg");
 
         config = new ConfigProperty();
         config.setSource(defaultsConfig.getAbsolutePath());

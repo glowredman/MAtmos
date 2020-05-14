@@ -1,9 +1,12 @@
 package eu.ha3.matmos.core;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -14,12 +17,16 @@ import eu.ha3.matmos.core.expansion.ExpansionIdentity;
 import eu.ha3.matmos.core.logic.Condition;
 import eu.ha3.matmos.core.logic.Junction;
 import eu.ha3.matmos.core.logic.Machine;
+import eu.ha3.matmos.core.sfx.BlockChangeSound;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sheet.Sheet;
 import eu.ha3.matmos.core.sheet.SheetCommander;
 import eu.ha3.matmos.core.sheet.SheetEntry;
 import eu.ha3.matmos.core.sheet.SheetIndex;
 import eu.ha3.matmos.util.BetterStreams;
+import eu.ha3.mc.haddon.supporting.SupportsBlockChangeEvents;
+import eu.ha3.mc.haddon.supporting.event.BlockChangeEvent;
+import net.minecraft.block.Block;
 import net.minecraft.client.resources.IResourcePack;
 
 /**
@@ -34,6 +41,8 @@ public class Knowledge implements Evaluated, Simulated {
     private final Map<String, Junction> junctionMapped = new TreeMap<>();
     private final Map<String, Machine> machineMapped = new TreeMap<>();
     private final Map<String, Event> eventMapped = new TreeMap<>();
+    
+    private final Map<String, BlockChangeSound> blockChangeMapped = new TreeMap<>();
 
     private final SheetCommander<String> sheetCommander = new SheetCommander<String>() {
         @Override
@@ -101,6 +110,8 @@ public class Knowledge implements Evaluated, Simulated {
                 possibilityMapped.put(n.getName(), (PossibilityList)n);
             } else if (n instanceof Dynamic) {
                 dynamicMapped.put(n.getName(), (Dynamic)n);
+            } else if (n instanceof BlockChangeSound) {
+                blockChangeMapped.put(n.getName(), (BlockChangeSound)n);
             } else {
                 System.err.println("Cannot handle named element: " + n.getName() + " " + n.getClass());
             }
@@ -120,8 +131,8 @@ public class Knowledge implements Evaluated, Simulated {
         
         addKnowledge(things);
     }
-
-    public void compile() {
+    
+    private void createInvertedJunctions() {
         Set<String> junctionsToInvert = new TreeSet<>();
         LinkedList<Named> newStuff = new LinkedList<>();
         
@@ -143,7 +154,33 @@ public class Knowledge implements Evaluated, Simulated {
             
         }
         addKnowledge(newStuff);
+    }
+    
+    private void buildBlockList() {
+        Set<String> sheetIndexes = new HashSet<String>();
+        Set<String> blockSet = new HashSet<String>();
         
+        for(Condition condition : conditionMapped.values()) {
+            sheetIndexes.add(condition.getIndex().getIndex());
+        }
+        for(Dynamic dynamic : dynamicMapped.values()) {
+            for(SheetIndex si : dynamic.getIndexes()) {
+                sheetIndexes.add(si.getIndex());
+            }
+        }
+        
+        for(String index : sheetIndexes) {
+            if(index.contains("^")) {
+                index = index.substring(0, index.indexOf('^'));
+            }
+            blockSet.add(index);
+        }
+    }
+
+    public void compile() {
+        buildBlockList();
+        
+        createInvertedJunctions();
         
         purge(machineMapped, junctionMapped, "junctions");
         purge(junctionMapped, conditionMapped, "conditions");
@@ -207,6 +244,20 @@ public class Knowledge implements Evaluated, Simulated {
         }
 
         BetterStreams.<Evaluated>of(conditionMapped, junctionMapped, machineMapped).forEach(Evaluated::evaluate);
+    }
+    
+    public void onBlockChanged(BlockChangeEvent event) {
+        blockChangeMapped.forEach((k, v) -> v.onBlockChange(event));
+    }
+    
+    public void setOverrideOff(boolean overrideOff) {
+        machineMapped.forEach((s, m) -> {
+            if(overrideOff) {
+                m.overrideForceOff();
+            } else {
+                m.overrideFinish();
+            }
+        });
     }
     
     // might be nicer to have this read from a json file

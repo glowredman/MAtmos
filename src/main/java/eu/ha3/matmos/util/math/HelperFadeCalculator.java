@@ -1,87 +1,73 @@
 package eu.ha3.matmos.util.math;
 
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.ReferenceTime;
 
 public class HelperFadeCalculator {
     private final ReferenceTime time;
-
-    private long fadeInTime = 0;
-    private long fadeInDuration = 0;
-
-    private long fadeOutTime = 0;
-    private long fadeOutDuration = 0;
-
-    private boolean foLast = true;
-    private boolean complete = true;
-    private boolean doneFadingOut = false;
-    private float fade = 0;
+    
+    private double slope = 0;
+    private double intercept;
+    
+    private float targetFade;
+    private boolean doneFading;
 
     public HelperFadeCalculator(ReferenceTime time) {
         this.time = time;
     }
-
+    
     public void fadeIn(long durationMs) {
-        float currentFade = calculateFadeFactor();
-
-        long minTime = (long)(currentFade * durationMs);
-
-        fadeInTime = time.getMilliseconds() - minTime;
-        fadeInDuration = durationMs;
-
-        foLast = false;
-        complete = false;
-        doneFadingOut = false;
+        fadeTo(1f, durationMs);
     }
 
     public void fadeOut(long durationMs) {
+        fadeTo(0f, durationMs);
+    }
+    
+    public void fadeTo(float newVolume, long durationMs) {
+        float duration = durationMs / 1000f;
         float currentFade = calculateFadeFactor();
-
-        long minTime = (long)(durationMs - durationMs * currentFade);
-
-        fadeOutTime = time.getMilliseconds() - minTime;
-        fadeOutDuration = durationMs;
-
-        foLast = true;
-        complete = false;
-        doneFadingOut = false;
+        
+        targetFade = newVolume;
+        doneFading = false;
+        
+        if(currentFade != newVolume) {
+            slope = (newVolume - currentFade) / duration;
+            
+            double now = time.getMilliseconds() / 1000.0;
+            
+            // slope * now + intercept = currentFade
+            intercept = currentFade - slope * now;
+        }
     }
 
     public float calculateFadeFactor() {
-        if (complete) {
-            return fade;
+        if(doneFading) {
+            return targetFade;
         }
-
-        long curTime = time.getMilliseconds();
-        if (foLast) {
-            if (fadeOutDuration <= 0f) {
-                fade = 0f;
-                complete = true;
-                doneFadingOut = true;
-            } else {
-                fade = 1 - (curTime - fadeOutTime) / (float)fadeOutDuration;
-                if (fade < 0f) {
-                    fade = 0f;
-                    complete = true;
-                    doneFadingOut = true;
-                }
-            }
+        
+        if(Double.isInfinite(slope)) {
+            doneFading = true;
+            return targetFade;
         } else {
-            if (fadeInDuration <= 0f) {
-                fade = 1f;
-                complete = true;
-            } else {
-                fade = (curTime - fadeInTime) / (float)fadeInDuration;
-                if (fade > 1f) {
-                    fade = 1f;
-                    complete = true;
-                }
+            double now = time.getMilliseconds() / 1000.0;
+            
+            float fadeNow = (float)(slope * now + intercept);
+            
+            if((slope > 0 && fadeNow > targetFade) || (slope < 0 && fadeNow < targetFade)) {
+                fadeNow = targetFade;
+                doneFading = true;
             }
+            
+            return fadeNow;
         }
-
-        return fade;
     }
 
     public boolean isDoneFadingOut() {
-        return doneFadingOut;
+        return doneFading && targetFade == 0;
+    }
+    
+    public float getTargetFade() {
+        return targetFade;
     }
 }

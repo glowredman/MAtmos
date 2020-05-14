@@ -7,8 +7,10 @@ public class StreamInformation extends MultistateComponent implements Simulated 
     private String path;
     private float volume;
     private float pitch;
+    
     private float delayBeforeFadeIn;
     private float delayBeforeFadeOut;
+    
     private float fadeInTime;
     private float fadeOutTime;
     private boolean isLooping;
@@ -20,12 +22,8 @@ public class StreamInformation extends MultistateComponent implements Simulated 
     private final ReferenceTime time;
     private final SoundRelay relay;
 
-    private boolean initialized;
     private int token;
 
-    /** If this is false, the stream is not playing. If it's true, the stream is supposed to be playing, but maybe it's not.
-     * (For example, interdimensional travel can result in the stream stopping after this has been set to true.) */
-    private boolean commandedToBePlaying;
     private long startTime;
     private long stopTime;
 
@@ -48,7 +46,7 @@ public class StreamInformation extends MultistateComponent implements Simulated 
         this.usesPause = usesPause;
         this.normalVolumeUnderwater = underwater;
 
-        token = -1;
+        token = relay.getStreamingTokenFor(path, volume, pitch, isLooping, usesPause, normalVolumeUnderwater);
     }
 
     @Override
@@ -83,28 +81,13 @@ public class StreamInformation extends MultistateComponent implements Simulated 
             return; // FIXME: A non-looping sound cannot use the pause scheme.
         }
 
-        if (isActive && (!commandedToBePlaying || !relay.isPlaying(token))) {
-            if(commandedToBePlaying) {
-                Matmos.LOGGER.debug("StreamInformation's state got desynced for sound " + path + ", restarting stream");
-            }
+        if (isActive) {
             if (time.getMilliseconds() > startTime) {
-                commandedToBePlaying = true;
-
-                if (!initialized) {
-                    token = relay.getNewStreamingToken();
-
-                    if (relay.setupStreamingToken(token, path, volume, pitch, isLooping, usesPause, normalVolumeUnderwater)) {
-                        initialized = true;
-                        relay.startStreaming(token, fadeInTime);
-                    }
-                } else {
-                    relay.startStreaming(token, fadeInTime);
-                }
+                relay.setVolume(token, volume, fadeInTime);
             }
-        } else if (!isActive && commandedToBePlaying) {
+        } else if (!isActive) {
             if (time.getMilliseconds() > stopTime) {
-                commandedToBePlaying = false;
-                relay.stopStreaming(token, fadeOutTime);
+                relay.setVolume(token, 0, fadeOutTime);
             }
         }
     }

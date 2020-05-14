@@ -9,11 +9,13 @@ import net.minecraft.entity.Entity;
 
 public class SoundHelperRelay extends SoundHelper implements SoundRelay {
     private static int streamingToken;
+    protected final Map<String, Integer> pathToToken = new HashMap<>();
 
     private final Map<String, String> paths = new HashMap<>();
 
     @Override
     public void routine() {
+        super.routine();
     }
 
     @Override
@@ -41,21 +43,16 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
     }
 
     @Override
-    public boolean setupStreamingToken(int token, String path, float volume, float pitch, boolean isLooping,
+    public boolean setupStreamingToken(int token, String path, float pitch, boolean isLooping,
             boolean usesPause, boolean underwater) {
-        registerStreaming("" + token, path, volume, pitch, isLooping, usesPause, underwater);
+        registerStreaming("" + token, path, 1f, pitch, isLooping, usesPause, underwater, this);
 
         return true;
     }
 
     @Override
-    public void startStreaming(int token, float fadeDuration) {
-        playStreaming(Integer.toString(token), fadeDuration);
-    }
-
-    @Override
-    public void stopStreaming(int token, float fadeDuration) {
-        stopStreaming(Integer.toString(token), fadeDuration);
+    public void setVolume(int token, float newVolume, float fadeDuration) {
+        super.setVolume("" + token, newVolume, fadeDuration);
     }
 
     @Override
@@ -64,6 +61,26 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
 
     @Override
     public boolean isPlaying(int token) {
-        return Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(streaming.get(String.valueOf(token)));
+        return Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(streaming.get(String.valueOf(token)).getSound());
+    }
+
+    @Override
+    public boolean isCommandedToBePlaying(int token) {
+        return streaming.get(String.valueOf(token)).isCommandedToBePlaying();
+    }
+
+    @Override
+    public int getStreamingTokenFor(String path, float volume, float pitch, boolean isLooping, boolean usesPause, boolean underwater) {
+        if(pathToToken.containsKey(path)) {
+            return pathToToken.get(path);
+        }
+
+        int token = getNewStreamingToken();
+
+        registerStreaming("" + token, path, volume, pitch, isLooping, usesPause, underwater, this);
+        
+        pathToToken.put(path, token);
+        
+        return token;
     }
 }
