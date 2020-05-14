@@ -29,7 +29,9 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
     
     private int[] oldCounts = new int[COUNT_LENGTH];
 	private int[] counts = new int[COUNT_LENGTH];
-	private int[] zeroCounts = new int[COUNT_LENGTH];
+	private int[] BLANK_COUNTS = new int[COUNT_LENGTH];
+	
+	private int[] zeroMetadataCounts = new int[COUNT_LENGTH];
 	private TreeMap<Integer, Integer>[] metadatas = new TreeMap[COUNT_LENGTH];
 	
 	VirtualCountModule<Pair<Block, Integer>> thousand;
@@ -80,6 +82,8 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
 			}
 			Integer metaCount = metadatas[id].get(meta);
 			metadatas[id].put(meta, metaCount == null ? 0 : metaCount + amount);
+		} else if(meta == 0) {
+		    zeroMetadataCounts[id] += amount;
 		}
 		
 		blocksCounted += amount;
@@ -106,14 +110,30 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
 			if(counts[i] > 0 || oldCounts[i] > 0) {
 				String name = MAtUtil.nameOf(Block.getBlockById(i));
 				this.setValue(name, counts[i]);
+				
 				if(thousand != null) {
 					float flaot = counts[i] / (float)blocksCounted * 1000f;
 					thousand.setValue(name, (int)Math.ceil(flaot));
 				}
 			}
+			if(zeroMetadataCounts[i] > 0) {
+			    String name = MAtUtil.asPowerMeta(Block.getBlockById(i), 0);
+                this.setValue(name, zeroMetadataCounts[i]);
+                
+                if(thousand != null) {
+                    float flaot = zeroMetadataCounts[i] / (float)blocksCounted * 1000f;
+                    thousand.setValue(name, (int)Math.ceil(flaot));
+                }
+            }
 			if(metadatas[i] != null) {
 				for(Entry<Integer, Integer> entry : metadatas[i].entrySet()) {
-					this.setValue(MAtUtil.asPowerMeta(Block.getBlockById(i), entry.getKey()), entry.getValue());
+				    String name = MAtUtil.asPowerMeta(Block.getBlockById(i), entry.getKey());
+					this.setValue(name, entry.getValue());
+					
+					if(thousand != null) {
+	                    float flaot = entry.getValue() / (float)blocksCounted * 1000f;
+	                    thousand.setValue(name, (int)Math.ceil(flaot));
+	                }
 				}
 				metadatas[i].clear();
 			}
@@ -122,7 +142,8 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
 		blocksCounted = 0;
 		
 		System.arraycopy(counts, 0, oldCounts, 0, counts.length);
-		System.arraycopy(zeroCounts, 0, counts, 0, counts.length);
+		System.arraycopy(BLANK_COUNTS, 0, counts, 0, counts.length);
+		System.arraycopy(BLANK_COUNTS, 0, zeroMetadataCounts, 0, counts.length);
 		
 	}
 	
