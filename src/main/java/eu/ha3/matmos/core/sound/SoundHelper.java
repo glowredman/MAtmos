@@ -1,9 +1,11 @@
 package eu.ha3.matmos.core.sound;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import eu.ha3.matmos.Matmos;
+import eu.ha3.matmos.core.StreamHandle;
 import eu.ha3.matmos.core.expansion.Stable;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
 import net.minecraft.client.Minecraft;
@@ -11,8 +13,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 public class SoundHelper implements SoundCapabilities, Stable {
-
-    protected final Map<String, NoAttenuationMovingSound> streaming = new LinkedHashMap<>();
+    
+    protected final Map<String, StreamHandle<NoAttenuationMovingSound>> streaming = new LinkedHashMap<>();
 
     private float volumeModulator;
 
@@ -48,7 +50,7 @@ public class SoundHelper implements SoundCapabilities, Stable {
     }
 
     @Override
-    public void registerStreaming(String customName, String path, float volume, float pitch, boolean isLooping, boolean usesPause, boolean underwater) {
+    public void registerStreaming(String customName, String path, float volume, float pitch, boolean isLooping, boolean usesPause, boolean underwater, SoundHelperRelay relay) {
         if (isInterrupt) {
             return;
         }
@@ -56,7 +58,7 @@ public class SoundHelper implements SoundCapabilities, Stable {
         String loc = path.replace(".ogg", "").replace('/', '.').replaceAll("[0-9]", "");
         NoAttenuationMovingSound nams = new NoAttenuationMovingSound(new ResourceLocation(loc), volume, pitch, isLooping, usesPause, underwater);
 
-        streaming.put(customName, nams);
+        streaming.put(customName, StreamHandle.of(nams, relay));
     }
 
     @Override
@@ -69,34 +71,8 @@ public class SoundHelper implements SoundCapabilities, Stable {
             IDontKnowHowToCode.warnOnce("Tried to play missing stream " + customName);
             return;
         }
-
-        NoAttenuationMovingSound previous = streaming.get(customName);
-        NoAttenuationMovingSound newSound = null;
         
-        boolean reuse = false;
-        
-        if(previous.isDonePlaying()) {
-            newSound = previous.copy();
-            streaming.put(customName, newSound);
-        } else {
-            newSound = previous; // reuse previous sound
-            reuse = true;
-        }
-        newSound.play(fadeIn);
-        newSound.applyVolume(volumeModulator);
-        
-        boolean notYetPlayed = newSound.popNotYetPlayed();
-        boolean isSoundPlaying = Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(newSound);
-        
-        Matmos.LOGGER.debug("playStreaming " + newSound.getSoundLocation() + " (reuse=" + reuse + ", notYetPlayed = " + notYetPlayed + ", isSoundPlaying=" + isSoundPlaying + ")");
-        
-        if(notYetPlayed || !isSoundPlaying) {
-            try {
-                Minecraft.getMinecraft().getSoundHandler().playSound(newSound);
-            } catch (Exception e) {
-                Matmos.LOGGER.warn("There was an exception when trying to start stream " + newSound.getSoundLocation() + ": " + e.getMessage());
-            }
-        }
+        setVolume(customName, streaming.get(customName).getSound().getVolume(), fadeIn);
     }
 
     @Override
@@ -110,11 +86,71 @@ public class SoundHelper implements SoundCapabilities, Stable {
             return;
         }
         
-        NoAttenuationMovingSound sound = streaming.get(customName);
+        setVolume(customName, 0, fadeOut);
+    }
+    
+    public void routine() {
+        for(StreamHandle<NoAttenuationMovingSound> handle : streaming.values()) {
+            float newVolume = handle.getLargestVolumeCommandThisTick();
+            if(newVolume >= 0) {
+                float fade = handle.getFadeOfLargestVolumeCommandThisTick();
+                
+                NoAttenuationMovingSound sound = handle.getSound();
+                
+                if(newVolume > 0 && 
+                        (sound.getTargetVolume() != newVolume || 
+                        !Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(sound))) {
+                    if(sound.getTargetVolume() == newVolume) {
+                        Matmos.LOGGER.debug("Restarting " + sound.getSoundLocation() + " because it's not playing accordng to the sound handler, even though its volume should be " + newVolume);
+                    }
+                    
+                    boolean reuse = false;
+                    boolean previousIsDonePlaying = sound.isDonePlaying();
+                    
+                    if(previousIsDonePlaying) {
+                        sound = sound.copy();
+                        handle.setSound(sound);
+                    } else {
+                        reuse = true;
+                    }
+                    sound.setVolume(newVolume, fade);
+                    sound.applyVolume(volumeModulator);
+                    
+                    boolean notYetPlayed = sound.popNotYetPlayed();
+                    boolean isSoundPlaying = Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(sound);
+                    
+                    Matmos.LOGGER.debug("playStreaming " + sound.getSoundLocation() + " (reuse=" + reuse + ", notYetPlayed = " + notYetPlayed + ", isSoundPlaying=" + isSoundPlaying + ", donePlaying=" + previousIsDonePlaying + ")");
+                    
+                    if(notYetPlayed || !isSoundPlaying) {
+                        try {
+                            Minecraft.getMinecraft().getSoundHandler().playSound(sound);
+                        } catch (Exception e) {
+                            Matmos.LOGGER.warn("There was an exception when trying to start stream " + sound.getSoundLocation() + ": " + e.getMessage());
+                        }
+                    }
+                    handle.setCommandedToBePlaying(true);
+                } else if(newVolume == 0 && sound.getTargetVolume() != newVolume) {
+                    Matmos.LOGGER.debug("stopStreaming " + sound.getSoundLocation());
+                    sound.stop(fade);
+                    handle.setCommandedToBePlaying(false);
+                }
+            }
+            
+            handle.resetLargestVolumeCommandThisTick();
+        }
+    }
+    
+    public void setVolume(String customName, float newVolume, float fade) {
+        if(isInterrupt) {
+            return;
+        }
         
-        Matmos.LOGGER.debug("stopStreaming " + sound.getSoundLocation());
-
-        streaming.get(customName).stop(fadeOut);
+        if (!streaming.containsKey(customName)) {
+            IDontKnowHowToCode.warnOnce("Tried to set volume of missing stream " + customName);
+            return;
+        }
+        
+        streaming.get(customName).setVolume(newVolume, fade);
     }
 
     @Override
@@ -123,8 +159,8 @@ public class SoundHelper implements SoundCapabilities, Stable {
             return;
         }
 
-        for (StreamingSound sound : streaming.values()) {
-            sound.dispose();
+        for (StreamHandle<? extends StreamingSound> handle : streaming.values()) {
+            handle.getSound().dispose();
         }
     }
 
@@ -132,8 +168,8 @@ public class SoundHelper implements SoundCapabilities, Stable {
     public void applyVolume(float volumeMod) {
         volumeModulator = volumeMod;
         
-        for (StreamingSound sound : streaming.values()) {
-            sound.applyVolume(volumeMod);
+        for (StreamHandle<? extends StreamingSound> handle : streaming.values()) {
+            handle.getSound().applyVolume(volumeMod);
         }
     }
 
@@ -148,8 +184,8 @@ public class SoundHelper implements SoundCapabilities, Stable {
             return;
         }
 
-        for (StreamingSound sound : streaming.values()) {
-            sound.dispose();
+        for (StreamHandle<? extends StreamingSound> handle : streaming.values()) {
+            handle.getSound().dispose();
         }
         streaming.clear();
     }
