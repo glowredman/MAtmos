@@ -24,6 +24,7 @@ import eu.ha3.matmos.core.expansion.ExpansionIdentity;
 import eu.ha3.matmos.core.logic.Condition;
 import eu.ha3.matmos.core.logic.Junction;
 import eu.ha3.matmos.core.logic.Machine;
+import eu.ha3.matmos.core.sfx.BlockChangeSound;
 import eu.ha3.matmos.core.sheet.SheetEntry;
 import eu.ha3.matmos.core.sheet.SheetIndex;
 import eu.ha3.matmos.serialisation.expansion.SerialCondition;
@@ -35,6 +36,7 @@ import eu.ha3.matmos.serialisation.expansion.SerialMachine;
 import eu.ha3.matmos.serialisation.expansion.SerialMachineEvent;
 import eu.ha3.matmos.serialisation.expansion.SerialMachineStream;
 import eu.ha3.matmos.serialisation.expansion.SerialRoot;
+import eu.ha3.matmos.serialisation.expansion.SerialSFXBlockChange;
 import eu.ha3.matmos.serialisation.expansion.SerialSet;
 
 public class JsonExpansions_EngineDeserializer {
@@ -120,6 +122,13 @@ public class JsonExpansions_EngineDeserializer {
         if (root.machine != null) {
             for (Entry<String, SerialMachine> entry : root.machine.entrySet()) {
                 deserializeMachine(entry);
+            }
+        }
+        if(root.soundeffects != null) {
+            if(root.soundeffects.blockchange != null) {
+                root.soundeffects.blockchange.forEach((k, v) -> {
+                   elements.add(new BlockChangeSound(k, v.when, v.blocks, v.sound)); 
+                });
             }
         }
 

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -16,18 +17,21 @@ import eu.ha3.matmos.core.expansion.ExpansionIdentity;
 import eu.ha3.matmos.core.logic.Condition;
 import eu.ha3.matmos.core.logic.Junction;
 import eu.ha3.matmos.core.logic.Machine;
+import eu.ha3.matmos.core.sfx.BlockChangeSound;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sheet.Sheet;
 import eu.ha3.matmos.core.sheet.SheetCommander;
 import eu.ha3.matmos.core.sheet.SheetEntry;
 import eu.ha3.matmos.core.sheet.SheetIndex;
 import eu.ha3.matmos.util.BetterStreams;
+import eu.ha3.mc.haddon.supporting.SupportsBlockChangeEvents;
+import net.minecraft.block.Block;
 import net.minecraft.client.resources.IResourcePack;
 
 /**
  * Stores a Knowledge.
  */
-public class Knowledge implements Evaluated, Simulated {
+public class Knowledge implements Evaluated, Simulated, SupportsBlockChangeEvents {
     private DataPackage data;
 
     private final Map<String, Dynamic> dynamicMapped = new TreeMap<>();
@@ -36,6 +40,8 @@ public class Knowledge implements Evaluated, Simulated {
     private final Map<String, Junction> junctionMapped = new TreeMap<>();
     private final Map<String, Machine> machineMapped = new TreeMap<>();
     private final Map<String, Event> eventMapped = new TreeMap<>();
+    
+    private final Map<String, BlockChangeSound> blockChangeMapped = new TreeMap<>();
 
     private final SheetCommander<String> sheetCommander = new SheetCommander<String>() {
         @Override
@@ -103,6 +109,8 @@ public class Knowledge implements Evaluated, Simulated {
                 possibilityMapped.put(n.getName(), (PossibilityList)n);
             } else if (n instanceof Dynamic) {
                 dynamicMapped.put(n.getName(), (Dynamic)n);
+            } else if (n instanceof BlockChangeSound) {
+                blockChangeMapped.put(n.getName(), (BlockChangeSound)n);
             } else {
                 System.err.println("Cannot handle named element: " + n.getName() + " " + n.getClass());
             }
@@ -235,6 +243,11 @@ public class Knowledge implements Evaluated, Simulated {
         }
 
         BetterStreams.<Evaluated>of(conditionMapped, junctionMapped, machineMapped).forEach(Evaluated::evaluate);
+    }
+    
+    @Override
+    public void onBlockChanged(int x, int y, int z, Block oldBlock, Block newBlock) {
+        blockChangeMapped.forEach((k, v) -> v.onBlockChange(x, y, z, oldBlock, newBlock));
     }
     
     public void setOverrideOff(boolean overrideOff) {

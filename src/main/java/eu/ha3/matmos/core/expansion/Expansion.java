@@ -23,12 +23,15 @@ import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sound.SoundHelperRelay;
 import eu.ha3.matmos.data.IDataCollector;
 import eu.ha3.matmos.data.modules.ModuleRegistry;
+import eu.ha3.mc.haddon.supporting.SupportsBlockChangeEvents;
 import eu.ha3.util.property.simple.ConfigProperty;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.FolderResourcePack;
 import net.minecraft.util.ResourceLocation;
 
-public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated {
+public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
+                                    SupportsBlockChangeEvents {
     private static ReferenceTime TIME = new SystemClock();
 
     private final ExpansionIdentity identity;
@@ -69,6 +72,8 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+        
+        Matmos.addBlockChangeListener(this);
 
         setVolumeAndUpdate(myConfiguration.getFloat("volume"));
     }
@@ -96,6 +101,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
 
     private void newKnowledge() {
         knowledge = new Knowledge(capabilities, TIME);
+        
         knowledge.setData(data);
     }
 
@@ -258,6 +264,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
         capabilities.cleanUp();
         newKnowledge();
         setLoadingAgent(null);
+        Matmos.removeBlockChangeListener(this);
     }
 
     @Override
@@ -372,5 +379,10 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
             e.printStackTrace();
             return "Error while fetching info.txt";
         }
+    }
+
+    @Override
+    public void onBlockChanged(int x, int y, int z, Block oldBlock, Block newBlock) {
+        knowledge.onBlockChanged(x, y, z, oldBlock, newBlock);
     }
 }

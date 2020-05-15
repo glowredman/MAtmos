@@ -1,19 +1,15 @@
 package eu.ha3.matmos;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.config.Configurator;
 
 import eu.ha3.easy.StopWatchStatistic;
 import eu.ha3.easy.TimeStatistic;
@@ -21,7 +17,6 @@ import eu.ha3.matmos.core.ducks.ISoundHandler;
 import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.Stable;
 import eu.ha3.matmos.core.expansion.VolumeUpdatable;
-import eu.ha3.matmos.core.preinit.SoundSystemReplacer;
 import eu.ha3.matmos.core.preinit.SoundSystemReplacerTransformer;
 import eu.ha3.matmos.core.sound.Simulacrum;
 import eu.ha3.matmos.debug.Pluggable;
@@ -34,7 +29,7 @@ import eu.ha3.mc.haddon.UpdatableIdentity;
 import eu.ha3.mc.haddon.implem.HaddonIdentity;
 import eu.ha3.mc.haddon.implem.HaddonImpl;
 import eu.ha3.mc.haddon.implem.HaddonVersion;
-import eu.ha3.mc.haddon.implem.UpdatableHaddonIdentity;
+import eu.ha3.mc.haddon.supporting.SupportsBlockChangeEvents;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsInGameChangeEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
@@ -42,14 +37,17 @@ import eu.ha3.mc.quick.chat.Chatter;
 import eu.ha3.mc.quick.update.NotifiableHaddon;
 import eu.ha3.mc.quick.update.UpdateNotifier;
 import eu.ha3.util.property.simple.ConfigProperty;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.EnumFacing;
 
-public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, SupportsInGameChangeEvents, NotifiableHaddon, IResourceManagerReloadListener, Stable {
+public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, SupportsInGameChangeEvents,
+                                        SupportsBlockChangeEvents, NotifiableHaddon, IResourceManagerReloadListener, Stable {
     private static final boolean _COMPILE_IS_UNSTABLE = false;
 
     public static final Logger LOGGER = LogManager.getLogger("matmos");
@@ -72,6 +70,8 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     private Optional<Simulacrum> simulacrum = Optional.empty();
     private boolean isUnderwaterMode;
     private boolean isDebugMode;
+    
+    private static List<SupportsBlockChangeEvents> blockChangeListeners = new LinkedList<>();
     
     public static final int MAX_ID;
 
@@ -433,5 +433,18 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         } else {
             deactivate();
         }
+    }
+    
+    @Override
+    public void onBlockChanged(int x, int y, int z, Block oldBlock, Block newBlock) {
+        blockChangeListeners.forEach(l -> l.onBlockChanged(x, y, z, oldBlock, newBlock));
+    }
+    
+    public static void addBlockChangeListener(SupportsBlockChangeEvents l) {
+        blockChangeListeners.add(l);
+    }
+    
+    public static void removeBlockChangeListener(SupportsBlockChangeEvents l) {
+        blockChangeListeners.remove(l);
     }
 }
