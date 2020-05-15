@@ -221,59 +221,61 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
                 isUnderwaterMode = false;
                 resetAmbientVolume();
             }
+            
+            if (!hasFirstTickPassed) {
+                hasFirstTickPassed = true;
+                updateNotifier.attempt();
+                if (_COMPILE_IS_UNSTABLE) {
+                    String lastVersion = config.getString("version.last");
+                    int warns = config.getInteger("version.warnunstable");
+                    if (!lastVersion.equals(VERSION)) {
+                        warns = 3;
+                        config.setProperty("version.last", VERSION);
+                    }
+                    if (warns > 0) {
+                        warns--;
+                        config.setProperty("version.warnunstable", warns);
+                        getChatter().printChat(
+                                EnumChatFormatting.RED, "You are using an ", EnumChatFormatting.YELLOW, "Unofficial Beta", EnumChatFormatting.RED, " version of MAtmos.");
+                        getChatter().printChatShort("By using this version, you understand that this mod isn't intended for " +
+                                "actual game sessions, MAtmos may not work, might crash, the sound ambience is incomplete, etc. Use at your own risk. ");
+                        getChatter().printChatShort("Please check regularly for updates and resource pack updates.");
+                        if (warns > 0) {
+                            getChatter().printChatShort("This message will appear ", EnumChatFormatting.YELLOW, warns, " more times.");
+                        }
+                    }
+                    if (config.commit()) {
+                        config.save();
+                    }
+                }
+
+                if (isDebugMode()) {
+                    getChatter().printChat(EnumChatFormatting.GOLD, "Developer mode is enabled in the Advanced options.");
+                    getChatter().printChatShort("This affects performance. Your game may run slower.");
+                }
+
+                if (!simulacrum.get().hasResourcePacks()) {
+                    hasResourcePacks_FixMe = true;
+                    if (simulacrum.get().hasDisabledResourcePacks()) {
+                        chatter.printChat(EnumChatFormatting.RED, "Resource Pack not enabled yet!");
+                        chatter.printChatShort(EnumChatFormatting.WHITE, "You need to activate \"MAtmos Resource Pack\" in the Minecraft Options menu for it to run.");
+                    } else {
+                        chatter.printChat(EnumChatFormatting.RED, "Resource Pack missing from resourcepacks/!");
+                        chatter.printChatShort(EnumChatFormatting.WHITE, "You may have forgotten to put the Resource Pack file into your resourcepacks/ folder.");
+                    }
+                }
+            }
+
+            if (hasResourcePacks_FixMe && simulacrum.get().hasResourcePacks()) {
+                hasResourcePacks_FixMe = false;
+                chatter.printChat(EnumChatFormatting.GREEN, "It should work now!");
+            }
         } else if (isUnderwaterMode) {
             isUnderwaterMode = false;
             resetAmbientVolume();
         }
 
-        if (!hasFirstTickPassed) {
-            hasFirstTickPassed = true;
-            updateNotifier.attempt();
-            if (_COMPILE_IS_UNSTABLE) {
-                String lastVersion = config.getString("version.last");
-                int warns = config.getInteger("version.warnunstable");
-                if (!lastVersion.equals(VERSION)) {
-                    warns = 3;
-                    config.setProperty("version.last", VERSION);
-                }
-                if (warns > 0) {
-                    warns--;
-                    config.setProperty("version.warnunstable", warns);
-                    getChatter().printChat(
-                            EnumChatFormatting.RED, "You are using an ", EnumChatFormatting.YELLOW, "Unofficial Beta", EnumChatFormatting.RED, " version of MAtmos.");
-                    getChatter().printChatShort("By using this version, you understand that this mod isn't intended for " +
-                            "actual game sessions, MAtmos may not work, might crash, the sound ambience is incomplete, etc. Use at your own risk. ");
-                    getChatter().printChatShort("Please check regularly for updates and resource pack updates.");
-                    if (warns > 0) {
-                        getChatter().printChatShort("This message will appear ", EnumChatFormatting.YELLOW, warns, " more times.");
-                    }
-                }
-                if (config.commit()) {
-                    config.save();
-                }
-            }
-
-            if (isDebugMode()) {
-                getChatter().printChat(EnumChatFormatting.GOLD, "Developer mode is enabled in the Advanced options.");
-                getChatter().printChatShort("This affects performance. Your game may run slower.");
-            }
-
-            if (!simulacrum.get().hasResourcePacks()) {
-                hasResourcePacks_FixMe = true;
-                if (simulacrum.get().hasDisabledResourcePacks()) {
-                    chatter.printChat(EnumChatFormatting.RED, "Resource Pack not enabled yet!");
-                    chatter.printChatShort(EnumChatFormatting.WHITE, "You need to activate \"MAtmos Resource Pack\" in the Minecraft Options menu for it to run.");
-                } else {
-                    chatter.printChat(EnumChatFormatting.RED, "Resource Pack missing from resourcepacks/!");
-                    chatter.printChatShort(EnumChatFormatting.WHITE, "You may have forgotten to put the Resource Pack file into your resourcepacks/ folder.");
-                }
-            }
-        }
-
-        if (isActivated() && hasResourcePacks_FixMe && simulacrum.get().hasResourcePacks()) {
-            hasResourcePacks_FixMe = false;
-            chatter.printChat(EnumChatFormatting.GREEN, "It should work now!");
-        }
+        
         Minecraft.getMinecraft().mcProfiler.endSection();
     }
 
