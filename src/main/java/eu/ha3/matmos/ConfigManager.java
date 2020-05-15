@@ -85,7 +85,8 @@ public class ConfigManager {
             if(!configFile.exists()) {
                 try {
                     InputStream defaultFileStream = ConfigManager.class.getClassLoader()
-                    .getResourceAsStream(Paths.get("assets/matmos/default_config/").resolve(relPath).toString());
+                    .getResourceAsStream(Paths.get("assets/matmos/default_config/").resolve(relPath)
+                            .toString().replace('\\', '/'));
                     
                     if(defaultFileStream != null) {
                         String contents = IOUtils.toString(defaultFileStream);
