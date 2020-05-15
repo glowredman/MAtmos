@@ -14,6 +14,8 @@ public class ConfigManager {
     private static final ConfigProperty config = new ConfigProperty();
     private static boolean hasInitialized = false;
     
+    private static File configFolder = null;
+    
     private static void initConfig() {
         // Create default configuration
         
@@ -34,7 +36,7 @@ public class ConfigManager {
 
         // Load configuration from source
         try {
-            config.setSource(new File(Launch.minecraftHome, "matmos/userconfig.cfg").getCanonicalPath());
+            config.setSource(new File(getConfigFolder(), "userconfig.cfg").getCanonicalPath());
             config.load();
         } catch (IOException e) {
             e.printStackTrace();
@@ -49,5 +51,12 @@ public class ConfigManager {
             initConfig();
         }
         return config;
+    }
+    
+    public static File getConfigFolder() {
+        if(configFolder == null) {
+            configFolder = new File(Launch.minecraftHome, "config/matmos");
+        }
+        return configFolder;
     }
 }
