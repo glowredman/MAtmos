@@ -70,7 +70,6 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     }
     
     private Module initSubmodule(Submodule sm, String baseName, DataPackage data) {
-        // XXX thousands with externalStringCountModule is broken. ExternalStringCountModule should either be fixed or removed. 
         boolean useExternalStringCountModule = false;
         
         if(sm != Submodule.BASE && !requiredSubmodules.contains(sm)) {
@@ -91,7 +90,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
         case THOUSAND:
             submoduleName = baseName + THOUSAND_SUFFIX;
             if(useExternalStringCountModule) {
-                result = new ThousandStringCountModule(data, submoduleName);
+                result = new ThousandStringCountModule(data, submoduleName, true);
             } else {
                 result = new VirtualCountModule<Pair<Block,Integer>>(data, submoduleName, true);
             }
@@ -306,19 +305,15 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     
     /** Not sure if this optimization is necessary */
     public void inputAndReturnBlockMeta(int x, int y, int z, int weight, Block[] blockOut, int[] metaOut) {
-        Block block = null;
-        int meta = -1;
-        if(base instanceof BlockCountModule || blockOut != null || metaOut != null) {
-            block = MAtUtil.getBlockAt(new BlockPos(x, y, z));
-            meta = MAtUtil.getMetaAt(new BlockPos(x, y, z), -1);
-        }
+        Block block = MAtUtil.getBlockAt(new BlockPos(x, y, z));
+        int meta = MAtUtil.getMetaAt(new BlockPos(x, y, z), -1);
         
         if(base instanceof BlockCountModule) {
             base.increment(Pair.of(block, meta));
         } else if(base instanceof ExternalStringCountModule) {
-            String name = MAtUtil.getNameAt(new BlockPos(x, y, z), "");
+            String name = MAtUtil.nameOf(block);
             base.increment(name);
-            base.increment(MAtUtil.getPowerMetaAt(new BlockPos(x, y, z), ""));
+            base.increment(MAtUtil.asPowerMeta(block, meta));
             if(thousand != null) {
                 thousand.increment(name);
             }
