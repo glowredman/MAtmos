@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
@@ -27,9 +26,11 @@ import eu.ha3.matmos.core.expansion.agents.JsonLoadingAgent;
 import eu.ha3.matmos.core.expansion.agents.LegacyXMLLoadingAgent;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.IDataCollector;
+import eu.ha3.matmos.data.modules.BlockCountModule;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.util.ResourceLocation;
@@ -41,7 +42,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     private final ResourcePackDealer dealer = new ResourcePackDealer();
     private final List<SoundpackIdentity> soundpackIdentities = new ArrayList<SoundpackIdentity>();
     private final Map<String, Expansion> expansions = new HashMap<>();
-    private static Map<String, String> dealiasMap;
+    private static int[] dealiasMap;
 
     private DataPackage data;
 
@@ -62,7 +63,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
         }
     }
     
-    private Map<String, String> buildDealiasMap(File aliasFile){
+    private int[] buildDealiasMap(File aliasFile){
         Properties props = new Properties();
         
         try(FileReader reader = new FileReader(aliasFile)){
@@ -73,8 +74,18 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
             Matmos.LOGGER.error("Error loading alias file (" + aliasFile.getPath() + "): " + e);
         }
         
-        Map<String, String> dealiasMap = new HashMap<String, String>();
-        props.stringPropertyNames().forEach(k -> Arrays.stream(props.getProperty(k).split(",")).forEach(v -> dealiasMap.put(v, k)));
+        int[] dealiasMap = new int[BlockCountModule.MAX_ID];
+        for(int i = 0; i < dealiasMap.length; i++) dealiasMap[i] = i;
+        
+        props.stringPropertyNames().forEach(k -> Arrays.stream(props.getProperty(k).split(",")).forEach(v -> {
+            if(Block.blockRegistry.containsKey(k) && Block.blockRegistry.containsKey(v)) {
+                Object keyObj = Block.blockRegistry.getObject(k);
+                Object valueObj = Block.blockRegistry.getObject(v);
+                if(keyObj instanceof Block && valueObj instanceof Block) {
+                    dealiasMap[Block.getIdFromBlock((Block)valueObj)] = Block.getIdFromBlock((Block)keyObj);
+                }
+            }
+        }));
         
         return dealiasMap;
     }
@@ -154,8 +165,8 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
         return soundpackIdentities;
     }
     
-    public static String dealias(String alias) {
-        return Optional.ofNullable(dealiasMap.get(alias)).orElse(alias);
+    public static int dealiasID(int alias) {
+        return dealiasMap[alias];
     }
 
     private void synchronizeStable(Expansion expansion) {

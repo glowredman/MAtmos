@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import org.apache.commons.lang3.tuple.Pair;
 
 import eu.ha3.matmos.core.sheet.DataPackage;
+import eu.ha3.matmos.core.sheet.SheetDataPackage;
 import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -26,16 +27,18 @@ import net.minecraft.client.Minecraft;
  */
 public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integer>>
 {
-    private final int COUNT_LENGTH = 4096;
+    public static final int MAX_ID = 4096;
     
-    private boolean[] wasZero = new boolean[COUNT_LENGTH];
-	private int[] counts = new int[COUNT_LENGTH];
-	private int[] BLANK_COUNTS = new int[COUNT_LENGTH];
+    private boolean[] wasZero = new boolean[MAX_ID];
+	private int[] counts = new int[MAX_ID];
+	private int[] BLANK_COUNTS = new int[MAX_ID];
 	
-	private int[] zeroMetadataCounts = new int[COUNT_LENGTH];
-	private TreeMap<Integer, Integer>[] metadatas = new TreeMap[COUNT_LENGTH];
+	private int[] zeroMetadataCounts = new int[MAX_ID];
+	private TreeMap<Integer, Integer>[] metadatas = new TreeMap[MAX_ID];
 	
 	VirtualCountModule<Pair<Block, Integer>> thousand;
+	
+	SheetDataPackage sheetData; 
 	
 	public BlockCountModule(DataPackage data, String name)
 	{
@@ -53,6 +56,8 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
 		{
 			data.getSheet(name + DELTA_SUFFIX).setDefaultValue("0");
 		}
+		
+		sheetData = (SheetDataPackage)data;
 	}
 	
 	@Override
@@ -73,7 +78,7 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
 	    Block block = blockMeta.getLeft();
 	    int meta = blockMeta.getRight();
 	    
-		int id = Block.getIdFromBlock(block);
+		int id = sheetData.dealiasID(Block.getIdFromBlock(block));
 		
 		counts[id] += amount;
 		
