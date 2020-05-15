@@ -1,7 +1,15 @@
 package eu.ha3.matmos;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import eu.ha3.util.property.simple.ConfigProperty;
 import net.minecraft.launchwrapper.Launch;
@@ -11,6 +19,9 @@ import net.minecraft.launchwrapper.Launch;
  */
 
 public class ConfigManager {
+    
+    private static final Logger LOGGER = LogManager.getLogger("matmos");
+    
     private static final ConfigProperty config = new ConfigProperty();
     private static boolean hasInitialized = false;
     
@@ -62,5 +73,33 @@ public class ConfigManager {
             configFolder = new File(Launch.minecraftHome, "config/matmos");
         }
         return configFolder;
+    }
+    
+    public static void createDefaultConfigFileIfMissing(File configFile) {
+        Path configFolderPath = Paths.get(getConfigFolder().getPath());
+        Path configFilePath = Paths.get(configFile.getPath());
+        
+        Path relPath = configFolderPath.relativize(configFilePath);
+        
+        if(configFilePath.startsWith(configFolderPath)) {
+            if(!configFile.exists()) {
+                try {
+                    InputStream defaultFileStream = ConfigManager.class.getClassLoader()
+                    .getResourceAsStream(Paths.get("assets/matmos/default_config/").resolve(relPath).toString());
+                    
+                    if(defaultFileStream != null) {
+                        String contents = IOUtils.toString(defaultFileStream);
+                        
+                        try(FileWriter out = new FileWriter(configFile)){
+                            IOUtils.write(contents, out);
+                        }
+                    }
+                } catch (IOException e) {
+                    LOGGER.error("Failed to create default config file for " + relPath.toString());
+                }
+            }
+        } else {
+            LOGGER.debug("Invalid argument for creating default config file: " + relPath.toString() + " (file is not in the config directory)");
+        }
     }
 }
