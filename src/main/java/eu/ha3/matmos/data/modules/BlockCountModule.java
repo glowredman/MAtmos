@@ -1,5 +1,6 @@
 package eu.ha3.matmos.data.modules;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -27,7 +28,7 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
 {
     private final int COUNT_LENGTH = 4096;
     
-    private int[] oldCounts = new int[COUNT_LENGTH];
+    private boolean[] wasZero = new boolean[COUNT_LENGTH];
 	private int[] counts = new int[COUNT_LENGTH];
 	private int[] BLANK_COUNTS = new int[COUNT_LENGTH];
 	
@@ -107,8 +108,11 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
 	public void apply()
 	{
 		for(int i = 0; i < counts.length; i++) {
-			if(counts[i] > 0 || oldCounts[i] > 0) {
-				String name = MAtUtil.nameOf(Block.getBlockById(i));
+		    boolean isZero = true;
+			if(counts[i] > 0 || !wasZero[i]) {
+			    isZero &= counts[i] == 0;
+				
+			    String name = MAtUtil.nameOf(Block.getBlockById(i));
 				this.setValue(name, counts[i]);
 				
 				if(thousand != null) {
@@ -116,7 +120,9 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
 					thousand.setValue(name, (int)Math.ceil(flaot));
 				}
 			}
-			if(zeroMetadataCounts[i] > 0) {
+			if(zeroMetadataCounts[i] > 0 || !wasZero[i]) {
+			    isZero &= zeroMetadataCounts[i] == 0;
+			    
 			    String name = MAtUtil.asPowerMeta(Block.getBlockById(i), 0);
                 this.setValue(name, zeroMetadataCounts[i]);
                 
@@ -127,23 +133,29 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
             }
 			if(metadatas[i] != null) {
 				for(Entry<Integer, Integer> entry : metadatas[i].entrySet()) {
-				    String name = MAtUtil.asPowerMeta(Block.getBlockById(i), entry.getKey());
-					this.setValue(name, entry.getValue());
-					
-					if(thousand != null) {
-	                    float flaot = entry.getValue() / (float)blocksCounted * 1000f;
-	                    thousand.setValue(name, (int)Math.ceil(flaot));
-	                }
+				    int value = entry.getValue();
+				    
+				    isZero &= value == 0;
+				    
+				    if(value > 0 || !wasZero[i]) {
+    				    String name = MAtUtil.asPowerMeta(Block.getBlockById(i), entry.getKey());
+    					this.setValue(name, value);
+    					
+    					if(thousand != null) {
+    	                    float flaot = value / (float)blocksCounted * 1000f;
+    	                    thousand.setValue(name, (int)Math.ceil(flaot));
+    	                }
+				    }
 				}
-				metadatas[i].clear();
 			}
+			wasZero[i] = isZero;
 		}
 		
 		blocksCounted = 0;
 		
-		System.arraycopy(counts, 0, oldCounts, 0, counts.length);
 		System.arraycopy(BLANK_COUNTS, 0, counts, 0, counts.length);
 		System.arraycopy(BLANK_COUNTS, 0, zeroMetadataCounts, 0, counts.length);
+		Arrays.stream(metadatas).forEach(m -> {if(m != null) m.replaceAll((k, v) -> 0);} );
 		
 	}
 	
