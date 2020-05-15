@@ -10,7 +10,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 
@@ -48,6 +50,10 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     private DataPackage data;
 
     private float volume = 1;
+    
+    List<Integer> dimensionList;
+    boolean dimensionListIsWhitelist;
+    private Optional<Integer> lastDimension = Optional.empty();
 
     private IDataCollector collector;
 
@@ -61,6 +67,10 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
         
         if(dealiasMap == null) {
             dealiasMap = buildDealiasMap(aliasFile);
+        }
+        
+        if(dimensionList == null) {
+            buildDimensionList();
         }
     }
     
@@ -91,6 +101,23 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
         }));
         
         return dealiasMap;
+    }
+    
+    private void buildDimensionList() {
+        dimensionList = new ArrayList<Integer>();
+        String dimensionListString = ConfigManager.getConfig().getString("dimensions.list");
+        
+        if(!dimensionListString.isEmpty()) {
+            Arrays.stream(dimensionListString.split(",")).forEach(o -> {
+                try {
+                    dimensionList.add(Integer.parseInt(o));
+                } catch(NumberFormatException e) {
+                    Matmos.LOGGER.warn("Ignoring invalid dimension number: " + o);
+                }
+            });
+        }
+        
+        dimensionListIsWhitelist = ConfigManager.getConfig().getString("dimensions.listtype").contentEquals("white");
     }
 
     public void loadExpansions() {
@@ -198,8 +225,18 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     @Override
     public void onTick() {
         Minecraft.getMinecraft().mcProfiler.startSection("expansionmanager");
+        if(!lastDimension.isPresent() || MAtUtil.getPlayer().dimension != lastDimension.get()) {
+            expansions.values().forEach(e -> e.setOverrideOff(!isDimensionAllowed(MAtUtil.getPlayer().dimension)));
+            lastDimension = Optional.of(MAtUtil.getPlayer().dimension);
+        }
+        
         expansions.values().forEach(Expansion::evaluate);
         Minecraft.getMinecraft().mcProfiler.endSection();
+    }
+    
+    private boolean isDimensionAllowed(int dimension) {
+        boolean inList = dimensionList.contains(dimension);
+        return dimensionListIsWhitelist ? inList : !inList;
     }
 
     public void setData(DataPackage data) {

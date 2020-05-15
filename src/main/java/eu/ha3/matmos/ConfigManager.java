@@ -47,6 +47,9 @@ public class ConfigManager {
                                                                  "Forge provides a fix for this in 1.12.2, but MAtmos has to provide its own fix on 1.7.10, and on LiteLoader versions.\n" +
                                                                  "Use this option to control when the SoundSystem should be overridden.\n\n" +
                                                                  "Allowed values are: always, never, auto (which only overrides if no other mod is present which also overrides it (like DynamicSurroundings on 1.7.10, or Forge itself on 1.12.2))");
+        config.setProperty("dimensions.list", "", "Comma-separated list of dimensions. If dimensions.listtype is black, then ambience will NOT be played in these dimensions.\n" +
+                                                  "If it's white, then ambience will ONLY play in these dimensions.\n");
+        config.setProperty("dimensions.listtype", "black", "BLACK or WHITE?\n");
         config.commit();
 
         // Load configuration from source
@@ -87,6 +90,7 @@ public class ConfigManager {
                     InputStream defaultFileStream = ConfigManager.class.getClassLoader()
                     .getResourceAsStream(Paths.get("assets/matmos/default_config/").resolve(relPath)
                             .toString().replace('\\', '/'));
+                    // Paths need to have forward slashes in jars
                     
                     if(defaultFileStream != null) {
                         String contents = IOUtils.toString(defaultFileStream);

@@ -275,6 +275,10 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated 
     public void updateVolume() {
         capabilities.applyVolume(masterVolume.getVolume() * getVolume() * identity.getVolumeModifier());
     }
+    
+    public void setOverrideOff(boolean overrideOff) {
+        knowledge.setOverrideOff(overrideOff);
+    }
 
     /**
      * Interrupt this expansion brutally, without calling cleanup calls.

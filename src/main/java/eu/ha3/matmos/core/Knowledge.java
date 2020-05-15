@@ -237,6 +237,16 @@ public class Knowledge implements Evaluated, Simulated {
         BetterStreams.<Evaluated>of(conditionMapped, junctionMapped, machineMapped).forEach(Evaluated::evaluate);
     }
     
+    public void setOverrideOff(boolean overrideOff) {
+        machineMapped.forEach((s, m) -> {
+            if(overrideOff) {
+                m.overrideForceOff();
+            } else {
+                m.overrideFinish();
+            }
+        });
+    }
+    
     // might be nicer to have this read from a json file
     public static List<Named> getBuiltins(ProviderCollection providers) {
         return Arrays.asList(
