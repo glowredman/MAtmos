@@ -42,8 +42,13 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
 	
 	public BlockCountModule(DataPackage data, String name)
 	{
-		this(data, name, false, null);
+		this(data, name, false);
 	}
+	
+	public BlockCountModule(DataPackage data, String name, boolean doNotUseDelta)
+    {
+        this(data, name, doNotUseDelta, null);
+    }
 	
 	public BlockCountModule(DataPackage data, String name, boolean doNotUseDelta, VirtualCountModule<Pair<Block, Integer>> thousand)
 	{
