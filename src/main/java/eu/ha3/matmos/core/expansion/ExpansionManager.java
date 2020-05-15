@@ -19,6 +19,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import eu.ha3.matmos.ConfigManager;
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.ResourcePackDealer;
 import eu.ha3.matmos.core.ducks.ISoundHandler;
@@ -64,6 +65,8 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     }
     
     private int[] buildDealiasMap(File aliasFile){
+        ConfigManager.createDefaultConfigFileIfMissing(aliasFile);
+        
         Properties props = new Properties();
         
         try(FileReader reader = new FileReader(aliasFile)){
