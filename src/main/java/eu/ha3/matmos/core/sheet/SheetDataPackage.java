@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.expansion.ExpansionManager;
 import eu.ha3.matmos.data.modules.BlockCountModule;
 import net.minecraft.block.Block;
@@ -17,7 +18,7 @@ public class SheetDataPackage implements DataPackage {
     private final Map<String, Sheet> sheets;
     private final Class<? extends Sheet> sheetType;
     
-    private boolean[] isReferenced = new boolean[BlockCountModule.MAX_ID];
+    private boolean[] isReferenced = new boolean[Matmos.MAX_ID];
 
     public SheetDataPackage(Class<? extends Sheet> sheetType) {
         sheets = new TreeMap<>();

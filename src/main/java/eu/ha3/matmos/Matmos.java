@@ -72,6 +72,8 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     private Optional<Simulacrum> simulacrum = Optional.empty();
     private boolean isUnderwaterMode;
     private boolean isDebugMode;
+    
+    public static final int MAX_ID;
 
     // Components
     private UserControl userControl;
@@ -87,6 +89,10 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     private List<Runnable> queue = new ArrayList<>();
     private boolean hasResourcePacks_FixMe;
 
+    static {
+        MAX_ID = ConfigManager.getConfig().getInteger("world.maxblockid");
+    }
+    
     @Override
     public void onLoad() {
         if(SoundSystemReplacerTransformer.hasMadeChanges()) {

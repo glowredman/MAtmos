@@ -74,7 +74,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
             Matmos.LOGGER.error("Error loading alias file (" + aliasFile.getPath() + "): " + e);
         }
         
-        int[] dealiasMap = new int[BlockCountModule.MAX_ID];
+        int[] dealiasMap = new int[Matmos.MAX_ID];
         for(int i = 0; i < dealiasMap.length; i++) dealiasMap[i] = i;
         
         props.stringPropertyNames().forEach(k -> Arrays.stream(props.getProperty(k).split(",")).forEach(v -> {

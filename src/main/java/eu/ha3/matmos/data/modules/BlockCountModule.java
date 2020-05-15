@@ -10,6 +10,7 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sheet.SheetDataPackage;
 import eu.ha3.matmos.util.MAtUtil;
@@ -27,14 +28,12 @@ import net.minecraft.client.Minecraft;
  */
 public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integer>>
 {
-    public static final int MAX_ID = 4096;
-    
-    private boolean[] wasZero = new boolean[MAX_ID];
-	private int[] counts = new int[MAX_ID];
-	private int[] BLANK_COUNTS = new int[MAX_ID];
+    private boolean[] wasZero = new boolean[Matmos.MAX_ID];
+	private int[] counts = new int[Matmos.MAX_ID];
+	private int[] BLANK_COUNTS = new int[Matmos.MAX_ID];
 	
-	private int[] zeroMetadataCounts = new int[MAX_ID];
-	private TreeMap<Integer, Integer>[] metadatas = new TreeMap[MAX_ID];
+	private int[] zeroMetadataCounts = new int[Matmos.MAX_ID];
+	private TreeMap<Integer, Integer>[] metadatas = new TreeMap[Matmos.MAX_ID];
 	
 	VirtualCountModule<Pair<Block, Integer>> thousand;
 	

@@ -20,6 +20,7 @@ public class ConfigManager {
         // Create default configuration
         
         config.setProperty("world.height", 256);
+        config.setProperty("world.maxblockid", 4096);
         config.setProperty("dump.sheets.enabled", false);
         config.setProperty("start.enabled", true);
         config.setProperty("reversed.controls", false);
