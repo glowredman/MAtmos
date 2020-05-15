@@ -1,6 +1,7 @@
 package eu.ha3.matmos.core;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -59,5 +60,9 @@ public class Dynamic extends Component implements Evaluated, InformationContaine
     @Override
     public Collection<String> getDependencies() {
         return dependencies;
+    }
+    
+    public List<SheetIndex> getIndexes() {
+        return Collections.unmodifiableList(indexes);
     }
 }

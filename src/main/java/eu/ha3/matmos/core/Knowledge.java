@@ -1,6 +1,8 @@
 package eu.ha3.matmos.core;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -120,8 +122,8 @@ public class Knowledge implements Evaluated, Simulated {
         
         addKnowledge(things);
     }
-
-    public void compile() {
+    
+    private void createInvertedJunctions() {
         Set<String> junctionsToInvert = new TreeSet<>();
         LinkedList<Named> newStuff = new LinkedList<>();
         
@@ -143,7 +145,33 @@ public class Knowledge implements Evaluated, Simulated {
             
         }
         addKnowledge(newStuff);
+    }
+    
+    private void buildBlockList() {
+        Set<String> sheetIndexes = new HashSet<String>();
+        Set<String> blockSet = new HashSet<String>();
         
+        for(Condition condition : conditionMapped.values()) {
+            sheetIndexes.add(condition.getIndex().getIndex());
+        }
+        for(Dynamic dynamic : dynamicMapped.values()) {
+            for(SheetIndex si : dynamic.getIndexes()) {
+                sheetIndexes.add(si.getIndex());
+            }
+        }
+        
+        for(String index : sheetIndexes) {
+            if(index.contains("^")) {
+                index = index.substring(0, index.indexOf('^'));
+            }
+            blockSet.add(index);
+        }
+    }
+
+    public void compile() {
+        buildBlockList();
+        
+        createInvertedJunctions();
         
         purge(machineMapped, junctionMapped, "junctions");
         purge(junctionMapped, conditionMapped, "conditions");

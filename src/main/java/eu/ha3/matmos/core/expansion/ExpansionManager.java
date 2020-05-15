@@ -1,12 +1,18 @@
 package eu.ha3.matmos.core.expansion;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+
 import org.apache.commons.io.IOUtils;
 
 import com.google.gson.JsonArray;
@@ -35,6 +41,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     private final ResourcePackDealer dealer = new ResourcePackDealer();
     private final List<SoundpackIdentity> soundpackIdentities = new ArrayList<SoundpackIdentity>();
     private final Map<String, Expansion> expansions = new HashMap<>();
+    private static Map<String, String> dealiasMap;
 
     private DataPackage data;
 
@@ -42,13 +49,34 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
 
     private IDataCollector collector;
 
-    public ExpansionManager(File userconfigFolder, ISoundHandler accessor) {
+    public ExpansionManager(File userconfigFolder, File aliasFile, ISoundHandler accessor) {
         this.userconfigFolder = userconfigFolder;
         this.accessor = accessor;
 
         if (!this.userconfigFolder.exists()) {
             this.userconfigFolder.mkdirs();
         }
+        
+        if(dealiasMap == null) {
+            dealiasMap = buildDealiasMap(aliasFile);
+        }
+    }
+    
+    private Map<String, String> buildDealiasMap(File aliasFile){
+        Properties props = new Properties();
+        
+        try(FileReader reader = new FileReader(aliasFile)){
+            props.load(reader);
+        } catch (FileNotFoundException e) {
+            Matmos.LOGGER.warn("Alias file (" + aliasFile.getPath() + ") is missing");
+        } catch (IOException e) {
+            Matmos.LOGGER.error("Error loading alias file (" + aliasFile.getPath() + "): " + e);
+        }
+        
+        Map<String, String> dealiasMap = new HashMap<String, String>();
+        props.stringPropertyNames().forEach(k -> Arrays.stream(props.getProperty(k).split(",")).forEach(v -> dealiasMap.put(v, k)));
+        
+        return dealiasMap;
     }
 
     public void loadExpansions() {
@@ -124,6 +152,10 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     
     public List<SoundpackIdentity> getSoundpackIdentities(){
         return soundpackIdentities;
+    }
+    
+    public static String dealias(String alias) {
+        return Optional.ofNullable(dealiasMap.get(alias)).orElse(alias);
     }
 
     private void synchronizeStable(Expansion expansion) {

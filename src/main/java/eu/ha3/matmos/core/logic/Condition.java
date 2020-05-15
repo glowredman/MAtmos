@@ -97,4 +97,8 @@ public class Condition extends MultistateComponent implements Dependable, Visual
 
         return indexX.getSheet() + ">" + indexX.getIndex() + ":[" + value + "] " + op + " " + constantX;
     }
+    
+    public SheetIndex getIndex() {
+        return indexX;
+    }
 }
