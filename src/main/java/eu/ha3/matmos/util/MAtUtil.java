@@ -1,5 +1,7 @@
 package eu.ha3.matmos.util;
 
+import java.util.Random;
+
 import eu.ha3.matmos.core.sound.NoAttenuationSound;
 import eu.ha3.matmos.core.sound.PositionedSound;
 import net.minecraft.block.Block;
@@ -16,6 +18,8 @@ import net.minecraft.world.World;
 
 public class MAtUtil {
 
+    private static final Random random = new Random();
+    
     public static EntityPlayer getPlayer() {
         return Minecraft.getMinecraft().thePlayer;
     }
@@ -221,5 +225,9 @@ public class MAtUtil {
     
     public static boolean canSeeSky(BlockPos pos) {
         return getWorld().canBlockSeeTheSky(pos.getX(), pos.getY(), pos.getZ());
+    }
+    
+    public static float randomFloatRange(float min, float max) {
+        return min + (max - min) * random.nextFloat();
     }
 }
