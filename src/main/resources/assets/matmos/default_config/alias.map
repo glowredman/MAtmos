@@ -1,4 +1,4 @@
-# This sile contains comma-separated alias mappings like:
+# This file contains comma-separated alias mappings like:
 #
 # torch=SomeCoolMod.cool_torch,SomeOtherMod.other_torch
 #
@@ -7,5 +7,7 @@
 # an expansion.
 # (So if an expansion had a different sound for the cool_torch, it wouldn't get
 # dealiased as the torch.)
+#
+# Tip: restart MAtmos to reload the aliases without restarting Minecraft
 
 torch=TConstruct:decoration.stonetorch
