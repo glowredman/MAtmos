@@ -25,13 +25,14 @@ import eu.ha3.matmos.core.sheet.SheetEntry;
 import eu.ha3.matmos.core.sheet.SheetIndex;
 import eu.ha3.matmos.util.BetterStreams;
 import eu.ha3.mc.haddon.supporting.SupportsBlockChangeEvents;
+import eu.ha3.mc.haddon.supporting.event.BlockChangeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.IResourcePack;
 
 /**
  * Stores a Knowledge.
  */
-public class Knowledge implements Evaluated, Simulated, SupportsBlockChangeEvents {
+public class Knowledge implements Evaluated, Simulated {
     private DataPackage data;
 
     private final Map<String, Dynamic> dynamicMapped = new TreeMap<>();
@@ -245,9 +246,8 @@ public class Knowledge implements Evaluated, Simulated, SupportsBlockChangeEvent
         BetterStreams.<Evaluated>of(conditionMapped, junctionMapped, machineMapped).forEach(Evaluated::evaluate);
     }
     
-    @Override
-    public void onBlockChanged(int x, int y, int z, Block oldBlock, Block newBlock) {
-        blockChangeMapped.forEach((k, v) -> v.onBlockChange(x, y, z, oldBlock, newBlock));
+    public void onBlockChanged(BlockChangeEvent event) {
+        blockChangeMapped.forEach((k, v) -> v.onBlockChange(event));
     }
     
     public void setOverrideOff(boolean overrideOff) {

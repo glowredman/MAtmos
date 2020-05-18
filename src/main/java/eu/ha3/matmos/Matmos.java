@@ -33,6 +33,7 @@ import eu.ha3.mc.haddon.supporting.SupportsBlockChangeEvents;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsInGameChangeEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
+import eu.ha3.mc.haddon.supporting.event.BlockChangeEvent;
 import eu.ha3.mc.quick.chat.Chatter;
 import eu.ha3.mc.quick.update.NotifiableHaddon;
 import eu.ha3.mc.quick.update.UpdateNotifier;
@@ -445,8 +446,8 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     }
     
     @Override
-    public void onBlockChanged(int x, int y, int z, Block oldBlock, Block newBlock) {
-        blockChangeListeners.forEach(l -> l.onBlockChanged(x, y, z, oldBlock, newBlock));
+    public void onBlockChanged(BlockChangeEvent event) {
+        blockChangeListeners.forEach(l -> l.onBlockChanged(event));
     }
     
     public static void addBlockChangeListener(SupportsBlockChangeEvents l) {

@@ -24,6 +24,7 @@ import eu.ha3.matmos.core.sound.SoundHelperRelay;
 import eu.ha3.matmos.data.IDataCollector;
 import eu.ha3.matmos.data.modules.ModuleRegistry;
 import eu.ha3.mc.haddon.supporting.SupportsBlockChangeEvents;
+import eu.ha3.mc.haddon.supporting.event.BlockChangeEvent;
 import eu.ha3.util.property.simple.ConfigProperty;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -382,7 +383,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
     }
 
     @Override
-    public void onBlockChanged(int x, int y, int z, Block oldBlock, Block newBlock) {
-        knowledge.onBlockChanged(x, y, z, oldBlock, newBlock);
+    public void onBlockChanged(BlockChangeEvent event) {
+        knowledge.onBlockChanged(event);
     }
 }

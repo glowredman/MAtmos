@@ -10,6 +10,7 @@ import eu.ha3.matmos.core.expansion.ExpansionManager;
 import eu.ha3.matmos.util.BlockPos;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.haddon.supporting.SupportsBlockChangeEvents.ClickType;
+import eu.ha3.mc.haddon.supporting.event.BlockChangeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.item.Item;
@@ -55,25 +56,25 @@ public class BlockChangeSound implements Named {
         return name;
     }
     
-    public void onBlockChange(int x, int y, int z, Block oldBlock, Block newBlock) {
+    public void onBlockChange(BlockChangeEvent e) {
         boolean accept = false;
         
-        if(onPlace && oldBlock instanceof BlockAir) {
-            int placedID = ExpansionManager.dealiasID(Block.getIdFromBlock(newBlock));
+        if(onPlace && e.oldBlock instanceof BlockAir) {
+            int placedID = ExpansionManager.dealiasID(Block.getIdFromBlock(e.newBlock));
             
             if(blockIDs.contains(placedID)) {
                 accept = true;
             }   
         }
-        if(onBreak && newBlock instanceof BlockAir) {
-            int brokeID = ExpansionManager.dealiasID(Block.getIdFromBlock(oldBlock));
+        if(onBreak && e.newBlock instanceof BlockAir) {
+            int brokeID = ExpansionManager.dealiasID(Block.getIdFromBlock(e.oldBlock));
             if(blockIDs.contains(brokeID)) {
                 accept = true;
             }
         }
         
         if(accept) {
-            play(x, y, z);
+            play(e.x, e.y, e.z);
         }
     }
     
