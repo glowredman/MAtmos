@@ -50,6 +50,8 @@ public class ConfigManager {
         config.setProperty("dimensions.list", "", "Comma-separated list of dimensions. If dimensions.listtype is black, then ambience will NOT be played in these dimensions.\n" +
                                                   "If it's white, then ambience will ONLY play in these dimensions.\n");
         config.setProperty("dimensions.listtype", "black", "BLACK or WHITE?\n");
+        config.setProperty("rain.suppress", true, "Set to true to mute the rain sounds of vanilla or other mods. If set to false, a soundpack that supports this option won't play its own rain.\n");
+        config.setProperty("rain.soundlist", "weather.rain,weather.rain.above,ambient.weather.rain", "Comma-separated list of rain sounds to suppress");
         config.commit();
         
         config.setGlobalDescription("Tip: restart MAtmos to reload the configs without restarting Minecraft");
