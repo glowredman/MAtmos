@@ -30,6 +30,7 @@ import eu.ha3.matmos.core.expansion.agents.LegacyXMLLoadingAgent;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.IDataCollector;
 import eu.ha3.matmos.data.modules.BlockCountModule;
+import eu.ha3.matmos.util.BlockDealiaser;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
@@ -45,7 +46,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     private final ResourcePackDealer dealer = new ResourcePackDealer();
     private final List<SoundpackIdentity> soundpackIdentities = new ArrayList<SoundpackIdentity>();
     private final Map<String, Expansion> expansions = new HashMap<>();
-    private static int[] dealiasMap;
+    private static BlockDealiaser dealiasMap;
 
     private DataPackage data;
 
@@ -65,40 +66,11 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
             this.userconfigFolder.mkdirs();
         }
         
-        dealiasMap = buildDealiasMap(aliasFile);
+        dealiasMap = new BlockDealiaser(aliasFile);
         
         if(dimensionList == null) {
             buildDimensionList();
         }
-    }
-    
-    private int[] buildDealiasMap(File aliasFile){
-        ConfigManager.createDefaultConfigFileIfMissing(aliasFile);
-        
-        Properties props = new Properties();
-        
-        try(FileReader reader = new FileReader(aliasFile)){
-            props.load(reader);
-        } catch (FileNotFoundException e) {
-            Matmos.LOGGER.warn("Alias file (" + aliasFile.getPath() + ") is missing");
-        } catch (IOException e) {
-            Matmos.LOGGER.error("Error loading alias file (" + aliasFile.getPath() + "): " + e);
-        }
-        
-        int[] dealiasMap = new int[Matmos.MAX_ID];
-        for(int i = 0; i < dealiasMap.length; i++) dealiasMap[i] = i;
-        
-        props.stringPropertyNames().forEach(k -> Arrays.stream(props.getProperty(k).split(",")).forEach(v -> {
-            if(Block.blockRegistry.containsKey(k) && Block.blockRegistry.containsKey(v)) {
-                Object keyObj = Block.blockRegistry.getObject(k);
-                Object valueObj = Block.blockRegistry.getObject(v);
-                if(keyObj instanceof Block && valueObj instanceof Block) {
-                    dealiasMap[Block.getIdFromBlock((Block)valueObj)] = Block.getIdFromBlock((Block)keyObj);
-                }
-            }
-        }));
-        
-        return dealiasMap;
     }
     
     private void buildDimensionList() {
@@ -194,7 +166,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     }
     
     public static int dealiasID(int alias) {
-        return dealiasMap[alias];
+        return dealiasMap.dealiasID(alias);
     }
 
     private void synchronizeStable(Expansion expansion) {
