@@ -80,7 +80,7 @@ public class Machine extends MultistateComponent implements Dependable, Simulate
         while (!isTrue && iterAllow.hasNext()) {
             String junction = iterAllow.next();
 
-            if (provider.get(junction).isActive()) {
+            if (provider.exists(junction) && provider.get(junction).isActive()) {
                 // If any Allows is true, it's true (exit the loop)
                 isTrue = true;
             }
@@ -96,7 +96,7 @@ public class Machine extends MultistateComponent implements Dependable, Simulate
         while (isTrue && iterRestrict.hasNext()) {
             String junction = iterRestrict.next();
 
-            if (provider.get(junction).isActive()) {
+            if (provider.exists(junction) && provider.get(junction).isActive()) {
                 // If any Restrict is true, it's false
                 isTrue = false;
             }
