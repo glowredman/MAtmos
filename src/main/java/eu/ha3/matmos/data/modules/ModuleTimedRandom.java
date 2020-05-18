@@ -1,5 +1,8 @@
 package eu.ha3.matmos.data.modules;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import eu.ha3.matmos.core.sheet.DataPackage;
@@ -11,15 +14,24 @@ import eu.ha3.matmos.core.sheet.DataPackage;
 public class ModuleTimedRandom extends ModuleProcessor implements Module {
     private static final Random RANDOM = new Random();
 
-    private final TimedValue[] timedRandoms = new TimedValue[5];
+    private final List<TimedValue> timedRandoms = new ArrayList<TimedValue>();
 
     public ModuleTimedRandom(DataPackage data) {
         super(data, "timed_random");
-        timedRandoms[0] = new TimedValue(1);
-        timedRandoms[1] = new TimedValue(2);
-        timedRandoms[2] = new TimedValue(5);
-        timedRandoms[3] = new TimedValue(10);
-        timedRandoms[4] = new TimedValue(20);
+        timedRandoms.addAll(Arrays.asList(
+            new TimedValue(1),
+            new TimedValue(2),
+            new TimedValue(5),
+            new TimedValue(10),
+            new TimedValue(15),
+            new TimedValue(20),
+            new TimedValue(30),
+            new TimedValue(1 * 60),
+            new TimedValue(2 * 60),
+            new TimedValue(5 * 60),
+            new TimedValue(10 * 60),
+            new TimedValue(20 * 60)
+        ));
     }
 
     @Override
@@ -36,9 +48,15 @@ public class ModuleTimedRandom extends ModuleProcessor implements Module {
         private int activeValue = -1;
         private long endTime;
 
-        public TimedValue(int mins) {
-            playlistId = "timed_random_" + (mins < 10 ? "0" + mins : mins) + "mins";
-            period = 1000 * 60 * mins;
+        public TimedValue(int secs) {
+            int minutes = secs / 60;
+            int secRemainder = secs % 60;
+            
+            playlistId = "timed_random"
+                    + (secRemainder == 0 ? String.format("_%02dminutes", minutes)
+                            : String.format("_%02dm%02ds", minutes, secRemainder));
+            
+            period = 1000 * secs;
         }
 
         public void process(ModuleTimedRandom timedRandom) {
