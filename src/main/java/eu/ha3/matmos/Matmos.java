@@ -152,7 +152,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     public void refresh() {
         deactivate();
-        activate();
+        activate(false);
     }
 
     @Override
@@ -162,11 +162,21 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void activate() {
+        activate(true);
+    }
+    
+    public void activate(boolean reloadConfigs) {
         if (isActivated()) {
             return;
         }
         LOGGER.info("Loading...");
+        
+        if(reloadConfigs) {
+            config.load();
+        }
+        
         simulacrum = Optional.of(new Simulacrum(this));
+        
         LOGGER.info("Loaded.");
     }
 
@@ -300,8 +310,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         // Initiate hot reload
         if (isActivated()) {
             simulacrum.get().interruptBrutally();
-            deactivate();
-            activate();
+            refresh();
         }
     }
 

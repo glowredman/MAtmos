@@ -65,9 +65,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
             this.userconfigFolder.mkdirs();
         }
         
-        if(dealiasMap == null) {
-            dealiasMap = buildDealiasMap(aliasFile);
-        }
+        dealiasMap = buildDealiasMap(aliasFile);
         
         if(dimensionList == null) {
             buildDimensionList();

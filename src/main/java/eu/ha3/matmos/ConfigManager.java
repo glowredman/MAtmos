@@ -51,6 +51,8 @@ public class ConfigManager {
                                                   "If it's white, then ambience will ONLY play in these dimensions.\n");
         config.setProperty("dimensions.listtype", "black", "BLACK or WHITE?\n");
         config.commit();
+        
+        config.setGlobalDescription("Tip: restart MAtmos to reload the configs without restarting Minecraft");
 
         // Load configuration from source
         try {
