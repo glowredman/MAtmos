@@ -35,10 +35,14 @@ public class ModuleWorld extends ModuleProcessor implements Module {
         setValue("moon_phase", w.getMoonPhase());
         setValue("can_rain_on", w.canBlockSeeTheSky(pos.getX(), pos.getY(), pos.getZ()));
         setValue("can_snow_here", w.provider.canSnowAt(pos.getX(), pos.getY(), pos.getZ(), false));
+        
         setValue("biome_can_rain", ((IBiomeGenBase)biome).enableRain());
         setValue("biome_is_snowy", biome.getEnableSnow());
         setValue("biome_temperature", Math.round(biome.getFloatTemperature(pos.getX(), pos.getY(), pos.getZ()) * 1000));
         setValue("biome_rainfall", Math.round(biome.getFloatRainfall() * 1000));
+        
+        setValue("can_rain_here", biome.canSpawnLightningBolt() && biome.getFloatTemperature(pos.getX(), pos.getY(), pos.getZ()) > 0.15f);
+        
         setValue("rain_force1k", Math.round(w.getRainStrength(0f) * 1000));
         setValue("thunder_force1k", Math.round(w.getWeightedThunderStrength(0f) * 1000));
 
