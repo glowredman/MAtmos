@@ -54,6 +54,12 @@ Pressing F7 opens the MAtmos settings menu which can be used to adjust the volum
 
 <img src="docs/matmos_menu.png" width="600">
 
+## Suggested companion mods
+
+[*Dynamic Surroundings*](https://www.curseforge.com/minecraft/mc-mods/dynamic-surroundings) for better footstep sounds. Disable its biome sounds in the config to only get the footsteps.
+
+*[Sound Filters](https://www.curseforge.com/minecraft/mc-mods/sound-filters) / [Sound Physics] (https://github.com/djpadbit/Sound-Physics) [(1.7.10 build here)](https://github.com/djpadbit/Sound-Physics/issues/26)* for reverb and muffling of sounds behind walls.
+
 ## Troubleshooting
 
 If adding MAtmos on 1.12.2 causes the game to **crash upon startup**, it's probably because you're using other, outdated mods that use version 0.7 of the Mixin library, while this mod uses version 0.8. This problem commonly occurs with old modpacks. There are 2 ways to resolve this:
