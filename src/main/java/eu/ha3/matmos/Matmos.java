@@ -311,11 +311,8 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
-        LOGGER.warn("ResourceManager has changed. Unintended side-effects may happen.");
-        interrupt();
         // Initiate hot reload
         if (isActivated()) {
-            simulacrum.get().interruptBrutally();
             refresh();
         }
     }
