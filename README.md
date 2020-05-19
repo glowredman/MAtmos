@@ -56,9 +56,9 @@ Pressing F7 opens the MAtmos settings menu which can be used to adjust the volum
 
 ## Suggested companion mods
 
-[*Dynamic Surroundings*](https://www.curseforge.com/minecraft/mc-mods/dynamic-surroundings) for better footstep sounds. Disable its biome sounds in the config to only get the footsteps.
+[***Dynamic Surroundings***](https://www.curseforge.com/minecraft/mc-mods/dynamic-surroundings) for better footstep sounds. (Yes, it's compatible.) Disable its biome sounds in the config to only get the footsteps.
 
-*[Sound Filters](https://www.curseforge.com/minecraft/mc-mods/sound-filters) / [Sound Physics](https://github.com/djpadbit/Sound-Physics) [(1.7.10 build here)](https://github.com/djpadbit/Sound-Physics/issues/26)* for reverb and muffling of sounds behind walls.
+***[Sound Filters](https://www.curseforge.com/minecraft/mc-mods/sound-filters) / [Sound Physics](https://github.com/djpadbit/Sound-Physics) [(1.7.10 build here)](https://github.com/djpadbit/Sound-Physics/issues/26)*** for reverb and muffling of sounds behind walls.
 
 ## Troubleshooting
 
