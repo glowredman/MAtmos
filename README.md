@@ -70,7 +70,7 @@ b) Use the versions of MAtmos ending in *-mixin0.7.jar* which are provided for c
 
 ## Downloads
 
-Releases for **MAtmos** are available on [the releases tab](https://github.com/makamys/MAtmos/releases). There are both Forge and LiteLoader releases available for most versions. Choose the one that matches the modloader you're using.
+Releases for **MAtmos** are available on [the releases tab](https://github.com/makamys/MAtmos/releases).
 
 For **soundpack** downloads, see the *Featured soundpacks* section above.
 
