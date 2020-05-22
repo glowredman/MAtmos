@@ -16,7 +16,9 @@ public class Providers implements ProviderCollection {
     private final Provider<Event> eventProvider;
     private final Provider<Dynamic> dynamicProvider;
 
-    public Providers(ReferenceTime time, SoundRelay soundRelay, SheetCommander<String> commander, Provider<Condition> conditionProvider, Provider<Junction> junctionProvider, Provider<Machine> machineProvider, Provider<Event> eventProvider, Provider<Dynamic> dynamicProvider) {
+    public Providers(ReferenceTime time, SoundRelay soundRelay, SheetCommander<String> commander,
+            Provider<Condition> conditionProvider, Provider<Junction> junctionProvider,
+            Provider<Machine> machineProvider, Provider<Event> eventProvider, Provider<Dynamic> dynamicProvider) {
         this.time = time;
         this.soundRelay = soundRelay;
         this.commander = commander;

@@ -44,21 +44,21 @@ public class VisualExpansionDebugging implements SupportsFrameEvents {
 
         try {
             Exception loadException = mod.getExpansionList().get(ex).getLoadException();
-            
-            if(loadException == null) {
+
+            if (loadException == null) {
                 ProviderCollection providers = mod.getExpansionList().get(ex).obtainProvidersForDebugging();
                 Distances condition = distances(providers.getCondition());
                 Distances junction = distances(providers.getJunction());
                 Distances machine = distances(providers.getMachine());
-    
+
                 int yyBase = 30;
-    
+
                 scrub(condition, 20, yyBase);
                 scrub(junction, 400, yyBase);
                 scrub(machine, 600, yyBase);
-    
-                //link(condition, 0, 0, junction, 40, 0);
-                //link(junction, 40, 0, machine, 80, 0);
+
+                // link(condition, 0, 0, junction, 40, 0);
+                // link(junction, 40, 0, machine, 80, 0);
             } else {
                 mc.fontRenderer.drawStringWithShadow("There was an error loading the file:", 10, 30, 0xFFFF00);
                 mc.fontRenderer.drawStringWithShadow(loadException.getMessage(), 10, 40, 0xFFFF00);
@@ -71,7 +71,8 @@ public class VisualExpansionDebugging implements SupportsFrameEvents {
     }
 
     @SuppressWarnings("unused")
-    private void link(Distances reliables, int xR, int yR, Collection<String> dependencies, int xD, int yDapplied, boolean right) {
+    private void link(Distances reliables, int xR, int yR, Collection<String> dependencies, int xD, int yDapplied,
+            boolean right) {
         for (String dependency : dependencies) {
             reliables.get(dependency);
 

@@ -12,7 +12,8 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.util.math.RayTraceResult.Type;
 
 /**
- * Processes values for the entity/block that a player focuses over with the cursor.
+ * Processes values for the entity/block that a player focuses over with the
+ * cursor.
  */
 public class ModuleHitscan extends ModuleProcessor implements Module {
     private final Map<Type, String> equiv = new HashMap<>();
@@ -41,9 +42,20 @@ public class ModuleHitscan extends ModuleProcessor implements Module {
 
         setValue("mouse_over_something", mc.objectMouseOver.typeOfHit != Type.MISS);
         setValue("mouse_over_what", equiv.get(mc.objectMouseOver.typeOfHit));
-        setValue("block", mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtUtil.getNameAt(mc.objectMouseOver.getBlockPos(), NO_BLOCK_OUT_OF_BOUNDS) : NO_BLOCK_IN_THIS_CONTEXT);
-        setValue("meta", mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtUtil.getMetaAsStringAt(mc.objectMouseOver.getBlockPos(), NO_BLOCK_OUT_OF_BOUNDS) : NO_BLOCK_IN_THIS_CONTEXT);
-        setValue("powermeta", mc.objectMouseOver.typeOfHit == Type.BLOCK ? MAtUtil.getPowerMetaAt(mc.objectMouseOver.getBlockPos(), NO_BLOCK_OUT_OF_BOUNDS) : NO_BLOCK_IN_THIS_CONTEXT);
-        setValue("entity_id", mc.objectMouseOver.typeOfHit == Type.ENTITY ? EntityList.getKey(mc.objectMouseOver.entityHit).toString() : NO_ENTITY);
+        setValue("block",
+                mc.objectMouseOver.typeOfHit == Type.BLOCK
+                        ? MAtUtil.getNameAt(mc.objectMouseOver.getBlockPos(), NO_BLOCK_OUT_OF_BOUNDS)
+                        : NO_BLOCK_IN_THIS_CONTEXT);
+        setValue("meta",
+                mc.objectMouseOver.typeOfHit == Type.BLOCK
+                        ? MAtUtil.getMetaAsStringAt(mc.objectMouseOver.getBlockPos(), NO_BLOCK_OUT_OF_BOUNDS)
+                        : NO_BLOCK_IN_THIS_CONTEXT);
+        setValue("powermeta",
+                mc.objectMouseOver.typeOfHit == Type.BLOCK
+                        ? MAtUtil.getPowerMetaAt(mc.objectMouseOver.getBlockPos(), NO_BLOCK_OUT_OF_BOUNDS)
+                        : NO_BLOCK_IN_THIS_CONTEXT);
+        setValue("entity_id",
+                mc.objectMouseOver.typeOfHit == Type.ENTITY ? EntityList.getKey(mc.objectMouseOver.entityHit).toString()
+                        : NO_ENTITY);
     }
 }

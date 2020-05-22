@@ -18,11 +18,11 @@ public class ResourcePackDealer {
     private static final ResourceLocation expansions = new ResourceLocation("matmos", "expansions.json");
 
     public Stream<IResourcePack> findResourcePacks() {
-        return Stream.concat(
-                Minecraft.getMinecraft().getResourcePackRepository().getRepositoryEntries().stream().map(ResourcePackRepository.Entry::getResourcePack),
-                ((IMinecraft)Minecraft.getMinecraft()).defaultResourcePacks().stream()
-            ).filter(this::checkCompatible)
-             .distinct();
+        return Stream
+                .concat(Minecraft.getMinecraft().getResourcePackRepository().getRepositoryEntries().stream()
+                        .map(ResourcePackRepository.Entry::getResourcePack),
+                        ((IMinecraft) Minecraft.getMinecraft()).defaultResourcePacks().stream())
+                .filter(this::checkCompatible).distinct();
     }
 
     public List<IResourcePack> findDisabledResourcePacks() {
@@ -31,9 +31,7 @@ public class ResourcePackDealer {
         List<ResourcePackRepository.Entry> repo = new ArrayList<>(rrr.getRepositoryEntriesAll());
         repo.removeAll(rrr.getRepositoryEntries());
 
-        return repo.stream()
-                .map(ResourcePackRepository.Entry::getResourcePack)
-                .filter(this::checkCompatible)
+        return repo.stream().map(ResourcePackRepository.Entry::getResourcePack).filter(this::checkCompatible)
                 .collect(Collectors.toList());
     }
 
@@ -44,7 +42,7 @@ public class ResourcePackDealer {
     public InputStream openExpansionsPointerFile(IResourcePack pack) throws IOException {
         return pack.getInputStream(expansions);
     }
-    
+
     public InputStream openMatPackPointerFile(IResourcePack pack) throws IOException {
         return pack.getInputStream(mat_pack);
     }

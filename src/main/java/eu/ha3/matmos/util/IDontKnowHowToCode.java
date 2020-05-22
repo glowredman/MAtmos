@@ -25,8 +25,8 @@ public class IDontKnowHowToCode {
     }
 
     /**
-     * Call this to print an error to the player's chat. The crash token is meant to prevent the
-     * exceptions from a single source to print multiple times.
+     * Call this to print an error to the player's chat. The crash token is meant to
+     * prevent the exceptions from a single source to print multiple times.
      *
      * @param chatter
      * @param e
@@ -38,7 +38,8 @@ public class IDontKnowHowToCode {
         }
         crash.add(crashToken);
 
-        chatter.printChat(TextFormatting.RED, "MAtmos is crashing: ", TextFormatting.WHITE, e.getClass().getName(), ": ", e.getCause());
+        chatter.printChat(TextFormatting.RED, "MAtmos is crashing: ", TextFormatting.WHITE, e.getClass().getName(),
+                ": ", e.getCause());
 
         int i = 0;
         for (StackTraceElement x : e.getStackTrace()) {

@@ -17,7 +17,8 @@ public class SerialCondition {
     @Expose
     public String value = "";
 
-    public SerialCondition() {}
+    public SerialCondition() {
+    }
 
     public SerialCondition(SheetIndex sheet, String symbol, String value) {
         this.sheet = sheet.getSheet();

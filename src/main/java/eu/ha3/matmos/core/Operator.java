@@ -102,7 +102,7 @@ public enum Operator {
     /**
      * Returns ALWAYS_FALSE in case the serialized form doesn't exist or is null.
      *
-     * @param  serializedForm
+     * @param serializedForm
      * @return
      */
     public static Operator fromSerializedForm(String serializedForm) {
@@ -126,7 +126,7 @@ public enum Operator {
 
     public boolean test(Object one, Object two) {
         if (one instanceof Number && two instanceof Number) {
-            return testNumber(((Number)one).longValue(), ((Number)two).longValue());
+            return testNumber(((Number) one).longValue(), ((Number) two).longValue());
         }
         return false;
     }

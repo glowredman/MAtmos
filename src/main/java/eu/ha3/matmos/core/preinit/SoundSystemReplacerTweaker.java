@@ -10,19 +10,19 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 
 public class SoundSystemReplacerTweaker implements ITweaker {
 
-    public SoundSystemReplacerTweaker(){
+    public SoundSystemReplacerTweaker() {
         SoundSystemReplacer.run();
-        
+
     }
-    
+
     @Override
     public void acceptOptions(List<String> args, File gameDir, File assetsDir, String profile) {
-        
+
     }
 
     @Override
     public void injectIntoClassLoader(LaunchClassLoader classLoader) {
-        
+
     }
 
     @Override

@@ -58,30 +58,28 @@ public class VisualDebugger implements SupportsFrameEvents {
     public void onFrame(float semi) {
         if (mod.isDebugMode()) {
             mod.util().prepareDrawString();
-            mod.util().drawString(
-                    TextFormatting.GRAY.toString() + mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0, 0, '3', 0, 0, 0,
-                    0, true);
+            mod.util().drawString(TextFormatting.GRAY.toString() + mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0, 0,
+                    '3', 0, 0, 0, 0, true);
         }
 
         if (mode == DebugMode.NONE) {
             return;
         }
 
-        if (mode == DebugMode.EXPANSION
-                && semi >= 0f && mod.util().getCurrentScreen() != null
+        if (mode == DebugMode.EXPANSION && semi >= 0f && mod.util().getCurrentScreen() != null
                 && !(mod.util().getCurrentScreen() instanceof GuiChat)) {
             return;
         }
 
         switch (mode) {
-            case SCAN:
-                debugScan();
-                break;
-            case EXPANSION:
-                ed.onFrame(semi);
-                break;
-            default:
-                break;
+        case SCAN:
+            debugScan();
+            break;
+        case EXPANSION:
+            ed.onFrame(semi);
+            break;
+        default:
+            break;
         }
 
     }
@@ -109,14 +107,14 @@ public class VisualDebugger implements SupportsFrameEvents {
                 Collections.sort(sort, (String o1, String o2) -> {
                     boolean o1IsVar = o1.startsWith(".");
                     boolean o2IsVar = o2.startsWith(".");
-                    if(o1IsVar && o2IsVar) {
+                    if (o1IsVar && o2IsVar) {
                         return o1.compareTo(o2);
-                    } else if(o1IsVar) { // variables are on top
+                    } else if (o1IsVar) { // variables are on top
                         return 1;
-                    } else if(o2IsVar){
+                    } else if (o2IsVar) {
                         return -1;
                     }
-                    
+
                     Long l1 = Numbers.toLong(sheet.get(o1));
                     Long l2 = Numbers.toLong(sheet.get(o2));
 
@@ -147,7 +145,7 @@ public class VisualDebugger implements SupportsFrameEvents {
             if (!index.contains("^")) {
                 Long l = Numbers.toLong(sheet.get(index));
                 if (l != null) {
-                    total = total + (int)(long)l;
+                    total = total + (int) (long) l;
                 }
             }
         }
@@ -158,12 +156,11 @@ public class VisualDebugger implements SupportsFrameEvents {
 
         if (scanDebug.startsWith("scan_large")) {
             Progress progressObject = dataGatherer.getLargeScanProgress();
-            float progress = (float)progressObject.getProgress_Current() / progressObject.getProgress_Total();
+            float progress = (float) progressObject.getProgress_Current() / progressObject.getProgress_Total();
 
-            fontRenderer.drawStringWithShadow(
-                    "Scan ["
-                            + mc.world.getHeight() + "]: " + StringUtils.repeat("|", (int)(100 * progress)) + " ("
-                            + (int)(progress * 100) + "%)", 20, 2 + 9 * lineNumber, 0xFFFFCC);
+            fontRenderer.drawStringWithShadow("Scan [" + mc.world.getHeight() + "]: "
+                    + StringUtils.repeat("|", (int) (100 * progress)) + " (" + (int) (progress * 100) + "%)", 20,
+                    2 + 9 * lineNumber, 0xFFFFCC);
         }
 
         lineNumber = lineNumber + 1;
@@ -173,43 +170,49 @@ public class VisualDebugger implements SupportsFrameEvents {
         for (String index : sort) {
             if (lineNumber <= 100 && !index.contains("^")) {
                 if (scanDebug.startsWith("scan_") || scanDebug.equals("block_contact")) {
-                    if(index.startsWith(".")) {
-                        fontRenderer.drawStringWithShadow(TextFormatting.AQUA + index + ": " + TextFormatting.YELLOW + sheet.get(index) + TextFormatting.RESET, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
+                    if (index.startsWith(".")) {
+                        fontRenderer.drawStringWithShadow(TextFormatting.AQUA + index + ": " + TextFormatting.YELLOW
+                                + sheet.get(index) + TextFormatting.RESET, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
                         lineNumber += 1;
                     } else {
                         Long count = Numbers.toLong(sheet.get(index));
                         if (count != null) {
                             if (count > 0) {
-                                float scalar = (float)count / total;
-                                String percentage = !scanDebug.endsWith(ScannerModule.THOUSAND_SUFFIX) ? Float.toString(Math.round(scalar * 1000f) / 10f) : Integer.toString(Math.round(scalar * 100f));
-    
+                                float scalar = (float) count / total;
+                                String percentage = !scanDebug.endsWith(ScannerModule.THOUSAND_SUFFIX)
+                                        ? Float.toString(Math.round(scalar * 1000f) / 10f)
+                                        : Integer.toString(Math.round(scalar * 100f));
+
                                 if (percentage.equals("0.0")) {
                                     percentage = "0";
                                 }
-    
-                                int fill = Math.round(scalar * ALL * 2 /* * 2*/);
+
+                                int fill = Math.round(scalar * ALL * 2 /* * 2 */);
                                 int superFill = 0;
-    
+
                                 if (fill > ALL * 2) {
                                     fill = ALL * 2;
                                 }
-    
+
                                 if (fill > ALL) {
                                     superFill = fill - ALL;
                                 }
-    
+
                                 String bars = "";
                                 if (superFill > 0) {
                                     bars += TextFormatting.YELLOW + StringUtils.repeat("|", superFill);
                                 }
-    
+
                                 bars += TextFormatting.RESET + StringUtils.repeat("|", fill - superFill * 2);
-    
+
                                 if (index.startsWith("minecraft:")) {
                                     index = index.substring(10);
                                 }
-    
-                                fontRenderer.drawStringWithShadow(bars + (fill == ALL * 2 ? TextFormatting.YELLOW + "++" + TextFormatting.RESET : "") + " (" + count + ", " + percentage + "%) " + index, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
+
+                                fontRenderer.drawStringWithShadow(
+                                        bars + (fill == ALL * 2 ? TextFormatting.YELLOW + "++" + TextFormatting.RESET
+                                                : "") + " (" + count + ", " + percentage + "%) " + index,
+                                        leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
                                 lineNumber = lineNumber + 1;
                             }
                         }
@@ -217,7 +220,8 @@ public class VisualDebugger implements SupportsFrameEvents {
                 } else if (scanDebug.startsWith("detect_")) {
                     String val = sheet.get(index);
                     if (!val.equals("0") && !val.equals(Integer.toString(Integer.MAX_VALUE))) {
-                        fontRenderer.drawStringWithShadow(String.format("%s (%s): %s", index, index, val), leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
+                        fontRenderer.drawStringWithShadow(String.format("%s (%s): %s", index, index, val), leftAlign,
+                                2 + 9 * lineNumber, 0xFFFFFF);
                         lineNumber = lineNumber + 1;
                     }
                 } else {
@@ -243,8 +247,6 @@ public class VisualDebugger implements SupportsFrameEvents {
     }
 
     private enum DebugMode {
-        NONE,
-        SCAN,
-        EXPANSION;
+        NONE, SCAN, EXPANSION;
     }
 }

@@ -11,19 +11,19 @@ public class VirtualCountModule<T> extends AbstractThingCountModule<T> {
     public VirtualCountModule(DataPackage data, String name, boolean doNotUseDelta) {
         super(data, name, doNotUseDelta);
     }
-    
+
     @Override
     protected void doProcess() {
     }
 
     @Override
     public void increment(T thing) {
-        
+
     }
-    
+
     @Override
     public void increment(T thing, int amount) {
-        
+
     }
 
     @Override
@@ -33,11 +33,11 @@ public class VirtualCountModule<T> extends AbstractThingCountModule<T> {
 
     @Override
     public void count() {
-        
+
     }
 
     @Override
     public void apply() {
-        
+
     }
 }

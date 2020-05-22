@@ -18,29 +18,30 @@ import paulscode.sound.SoundSystemConfig;
 abstract class MixinSoundManager implements ISoundManager {
 
     private SoundSystem __sndSystem;
-    
+
     @Shadow
     private List<String> pausedChannels;
-    
+
     @Shadow
     private boolean loaded;
-    
+
     @Inject(method = "<init>*", at = @At("RETURN"))
     private void onConstructed(CallbackInfo ci) {
         Matmos.LOGGER.debug("Running mixin for SoundManager constructor!");
         SoundSystemConfig.setNumberStreamingChannels(11);
-        SoundSystemConfig.setNumberNormalChannels(32-11);
+        SoundSystemConfig.setNumberNormalChannels(32 - 11);
         SoundSystemConfig.setStreamQueueFormatsMatch(true);
     }
-    
-    /** Applies Forge's fix for MC-35856. Required for LiteLoader. Redundant if we're using Forge, but should be harmless. */
+
+    /**
+     * Applies Forge's fix for MC-35856. Required for LiteLoader. Redundant if we're
+     * using Forge, but should be harmless.
+     */
     @Inject(method = "stopAllSounds", at = @At("RETURN"))
-    public void stopAllSounds(CallbackInfo ci)
-    {
+    public void stopAllSounds(CallbackInfo ci) {
         Matmos.LOGGER.debug("Running mixin for SoundManager.stopAllSounds!");
-        if (this.loaded)
-        {
-            this.pausedChannels.clear(); //Forge: MC-35856 Fixed paused sounds repeating when switching worlds
+        if (this.loaded) {
+            this.pausedChannels.clear(); // Forge: MC-35856 Fixed paused sounds repeating when switching worlds
         }
     }
 

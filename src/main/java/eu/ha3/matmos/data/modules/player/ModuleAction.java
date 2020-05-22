@@ -18,9 +18,9 @@ public class ModuleAction extends ModuleProcessor implements Module {
     protected void doProcess() {
         EntityPlayerSP player = Minecraft.getMinecraft().player;
 
-        setValue("swing_progress16", (int)Math.floor(player.swingProgress * 16));
+        setValue("swing_progress16", (int) Math.floor(player.swingProgress * 16));
         setValue("swinging", player.swingProgress != 0);
-        setValue("fall_distance1k", (int)(player.fallDistance * 1000));
+        setValue("fall_distance1k", (int) (player.fallDistance * 1000));
         setValue("item_use_duration", player.getItemInUseCount());
     }
 }

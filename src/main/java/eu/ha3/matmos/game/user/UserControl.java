@@ -33,7 +33,8 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 
     public void load() {
         keyBindingMain = new KeyBinding("MAtmos", 65, "key.categories.misc");
-        Minecraft.getMinecraft().gameSettings.keyBindings = ArrayUtils.addAll(Minecraft.getMinecraft().gameSettings.keyBindings, keyBindingMain);
+        Minecraft.getMinecraft().gameSettings.keyBindings = ArrayUtils
+                .addAll(Minecraft.getMinecraft().gameSettings.keyBindings, keyBindingMain);
         keyBindingMain.setKeyCode(mod.getConfig().getInteger("key.code"));
         KeyBinding.resetKeyBindingArrayAndHash();
 
@@ -58,7 +59,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
         if (tickRound == 0) {
             int keyCode = keyBindingMain.getKeyCode();
             if (keyCode != mod.getConfig().getInteger("key.code")) {
-                //PFLog.log("Key binding changed. Saving...");
+                // PFLog.log("Key binding changed. Saving...");
                 mod.getConfig().setProperty("key.code", keyCode);
                 mod.saveConfig();
             }
@@ -81,13 +82,11 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
             mod.getChatter().printChat(TextFormatting.RED, "Unknown error: MAtmos isn't initialized");
         } else {
             if (!MAtUtil.isSoundMasterEnabled()) {
-                mod.getChatter().printChat(
-                        TextFormatting.RED, "Warning: ", TextFormatting.WHITE,
+                mod.getChatter().printChat(TextFormatting.RED, "Warning: ", TextFormatting.WHITE,
                         "Sounds are turned off in your game settings!");
             }
             if (!MAtUtil.isSoundAmbientEnabled()) {
-                mod.getChatter().printChat(
-                        TextFormatting.RED, "Warning: ", TextFormatting.WHITE,
+                mod.getChatter().printChat(TextFormatting.RED, "Warning: ", TextFormatting.WHITE,
                         "Ambient sounds are at 0%% volume in the Minecraft options menu!");
             }
         }
@@ -127,18 +126,16 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
     private void whenWantsToggle() {
         if (mod.isActivated()) {
             mod.deactivate();
-            mod.getChatter().printChat(
-                    TextFormatting.YELLOW, "Stopped. Press ", TextFormatting.WHITE,
+            mod.getChatter().printChat(TextFormatting.YELLOW, "Stopped. Press ", TextFormatting.WHITE,
                     getKeyBindingMainFriendlyName(), TextFormatting.YELLOW, " to re-enable.");
 
         } else if (mod.isInitialized()) {
             if (loadingCount != 0) {
                 mod.getChatter().printChat(TextFormatting.GREEN, "Loading...");
             } else {
-                mod.getChatter().printChat(
-                        TextFormatting.GREEN, "Loading...", TextFormatting.YELLOW, " (Hold ",
-                        TextFormatting.WHITE, getKeyBindingMainFriendlyName() + " down",
-                        TextFormatting.YELLOW, " to tweak the volume)");
+                mod.getChatter().printChat(TextFormatting.GREEN, "Loading...", TextFormatting.YELLOW, " (Hold ",
+                        TextFormatting.WHITE, getKeyBindingMainFriendlyName() + " down", TextFormatting.YELLOW,
+                        " to tweak the volume)");
             }
 
             loadingCount++;
@@ -157,7 +154,8 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 
         TimeStatistic stat = new TimeStatistic();
         mod.start();
-        mod.getChatter().printChat(TextFormatting.GREEN, "Loading for the first time (" + stat.getSecondsAsString(2) + "s)");
+        mod.getChatter().printChat(TextFormatting.GREEN,
+                "Loading for the first time (" + stat.getSecondsAsString(2) + "s)");
     }
 
     private void whenWantsForcing() {
@@ -165,7 +163,8 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
             TimeStatistic stat = new TimeStatistic();
             mod.refresh();
             mod.activate();
-            mod.getChatter().printChat(TextFormatting.GREEN, "Reloading expansions (" + stat.getSecondsAsString(2) + "s)");
+            mod.getChatter().printChat(TextFormatting.GREEN,
+                    "Reloading expansions (" + stat.getSecondsAsString(2) + "s)");
         } else if (!mod.isInitialized()) {
             whenUninitializedAction();
         }
@@ -173,7 +172,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 
     private void displayMenu() {
         if (mod.isActivated() && mod.util().isCurrentScreen(null)) {
-            Minecraft.getMinecraft().displayGuiScreen(new GuiMatMenu((GuiScreen)mod.util().getCurrentScreen(), mod));
+            Minecraft.getMinecraft().displayGuiScreen(new GuiMatMenu((GuiScreen) mod.util().getCurrentScreen(), mod));
         }
     }
 

@@ -27,7 +27,7 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
     @Override
     public void playSound(String path, float volume, float pitch, int meta) {
         // XXX 2014-01-12 TEMPORARY: USE MONO-STEREO
-        //playStereo(this.paths.get(path), volume, pitch);
+        // playStereo(this.paths.get(path), volume, pitch);
         Entity e = Minecraft.getMinecraft().player;
 
         if (meta <= 0) {
@@ -43,8 +43,8 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
     }
 
     @Override
-    public boolean setupStreamingToken(int token, String path, float pitch, boolean isLooping,
-            boolean usesPause, boolean underwater) {
+    public boolean setupStreamingToken(int token, String path, float pitch, boolean isLooping, boolean usesPause,
+            boolean underwater) {
         registerStreaming("" + token, path, 1f, pitch, isLooping, usesPause, underwater, this);
 
         return true;
@@ -61,7 +61,8 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
 
     @Override
     public boolean isPlaying(int token) {
-        return Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(streaming.get(String.valueOf(token)).getSound());
+        return Minecraft.getMinecraft().getSoundHandler()
+                .isSoundPlaying(streaming.get(String.valueOf(token)).getSound());
     }
 
     @Override
@@ -70,17 +71,18 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
     }
 
     @Override
-    public int getStreamingTokenFor(String path, float volume, float pitch, boolean isLooping, boolean usesPause, boolean underwater) {
-        if(pathToToken.containsKey(path)) {
+    public int getStreamingTokenFor(String path, float volume, float pitch, boolean isLooping, boolean usesPause,
+            boolean underwater) {
+        if (pathToToken.containsKey(path)) {
             return pathToToken.get(path);
         }
 
         int token = getNewStreamingToken();
 
         registerStreaming("" + token, path, volume, pitch, isLooping, usesPause, underwater, this);
-        
+
         pathToToken.put(path, token);
-        
+
         return token;
     }
 }

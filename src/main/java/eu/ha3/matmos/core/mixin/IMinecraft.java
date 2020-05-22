@@ -12,7 +12,7 @@ import net.minecraft.client.resources.IResourcePack;
 public interface IMinecraft {
     @Accessor("defaultResourcePacks")
     List<IResourcePack> defaultResourcePacks();
-    
+
     @Accessor("renderPartialTicksPaused")
     float renderPartialTicksPaused();
 }

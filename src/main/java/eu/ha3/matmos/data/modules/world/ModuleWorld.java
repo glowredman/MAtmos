@@ -23,8 +23,8 @@ public class ModuleWorld extends ModuleProcessor implements Module {
         WorldInfo info = w.getWorldInfo();
         BlockPos pos = MAtUtil.getPlayerPos();
         Biome biome = w.getBiome(pos);
-        
-        setValue("time_modulo24k", (int)(info.getWorldTime() % 24000L));
+
+        setValue("time_modulo24k", (int) (info.getWorldTime() % 24000L));
         setValue("rain", w.isRaining());
         setValue("thunder", info.isThundering());
         setValue("thunder", w.getThunderStrength(0f) > 0.9f);
@@ -34,14 +34,14 @@ public class ModuleWorld extends ModuleProcessor implements Module {
         setValue("moon_phase", w.getMoonPhase());
         setValue("can_rain_on", MAtUtil.canSeeSky(pos));
         setValue("can_snow_here", w.provider.canSnowAt(pos, false));
-        
+
         setValue("biome_can_rain", biome.canRain());
         setValue("biome_is_snowy", biome.getEnableSnow());
         setValue("biome_temperature", Math.round(biome.getTemperature(pos) * 1000));
         setValue("biome_rainfall", Math.round(biome.getRainfall() * 1000));
-        
+
         setValue("can_rain_here", biome.canRain() && biome.getTemperature(pos) > 0.15f);
-        
+
         setValue("rain_force1k", Math.round(w.getRainStrength(0f) * 1000));
         setValue("thunder_force1k", Math.round(w.getThunderStrength(0f) * 1000));
 

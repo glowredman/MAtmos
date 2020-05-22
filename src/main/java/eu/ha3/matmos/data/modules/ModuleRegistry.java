@@ -86,21 +86,21 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
     private void addModule(Module module) {
         modules.put(module.getName(), module);
         if (module instanceof PassOnceModule) {
-            passOnceModules.put(module.getName(), ((PassOnceModule)module).getSubModules());
-            passOnceSubmodules.addAll(((PassOnceModule)module).getSubModules());
+            passOnceModules.put(module.getName(), ((PassOnceModule) module).getSubModules());
+            passOnceSubmodules.addAll(((PassOnceModule) module).getSubModules());
         }
     }
 
     /**
-     * Adds a module after setting an cycle on it, if it's an instance of a ProcessorModel. Cycle: Every
-     * n ticks. Cycle = 1: Every ticks.
+     * Adds a module after setting an cycle on it, if it's an instance of a
+     * ProcessorModel. Cycle: Every n ticks. Cycle = 1: Every ticks.
      *
      * @param module
      * @param cycle
      */
     private void addModule(Module module, int cycle) {
         if (module instanceof ProcessorModel) {
-            ((ProcessorModel)module).setInterval(cycle - 1);
+            ((ProcessorModel) module).setInterval(cycle - 1);
         }
         addModule(module);
     }
@@ -145,36 +145,32 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         addModule(new ModulePotionStrength(data));
         addModule(new ModuleCollission(data));
 
-        //this.frequent.add(new MAtProcessorEntityDetector(
-        //	this.mod, this.data, "DetectMinDist", "Detect", "_Deltas", ENTITYIDS_MAX, 2, 5, 10, 20, 50));
+        // this.frequent.add(new MAtProcessorEntityDetector(
+        // this.mod, this.data, "DetectMinDist", "Detect", "_Deltas", ENTITYIDS_MAX, 2,
+        // 5, 10, 20, 50));
         // 16 * 8 * 16
-        largeScanner = new ScannerModule(
-                ScanVolumetric.class, this.data, "_POM__scan_large", "scan_large",
-                Arrays.asList(ScannerModule.Submodule.THOUSAND, ScannerModule.Submodule.ABOVE, ScannerModule.Submodule.BELOW),
-                8, 10, 20 /*256*/, 64, 32, 64, 16 * 8 * 16/*64 * 64 * 2*/);
+        largeScanner = new ScannerModule(ScanVolumetric.class, this.data, "_POM__scan_large", "scan_large", Arrays
+                .asList(ScannerModule.Submodule.THOUSAND, ScannerModule.Submodule.ABOVE, ScannerModule.Submodule.BELOW),
+                8, 10, 20 /* 256 */, 64, 32, 64, 16 * 8 * 16/* 64 * 64 * 2 */);
         addModule(largeScanner);
-        
-        addModule(new ScannerModule(
-                ScanRaycast.class, this.data, "_POM__scan_raycast", "scan_raycast", 
-                Arrays.asList(ScannerModule.Submodule.WEIGHTED, ScannerModule.Submodule.ABOVE, ScannerModule.Submodule.BELOW),
+
+        addModule(new ScannerModule(ScanRaycast.class, this.data, "_POM__scan_raycast", "scan_raycast", Arrays
+                .asList(ScannerModule.Submodule.WEIGHTED, ScannerModule.Submodule.ABOVE, ScannerModule.Submodule.BELOW),
                 -1, -1, -1, 100, 100, 100, 10));
         // scan_raycast has to be added BEFORE scan_air, because scan_air depends on it
-        
-        this.mediumScanner = new ScannerModule(
-                ScanAir.class, data.getSheet("scan_raycast"),
-                this.data, "_POM__scan_air", "scan_air", Arrays.asList(ScannerModule.Submodule.THOUSAND),
-                -1, -1, 20, 31, 31, 31, 31*31*4);
+
+        this.mediumScanner = new ScannerModule(ScanAir.class, data.getSheet("scan_raycast"), this.data,
+                "_POM__scan_air", "scan_air", Arrays.asList(ScannerModule.Submodule.THOUSAND), -1, -1, 20, 31, 31, 31,
+                31 * 31 * 4);
         addModule(this.mediumScanner);
-        
+
         // 16 * 4 * 16
-        addModule(new ScannerModule(
-                ScanVolumetric.class, this.data, "_POM__scan_small", "scan_small", 
-                Arrays.asList(ScannerModule.Submodule.THOUSAND),
-                -1, -1, 2 /*64*/, 16, 8, 16, 16 * 4 * 16));
+        addModule(new ScannerModule(ScanVolumetric.class, this.data, "_POM__scan_small", "scan_small",
+                Arrays.asList(ScannerModule.Submodule.THOUSAND), -1, -1, 2 /* 64 */, 16, 8, 16, 16 * 4 * 16));
         // Each ticks, check half of the small scan
-        
+
         addModule(new ModuleDebug(data));
-        
+
         Matmos.LOGGER.info("Modules initialized: " + Arrays.toString(new TreeSet<>(modules.keySet()).toArray()));
     }
 
@@ -224,7 +220,8 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         requiredModules.removeAll(deltaModules);
         requiredModules.addAll(actualModules);
 
-        // Find missing modules. We don't want to iterate and check through invalid modules.
+        // Find missing modules. We don't want to iterate and check through invalid
+        // modules.
         Set<String> missingModules = new HashSet<>();
         for (String module : requiredModules) {
             if (!modules.containsKey(module) && !passOnceSubmodules.contains(module)) {

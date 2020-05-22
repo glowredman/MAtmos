@@ -10,7 +10,8 @@ public final class ExpansionIdentity {
     private final ResourceLocation location;
     private final float volumeModifier;
 
-    public ExpansionIdentity(String uniqueName, String friendlyName, IResourcePack pack, ResourceLocation location, float volumeModifier) {
+    public ExpansionIdentity(String uniqueName, String friendlyName, IResourcePack pack, ResourceLocation location,
+            float volumeModifier) {
         this.uniqueName = uniqueName;
         this.friendlyName = friendlyName;
         this.pack = pack;
@@ -33,7 +34,7 @@ public final class ExpansionIdentity {
     public ResourceLocation getLocation() {
         return location;
     }
-    
+
     public float getVolumeModifier() {
         return volumeModifier;
     }

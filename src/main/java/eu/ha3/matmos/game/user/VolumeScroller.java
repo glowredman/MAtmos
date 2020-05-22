@@ -33,7 +33,7 @@ public class VolumeScroller extends Ha3Scroller {
         Minecraft mc = Minecraft.getMinecraft();
         FontRenderer fontRenderer = mc.fontRenderer;
 
-        String msgper = (int)Math.floor(doneValue * 100) + "%";
+        String msgper = (int) Math.floor(doneValue * 100) + "%";
 
         ScaledResolution screenRes = new ScaledResolution(mc);
 
@@ -45,14 +45,14 @@ public class VolumeScroller extends Ha3Scroller {
 
         fontRenderer.drawStringWithShadow(MESSAGE_TITLE, uposx + uwidth * 2, scrHeight / 2, 0xffffff);
 
-        fontRenderer.drawStringWithShadow(msgper, uposx + uwidth * 2, scrHeight / 2 + 10, 255 << 16
-                | (int)(200 + 55 * (doneValue < 1 ? 1 : 2 - doneValue)) << 8);
+        fontRenderer.drawStringWithShadow(msgper, uposx + uwidth * 2, scrHeight / 2 + 10,
+                255 << 16 | (int) (200 + 55 * (doneValue < 1 ? 1 : 2 - doneValue)) << 8);
 
         if (!knowsHowToUse) {
             float glocount = mod.util().getClientTick() + fspan;
-            int blink = (int)(200 + 55 * (Math.sin(glocount * Math.PI * 0.07) + 1) / 2F);
-            fontRenderer.drawStringWithShadow(
-                    MESSAGE_HINT, uposx + uwidth * 2, scrHeight / 2 + 10 * 2, blink << 16 | blink << 8 | blink);
+            int blink = (int) (200 + 55 * (Math.sin(glocount * Math.PI * 0.07) + 1) / 2F);
+            fontRenderer.drawStringWithShadow(MESSAGE_HINT, uposx + uwidth * 2, scrHeight / 2 + 10 * 2,
+                    blink << 16 | blink << 8 | blink);
 
             if (Math.abs(getInitialPitch() - getPitch()) > 60) {
                 knowsHowToUse = true;
@@ -61,11 +61,11 @@ public class VolumeScroller extends Ha3Scroller {
 
         }
 
-        fontRenderer.drawStringWithShadow(
-                MESSAGE_MORE, uposx + uwidth * 2, scrHeight / 2 - scrHeight / 6 + 3, 0xffff00);
+        fontRenderer.drawStringWithShadow(MESSAGE_MORE, uposx + uwidth * 2, scrHeight / 2 - scrHeight / 6 + 3,
+                0xffff00);
 
-        fontRenderer.drawStringWithShadow(
-                MESSAGE_LESS, uposx + uwidth * 2, scrHeight / 2 + scrHeight / 6 + 3, 0xffff00);
+        fontRenderer.drawStringWithShadow(MESSAGE_LESS, uposx + uwidth * 2, scrHeight / 2 + scrHeight / 6 + 3,
+                0xffff00);
 
         final int ucount = 8;
         final float speedytude = 20;
@@ -73,8 +73,8 @@ public class VolumeScroller extends Ha3Scroller {
             float perx = ((getPitch() + 90F) % speedytude / speedytude + i) / ucount;
             double pirx = Math.cos(Math.PI * perx);
 
-            fontRenderer.drawStringWithShadow(
-                    "_", uposx, scrHeight / 2 + (int)Math.floor(pirx * scrHeight / 6), 0xffff00);
+            fontRenderer.drawStringWithShadow("_", uposx, scrHeight / 2 + (int) Math.floor(pirx * scrHeight / 6),
+                    0xffff00);
 
         }
 
@@ -93,16 +93,16 @@ public class VolumeScroller extends Ha3Scroller {
     protected void doRoutineBefore() {
         final int caps = 10;
         if (mod.getConfig().getBoolean("sound.autopreview")
-                && (int)Math.floor((prevPitch + 90F) / caps) != (int)Math.floor((getPitch() + 90F) / caps)) {
+                && (int) Math.floor((prevPitch + 90F) / caps) != (int) Math.floor((getPitch() + 90F) / caps)) {
             // Calculate volume from 0f to 2f
             float hgn = (-getPitch() + 90F) / 90F;
 
             // Calculate pitch
-            float res = (float)Math.pow(2, -Math.floor(getPitch() / caps) / 12);
+            float res = (float) Math.pow(2, -Math.floor(getPitch() / caps) / 12);
 
             EntityPlayer ply = Minecraft.getMinecraft().player;
 
-            MAtUtil.playSound("ui.button.click", (float)ply.posX, (float)ply.posY, (float)ply.posZ, hgn, res);
+            MAtUtil.playSound("ui.button.click", (float) ply.posX, (float) ply.posY, (float) ply.posZ, hgn, res);
 
         }
 

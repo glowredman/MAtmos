@@ -4,7 +4,7 @@ public interface SheetCommander<T> {
     /**
      * Tells if the sheet index exists
      *
-     * @param  sheetIndex
+     * @param sheetIndex
      * @return
      */
     boolean exists(SheetIndex sheetIndex);
@@ -12,7 +12,7 @@ public interface SheetCommander<T> {
     /**
      * Gets the version of the sheet index
      *
-     * @param  sheetIndex
+     * @param sheetIndex
      * @return
      */
     int version(SheetIndex sheetIndex);
@@ -20,7 +20,7 @@ public interface SheetCommander<T> {
     /**
      * Returns the value of the sheet index
      *
-     * @param  sheetIndex
+     * @param sheetIndex
      * @return
      */
     T get(SheetIndex sheetIndex);
@@ -28,8 +28,8 @@ public interface SheetCommander<T> {
     /**
      * Tells if a list has a certain value.
      *
-     * @param  constantX
-     * @param  value
+     * @param constantX
+     * @param value
      * @return
      */
     boolean listHas(String constantX, String value);

@@ -38,8 +38,10 @@ public class ModuleLegacyHitscan extends ModuleProcessor implements Module {
 
         setValue("mouse_over_something", mc.typeOfHit != Type.MISS);
         setValue("mouse_over_what_remapped", equiv.get(mc.typeOfHit));
-        setValue("block_as_number",
-                mc.typeOfHit == Type.BLOCK ? MAtUtil.legacyOf(MAtUtil.getBlockAt(mc.getBlockPos())) : LEGACY_NO_BLOCK_IN_THIS_CONTEXT);
-        setValue("meta_as_number", mc.typeOfHit == Type.BLOCK ? MAtUtil.getMetaAt(mc.getBlockPos(), LEGACY_NO_BLOCK_OUT_OF_BOUNDS) : LEGACY_NO_BLOCK_IN_THIS_CONTEXT);
+        setValue("block_as_number", mc.typeOfHit == Type.BLOCK ? MAtUtil.legacyOf(MAtUtil.getBlockAt(mc.getBlockPos()))
+                : LEGACY_NO_BLOCK_IN_THIS_CONTEXT);
+        setValue("meta_as_number",
+                mc.typeOfHit == Type.BLOCK ? MAtUtil.getMetaAt(mc.getBlockPos(), LEGACY_NO_BLOCK_OUT_OF_BOUNDS)
+                        : LEGACY_NO_BLOCK_IN_THIS_CONTEXT);
     }
 }

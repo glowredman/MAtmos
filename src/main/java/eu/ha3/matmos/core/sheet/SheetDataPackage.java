@@ -17,7 +17,7 @@ import net.minecraft.block.Block;
 public class SheetDataPackage implements DataPackage {
     private final Map<String, Sheet> sheets;
     private final Class<? extends Sheet> sheetType;
-    
+
     private boolean[] isReferenced = new boolean[Matmos.MAX_ID];
 
     public SheetDataPackage(Class<? extends Sheet> sheetType) {
@@ -55,15 +55,15 @@ public class SheetDataPackage implements DataPackage {
             sheet.clear();
         }
     }
-    
+
     public int dealiasID(int id) {
-        if(isReferenced[id]) {
+        if (isReferenced[id]) {
             return id;
         } else {
             return ExpansionManager.dealiasID(id);
         }
     }
-    
+
     public void addReferencedBlocks(List<Block> newReferencedBlocks) {
         newReferencedBlocks.stream().forEach(b -> isReferenced[Block.getIdFromBlock(b)] = true);
     }

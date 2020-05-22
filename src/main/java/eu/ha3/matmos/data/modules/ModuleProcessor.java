@@ -8,8 +8,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
- * A convenient class for modules that use the processor model. When calling process(), doProcess()
- * is called first, then the virtual sheets are applied at the end.
+ * A convenient class for modules that use the processor model. When calling
+ * process(), doProcess() is called first, then the virtual sheets are applied
+ * at the end.
  *
  * @author Hurry
  */

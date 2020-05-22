@@ -26,7 +26,7 @@ public class ModuleLegacy extends ModuleProcessor implements Module {
 
         Entity ride = player.getRidingEntity();
 
-        setValue("player_health_ceil", (int)Math.ceil(player.getHealth()));
+        setValue("player_health_ceil", (int) Math.ceil(player.getHealth()));
         setValue("world_nether", player.dimension == -1);
         setValue("player_current_item_as_number", number(player.inventory.getCurrentItem()));
 
@@ -39,8 +39,8 @@ public class ModuleLegacy extends ModuleProcessor implements Module {
         setValue("armor_3_as_number", number(player.inventory.armorInventory.get(3)));
         setValue("gui_instanceof_container", mc.currentScreen != null && mc.currentScreen instanceof GuiContainer);
         setValue("riding_horse", ride != null && ride instanceof EntityHorse);
-        setValue("seed_higher", (int)(mc.world.getSeed() >> 32));
-        setValue("seed_lower", (int)(mc.world.getSeed() & 0xFFFFFFFF));
+        setValue("seed_higher", (int) (mc.world.getSeed() >> 32));
+        setValue("seed_lower", (int) (mc.world.getSeed() & 0xFFFFFFFF));
     }
 
     private int number(ItemStack item) {

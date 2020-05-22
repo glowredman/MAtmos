@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose;
 public class SerialMachineStreamPair {
     @Expose
     public List<SerialMachineStream> indoor = new ArrayList<>();
-    
+
     @Expose
     public List<SerialMachineStream> outdoor = new ArrayList<>();
 }

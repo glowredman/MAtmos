@@ -20,8 +20,8 @@ public class PluggableIntoMAtmos implements Pluggable {
     public PluggableIntoMAtmos(Matmos mod, Expansion expansion) {
         this.mod = mod;
         if (expansion.obtainDebugUnit() instanceof FolderExpansionDebugUnit) {
-            file = ((FolderExpansionDebugUnit)expansion.obtainDebugUnit()).getExpansionFile();
-            workingDirectory = ((FolderExpansionDebugUnit)expansion.obtainDebugUnit()).getExpansionFolder();
+            file = ((FolderExpansionDebugUnit) expansion.obtainDebugUnit()).getExpansionFile();
+            workingDirectory = ((FolderExpansionDebugUnit) expansion.obtainDebugUnit()).getExpansionFolder();
             isReadOnly = false;
         } else {
             isReadOnly = true;
@@ -38,7 +38,8 @@ public class PluggableIntoMAtmos implements Pluggable {
             if (opt.isPresent()) {
                 Expansion expansion = opt.get();
 
-                mod.getChatter().printChat(TextFormatting.AQUA, "Reloading from editor state: " + expansion.getName() + " " + getTimestamp());
+                mod.getChatter().printChat(TextFormatting.AQUA,
+                        "Reloading from editor state: " + expansion.getName() + " " + getTimestamp());
                 expansion.pushDebugJsonAndRefreshKnowledge(json);
             }
         });
@@ -48,7 +49,8 @@ public class PluggableIntoMAtmos implements Pluggable {
     public void reloadFromDisk() {
         mod.queueForNextTick(() -> {
             mod.getExpansionEffort(expansionName).ifPresent(expansion -> {
-                mod.getChatter().printChat(TextFormatting.BLUE, "Reloading from disk: ", expansion.getName() + " " + getTimestamp());
+                mod.getChatter().printChat(TextFormatting.BLUE, "Reloading from disk: ",
+                        expansion.getName() + " " + getTimestamp());
                 expansion.refreshKnowledge();
             });
         });

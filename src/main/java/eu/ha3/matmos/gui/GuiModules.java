@@ -44,15 +44,19 @@ public class GuiModules extends GuiScreen {
         final int _SEPARATOR = 10;
         final int _TURNOFFWIDTH = _WIDTH / 5;
 
-        buttonList.add(new GuiButton(201, _LEFT + _MIX + _WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH + _GAP, _SEPARATOR + _MIX * (5 + 4), _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.discard")));
-        buttonList.add(new GuiButton(202, _LEFT + _MIX + _WIDTH - _MIX * 2 + _GAP, _SEPARATOR + _MIX * (5 + 4), _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.deltas")));
+        buttonList.add(new GuiButton(201, _LEFT + _MIX + _WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH + _GAP,
+                _SEPARATOR + _MIX * (5 + 4), _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.discard")));
+        buttonList.add(new GuiButton(202, _LEFT + _MIX + _WIDTH - _MIX * 2 + _GAP, _SEPARATOR + _MIX * (5 + 4),
+                _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.deltas")));
 
         for (int id = 0; id < val.size(); id++) {
             int flid = id / 18;
-            buttonList.add(new GuiButton(id, _LEFT + flid * _WIDTH / 3, _SEPARATOR + _MIX / 2 * (id % 18), _WIDTH / 3, _UNIT / 2, val.get(id)));
+            buttonList.add(new GuiButton(id, _LEFT + flid * _WIDTH / 3, _SEPARATOR + _MIX / 2 * (id % 18), _WIDTH / 3,
+                    _UNIT / 2, val.get(id)));
         }
 
-        buttonList.add(new GuiButton(200, _LEFT + _MIX, _SEPARATOR + _MIX * (5 + 4), _WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.done")));
+        buttonList.add(new GuiButton(200, _LEFT + _MIX, _SEPARATOR + _MIX * (5 + 4),
+                _WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.done")));
     }
 
     @Override

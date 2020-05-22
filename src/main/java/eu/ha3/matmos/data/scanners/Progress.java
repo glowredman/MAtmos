@@ -9,8 +9,8 @@ public interface Progress {
     int getProgress_Current();
 
     /**
-     * Returns the total value to "complete". Never set the total to zero, to prevent division by zero
-     * errors.
+     * Returns the total value to "complete". Never set the total to zero, to
+     * prevent division by zero errors.
      *
      * @return
      */

@@ -34,7 +34,8 @@ public class GuiExpansionDetails extends GuiScreen {
     public void drawScreen(int par1, int par2, float par3) {
         drawGradientRect(0, 0, width, height, 0xF0000000, 0x90000000);
 
-        drawCenteredString(fontRenderer, I18n.format("mat.mode.dev", expansion.getFriendlyName(), expansion.getName()), width / 2, 4, 0xffffff);
+        drawCenteredString(fontRenderer, I18n.format("mat.mode.dev", expansion.getFriendlyName(), expansion.getName()),
+                width / 2, 4, 0xffffff);
 
         debug.onFrame(0f);
 
@@ -93,7 +94,7 @@ public class GuiExpansionDetails extends GuiScreen {
 
             if (debugUnit instanceof FolderExpansionDebugUnit) {
 
-                File expFolder = ((FolderExpansionDebugUnit)debugUnit).getExpansionFolder();
+                File expFolder = ((FolderExpansionDebugUnit) debugUnit).getExpansionFolder();
                 File minecraftFolder = new File(expFolder, "assets/minecraft/");
 
                 if (minecraftFolder.exists()) {

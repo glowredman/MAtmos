@@ -14,24 +14,26 @@ import org.apache.logging.log4j.Logger;
 import eu.ha3.util.property.simple.ConfigProperty;
 import net.minecraft.launchwrapper.Launch;
 
-/** Class for statically initializing and accessing the config.
- * Required to make it possible to access the config from the coremod/tweaker.
+/**
+ * Class for statically initializing and accessing the config. Required to make
+ * it possible to access the config from the coremod/tweaker.
  */
 
 public class ConfigManager {
-    
+
     private static final Logger LOGGER = LogManager.getLogger("matmos");
-    
+
     private static final ConfigProperty config = new ConfigProperty();
     private static boolean hasInitialized = false;
-    
+
     private static File configFolder = null;
-    
+
     private static void initConfig() {
         // Create default configuration
-        
+
         config.setProperty("world.height", 256);
-        config.setProperty("world.maxblockid", 4096, "The max block ID. This is 4096 normally, but there are mods that raise it. Getting an ArrayIndexOutOfBoundsException is indication that it needs to be raised.");
+        config.setProperty("world.maxblockid", 4096,
+                "The max block ID. This is 4096 normally, but there are mods that raise it. Getting an ArrayIndexOutOfBoundsException is indication that it needs to be raised.");
         config.setProperty("dump.sheets.enabled", false);
         config.setProperty("start.enabled", true, "If false, MAtmos won't start until the MAtmos key is pressed.");
         config.setProperty("reversed.controls", false);
@@ -43,17 +45,21 @@ public class ConfigManager {
         config.setProperty("useroptions.biome.override", -1);
         config.setProperty("debug.mode", 0);
         config.setProperty("minecraftsound.ambient.volume", 1f);
-        config.setProperty("coremod.replacesoundsystem", "auto", "There's a bug in Minecraft's sound system that causes it to crash after some time if looping streams are played.\n" +
-                                                                 "Forge provides a fix for this in 1.12.2, but MAtmos has to provide its own fix on 1.7.10, and on LiteLoader versions.\n" +
-                                                                 "Use this option to control when the SoundSystem should be overridden.\n\n" +
-                                                                 "Allowed values are: always, never, auto (which only overrides if no other mod is present which also overrides it (like DynamicSurroundings on 1.7.10, or Forge itself on 1.12.2))");
-        config.setProperty("dimensions.list", "", "Comma-separated list of dimensions. If dimensions.listtype is black, then ambience will NOT be played in these dimensions.\n" +
-                                                  "If it's white, then ambience will ONLY play in these dimensions.\n");
+        config.setProperty("coremod.replacesoundsystem", "auto",
+                "There's a bug in Minecraft's sound system that causes it to crash after some time if looping streams are played.\n"
+                        + "Forge provides a fix for this in 1.12.2, but MAtmos has to provide its own fix on 1.7.10, and on LiteLoader versions.\n"
+                        + "Use this option to control when the SoundSystem should be overridden.\n\n"
+                        + "Allowed values are: always, never, auto (which only overrides if no other mod is present which also overrides it (like DynamicSurroundings on 1.7.10, or Forge itself on 1.12.2))");
+        config.setProperty("dimensions.list", "",
+                "Comma-separated list of dimensions. If dimensions.listtype is black, then ambience will NOT be played in these dimensions.\n"
+                        + "If it's white, then ambience will ONLY play in these dimensions.\n");
         config.setProperty("dimensions.listtype", "black", "BLACK or WHITE?\n");
-        config.setProperty("rain.suppress", true, "Set to true to mute the rain sounds of vanilla or other mods. If set to false, a soundpack that supports this option won't play its own rain.\n");
-        config.setProperty("rain.soundlist", "weather.rain,weather.rain.above,ambient.weather.rain", "Comma-separated list of rain sounds to suppress");
+        config.setProperty("rain.suppress", true,
+                "Set to true to mute the rain sounds of vanilla or other mods. If set to false, a soundpack that supports this option won't play its own rain.\n");
+        config.setProperty("rain.soundlist", "weather.rain,weather.rain.above,ambient.weather.rain",
+                "Comma-separated list of rain sounds to suppress");
         config.commit();
-        
+
         config.setGlobalDescription("Tip: restart MAtmos to reload the configs without restarting Minecraft");
 
         // Load configuration from source
@@ -64,42 +70,41 @@ public class ConfigManager {
             e.printStackTrace();
             throw new RuntimeException("Error caused config not to work: " + e.getMessage());
         }
-        
+
         hasInitialized = true;
     }
-    
+
     public static ConfigProperty getConfig() {
-        if(!hasInitialized) {
+        if (!hasInitialized) {
             initConfig();
         }
         return config;
     }
-    
+
     public static File getConfigFolder() {
-        if(configFolder == null) {
+        if (configFolder == null) {
             configFolder = new File(Launch.minecraftHome, "config/matmos");
         }
         return configFolder;
     }
-    
+
     public static void createDefaultConfigFileIfMissing(File configFile) {
         Path configFolderPath = Paths.get(getConfigFolder().getPath());
         Path configFilePath = Paths.get(configFile.getPath());
-        
+
         Path relPath = configFolderPath.relativize(configFilePath);
-        
-        if(configFilePath.startsWith(configFolderPath)) {
-            if(!configFile.exists()) {
+
+        if (configFilePath.startsWith(configFolderPath)) {
+            if (!configFile.exists()) {
                 try {
-                    InputStream defaultFileStream = ConfigManager.class.getClassLoader()
-                    .getResourceAsStream(Paths.get("assets/matmos/default_config/").resolve(relPath)
-                            .toString().replace('\\', '/'));
+                    InputStream defaultFileStream = ConfigManager.class.getClassLoader().getResourceAsStream(
+                            Paths.get("assets/matmos/default_config/").resolve(relPath).toString().replace('\\', '/'));
                     // Paths need to have forward slashes in jars
-                    
-                    if(defaultFileStream != null) {
+
+                    if (defaultFileStream != null) {
                         String contents = IOUtils.toString(defaultFileStream);
-                        
-                        try(FileWriter out = new FileWriter(configFile)){
+
+                        try (FileWriter out = new FileWriter(configFile)) {
                             IOUtils.write(contents, out);
                         }
                     }
@@ -108,7 +113,8 @@ public class ConfigManager {
                 }
             }
         } else {
-            LOGGER.debug("Invalid argument for creating default config file: " + relPath.toString() + " (file is not in the config directory)");
+            LOGGER.debug("Invalid argument for creating default config file: " + relPath.toString()
+                    + " (file is not in the config directory)");
         }
     }
 }

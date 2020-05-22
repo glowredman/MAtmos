@@ -52,8 +52,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 
 public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, SupportsInGameChangeEvents,
-                                        SupportsBlockChangeEvents, SupportsSoundEvents,
-                                        NotifiableHaddon, IResourceManagerReloadListener, Stable {
+        SupportsBlockChangeEvents, SupportsSoundEvents, NotifiableHaddon, IResourceManagerReloadListener, Stable {
     private static final boolean _COMPILE_IS_UNSTABLE = false;
 
     public static final Logger LOGGER = LogManager.getLogger("matmos");
@@ -69,7 +68,8 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     // NotifiableHaddon and UpdateNotifier
     private final ConfigProperty config = ConfigManager.getConfig();
     private final Chatter chatter = new Chatter(this, "<MAtmos> ");
-    private final UpdateNotifier updateNotifier = new UpdateNotifier(this, new HaddonVersion(FOR + "-" + VERSION), UPDATE_JSON);
+    private final UpdateNotifier updateNotifier = new UpdateNotifier(this, new HaddonVersion(FOR + "-" + VERSION),
+            UPDATE_JSON);
 
     // State
     private boolean isListenerInstalled;
@@ -78,7 +78,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     private boolean isDebugMode;
 
     private static List<SupportsBlockChangeEvents> blockChangeListeners = new LinkedList<>();
-    
+
     public static final int MAX_ID;
 
     // Components
@@ -98,21 +98,21 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     static {
         MAX_ID = ConfigManager.getConfig().getInteger("world.maxblockid");
     }
-    
+
     @Override
     public void onLoad() {
-        if(SoundSystemReplacerTransformer.hasMadeChanges()) {
+        if (SoundSystemReplacerTransformer.hasMadeChanges()) {
             LOGGER.info("Overriding SoundSystem was successful!");
         } else {
             LOGGER.info("SoundSystem was not overridden.");
         }
-        
+
         this.<OperatorCaster>op().setTickEnabled(true);
         this.<OperatorCaster>op().setFrameEnabled(true);
 
         TimeStatistic timeMeasure = new TimeStatistic(Locale.ENGLISH);
         userControl = new UserControl(this);
-        
+
         updateNotifier.fillDefaults(config);
         config.setProperty("version.last", VERSION);
         config.setProperty("version.warnunstable", 3);
@@ -127,8 +127,6 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
         LOGGER.info("Took " + timeMeasure.getSecondsAsString(3) + " seconds to setup MAtmos base.");
     }
-    
-    
 
     private void resetAmbientVolume() {
         setSoundLevelAmbient(config.getFloat("minecraftsound.ambient.volume"));
@@ -170,19 +168,19 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     public void activate() {
         activate(true);
     }
-    
+
     public void activate(boolean reloadConfigs) {
         if (isActivated()) {
             return;
         }
         LOGGER.info("Loading...");
-        
-        if(reloadConfigs) {
+
+        if (reloadConfigs) {
             config.load();
         }
-        
+
         simulacrum = Optional.of(new Simulacrum(this));
-        
+
         LOGGER.info("Loaded.");
     }
 
@@ -213,7 +211,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     @Override
     public void onTick() {
         Minecraft.getMinecraft().profiler.startSection("ontick");
-        
+
         userControl.onTick();
         if (isActivated()) {
             if (!queue.isEmpty()) {
@@ -238,60 +236,63 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
                 resetAmbientVolume();
             }
 
-        if (!hasFirstTickPassed) {
-            hasFirstTickPassed = true;
-            updateNotifier.attempt();
-            if (_COMPILE_IS_UNSTABLE) {
-                String lastVersion = config.getString("version.last");
-                int warns = config.getInteger("version.warnunstable");
-                if (!lastVersion.equals(VERSION)) {
-                    warns = 3;
-                    config.setProperty("version.last", VERSION);
-                }
-                if (warns > 0) {
-                    warns--;
-                    config.setProperty("version.warnunstable", warns);
-                    getChatter().printChat(
-                            TextFormatting.RED, "You are using an ", TextFormatting.YELLOW, "Unofficial Beta", TextFormatting.RED, " version of MAtmos.");
-                    getChatter().printChatShort("By using this version, you understand that this mod isn't intended for " +
-                            "actual game sessions, MAtmos may not work, might crash, the sound ambience is incomplete, etc. Use at your own risk. ");
-                    getChatter().printChatShort("Please check regularly for updates and resource pack updates.");
+            if (!hasFirstTickPassed) {
+                hasFirstTickPassed = true;
+                updateNotifier.attempt();
+                if (_COMPILE_IS_UNSTABLE) {
+                    String lastVersion = config.getString("version.last");
+                    int warns = config.getInteger("version.warnunstable");
+                    if (!lastVersion.equals(VERSION)) {
+                        warns = 3;
+                        config.setProperty("version.last", VERSION);
+                    }
                     if (warns > 0) {
-                        getChatter().printChatShort("This message will appear ", TextFormatting.YELLOW, warns, " more times.");
+                        warns--;
+                        config.setProperty("version.warnunstable", warns);
+                        getChatter().printChat(TextFormatting.RED, "You are using an ", TextFormatting.YELLOW,
+                                "Unofficial Beta", TextFormatting.RED, " version of MAtmos.");
+                        getChatter().printChatShort(
+                                "By using this version, you understand that this mod isn't intended for "
+                                        + "actual game sessions, MAtmos may not work, might crash, the sound ambience is incomplete, etc. Use at your own risk. ");
+                        getChatter().printChatShort("Please check regularly for updates and resource pack updates.");
+                        if (warns > 0) {
+                            getChatter().printChatShort("This message will appear ", TextFormatting.YELLOW, warns,
+                                    " more times.");
+                        }
+                    }
+                    if (config.commit()) {
+                        config.save();
                     }
                 }
-                if (config.commit()) {
-                    config.save();
+
+                if (isDebugMode()) {
+                    getChatter().printChat(TextFormatting.GOLD, "Developer mode is enabled in the Advanced options.");
+                    getChatter().printChatShort("This affects performance. Your game may run slower.");
+                }
+
+                if (!simulacrum.get().hasResourcePacks()) {
+                    hasResourcePacks_FixMe = true;
+                    if (simulacrum.get().hasDisabledResourcePacks()) {
+                        chatter.printChat(TextFormatting.RED, "Resource Pack not enabled yet!");
+                        chatter.printChatShort(TextFormatting.WHITE,
+                                "You need to activate \"MAtmos Resource Pack\" in the Minecraft Options menu for it to run.");
+                    } else {
+                        chatter.printChat(TextFormatting.RED, "Resource Pack missing from resourcepacks/!");
+                        chatter.printChatShort(TextFormatting.WHITE,
+                                "You may have forgotten to put the Resource Pack file into your resourcepacks/ folder.");
+                    }
                 }
             }
-
-            if (isDebugMode()) {
-                getChatter().printChat(TextFormatting.GOLD, "Developer mode is enabled in the Advanced options.");
-                getChatter().printChatShort("This affects performance. Your game may run slower.");
-            }
-
-            if (!simulacrum.get().hasResourcePacks()) {
-                hasResourcePacks_FixMe = true;
-                if (simulacrum.get().hasDisabledResourcePacks()) {
-                    chatter.printChat(TextFormatting.RED, "Resource Pack not enabled yet!");
-                    chatter.printChatShort(TextFormatting.WHITE, "You need to activate \"MAtmos Resource Pack\" in the Minecraft Options menu for it to run.");
-                } else {
-                    chatter.printChat(TextFormatting.RED, "Resource Pack missing from resourcepacks/!");
-                    chatter.printChatShort(TextFormatting.WHITE, "You may have forgotten to put the Resource Pack file into your resourcepacks/ folder.");
-                }
-            }
-        }
 
             if (hasResourcePacks_FixMe && simulacrum.get().hasResourcePacks()) {
-            hasResourcePacks_FixMe = false;
-            chatter.printChat(TextFormatting.GREEN, "It should work now!");
-        }
+                hasResourcePacks_FixMe = false;
+                chatter.printChat(TextFormatting.GREEN, "It should work now!");
+            }
         } else if (isUnderwaterMode) {
             isUnderwaterMode = false;
             resetAmbientVolume();
         }
 
-        
         Minecraft.getMinecraft().profiler.endSection();
     }
 
@@ -355,7 +356,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     }
 
     public ISoundHandler getSoundHandler() {
-        return ((ISoundHandler)Minecraft.getMinecraft().getSoundHandler());
+        return ((ISoundHandler) Minecraft.getMinecraft().getSoundHandler());
     }
 
     public VolumeUpdatable getGlobalVolumeControl() {
@@ -381,11 +382,11 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
             simulacrum.get().saveConfig();
         }
     }
-    
+
     public void addUpdateNotifierJob(UpdatableIdentity id) {
         updateNotifier.addJob(id);
     }
-    
+
     public void attemptUpdateNotifier() {
         updateNotifier.attempt();
     }
@@ -411,7 +412,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     public void changedDebugMode() {
         isDebugMode = config.getInteger("debug.mode") > 0;
-        
+
         if (isDebugMode()) {
             getChatter().printChat(TextFormatting.GOLD, "Dev/Editor mode enabled.");
             getChatter().printChatShort("Enabling this mode may cause Minecraft to run slower.");
@@ -426,7 +427,8 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     }
 
     public Runnable instantiateRunnableEditor(Pluggable pluggable) {
-        return util().<Runnable>getInstantiator("eu.ha3.matmos.editor.EditorMaster", Pluggable.class).instantiate(pluggable);
+        return util().<Runnable>getInstantiator("eu.ha3.matmos.editor.EditorMaster", Pluggable.class)
+                .instantiate(pluggable);
     }
 
     public Optional<Expansion> getExpansionEffort(String expansionName) {
@@ -438,7 +440,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void onInGameChange(boolean inGame) {
-        if(inGame) {
+        if (inGame) {
             if (config.getBoolean("start.enabled")) {
                 start();
             }
@@ -446,26 +448,26 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
             deactivate();
         }
     }
-    
+
     @Override
     public void onBlockChanged(BlockChangeEvent event) {
         blockChangeListeners.forEach(l -> l.onBlockChanged(event));
     }
-    
+
     public static void addBlockChangeListener(SupportsBlockChangeEvents l) {
         blockChangeListeners.add(l);
     }
-    
+
     public static void removeBlockChangeListener(SupportsBlockChangeEvents l) {
         blockChangeListeners.remove(l);
     }
 
     @Override
     public boolean onSound(ISound sound, String name, SoundManager manager) {
-        boolean badSound = config.getBoolean("rain.suppress") 
-                && simulacrum.isPresent() && !simulacrum.get().getExpansions().isEmpty()
+        boolean badSound = config.getBoolean("rain.suppress") && simulacrum.isPresent()
+                && !simulacrum.get().getExpansions().isEmpty()
                 && Arrays.asList(config.getString("rain.soundlist").split(",")).contains(name);
-        
+
         return !badSound;
     }
 }

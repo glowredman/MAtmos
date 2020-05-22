@@ -61,7 +61,7 @@ public class Dynamic extends Component implements Evaluated, InformationContaine
     public Collection<String> getDependencies() {
         return dependencies;
     }
-    
+
     public List<SheetIndex> getIndexes() {
         return Collections.unmodifiableList(indexes);
     }

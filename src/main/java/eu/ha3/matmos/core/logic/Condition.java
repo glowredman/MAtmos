@@ -22,14 +22,17 @@ public class Condition extends MultistateComponent implements Dependable, Visual
 
     private final SheetCommander<String> sheetCommander;
 
-    // Fixes a bug where conditions don't evaluate for sheet indexes that don't exist
+    // Fixes a bug where conditions don't evaluate for sheet indexes that don't
+    // exist
     // Required for ALWAYS_TRUE / ALWAYS_FALSE
-    // This was caused by default value for undefined sheet indexes being -1 (equal to initial siVersion)
+    // This was caused by default value for undefined sheet indexes being -1 (equal
+    // to initial siVersion)
     private int siVersion = Integer.MIN_VALUE;
 
     private final Collection<String> dependencies;
 
-    public Condition(String name, SheetCommander<String> sheetCommander, SheetIndex index, Operator operator, String constant) {
+    public Condition(String name, SheetCommander<String> sheetCommander, SheetIndex index, Operator operator,
+            String constant) {
         super(name);
         this.sheetCommander = sheetCommander;
 
@@ -63,18 +66,18 @@ public class Condition extends MultistateComponent implements Dependable, Visual
         try {
             String value = sheetCommander.get(indexX);
             switch (operatorX) {
-                case IN_LIST:
-                    return sheetCommander.listHas(constantX, value);
-                case NOT_IN_LIST:
-                    return !sheetCommander.listHas(constantX, value);
-                default:
-                    if (constantLongX != null) {
-                        Long longValue = Numbers.toLong(value);
-                        if (longValue != null) {
-                            return operatorX.test(longValue, constantLongX);
-                        }
+            case IN_LIST:
+                return sheetCommander.listHas(constantX, value);
+            case NOT_IN_LIST:
+                return !sheetCommander.listHas(constantX, value);
+            default:
+                if (constantLongX != null) {
+                    Long longValue = Numbers.toLong(value);
+                    if (longValue != null) {
+                        return operatorX.test(longValue, constantLongX);
                     }
-                    return operatorX.test(value, constantX);
+                }
+                return operatorX.test(value, constantX);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,7 +100,7 @@ public class Condition extends MultistateComponent implements Dependable, Visual
 
         return indexX.getSheet() + ">" + indexX.getIndex() + ":[" + value + "] " + op + " " + constantX;
     }
-    
+
     public SheetIndex getIndex() {
         return indexX;
     }

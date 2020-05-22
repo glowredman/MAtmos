@@ -39,7 +39,7 @@ public class ModuleHorse extends ModuleProcessor implements Module {
             return;
         }
 
-        EntityHorse ride = (EntityHorse)xride;
+        EntityHorse ride = (EntityHorse) xride;
 
         setValue("jumping", ride.isHorseJumping());
         setValue("rearing", ride.isRearing());
@@ -47,26 +47,25 @@ public class ModuleHorse extends ModuleProcessor implements Module {
         setValue("leashed", ride.getLeashed());
         setValue("tame", ride.isTame());
         // TODO: Where'd it go?
-        //setValue("chested", ride.isChested());
+        // setValue("chested", ride.isChested());
         setValue("tame", ride.isTame());
         setValue("type", ride.isEntityUndead());
         setValue("variant", ride.getHorseVariant());
 
         setValue("name_tag", ride.getCustomNameTag());
 
-        setValue("health1k", (int)(ride.getHealth() * 1000));
+        setValue("health1k", (int) (ride.getHealth() * 1000));
         setValue("leashed_to_player", ride.getLeashed() && ride.getLeashHolder() instanceof EntityPlayer);
         setValue("ridden_by_owner",
-                ride.getControllingPassenger() instanceof EntityPlayer
-                        && ride.getOwnerUniqueId() != null
-                        && ride.getOwnerUniqueId().equals(((EntityPlayer)ride.getControllingPassenger()).getGameProfile().getId()));
-        setValue("leashed_to_owner",
-                ride.getLeashHolder() instanceof EntityPlayer
-                        && !ride.getOwnerUniqueId().toString().equals("")
-                        && ride.getOwnerUniqueId().equals(((EntityPlayer)ride.getLeashHolder()).getGameProfile().getId()));
+                ride.getControllingPassenger() instanceof EntityPlayer && ride.getOwnerUniqueId() != null
+                        && ride.getOwnerUniqueId()
+                                .equals(((EntityPlayer) ride.getControllingPassenger()).getGameProfile().getId()));
+        setValue("leashed_to_owner", ride.getLeashHolder() instanceof EntityPlayer
+                && !ride.getOwnerUniqueId().toString().equals("")
+                && ride.getOwnerUniqueId().equals(((EntityPlayer) ride.getLeashHolder()).getGameProfile().getId()));
 
         if (ride.getLeashed() && ride.getLeashHolder() != null) {
-            setValue("leash_distance", (int)(ride.getLeashHolder().getDistance(ride) * 1000));
+            setValue("leash_distance", (int) (ride.getLeashHolder().getDistance(ride) * 1000));
         } else {
             setValue("leash_distance", 0);
         }

@@ -12,8 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * An abstract module that extracts all enchantments associated to an item defined by the
- * implementing class.
+ * An abstract module that extracts all enchantments associated to an item
+ * defined by the implementing class.
  *
  * @author Hurry
  */

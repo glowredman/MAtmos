@@ -77,15 +77,15 @@ public class ModuleServerInfo extends ModuleProcessor implements Module {
 
                 if (portPart.charAt(0) == ':' && portPart.length() > 0) {
                     portPart = portPart.substring(1);
-                    splitIp = new String[] {ipPart, portPart};
+                    splitIp = new String[] { ipPart, portPart };
                 } else {
-                    splitIp = new String[] {ipPart};
+                    splitIp = new String[] { ipPart };
                 }
             }
         }
 
         if (splitIp.length > 2) {
-            splitIp = new String[] {playerDefinedAddress};
+            splitIp = new String[] { playerDefinedAddress };
         }
 
         String ipPotential = splitIp[0];
@@ -123,7 +123,7 @@ public class ModuleServerInfo extends ModuleProcessor implements Module {
 
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private static String[] resolveSRV(String resolve) {
         try {
             Hashtable hash = new Hashtable();
@@ -131,11 +131,11 @@ public class ModuleServerInfo extends ModuleProcessor implements Module {
             hash.put("java.naming.provider.url", "dns:");
 
             InitialDirContext idc = new InitialDirContext(hash);
-            Attributes att = idc.getAttributes("_minecraft._tcp." + resolve, new String[] {"SRV"});
+            Attributes att = idc.getAttributes("_minecraft._tcp." + resolve, new String[] { "SRV" });
             String[] cts = att.get("srv").get().toString().split(" ", 4);
-            return new String[] {cts[3], cts[2]};
+            return new String[] { cts[3], cts[2] };
         } catch (Throwable e) {
-            return new String[] {resolve, Integer.toString(25565)};
+            return new String[] { resolve, Integer.toString(25565) };
         }
     }
 

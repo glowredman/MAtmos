@@ -10,9 +10,9 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
 /**
- * An abstract module that extracts a certain quality of all potion effects (such as time,
- * strength...) that is currently affecting the player. The quality is defined by the implementing
- * class.
+ * An abstract module that extracts a certain quality of all potion effects
+ * (such as time, strength...) that is currently affecting the player. The
+ * quality is defined by the implementing class.
  *
  * @author Hurry
  */

@@ -27,7 +27,7 @@ public class SoundsJsonGenerator implements Runnable {
         this.jsonFile = jsonFile;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void run() {
         listAllFiles();

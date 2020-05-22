@@ -8,6 +8,6 @@ public interface ISoundHandler {
     SoundManager getSoundManager();
 
     default SoundSystem getSoundSystem() {
-        return ((ISoundManager)getSoundManager()).getSoundSystem();
+        return ((ISoundManager) getSoundManager()).getSoundSystem();
     }
 }

@@ -74,7 +74,8 @@ public class LegacySheetIndex_Engine0to1 implements SheetIndex {
         add(55, "ply_stats", "experience_level");
         add(56, "ply_stats", "experience_total");
 
-        //add(32, "ply_inventory", "current_item"); -> moved to player current item as number
+        // add(32, "ply_inventory", "current_item"); -> moved to player current item as
+        // number
         add(46, "ply_inventory", "held_slot");
         add(62, "ply_inventory", "current_damage");
 
@@ -102,10 +103,10 @@ public class LegacySheetIndex_Engine0to1 implements SheetIndex {
         add(37, "legacy_column", "y-2_as_number");
         add(94, "legacy_column", "y0_as_number");
         add(95, "legacy_column", "y1_as_number");
-        /*add(36, "cb_column", "y-1");
-        add(37, "cb_column", "y-2");
-        add(94, "cb_column", "y0");
-        add(95, "cb_column", "y1");*/
+        /*
+         * add(36, "cb_column", "y-1"); add(37, "cb_column", "y-2"); add(94,
+         * "cb_column", "y0"); add(95, "cb_column", "y1");
+         */
         add(26, "cb_column", "can_rain_reach");
         add(27, "cb_column", "topmost_block");
         add(28, "cb_column", "thickness_overhead");

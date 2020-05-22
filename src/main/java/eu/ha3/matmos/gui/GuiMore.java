@@ -38,20 +38,26 @@ public class GuiMore extends GuiScreen {
         final int _SEPARATOR = 10;
         final int _TURNOFFWIDTH = _WIDTH / 5;
 
-        buttonList.add(new GuiButton(211, _LEFT + _MIX, _MIX * (0 + 1), _WIDTH - _MIX * 2, _UNIT, mod.getConfig().getBoolean("reversed.controls") ? "Menu: Hold Down Key to open" : "Menu: Press Key to open"));
+        buttonList.add(new GuiButton(211, _LEFT + _MIX, _MIX * (0 + 1), _WIDTH - _MIX * 2, _UNIT,
+                mod.getConfig().getBoolean("reversed.controls") ? "Menu: Hold Down Key to open"
+                        : "Menu: Press Key to open"));
 
-        buttonList.add(new GuiButton(212, _LEFT + _MIX, _MIX * (1 + 1), _WIDTH - _MIX * 2, _UNIT, formatOpt("mat.options.ambience.low", mod.getConfig().getBoolean("useroptions.altitudes.low"))));
-        buttonList.add(new GuiButton(213, _LEFT + _MIX, _MIX * (2 + 1), _WIDTH - _MIX * 2, _UNIT, formatOpt("mat.options.ambience.high", mod.getConfig().getBoolean("useroptions.altitudes.high"))));
+        buttonList.add(new GuiButton(212, _LEFT + _MIX, _MIX * (1 + 1), _WIDTH - _MIX * 2, _UNIT,
+                formatOpt("mat.options.ambience.low", mod.getConfig().getBoolean("useroptions.altitudes.low"))));
+        buttonList.add(new GuiButton(213, _LEFT + _MIX, _MIX * (2 + 1), _WIDTH - _MIX * 2, _UNIT,
+                formatOpt("mat.options.ambience.high", mod.getConfig().getBoolean("useroptions.altitudes.high"))));
 
         GuiBiomeSlider biomeSlider = new GuiBiomeSlider(mod, mod.getConfig().getInteger("useroptions.biome.override"));
-        HGuiSliderControl biomeControl = new HGuiSliderControl(214, _LEFT, _MIX * (3 + 1), _WIDTH, _UNIT, "", biomeSlider.calculateSliderLocation(mod.getConfig().getInteger("useroptions.biome.override")));
+        HGuiSliderControl biomeControl = new HGuiSliderControl(214, _LEFT, _MIX * (3 + 1), _WIDTH, _UNIT, "",
+                biomeSlider.calculateSliderLocation(mod.getConfig().getInteger("useroptions.biome.override")));
 
         biomeControl.setListener(biomeSlider);
         biomeControl.setDisplayStringProvider(biomeSlider);
         biomeControl.updateDisplayString();
         buttonList.add(biomeControl);
 
-        HGuiSliderControl ambienceVolume = new HGuiSliderControl(216, _LEFT, _MIX * (4 + 1), _WIDTH, _UNIT, "", mod.getConfig().getFloat("minecraftsound.ambient.volume"));
+        HGuiSliderControl ambienceVolume = new HGuiSliderControl(216, _LEFT, _MIX * (4 + 1), _WIDTH, _UNIT, "",
+                mod.getConfig().getFloat("minecraftsound.ambient.volume"));
         ambienceVolume.setListener(new HSliderListener() {
 
             @Override
@@ -68,12 +74,15 @@ public class GuiMore extends GuiScreen {
             }
         });
         ambienceVolume.setDisplayStringProvider(() -> {
-            return I18n.format("mat.options.volume.ambient", (int)Math.floor(mod.getConfig().getFloat("minecraftsound.ambient.volume") * 100) + "%");
+            return I18n.format("mat.options.volume.ambient",
+                    (int) Math.floor(mod.getConfig().getFloat("minecraftsound.ambient.volume") * 100) + "%");
         });
         ambienceVolume.updateDisplayString();
         buttonList.add(ambienceVolume);
-        buttonList.add(new GuiButton(215, _LEFT + _MIX, _MIX * (6 + 1), _WIDTH - _MIX * 2, _UNIT, formatOpt("mat.options.devmode", mod.getConfig().getInteger("debug.mode") == 1)));
-        buttonList.add(new GuiButton(200, _LEFT + _MIX, _SEPARATOR + _MIX * (IDS_PER_PAGE + 4), _WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.done")));
+        buttonList.add(new GuiButton(215, _LEFT + _MIX, _MIX * (6 + 1), _WIDTH - _MIX * 2, _UNIT,
+                formatOpt("mat.options.devmode", mod.getConfig().getInteger("debug.mode") == 1)));
+        buttonList.add(new GuiButton(200, _LEFT + _MIX, _SEPARATOR + _MIX * (IDS_PER_PAGE + 4),
+                _WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH, _UNIT, I18n.format("mat.options.done")));
     }
 
     @Override
@@ -82,7 +91,8 @@ public class GuiMore extends GuiScreen {
             mc.displayGuiScreen(parentScreen);
         } else if (button.id == 211) {
             mod.getConfig().setProperty("reversed.controls", !mod.getConfig().getBoolean("reversed.controls"));
-            button.displayString = mod.getConfig().getBoolean("reversed.controls") ? "Menu: Hold Down Key to open" : "Menu: Press Key to open";
+            button.displayString = mod.getConfig().getBoolean("reversed.controls") ? "Menu: Hold Down Key to open"
+                    : "Menu: Press Key to open";
             mod.saveConfig();
         } else if (button.id == 212) {
             toggleOption("useroptions.altitudes.low", "mat.options.ambience.low", button);
@@ -90,7 +100,9 @@ public class GuiMore extends GuiScreen {
             toggleOption("useroptions.altitudes.high", "mat.options.ambience.high", button);
         } else if (button.id == 215) {
             mod.getConfig().setProperty("debug.mode", mod.getConfig().getInteger("debug.mode") == 0 ? 1 : 0);
-            button.displayString = mod.getConfig().getInteger("debug.mode") == 1 ? TextFormatting.GOLD + "Dev/Editor mode: ON" : "Dev/Editor mode: OFF";
+            button.displayString = mod.getConfig().getInteger("debug.mode") == 1
+                    ? TextFormatting.GOLD + "Dev/Editor mode: ON"
+                    : "Dev/Editor mode: OFF";
             mod.changedDebugMode();
             mod.saveConfig();
         }
@@ -134,11 +146,13 @@ public class GuiMore extends GuiScreen {
             drawGradientRect(0, 0, width, height, 0xC0C06000, 0x60C06000);
             drawCenteredString(fontRenderer, I18n.format("mat.title.advanced") + "(Dev mode)", width / 2, 8, 0xffffff);
 
-            drawCenteredString(fontRenderer, I18n.format("mat.title.devmode"), width / 2, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3) - 9, 0xffffff);
+            drawCenteredString(fontRenderer, I18n.format("mat.title.devmode"), width / 2,
+                    _SEPARATOR + _MIX * (IDS_PER_PAGE + 3) - 9, 0xffffff);
         }
 
         mod.util().prepareDrawString();
-        mod.util().drawString(I18n.format("mat.resources.lag", mod.getLag().getMilliseconds()), 1f, 1f, 0, 0, '3', 0, 0, 0, 0, true);
+        mod.util().drawString(I18n.format("mat.resources.lag", mod.getLag().getMilliseconds()), 1f, 1f, 0, 0, '3', 0, 0,
+                0, 0, true);
 
         super.drawScreen(par1, par2, par3);
 

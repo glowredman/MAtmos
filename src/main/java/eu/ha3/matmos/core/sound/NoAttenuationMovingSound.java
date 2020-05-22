@@ -19,10 +19,11 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
     private float desiredPitch;
     private float volumeMod;
     private boolean underwater;
-    
+
     private boolean notYetPlayed = true;
 
-    protected NoAttenuationMovingSound(ResourceLocation myResource, float volume, float pitch, boolean isLooping, boolean usesPause, boolean underwater) {
+    protected NoAttenuationMovingSound(ResourceLocation myResource, float volume, float pitch, boolean isLooping,
+            boolean usesPause, boolean underwater) {
         super(SoundEvents.AMBIENT_CAVE, underwater ? SoundCategory.MASTER : SoundCategory.AMBIENT);
 
         positionedSoundLocation = myResource;
@@ -40,16 +41,17 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
     }
 
     public NoAttenuationMovingSound copy() {
-        return new NoAttenuationMovingSound(getSoundLocation(), desiredVolume, desiredPitch, repeat, usesPause, underwater);
+        return new NoAttenuationMovingSound(getSoundLocation(), desiredVolume, desiredPitch, repeat, usesPause,
+                underwater);
     }
 
     @Override
     public void update() {
         Entity e = Minecraft.getMinecraft().player;
 
-        xPosF = (float)e.posX;
-        yPosF = (float)e.posY;
-        zPosF = (float)e.posZ;
+        xPosF = (float) e.posX;
+        yPosF = (float) e.posY;
+        zPosF = (float) e.posZ;
 
         volume = helper.calculateFadeFactor() * desiredVolume * volumeMod;
 
@@ -75,9 +77,9 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
     public void stop(float fadeOut) {
         setVolume(0, fadeOut);
     }
-    
+
     public void setVolume(float volume, float fadeTime) {
-        helper.fadeTo(volume / desiredVolume, (long)(fadeTime * 1000));
+        helper.fadeTo(volume / desiredVolume, (long) (fadeTime * 1000));
     }
 
     @Override
@@ -98,20 +100,20 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
     public void interrupt() {
         donePlaying = true;
     }
-    
+
     @Override
     public Sound getSound() {
         notYetPlayed = false;
         return super.getSound();
     }
-    
+
     public boolean notYetPlayed() {
         return notYetPlayed;
     }
-    
+
     public boolean popNotYetPlayed() {
         boolean wasNotYetPlayed = notYetPlayed;
-        if(notYetPlayed) {
+        if (notYetPlayed) {
             notYetPlayed = false;
         }
         return wasNotYetPlayed;

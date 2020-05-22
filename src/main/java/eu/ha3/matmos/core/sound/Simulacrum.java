@@ -28,10 +28,8 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
     private boolean hasDisabledResourcePacks;
 
     public Simulacrum(Matmos mod) {
-        expansionManager = new ExpansionManager(
-                new File(ConfigManager.getConfigFolder(), "expansions_userconfig/"),
-                new File(ConfigManager.getConfigFolder(), "alias.map"),
-                        mod.getSoundHandler());
+        expansionManager = new ExpansionManager(new File(ConfigManager.getConfigFolder(), "expansions_userconfig/"),
+                new File(ConfigManager.getConfigFolder(), "alias.map"), mod.getSoundHandler());
         expansionManager.setVolumeAndUpdate(mod.getConfig().getFloat("globalvolume.scale"));
 
         TimeStatistic stat = new TimeStatistic(Locale.ENGLISH);
@@ -52,7 +50,7 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
                 hasDisabledResourcePacks = dealer.findDisabledResourcePacks().size() > 0;
             }
         } else {
-            for(SoundpackIdentity id : expansionManager.getSoundpackIdentities()) {
+            for (SoundpackIdentity id : expansionManager.getSoundpackIdentities()) {
                 mod.addUpdateNotifierJob(id);
             }
         }

@@ -17,12 +17,12 @@ public interface BetterStreams<T> {
     }
 
     @SafeVarargs
-    static <T> BetterStreams<T> of(Collection<? extends T> ...collections) {
+    static <T> BetterStreams<T> of(Collection<? extends T>... collections) {
         return () -> Stream.of(collections).flatMap(Collection::stream);
     }
 
     @SafeVarargs
-    static <T> BetterStreams<T> of(Map<?, ? extends T> ...maps) {
+    static <T> BetterStreams<T> of(Map<?, ? extends T>... maps) {
         return () -> Stream.of(maps).map(Map::values).flatMap(Collection::stream);
     }
 

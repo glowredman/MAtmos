@@ -28,16 +28,16 @@ public class SerialMachine {
 
     @Expose
     public List<SerialMachineEvent> event = null;
-    
+
     @Expose
     public SerialMachineEventPair event_pair;
 
     @Expose
     public Object stream;
-    
+
     @Expose
     public SerialMachineStreamPair stream_pair;
-    
+
     @Expose
     public boolean play_deep_indoors;
 }

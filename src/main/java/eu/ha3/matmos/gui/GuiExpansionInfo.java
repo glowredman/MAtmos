@@ -27,7 +27,8 @@ public class GuiExpansionInfo extends GuiScreen {
     public void drawScreen(int par1, int par2, float par3) {
         drawGradientRect(0, 0, width, height, 0xF0000000, 0x90000000);
 
-        drawCenteredString(fontRenderer, "About " + TextFormatting.YELLOW + TextFormatting.ITALIC + expansion.getFriendlyName() + TextFormatting.RESET + "...", width / 2, 4, 0xffffff);
+        drawCenteredString(fontRenderer, "About " + TextFormatting.YELLOW + TextFormatting.ITALIC
+                + expansion.getFriendlyName() + TextFormatting.RESET + "...", width / 2, 4, 0xffffff);
 
         int lc = 0;
         for (String line : info) {
