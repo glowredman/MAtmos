@@ -10,7 +10,7 @@ Whenever you join a multiplayer server or single-player world, MAtmos will searc
 * New system for detecting when the player is outdoors, indoors, or deep indoors
 * A new soundpack making use of the new features: Matmos 2020 "Zen"
 * Update checking for sound packs which support it
-* Versions are now also built for Forge
+* Versions are now built for Forge
 * Many bug fixes and performance improvements
 ```
 
