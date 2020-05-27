@@ -15,8 +15,4 @@ public interface SoundRelay {
     void setVolume(int token, float volume, float fadeDuration);
 
     void eraseStreamingToken(int token);
-    
-    boolean isPlaying(int token);
-
-    boolean isCommandedToBePlaying(int token);
 }

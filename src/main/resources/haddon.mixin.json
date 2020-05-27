@@ -8,6 +8,7 @@
         "IEntity",
         "IFoodStats",
         "IMinecraft",
+        "ISoundManagerStaticAccessor",
         "MixinSoundHandler",
         "MixinSoundManager",
         "MixinSoundManager$1",

@@ -13,6 +13,10 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
 
     private final Map<String, String> paths = new HashMap<>();
 
+    public SoundHelperRelay(LoopingStreamedSoundManager soundManager) {
+        super(soundManager);
+    }
+
     @Override
     public void routine() {
         super.routine();
@@ -60,18 +64,9 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
     }
 
     @Override
-    public boolean isPlaying(int token) {
-        return Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(streaming.get(String.valueOf(token)).getSound());
-    }
-
-    @Override
-    public boolean isCommandedToBePlaying(int token) {
-        return streaming.get(String.valueOf(token)).isCommandedToBePlaying();
-    }
-
-    @Override
-    public int getStreamingTokenFor(String path, float volume, float pitch, boolean isLooping, boolean usesPause, boolean underwater) {
-        if(pathToToken.containsKey(path)) {
+    public int getStreamingTokenFor(String path, float volume, float pitch, boolean isLooping, boolean usesPause,
+            boolean underwater) {
+        if (pathToToken.containsKey(path)) {
             return pathToToken.get(path);
         }
 

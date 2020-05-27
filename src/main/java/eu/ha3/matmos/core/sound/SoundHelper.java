@@ -13,7 +13,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 public class SoundHelper implements SoundCapabilities, Stable {
-    
+
+    private LoopingStreamedSoundManager soundManager;
+
     protected final Map<String, StreamHandle<NoAttenuationMovingSound>> streaming = new LinkedHashMap<>();
 
     private float volumeModulator;
@@ -21,6 +23,10 @@ public class SoundHelper implements SoundCapabilities, Stable {
     private boolean isInterrupt;
     
     private boolean isActivated;
+
+    public SoundHelper(LoopingStreamedSoundManager soundManager) {
+        this.soundManager = soundManager;
+    }
 
     @Override
     public void playMono(String event, double xx, double yy, double zz, float volume, float pitch) {
@@ -96,14 +102,8 @@ public class SoundHelper implements SoundCapabilities, Stable {
                 float fade = handle.getFadeOfLargestVolumeCommandThisTick();
                 
                 NoAttenuationMovingSound sound = handle.getSound();
-                
-                if(newVolume > 0 && 
-                        (sound.getTargetVolume() != newVolume || 
-                        !Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(sound))) {
-                    if(sound.getTargetVolume() == newVolume) {
-                        Matmos.LOGGER.debug("Restarting " + sound.getSoundLocation() + " because it's not playing accordng to the sound handler, even though its volume should be " + newVolume);
-                    }
-                    
+
+                if (newVolume > 0 && (sound.getTargetVolume() != newVolume)) {
                     boolean reuse = false;
                     boolean previousIsDonePlaying = sound.isDonePlaying();
                     
@@ -117,22 +117,20 @@ public class SoundHelper implements SoundCapabilities, Stable {
                     sound.applyVolume(volumeModulator);
                     
                     boolean notYetPlayed = sound.popNotYetPlayed();
-                    boolean isSoundPlaying = Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(sound);
-                    
-                    Matmos.LOGGER.debug("playStreaming " + sound.getSoundLocation() + " (reuse=" + reuse + ", notYetPlayed = " + notYetPlayed + ", isSoundPlaying=" + isSoundPlaying + ", donePlaying=" + previousIsDonePlaying + ")");
-                    
-                    if(notYetPlayed || !isSoundPlaying) {
+
+                    Matmos.LOGGER.debug("playStreaming " + sound.getSoundLocation() + " (reuse=" + reuse
+                            + ", notYetPlayed = " + notYetPlayed + ", donePlaying=" + previousIsDonePlaying + ")");
+
+                    if (notYetPlayed) {
                         try {
-                            Minecraft.getMinecraft().getSoundHandler().playSound(sound);
+                            soundManager.playSound(sound);
                         } catch (Exception e) {
                             Matmos.LOGGER.warn("There was an exception when trying to start stream " + sound.getSoundLocation() + ": " + e.getMessage());
                         }
                     }
-                    handle.setCommandedToBePlaying(true);
-                } else if(newVolume == 0 && sound.getTargetVolume() != newVolume) {
+                } else if (newVolume == 0 && sound.getTargetVolume() != newVolume) {
                     Matmos.LOGGER.debug("stopStreaming " + sound.getSoundLocation());
                     sound.stop(fade);
-                    handle.setCommandedToBePlaying(false);
                 }
             }
             

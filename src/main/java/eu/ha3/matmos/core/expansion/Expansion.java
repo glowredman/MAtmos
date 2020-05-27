@@ -20,6 +20,7 @@ import eu.ha3.matmos.core.event.EventInterface;
 import eu.ha3.matmos.core.expansion.agents.LoadingAgent;
 import eu.ha3.matmos.core.expansion.agents.RawJsonLoadingAgent;
 import eu.ha3.matmos.core.sheet.DataPackage;
+import eu.ha3.matmos.core.sound.LoopingStreamedSoundManager;
 import eu.ha3.matmos.core.sound.SoundHelperRelay;
 import eu.ha3.matmos.data.IDataCollector;
 import eu.ha3.matmos.data.modules.ModuleRegistry;
@@ -39,7 +40,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
     private final DataPackage data;
     private final IDataCollector collector;
 
-    private final SoundHelperRelay capabilities = new SoundHelperRelay();
+    private final SoundHelperRelay capabilities;
 
     private final VolumeContainer masterVolume;
 
@@ -57,11 +58,13 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
     
     private Exception loadException;
 
-    public Expansion(ExpansionIdentity identity, DataPackage data, IDataCollector collector, ISoundHandler accessor, VolumeContainer masterVolume, File configurationSource) {
+    public Expansion(ExpansionIdentity identity, DataPackage data, IDataCollector collector,
+            LoopingStreamedSoundManager soundManager, VolumeContainer masterVolume, File configurationSource) {
         this.identity = identity;
         this.masterVolume = masterVolume;
         this.data = data;
         this.collector = collector;
+        this.capabilities = new SoundHelperRelay(soundManager);
 
         newKnowledge();
 

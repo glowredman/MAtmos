@@ -19,7 +19,9 @@ import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.Stable;
 import eu.ha3.matmos.core.expansion.VolumeUpdatable;
 import eu.ha3.matmos.core.preinit.SoundSystemReplacerTransformer;
+import eu.ha3.matmos.core.sound.LoopingStreamedSoundManager;
 import eu.ha3.matmos.core.sound.Simulacrum;
+import eu.ha3.matmos.core.sound.SoundManagerListener;
 import eu.ha3.matmos.debug.Pluggable;
 import eu.ha3.matmos.game.user.UserControl;
 import eu.ha3.matmos.game.user.VisualDebugger;
@@ -69,7 +71,9 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     // NotifiableHaddon and UpdateNotifier
     private final ConfigProperty config = ConfigManager.getConfig();
     private final Chatter chatter = new Chatter(this, "<MAtmos> ");
-    private final UpdateNotifier updateNotifier = new UpdateNotifier(this, new HaddonVersion(FOR + "-" + VERSION), UPDATE_JSON);
+    private final UpdateNotifier updateNotifier = new UpdateNotifier(this, new HaddonVersion(FOR + "-" + VERSION),
+            UPDATE_JSON);
+    private final LoopingStreamedSoundManager soundManager = new LoopingStreamedSoundManager();
 
     // State
     private boolean isListenerInstalled;
@@ -78,7 +82,8 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     private boolean isDebugMode;
     
     private static List<SupportsBlockChangeEvents> blockChangeListeners = new LinkedList<>();
-    
+    private static List<SoundManagerListener> soundManagerListeners = new LinkedList<>();
+
     public static final int MAX_ID;
 
     // Components
@@ -124,6 +129,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
         // This registers stuff to Minecraft (key bindings...)
         userControl.load();
+        soundManagerListeners.add(soundManager);
 
         LOGGER.info("Took " + timeMeasure.getSecondsAsString(3) + " seconds to setup MAtmos base.");
     }
@@ -193,6 +199,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         }
         LOGGER.info("Stopping...");
         simulacrum.get().dispose();
+        soundManager.stopAllSounds();
         simulacrum = Optional.empty();
         LOGGER.info("Stopped.");
     }
@@ -290,6 +297,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
             isUnderwaterMode = false;
             resetAmbientVolume();
         }
+        soundManager.onTick();
 
         
         Minecraft.getMinecraft().mcProfiler.endSection();
@@ -356,6 +364,10 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     public ISoundHandler getSoundHandler() {
         return ((ISoundHandler)Minecraft.getMinecraft().getSoundHandler());
+    }
+
+    public LoopingStreamedSoundManager getSoundManager() {
+        return soundManager;
     }
 
     public VolumeUpdatable getGlobalVolumeControl() {
@@ -467,5 +479,9 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
                 && Arrays.asList(config.getString("rain.soundlist").split(",")).contains(name);
         
         return !badSound;
+    }
+
+    public static List<SoundManagerListener> getSoundManagerListeners() {
+        return soundManagerListeners;
     }
 }
