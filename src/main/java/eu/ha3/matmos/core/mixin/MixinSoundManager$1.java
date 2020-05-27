@@ -4,6 +4,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import eu.ha3.matmos.core.ducks.ISoundManager;
@@ -17,9 +18,11 @@ abstract class MixinSoundManager$1 implements Runnable {
     @Final
     private SoundManager outerThis;
 
-    @Redirect(method = "run()V", at = @At(value = "INVOKE", target = "Lpaulscode/sound/SoundSystem;setMasterVolume(F)V"))
-    private void redirectSetMasterVolume(SoundSystem sndSystem, float value) {
-        ((ISoundManager) outerThis).setSoundSystem(sndSystem);
+    // Access redirectors don't work because the field is accessed via a synthetic
+    // method.
+    @Redirect(method = "run()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/audio/SoundManager$SoundSystemStarterThread;setMasterVolume(F)V"))
+    private void redirectSetMasterVolume(@Coerce SoundSystem sndSystem, float value) {
+        ((ISoundManager) outerThis).setSoundSystemAccessor(sndSystem);
         sndSystem.setMasterVolume(value);
     }
 }

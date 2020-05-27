@@ -28,6 +28,7 @@ import eu.ha3.matmos.core.ducks.ISoundHandler;
 import eu.ha3.matmos.core.expansion.agents.JsonLoadingAgent;
 import eu.ha3.matmos.core.expansion.agents.LegacyXMLLoadingAgent;
 import eu.ha3.matmos.core.sheet.DataPackage;
+import eu.ha3.matmos.core.sound.LoopingStreamedSoundManager;
 import eu.ha3.matmos.data.IDataCollector;
 import eu.ha3.matmos.data.modules.BlockCountModule;
 import eu.ha3.matmos.util.BlockDealiaser;
@@ -40,7 +41,7 @@ import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.util.ResourceLocation;
 
 public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, SupportsFrameEvents {
-    private final ISoundHandler accessor;
+    private final LoopingStreamedSoundManager soundManager;
     private final File userconfigFolder;
 
     private final ResourcePackDealer dealer = new ResourcePackDealer();
@@ -58,9 +59,9 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
 
     private IDataCollector collector;
 
-    public ExpansionManager(File userconfigFolder, File aliasFile, ISoundHandler accessor) {
+    public ExpansionManager(File userconfigFolder, File aliasFile, LoopingStreamedSoundManager soundManager) {
         this.userconfigFolder = userconfigFolder;
-        this.accessor = accessor;
+        this.soundManager = soundManager;
 
         if (!this.userconfigFolder.exists()) {
             this.userconfigFolder.mkdirs();
@@ -136,7 +137,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     }
 
     private void addExpansion(ExpansionIdentity identity) {
-        Expansion expansion = new Expansion(identity, data, collector, accessor, this,
+        Expansion expansion = new Expansion(identity, data, collector, soundManager, this,
                 new File(userconfigFolder, identity.getUniqueName() + ".cfg"));
         expansions.put(identity.getUniqueName(), expansion);
 

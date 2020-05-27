@@ -19,6 +19,7 @@ import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.Stable;
 import eu.ha3.matmos.core.expansion.VolumeUpdatable;
 import eu.ha3.matmos.core.preinit.SoundSystemReplacerTransformer;
+import eu.ha3.matmos.core.sound.LoopingStreamedSoundManager;
 import eu.ha3.matmos.core.sound.Simulacrum;
 import eu.ha3.matmos.debug.Pluggable;
 import eu.ha3.matmos.game.user.UserControl;
@@ -70,6 +71,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     private final Chatter chatter = new Chatter(this, "<MAtmos> ");
     private final UpdateNotifier updateNotifier = new UpdateNotifier(this, new HaddonVersion(FOR + "-" + VERSION),
             UPDATE_JSON);
+    private final LoopingStreamedSoundManager soundManager = new LoopingStreamedSoundManager();
 
     // State
     private boolean isListenerInstalled;
@@ -292,6 +294,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
             isUnderwaterMode = false;
             resetAmbientVolume();
         }
+        soundManager.onTick();
 
         Minecraft.getMinecraft().profiler.endSection();
     }
@@ -357,6 +360,10 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     public ISoundHandler getSoundHandler() {
         return ((ISoundHandler) Minecraft.getMinecraft().getSoundHandler());
+    }
+    
+    public LoopingStreamedSoundManager getSoundManager() {
+        return soundManager;
     }
 
     public VolumeUpdatable getGlobalVolumeControl() {
