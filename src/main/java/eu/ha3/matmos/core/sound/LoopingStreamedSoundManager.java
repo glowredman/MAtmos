@@ -80,8 +80,8 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
                 this.stopSound(streamingSound);
             } else {
                 String s = this.invPlayingSounds.get(streamingSound);
-                getSoundSystem().setVolume(s, this.getClampedVolume(itickablesound));
-                getSoundSystem().setPitch(s, this.getClampedPitch(itickablesound));
+                getSoundSystem().setVolume(s, this.getClampedVolume(streamingSound));
+                getSoundSystem().setPitch(s, this.getClampedPitch(streamingSound));
                 getSoundSystem().setPosition(s, itickablesound.getXPosF(), itickablesound.getYPosF(),
                         itickablesound.getZPosF());
             }
@@ -123,8 +123,8 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
                         }
 
                         SoundCategory soundcategory = p_sound.getCategory();
-                        float f1 = this.getClampedVolume(p_sound);
-                        float f2 = this.getClampedPitch(p_sound);
+                        float f1 = this.getClampedVolume(streamingSound);
+                        float f2 = this.getClampedPitch(streamingSound);
 
                         if (f1 == 0.0F) {
                             Matmos.LOGGER.debug("Skipped playing sound {}, volume was zero.",
@@ -187,12 +187,12 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
         return ((ISoundManager) getSoundManager()).isLoaded();
     }
 
-    private float getClampedPitch(ISound soundIn) {
-        return MathHelper.clamp(soundIn.getPitch(), 0.5F, 2.0F);
+    private float getClampedPitch(StreamingSound sound) {
+        return MathHelper.clamp(sound.asTickable().getPitch(), 0.5F, 2.0F);
     }
 
-    private float getClampedVolume(ISound soundIn) {
-        return MathHelper.clamp(soundIn.getVolume() * this.getCategoryVolume(soundIn.getCategory()), 0.0F, 1.0F);
+    private float getClampedVolume(StreamingSound sound) {
+        return MathHelper.clamp(sound.asTickable().getVolume() * this.getCategoryVolume(sound.asTickable().getCategory()), 0.0F, 1.0F);
     }
 
     private float getCategoryVolume(SoundCategory category) {
