@@ -5,6 +5,7 @@ import eu.ha3.matmos.core.SystemClock;
 import eu.ha3.matmos.util.math.HelperFadeCalculator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.client.audio.Sound;
 import net.minecraft.entity.Entity;
@@ -117,6 +118,11 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
             notYetPlayed = false;
         }
         return wasNotYetPlayed;
+    }
+    
+    @Override
+    public ITickableSound asTickable() {
+        return (ITickableSound)this;
     }
 
 }

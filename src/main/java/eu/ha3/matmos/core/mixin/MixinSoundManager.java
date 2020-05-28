@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.ducks.ISoundManager;
+import eu.ha3.matmos.core.sound.SoundManagerListener;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.util.SoundCategory;
 import paulscode.sound.SoundSystem;
@@ -43,16 +44,26 @@ abstract class MixinSoundManager implements ISoundManager {
         SoundSystemConfig.setStreamQueueFormatsMatch(true);
     }
 
-    /**
-     * Applies Forge's fix for MC-35856. Required for LiteLoader. Redundant if we're
-     * using Forge, but should be harmless.
-     */
+
     @Inject(method = "stopAllSounds", at = @At("RETURN"))
     public void stopAllSounds(CallbackInfo ci) {
-        Matmos.LOGGER.debug("Running mixin for SoundManager.stopAllSounds!");
         if (this.loaded) {
+            // Apply Forge's fix for MC-35856. Required for LiteLoader. Redundant if we're
+            // using Forge, but should be harmless.
             this.pausedChannels.clear(); // Forge: MC-35856 Fixed paused sounds repeating when switching worlds
         }
+        
+        Matmos.getSoundManagerListeners().forEach(l -> l.onStopAllSounds());
+    }
+    
+    @Inject(method = "pauseAllSounds", at = @At("RETURN"))
+    public void pauseAllSounds(CallbackInfo ci) {
+        Matmos.getSoundManagerListeners().forEach(l -> l.onPauseAllSounds(true));
+    }
+    
+    @Inject(method = "resumeAllSounds", at = @At("RETURN"))
+    public void resumeAllSounds(CallbackInfo ci) {
+        Matmos.getSoundManagerListeners().forEach(l -> l.onPauseAllSounds(false));
     }
     
     @Override

@@ -1,12 +1,10 @@
 package eu.ha3.matmos.core.sound;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.ducks.ISoundHandler;
@@ -65,30 +63,23 @@ import paulscode.sound.SoundSystem;
  *
  */
 
-public class LoopingStreamedSoundManager implements SupportsTickEvents {
+public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundManagerListener {
 
     private Set<ResourceLocation> UNABLE_TO_PLAY = new HashSet<>();
 
-    /**
-     * Identifiers of all currently playing sounds. Type: HashBiMap<String, ISound>
-     */
-    private final Map<String, ISound> playingSounds = new HashMap<>();
-    /**
-     * Inverse map of currently playing sounds, automatically mirroring changes in
-     * original map
-     */
-    private final Map<ISound, String> invPlayingSounds = new HashMap<>();
-    /** A subset of playingSounds, this contains only ITickableSounds */
-    private final List<ITickableSound> tickableSounds = new ArrayList<>();
+    private final Map<String, StreamingSound> playingSounds = new ConcurrentHashMap<>();
+    private final Map<StreamingSound, String> invPlayingSounds = new ConcurrentHashMap<>();
 
     public void onTick() {
-        for (ITickableSound itickablesound : this.tickableSounds) {
+        for (StreamingSound streamingSound : this.invPlayingSounds.keySet()) {
+            ITickableSound itickablesound = streamingSound.asTickable();
+
             itickablesound.update();
 
             if (itickablesound.isDonePlaying()) {
-                this.stopSound(itickablesound);
+                this.stopSound(streamingSound);
             } else {
-                String s = this.invPlayingSounds.get(itickablesound);
+                String s = this.invPlayingSounds.get(streamingSound);
                 getSoundSystem().setVolume(s, this.getClampedVolume(itickablesound));
                 getSoundSystem().setPitch(s, this.getClampedPitch(itickablesound));
                 getSoundSystem().setPosition(s, itickablesound.getXPosF(), itickablesound.getYPosF(),
@@ -98,10 +89,12 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents {
     }
 
     // logic copied from SoundManager.playSound
-    public void playSound(ISound p_sound) {
+    public void playSound(StreamingSound streamingSound) {
         if (isSoundManagerLoaded()) {
-            if (p_sound == null)
+            if (streamingSound == null)
                 return;
+
+            ITickableSound p_sound = streamingSound.asTickable();
 
             SoundEventAccessor soundeventaccessor = p_sound.createAccessor(getSoundHandler());
             ResourceLocation resourcelocation = p_sound.getSoundLocation();
@@ -156,12 +149,8 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents {
                             getSoundSystem().setPitch(s, f2);
                             getSoundSystem().setVolume(s, f1);
                             getSoundSystem().play(s);
-                            this.playingSounds.put(s, p_sound);
-                            this.invPlayingSounds.put(p_sound, s);
-
-                            if (p_sound instanceof ITickableSound) {
-                                this.tickableSounds.add((ITickableSound) p_sound);
-                            }
+                            this.playingSounds.put(s, streamingSound);
+                            this.invPlayingSounds.put(streamingSound, s);
                         }
                     }
                 }
@@ -169,7 +158,7 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents {
         }
     }
 
-    public void stopSound(ISound sound) {
+    public void stopSound(StreamingSound sound) {
         if (isSoundManagerLoaded()) {
             String s = this.invPlayingSounds.get(sound);
 
@@ -212,5 +201,28 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents {
 
     private URL getURLForSoundResource(final ResourceLocation p_148612_0_) {
         return ISoundManagerStaticAccessor.invokeGetURLForSoundResource(p_148612_0_);
+    }
+
+    @Override
+    public void onStopAllSounds() {
+
+    }
+
+    public void stopAllSounds() {
+        for (StreamingSound sound : playingSounds.values()) {
+            sound.interrupt();
+        }
+    }
+
+    @Override
+    public void onPauseAllSounds(boolean pause) {
+        for (String sound : playingSounds.keySet()) {
+            if (pause) {
+                getSoundSystem().pause(sound);
+            } else {
+                getSoundSystem().play(sound);
+            }
+
+        }
     }
 }

@@ -1,5 +1,7 @@
 package eu.ha3.matmos.core.sound;
 
+import net.minecraft.client.audio.ITickableSound;
+
 public interface StreamingSound {
     /**
      * Fading unit is in seconds.
@@ -30,4 +32,6 @@ public interface StreamingSound {
     void dispose();
 
     void interrupt();
+    
+    ITickableSound asTickable();
 }
