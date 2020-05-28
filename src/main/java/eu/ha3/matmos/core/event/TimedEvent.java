@@ -23,7 +23,8 @@ public class TimedEvent implements TimedEventInterface {
         this(eelt.event, provider, eelt.vol_mod, eelt.pitch_mod, eelt.delay_min, eelt.delay_max, eelt.delay_start);
     }
 
-    public TimedEvent(String event, Provider<Event> provider, float volMod, float pitchMod, float delayMin, float delayMax, float delayStart) {
+    public TimedEvent(String event, Provider<Event> provider, float volMod, float pitchMod, float delayMin,
+            float delayMax, float delayStart) {
         this.event = event;
         this.provider = provider;
         this.volMod = volMod;
@@ -40,9 +41,9 @@ public class TimedEvent implements TimedEventInterface {
     @Override
     public void restart(ReferenceTime time) {
         if (delayStart == 0) {
-            nextPlayTime = time.getMilliseconds() + (long)(random.nextFloat() * delayMax * 1000);
+            nextPlayTime = time.getMilliseconds() + (long) (random.nextFloat() * delayMax * 1000);
         } else {
-            nextPlayTime = time.getMilliseconds() + (long)(delayStart * 1000);
+            nextPlayTime = time.getMilliseconds() + (long) (delayStart * 1000);
         }
     }
 
@@ -58,11 +59,11 @@ public class TimedEvent implements TimedEventInterface {
 
         if (delayMin == delayMax && delayMin > 0) {
             while (nextPlayTime < time.getMilliseconds()) {
-                nextPlayTime = nextPlayTime + (long)(delayMin * 1000);
+                nextPlayTime = nextPlayTime + (long) (delayMin * 1000);
             }
         } else {
             nextPlayTime = time.getMilliseconds()
-                    + (long)((delayMin + random.nextFloat() * (delayMax - delayMin)) * 1000);
+                    + (long) ((delayMin + random.nextFloat() * (delayMax - delayMin)) * 1000);
         }
     }
 }

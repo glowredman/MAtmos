@@ -14,7 +14,7 @@ import paulscode.sound.SoundSystem;
 @Mixin(targets = "net/minecraft/client/audio/SoundManager$1")
 abstract class MixinSoundManager$1 implements Runnable {
 
-    @Shadow(aliases = {"this$0", "field_177224_a", "a"})
+    @Shadow(aliases = { "this$0", "field_177224_a", "a" })
     @Final
     private SoundManager outerThis;
 

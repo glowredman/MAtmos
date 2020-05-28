@@ -32,8 +32,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.FolderResourcePack;
 import net.minecraft.util.ResourceLocation;
 
-public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
-                                    SupportsBlockChangeEvents {
+public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated, SupportsBlockChangeEvents {
     private static ReferenceTime TIME = new SystemClock();
 
     private final ExpansionIdentity identity;
@@ -55,7 +54,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
 
     private LoadingAgent agent;
     private LoadingAgent jsonAgent;
-    
+
     private Exception loadException;
 
     public Expansion(ExpansionIdentity identity, DataPackage data, IDataCollector collector,
@@ -76,7 +75,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        
+
         Matmos.addBlockChangeListener(this);
 
         setVolumeAndUpdate(myConfiguration.getFloat("volume"));
@@ -105,7 +104,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
 
     private void newKnowledge() {
         knowledge = new Knowledge(capabilities, TIME);
-        
+
         knowledge.setData(data);
     }
 
@@ -115,11 +114,11 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
         }
 
         newKnowledge();
-        
+
         knowledge.addKnowledge(Knowledge.getBuiltins(knowledge.obtainProviders()));
-        
+
         loadException = null;
-        
+
         if (jsonAgent == null) {
             loadException = agent.load(identity, knowledge);
         } else {
@@ -154,7 +153,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
     public String getFriendlyName() {
         return identity.getFriendlyName();
     }
-    
+
     public Exception getLoadException() {
         return loadException;
     }
@@ -220,7 +219,8 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
             if (isSuccessfullyBuilt) {
                 Matmos.LOGGER.info("Expansion " + getName() + " built (" + stat.getSecondsAsString(3) + "s).");
             } else {
-                Matmos.LOGGER.warn("Expansion " + getName() + " failed to build!!! (" + stat.getSecondsAsString(3) + "s).");
+                Matmos.LOGGER
+                        .warn("Expansion " + getName() + " failed to build!!! (" + stat.getSecondsAsString(3) + "s).");
             }
         }
 
@@ -228,15 +228,15 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
             Set<String> requiredModules = knowledge.calculateRequiredModules();
             collector.addModuleStack(identity.getUniqueName(), requiredModules);
 
-            Matmos.LOGGER.info("Expansion " + identity.getUniqueName() + " requires " + requiredModules.size() + " found modules: " + Arrays.toString(requiredModules.toArray()));
+            Matmos.LOGGER.info("Expansion " + identity.getUniqueName() + " requires " + requiredModules.size()
+                    + " found modules: " + Arrays.toString(requiredModules.toArray()));
 
             String[] legacyModules = requiredModules.stream()
-                    .filter(module -> module.startsWith(ModuleRegistry.LEGACY_PREFIX))
-                    .sorted()
-                    .toArray(String[]::new);
+                    .filter(module -> module.startsWith(ModuleRegistry.LEGACY_PREFIX)).sorted().toArray(String[]::new);
 
             if (legacyModules.length > 0) {
-                Matmos.LOGGER.warn("Expansion " + identity.getUniqueName() + " uses LEGACY modules: " + Arrays.toString(legacyModules));
+                Matmos.LOGGER.warn("Expansion " + identity.getUniqueName() + " uses LEGACY modules: "
+                        + Arrays.toString(legacyModules));
                 reliesOnLegacyModules = true;
             }
         }
@@ -256,7 +256,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
         if (collector != null) {
             collector.removeModuleStack(identity.getUniqueName());
         }
-        
+
         capabilities.deactivate();
 
         isActive = false;
@@ -286,7 +286,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
     public void updateVolume() {
         capabilities.applyVolume(masterVolume.getVolume() * getVolume() * identity.getVolumeModifier());
     }
-    
+
     public void setOverrideOff(boolean overrideOff) {
         knowledge.setOverrideOff(overrideOff);
     }
@@ -309,7 +309,7 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
     public ExpansionDebugUnit obtainDebugUnit() {
         try {
             if (identity.getPack() instanceof FolderResourcePack) {
-                FolderResourcePack frp = (FolderResourcePack)identity.getPack();
+                FolderResourcePack frp = (FolderResourcePack) identity.getPack();
                 String folderName = frp.getPackName();
                 // XXX: getPackName might not be specified to return the folder name?
 

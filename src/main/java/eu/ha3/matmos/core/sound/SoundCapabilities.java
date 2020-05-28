@@ -14,37 +14,42 @@ public interface SoundCapabilities {
     /**
      * Registers a streaming sound.
      */
-    void registerStreaming(String customName, String path, float volume, float pitch, boolean isLooping, boolean usesPause, boolean underwater, SoundHelperRelay relay);
+    void registerStreaming(String customName, String path, float volume, float pitch, boolean isLooping,
+            boolean usesPause, boolean underwater, SoundHelperRelay relay);
 
     /**
-     * Plays a streaming sound, fading in if it's greater than zero. Fading unit is in seconds.
+     * Plays a streaming sound, fading in if it's greater than zero. Fading unit is
+     * in seconds.
      */
     void playStreaming(String customName, float fadeIn);
 
     /**
-     * Stops a streaming sound, fading out if it's greater than zero. Fading unit is in seconds.
+     * Stops a streaming sound, fading out if it's greater than zero. Fading unit is
+     * in seconds.
      */
     void stopStreaming(String customName, float fadeOut);
 
     /**
-     * Instantly applies a volume modulation of all currently running stuff and future ones.
+     * Instantly applies a volume modulation of all currently running stuff and
+     * future ones.
      */
     void applyVolume(float volumeMod);
 
     /**
-     * Gracefully stops all activities provided by the implementation. It should stop all sounds from
-     * playing.
+     * Gracefully stops all activities provided by the implementation. It should
+     * stop all sounds from playing.
      */
     void stop();
 
     /**
-     * Clean up all resources that are not freed up. SoundCapabilities should be able to be used again.
+     * Clean up all resources that are not freed up. SoundCapabilities should be
+     * able to be used again.
      */
     void cleanUp();
 
     /**
-     * Brutally interrupts all activities provided by the implementation. This indicates the sound
-     * engine may have been dumped during runtime.
+     * Brutally interrupts all activities provided by the implementation. This
+     * indicates the sound engine may have been dumped during runtime.
      */
     void interrupt();
 }

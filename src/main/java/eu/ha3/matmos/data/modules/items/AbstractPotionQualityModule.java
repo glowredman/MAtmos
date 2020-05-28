@@ -11,9 +11,9 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
 /**
- * An abstract module that extracts a certain quality of all potion effects (such as time,
- * strength...) that is currently affecting the player. The quality is defined by the implementing
- * class.
+ * An abstract module that extracts a certain quality of all potion effects
+ * (such as time, strength...) that is currently affecting the player. The
+ * quality is defined by the implementing class.
  *
  * @author Hurry
  */
@@ -41,17 +41,18 @@ abstract class AbstractPotionQualityModule extends ModuleProcessor implements Re
         oldThings.clear();
 
         for (Object effectObj : getPlayer().getActivePotionEffects()) {
-            if(effectObj instanceof PotionEffect) {
-                PotionEffect effect = (PotionEffect)effectObj;
+            if (effectObj instanceof PotionEffect) {
+                PotionEffect effect = (PotionEffect) effectObj;
                 int id = effect.getPotionID();
 
                 setValue(Integer.toString(id), getQuality(effect));
 
                 oldThings.add(Integer.toString(id));
             } else {
-                IDontKnowHowToCode.warnOnce("getActivePotionEffects() contained a " + effectObj.getClass() + ", (" + effectObj + "), expected PotionEffect");
+                IDontKnowHowToCode.warnOnce("getActivePotionEffects() contained a " + effectObj.getClass() + ", ("
+                        + effectObj + "), expected PotionEffect");
             }
-            
+
         }
     }
 

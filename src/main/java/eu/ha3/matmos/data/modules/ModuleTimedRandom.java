@@ -18,20 +18,9 @@ public class ModuleTimedRandom extends ModuleProcessor implements Module {
 
     public ModuleTimedRandom(DataPackage data) {
         super(data, "timed_random");
-        timedRandoms.addAll(Arrays.asList(
-            new TimedValue(1),
-            new TimedValue(2),
-            new TimedValue(5),
-            new TimedValue(10),
-            new TimedValue(15),
-            new TimedValue(20),
-            new TimedValue(30),
-            new TimedValue(1 * 60),
-            new TimedValue(2 * 60),
-            new TimedValue(5 * 60),
-            new TimedValue(10 * 60),
-            new TimedValue(20 * 60)
-        ));
+        timedRandoms.addAll(Arrays.asList(new TimedValue(1), new TimedValue(2), new TimedValue(5), new TimedValue(10),
+                new TimedValue(15), new TimedValue(20), new TimedValue(30), new TimedValue(1 * 60),
+                new TimedValue(2 * 60), new TimedValue(5 * 60), new TimedValue(10 * 60), new TimedValue(20 * 60)));
     }
 
     @Override
@@ -51,11 +40,10 @@ public class ModuleTimedRandom extends ModuleProcessor implements Module {
         public TimedValue(int secs) {
             int minutes = secs / 60;
             int secRemainder = secs % 60;
-            
-            playlistId = "timed_random"
-                    + (secRemainder == 0 ? String.format("_%02dminutes", minutes)
-                            : String.format("_%02dm%02ds", minutes, secRemainder));
-            
+
+            playlistId = "timed_random" + (secRemainder == 0 ? String.format("_%02dminutes", minutes)
+                    : String.format("_%02dm%02ds", minutes, secRemainder));
+
             period = 1000 * secs;
         }
 

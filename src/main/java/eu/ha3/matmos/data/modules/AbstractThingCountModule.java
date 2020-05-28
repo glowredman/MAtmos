@@ -10,18 +10,18 @@ public abstract class AbstractThingCountModule<T> extends ModuleProcessor {
     }
 
     public AbstractThingCountModule(DataPackage data, String name, boolean doNotUseDelta) {
-        super(data,  name, doNotUseDelta);
+        super(data, name, doNotUseDelta);
     }
 
     public abstract void increment(T thing);
-    
+
     public abstract void increment(T thing, int amount);
-    
+
     // for debugging
     public abstract int get(T thing);
 
     protected abstract void count();
 
     public abstract void apply();
-    
+
 }

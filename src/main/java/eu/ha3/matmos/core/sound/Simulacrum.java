@@ -50,7 +50,7 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
                 hasDisabledResourcePacks = dealer.findDisabledResourcePacks().size() > 0;
             }
         } else {
-            for(SoundpackIdentity id : expansionManager.getSoundpackIdentities()) {
+            for (SoundpackIdentity id : expansionManager.getSoundpackIdentities()) {
                 mod.addUpdateNotifierJob(id);
             }
         }

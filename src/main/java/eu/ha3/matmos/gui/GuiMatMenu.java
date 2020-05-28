@@ -69,14 +69,15 @@ public class GuiMatMenu extends GuiScreen {
         {
             final VolumeUpdatable globalVolumeControl = mod.getGlobalVolumeControl();
 
-            HGuiSliderControl sliderControl = new HGuiSliderControl(id, _LEFT, _MIX, _ELEMENT_WIDTH, _UNIT, "", globalVolumeControl.getVolume() * 0.5f);
+            HGuiSliderControl sliderControl = new HGuiSliderControl(id, _LEFT, _MIX, _ELEMENT_WIDTH, _UNIT, "",
+                    globalVolumeControl.getVolume() * 0.5f);
             sliderControl.setListener((slider, value) -> {
                 globalVolumeControl.setVolumeAndUpdate(value * 2);
                 slider.updateDisplayString();
                 GuiMatMenu.this.mod.getConfig().setProperty("globalvolume.scale", globalVolumeControl.getVolume());
             });
             sliderControl.setDisplayStringProvider(() -> {
-                return I18n.format("mat.options.volume", (int)Math.floor(globalVolumeControl.getVolume() * 100) + "%");
+                return I18n.format("mat.options.volume", (int) Math.floor(globalVolumeControl.getVolume() * 100) + "%");
             });
             sliderControl.updateDisplayString();
 
@@ -88,16 +89,14 @@ public class GuiMatMenu extends GuiScreen {
         List<String> sortedNames = new ArrayList<>(expansions.keySet());
         Collections.sort(sortedNames);
 
-        for (int expansionIndex = pageFromZero * IDS_PER_PAGE; expansionIndex < pageFromZero
-                * IDS_PER_PAGE + IDS_PER_PAGE
-                && expansionIndex < sortedNames.size(); expansionIndex++) {
+        for (int expansionIndex = pageFromZero * IDS_PER_PAGE; expansionIndex < pageFromZero * IDS_PER_PAGE
+                + IDS_PER_PAGE && expansionIndex < sortedNames.size(); expansionIndex++) {
             final String uniqueIdentifier = sortedNames.get(expansionIndex);
             final Expansion expansion = expansions.get(uniqueIdentifier);
             expansionList.add(expansion);
 
-            HGuiSliderControl sliderControl = new HGuiSliderControl(
-                    id, _LEFT + _MIX, _MIX * (id + 1), _ELEMENT_WIDTH - _MIX * 2, _UNIT, "",
-                    expansion.getVolume() * 0.5f);
+            HGuiSliderControl sliderControl = new HGuiSliderControl(id, _LEFT + _MIX, _MIX * (id + 1),
+                    _ELEMENT_WIDTH - _MIX * 2, _UNIT, "", expansion.getVolume() * 0.5f);
             sliderControl.setListener(new HSliderListener() {
                 @Override
                 public void sliderValueChanged(HGuiSliderControl slider, float value) {
@@ -125,7 +124,7 @@ public class GuiMatMenu extends GuiScreen {
                         display = display + "Disabled";
                     }
                 } else {
-                    display = display + (int)Math.floor(expansion.getVolume() * 100) + "%";
+                    display = display + (int) Math.floor(expansion.getVolume() * 100) + "%";
                 }
 
                 return EnumChatFormatting.ITALIC + display;
@@ -157,28 +156,38 @@ public class GuiMatMenu extends GuiScreen {
         }
 
         if (!mod.isDebugMode()) {
-            buttonList.add(new GuiButton(220, _RIGHT - _UNIT, _MIX * (IDS_PER_PAGE + 2), _UNIT, _UNIT, isAutopreviewEnabled() ? "^o^" : "^_^"));
+            buttonList.add(new GuiButton(220, _RIGHT - _UNIT, _MIX * (IDS_PER_PAGE + 2), _UNIT, _UNIT,
+                    isAutopreviewEnabled() ? "^o^" : "^_^"));
         } else {
-            buttonList.add(new GuiButton(230, _RIGHT - _UNIT, _MIX * (IDS_PER_PAGE + 2), 40, _UNIT, EnumChatFormatting.GOLD + "OSD"));
+            buttonList.add(new GuiButton(230, _RIGHT - _UNIT, _MIX * (IDS_PER_PAGE + 2), 40, _UNIT,
+                    EnumChatFormatting.GOLD + "OSD"));
         }
 
         if (pageFromZero != 0) {
-            buttonList.add(new GuiButton(201, _LEFT + _MIX, _MIX * (IDS_PER_PAGE + 2), _PREVNEWTWIDTH, _UNIT, I18n.format("mat.options.prev")));
+            buttonList.add(new GuiButton(201, _LEFT + _MIX, _MIX * (IDS_PER_PAGE + 2), _PREVNEWTWIDTH, _UNIT,
+                    I18n.format("mat.options.prev")));
         }
         if (pageFromZero * IDS_PER_PAGE + IDS_PER_PAGE < sortedNames.size()) {
-            buttonList.add(new GuiButton(202, _RIGHT - _MIX - _PREVNEWTWIDTH, _MIX * (IDS_PER_PAGE + 2), _PREVNEWTWIDTH, _UNIT, I18n.format("mat.options.next")));
+            buttonList.add(new GuiButton(202, _RIGHT - _MIX - _PREVNEWTWIDTH, _MIX * (IDS_PER_PAGE + 2), _PREVNEWTWIDTH,
+                    _UNIT, I18n.format("mat.options.next")));
         }
 
-        buttonList.add(new GuiButton(210, _LEFT, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3), _AWID, _UNIT, I18n.format("mat.options.start." + mod.getConfig().getBoolean("start.enabled"))));
-        buttonList.add(new GuiButton(211, _LEFT + _AWID + _GAP, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3), _AWID, _UNIT, (mod.isDebugMode() ? EnumChatFormatting.GOLD : "") + I18n.format("mat.options.advanced")));
+        buttonList.add(new GuiButton(210, _LEFT, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3), _AWID, _UNIT,
+                I18n.format("mat.options.start." + mod.getConfig().getBoolean("start.enabled"))));
+        buttonList.add(new GuiButton(211, _LEFT + _AWID + _GAP, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3), _AWID, _UNIT,
+                (mod.isDebugMode() ? EnumChatFormatting.GOLD : "") + I18n.format("mat.options.advanced")));
 
         final int _TURNOFFWIDTH = _ELEMENT_WIDTH / 5;
 
-        buttonList.add(new GuiButton(200, _LEFT + _MIX, _SEPARATOR + _MIX * (IDS_PER_PAGE + 4), _ELEMENT_WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH, _UNIT, "Done"));
-        buttonList.add(new GuiButton(212, _RIGHT - _TURNOFFWIDTH - _MIX, _SEPARATOR + _MIX * (IDS_PER_PAGE + 4), _TURNOFFWIDTH, _UNIT, "Turn Off"));
+        buttonList.add(new GuiButton(200, _LEFT + _MIX, _SEPARATOR + _MIX * (IDS_PER_PAGE + 4),
+                _ELEMENT_WIDTH - _MIX * 2 - _GAP - _TURNOFFWIDTH, _UNIT, "Done"));
+        buttonList.add(new GuiButton(212, _RIGHT - _TURNOFFWIDTH - _MIX, _SEPARATOR + _MIX * (IDS_PER_PAGE + 4),
+                _TURNOFFWIDTH, _UNIT, "Turn Off"));
 
         if (!mod.hasResourcePacksLoaded()) {
-            buttonList.add(new GuiButton(199, _LEFT + _MIX, _SEPARATOR + _MIX * (IDS_PER_PAGE + 1), _ELEMENT_WIDTH - _MIX * 2, _UNIT, (mod.hasNonethelessResourcePacksInstalled() ? "Enable" : "Install") + " MAtmos Resource Pack"));
+            buttonList.add(new GuiButton(199, _LEFT + _MIX, _SEPARATOR + _MIX * (IDS_PER_PAGE + 1),
+                    _ELEMENT_WIDTH - _MIX * 2, _UNIT,
+                    (mod.hasNonethelessResourcePacksInstalled() ? "Enable" : "Install") + " MAtmos Resource Pack"));
         }
     }
 
@@ -250,22 +259,31 @@ public class GuiMatMenu extends GuiScreen {
             drawCenteredString(fontRendererObj, I18n.format("mat.title.expansions"), width / 2, 8, 0xffffff);
         } else {
             drawGradientRect(0, 0, width, height, 0xC0C06000, 0x60C06000);
-            drawCenteredString(fontRendererObj, I18n.format("mat.title.expansions") + EnumChatFormatting.GOLD + "(Dev mode)", width / 2, 8, 0xffffff);
-            drawCenteredString(fontRendererObj, I18n.format("mat.title.devmode"), width / 2, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3) - 9, 0xffffff);
+            drawCenteredString(fontRendererObj,
+                    I18n.format("mat.title.expansions") + EnumChatFormatting.GOLD + "(Dev mode)", width / 2, 8,
+                    0xffffff);
+            drawCenteredString(fontRendererObj, I18n.format("mat.title.devmode"), width / 2,
+                    _SEPARATOR + _MIX * (IDS_PER_PAGE + 3) - 9, 0xffffff);
         }
-        
-        drawCenteredString(fontRendererObj, I18n.format("mat.title.reloadhint"), width / 2, _SEPARATOR + _MIX * (IDS_PER_PAGE + 5), 0xffffff);
+
+        drawCenteredString(fontRendererObj, I18n.format("mat.title.reloadhint"), width / 2,
+                _SEPARATOR + _MIX * (IDS_PER_PAGE + 5), 0xffffff);
 
         mod.util().prepareDrawString();
-        mod.util().drawString(I18n.format("mat.resources.lag", mod.getLag().getMilliseconds()), 1f, 1f, 0, 0, '3', 0, 0, 0, 0, true);
+        mod.util().drawString(I18n.format("mat.resources.lag", mod.getLag().getMilliseconds()), 1f, 1f, 0, 0, '3', 0, 0,
+                0, 0, true);
 
         if (!mod.hasResourcePacksLoaded()) {
             if (mod.hasNonethelessResourcePacksInstalled()) {
-                drawCenteredString(fontRendererObj, I18n.format("mat.resources.off.1"), width / 2, 10 + 22 * 6 - 40 + 20, 0xff0000);
-                drawCenteredString(fontRendererObj, I18n.format("mat.resources.off.2"), width / 2, 10 + 22 * 6 - 40 + 28, 0xff0000);
+                drawCenteredString(fontRendererObj, I18n.format("mat.resources.off.1"), width / 2,
+                        10 + 22 * 6 - 40 + 20, 0xff0000);
+                drawCenteredString(fontRendererObj, I18n.format("mat.resources.off.2"), width / 2,
+                        10 + 22 * 6 - 40 + 28, 0xff0000);
             } else {
-                drawCenteredString(fontRendererObj, I18n.format("mat.resources.none.1"), width / 2, 10 + 22 * 6 - 40 + 20, 0xff0000);
-                drawCenteredString(fontRendererObj, I18n.format("mat.resources.none.2"), width / 2, 10 + 22 * 6 - 40 + 28, 0xff0000);
+                drawCenteredString(fontRendererObj, I18n.format("mat.resources.none.1"), width / 2,
+                        10 + 22 * 6 - 40 + 20, 0xff0000);
+                drawCenteredString(fontRendererObj, I18n.format("mat.resources.none.2"), width / 2,
+                        10 + 22 * 6 - 40 + 28, 0xff0000);
             }
         }
 

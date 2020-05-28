@@ -19,14 +19,14 @@ public class ModulePlayerStats extends ModuleProcessor implements Module {
 
     @Override
     protected void doProcess() {
-        EntityPlayerSP player = (EntityPlayerSP)getPlayer();
+        EntityPlayerSP player = (EntityPlayerSP) getPlayer();
 
         setValue("in_water", player.isInWater());
         setValue("wet", player.isWet());
         setValue("on_ground", player.onGround);
         setValue("burning", player.isBurning());
         setValue("jumping", player.movementInput.jump);
-        setValue("in_web", ((IEntity)player).isInWeb());
+        setValue("in_web", ((IEntity) player).isInWeb());
         setValue("on_ladder", player.isOnLadder());
 
         setValue("blocking", player.isBlocking());

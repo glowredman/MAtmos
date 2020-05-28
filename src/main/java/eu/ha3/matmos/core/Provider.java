@@ -6,7 +6,7 @@ public interface Provider<T> {
     /**
      * Returns whether a named object exists.
      *
-     * @param  name
+     * @param name
      * @return
      */
     boolean exists(String name);
@@ -14,7 +14,7 @@ public interface Provider<T> {
     /**
      * Returns a named object version from the provider, or -1 if it doesn't exist.
      *
-     * @param  name
+     * @param name
      * @return
      */
     int version(String name);
@@ -22,7 +22,7 @@ public interface Provider<T> {
     /**
      * Returns an named object from the provider, or null if it doesn't exist.
      *
-     * @param  name
+     * @param name
      * @return
      */
     T get(String name);

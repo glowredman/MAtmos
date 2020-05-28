@@ -55,7 +55,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     private int ticksSinceBoot;
     private boolean firstScan;
     private boolean workInProgress;
-    
+
     private int lastScanTime = -1;
 
     private int dimension = Integer.MIN_VALUE;
@@ -64,37 +64,37 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     private int zz = Integer.MIN_VALUE;
 
     private final Scan scanner;
-    
+
     public static enum Submodule {
         BASE, THOUSAND, WEIGHTED, ABOVE, BELOW
     }
-    
+
     private Module initSubmodule(Submodule sm, String baseName, DataPackage data) {
         boolean useExternalStringCountModule = false;
-        
-        if(sm != Submodule.BASE && !requiredSubmodules.contains(sm)) {
+
+        if (sm != Submodule.BASE && !requiredSubmodules.contains(sm)) {
             return null;
         }
         Module result = null;
         String submoduleName = baseName;
-        
-        
-        switch(sm) {
+
+        switch (sm) {
         case BASE:
-            if(useExternalStringCountModule) {
+            if (useExternalStringCountModule) {
                 result = new ExternalStringCountModule(data, baseName, true);
             } else {
-                result = new BlockCountModule(data, baseName, true, (VirtualCountModule<Pair<Block,Integer>>)thousand);
+                result = new BlockCountModule(data, baseName, true,
+                        (VirtualCountModule<Pair<Block, Integer>>) thousand);
             }
             break;
         case THOUSAND:
             submoduleName = baseName + THOUSAND_SUFFIX;
-            if(useExternalStringCountModule) {
+            if (useExternalStringCountModule) {
                 result = new ThousandStringCountModule(data, submoduleName, true);
             } else {
-                result = new VirtualCountModule<Pair<Block,Integer>>(data, submoduleName, true);
+                result = new VirtualCountModule<Pair<Block, Integer>>(data, submoduleName, true);
             }
-            
+
             break;
         case WEIGHTED:
             submoduleName = baseName + WEIGHTED_SUFFIX;
@@ -109,27 +109,26 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
             result = new BlockCountModule(data, submoduleName, true, null);
             break;
         }
-        
-        if(result != null) {
+
+        if (result != null) {
             subModules.add(submoduleName);
             data.getSheet(submoduleName).setDefaultValue("0");
         }
-        
+
         return result;
     }
 
     /**
-     * Movement: Requires the player to move to another block to trigger a new scan. If movement is
-     * zero, no scan until the player moves. If movement is negative, always scan even if the player
-     * hasn't moved.
-     * Passive pulse: if this many pulses have elapsed since the last scan and the player has moved,
-     * the scan will run even if the movement condition hasn't been satisfied.
+     * Movement: Requires the player to move to another block to trigger a new scan.
+     * If movement is zero, no scan until the player moves. If movement is negative,
+     * always scan even if the player hasn't moved. Passive pulse: if this many
+     * pulses have elapsed since the last scan and the player has moved, the scan
+     * will run even if the movement condition hasn't been satisfied.
      */
-              
+
     private ScannerModule(Class<? extends Scan> scannerClass, Object scannerArgument, boolean hasScannerArgument,
-            DataPackage data, String passOnceName,
-            String baseName, List<Submodule> requiredSubmodules,
-            int movement, int passivePulse, int pulse, int xS, int yS, int zS, int blocksPerCall) {
+            DataPackage data, String passOnceName, String baseName, List<Submodule> requiredSubmodules, int movement,
+            int passivePulse, int pulse, int xS, int yS, int zS, int blocksPerCall) {
         this.passOnceName = passOnceName;
         this.requiredSubmodules = new HashSet<Submodule>(requiredSubmodules);
         this.movement = movement;
@@ -140,25 +139,23 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
         this.yS = yS;
         this.zS = zS;
         this.blocksPerCall = blocksPerCall;
-        
+
         thousand = (AbstractThingCountModule) initSubmodule(Submodule.THOUSAND, baseName, data);
         weighted = (BlockCountModule) initSubmodule(Submodule.WEIGHTED, baseName, data);
         base = (AbstractThingCountModule) initSubmodule(Submodule.BASE, baseName, data);
         above = (BlockCountModule) initSubmodule(Submodule.ABOVE, baseName, data);
         below = (BlockCountModule) initSubmodule(Submodule.BELOW, baseName, data);
-        
+
         Scan theScanner = null;
-        
-        try
-        {
-            if(hasScannerArgument) {
-                theScanner = (Scan)scannerClass.getConstructor(Object.class).newInstance(scannerArgument);
+
+        try {
+            if (hasScannerArgument) {
+                theScanner = (Scan) scannerClass.getConstructor(Object.class).newInstance(scannerArgument);
             } else {
-                theScanner = (Scan)scannerClass.newInstance();
+                theScanner = (Scan) scannerClass.newInstance();
             }
-        } catch (IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-                | SecurityException | InstantiationException | IllegalAccessException e)
-        {
+        } catch (IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException
+                | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         scanner = theScanner;
@@ -167,23 +164,23 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
         ticksSinceBoot = 0;
         firstScan = true;
     }
-    
-    /*** Constructor used to pass an argument to the to-be-instantiated scanner object */
-    public ScannerModule(Class<? extends Scan> scannerClass, Object scannerArgument, DataPackage data, String passOnceName,
-            String baseName, List<Submodule> requiredSubmodules,
-            int movement, int passivePulse, int pulse, int xS, int yS, int zS, int blocksPerCall) {
-        this(scannerClass, scannerArgument, true, data, passOnceName,
-                baseName, requiredSubmodules,
-                movement, passivePulse, pulse, xS, yS, zS, blocksPerCall);
+
+    /***
+     * Constructor used to pass an argument to the to-be-instantiated scanner object
+     */
+    public ScannerModule(Class<? extends Scan> scannerClass, Object scannerArgument, DataPackage data,
+            String passOnceName, String baseName, List<Submodule> requiredSubmodules, int movement, int passivePulse,
+            int pulse, int xS, int yS, int zS, int blocksPerCall) {
+        this(scannerClass, scannerArgument, true, data, passOnceName, baseName, requiredSubmodules, movement,
+                passivePulse, pulse, xS, yS, zS, blocksPerCall);
     }
-    
+
     /*** Normal constructor */
-    public ScannerModule(Class<? extends Scan> scannerClass, DataPackage data, String passOnceName,
-            String baseName, List<Submodule> requiredSubmodules,
-            int movement, int passivePulse, int pulse, int xS, int yS, int zS, int blocksPerCall) {
-        this(scannerClass, null, false, data, passOnceName,
-                baseName, requiredSubmodules,
-                movement, passivePulse, pulse, xS, yS, zS, blocksPerCall);
+    public ScannerModule(Class<? extends Scan> scannerClass, DataPackage data, String passOnceName, String baseName,
+            List<Submodule> requiredSubmodules, int movement, int passivePulse, int pulse, int xS, int yS, int zS,
+            int blocksPerCall) {
+        this(scannerClass, null, false, data, passOnceName, baseName, requiredSubmodules, movement, passivePulse, pulse,
+                xS, yS, zS, blocksPerCall);
     }
 
     @Override
@@ -269,9 +266,9 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
 
                 int max = Math.max(Math.abs(xx - x), Math.abs(yy - y));
                 max = Math.max(max, Math.abs(zz - z));
-                
-                go = max > movement ||
-                        (passivePulse >= 0 && max > 0 && lastScanTime != -1 && (ticksSinceBoot - lastScanTime) / pulse > passivePulse);
+
+                go = max > movement || (passivePulse >= 0 && max > 0 && lastScanTime != -1
+                        && (ticksSinceBoot - lastScanTime) / pulse > passivePulse);
             } else {
                 go = true;
             }
@@ -288,76 +285,76 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
             }
         }
     }
-    
+
     @Override
     public void input(int x, int y, int z) {
         inputAndReturnBlockMeta(x, y, z, 1, null, null);
     }
-    
+
     @Override
     public void input(int x, int y, int z, int weight) {
         inputAndReturnBlockMeta(x, y, z, weight, null, null);
     }
-    
+
     public void inputAndReturnBlockMeta(int x, int y, int z, Block[] blockOut, int[] metaOut) {
         inputAndReturnBlockMeta(x, y, z, 1, blockOut, metaOut);
     }
-    
+
     /** Not sure if this optimization is necessary */
     public void inputAndReturnBlockMeta(int x, int y, int z, int weight, Block[] blockOut, int[] metaOut) {
         Block block = MAtUtil.getBlockAt(new BlockPos(x, y, z));
         int meta = MAtUtil.getMetaAt(new BlockPos(x, y, z), -1);
-        
-        if(base instanceof BlockCountModule) {
+
+        if (base instanceof BlockCountModule) {
             base.increment(Pair.of(block, meta));
-        } else if(base instanceof ExternalStringCountModule) {
+        } else if (base instanceof ExternalStringCountModule) {
             String name = MAtUtil.nameOf(block);
             base.increment(name);
             base.increment(MAtUtil.asPowerMeta(block, meta));
-            if(thousand != null) {
+            if (thousand != null) {
                 thousand.increment(name);
             }
         }
-        
-        if(weighted != null) {
+
+        if (weighted != null) {
             weighted.increment(Pair.of(block, meta), weight);
-        } else if(weight != 1) {
-            IDontKnowHowToCode.warnOnce("Module " + getName() + " doesn't have a weighted counter, but the scanner tried to input a block with a weight.");
+        } else if (weight != 1) {
+            IDontKnowHowToCode.warnOnce("Module " + getName()
+                    + " doesn't have a weighted counter, but the scanner tried to input a block with a weight.");
         }
-        
+
         // yy is the block the player player's head is in
-        if(above != null && y >= yy) {
+        if (above != null && y >= yy) {
             above.increment(Pair.of(block, meta));
-        } else if(below != null && y < yy) {
+        } else if (below != null && y < yy) {
             below.increment(Pair.of(block, meta));
         }
-        
-        if(blockOut != null) {
+
+        if (blockOut != null) {
             blockOut[0] = block;
         }
-        if(metaOut != null) {
+        if (metaOut != null) {
             metaOut[0] = meta;
         }
     }
-    
+
     @Override
-    public void begin()
-    {
+    public void begin() {
     }
 
     @Override
     public void finish() {
         base.apply();
-        if(thousand != null) {
+        if (thousand != null) {
             thousand.apply();
         }
-        if(weighted != null) {
+        if (weighted != null) {
             weighted.apply();
         }
-        if(above != null) {
+        if (above != null) {
             above.apply();
         }
-        if(below != null) {
+        if (below != null) {
             below.apply();
         }
         workInProgress = false;
@@ -375,8 +372,9 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
 
     @Override
     public void setValue(String key, int value) {
-        if(!key.startsWith(".")) {
-            Matmos.LOGGER.error("Illegal scanner sheet key name: \"" + key + "\". Key must start with a '.' character.");
+        if (!key.startsWith(".")) {
+            Matmos.LOGGER
+                    .error("Illegal scanner sheet key name: \"" + key + "\". Key must start with a '.' character.");
         } else {
             base.setValue(key, value);
         }

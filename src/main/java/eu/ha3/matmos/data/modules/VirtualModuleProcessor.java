@@ -3,10 +3,11 @@ package eu.ha3.matmos.data.modules;
 import eu.ha3.matmos.core.sheet.DataPackage;
 
 /**
- * Implements doProcess with nothing inside it. This class is used for placeholder modules where the
- * logic of updating the sheet is outsourced to another logic. One should call the set...() methods
- * of this class to prepare the new values, and calling process() will apply the virtual sheets that
- * this module processor contains.
+ * Implements doProcess with nothing inside it. This class is used for
+ * placeholder modules where the logic of updating the sheet is outsourced to
+ * another logic. One should call the set...() methods of this class to prepare
+ * the new values, and calling process() will apply the virtual sheets that this
+ * module processor contains.
  *
  * @author Hurry
  */

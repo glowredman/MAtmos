@@ -41,7 +41,7 @@ public class Knowledge implements Evaluated, Simulated {
     private final Map<String, Junction> junctionMapped = new TreeMap<>();
     private final Map<String, Machine> machineMapped = new TreeMap<>();
     private final Map<String, Event> eventMapped = new TreeMap<>();
-    
+
     private final Map<String, BlockChangeSound> blockChangeMapped = new TreeMap<>();
 
     private final SheetCommander<String> sheetCommander = new SheetCommander<String>() {
@@ -81,7 +81,8 @@ public class Knowledge implements Evaluated, Simulated {
     public Knowledge(SoundRelay relay, ReferenceTime time) {
         this.relay = relay;
 
-        providerCollection = new Providers(time, relay, sheetCommander, conditionProvider, junctionProvider, machineProvider, eventProvider, dynamicProvider);
+        providerCollection = new Providers(time, relay, sheetCommander, conditionProvider, junctionProvider,
+                machineProvider, eventProvider, dynamicProvider);
     }
 
     public void setData(DataPackage data) {
@@ -99,78 +100,78 @@ public class Knowledge implements Evaluated, Simulated {
     public void addKnowledge(List<Named> namedThings) {
         for (Named n : namedThings) {
             if (n instanceof Condition) {
-                conditionMapped.put(n.getName(), (Condition)n);
+                conditionMapped.put(n.getName(), (Condition) n);
             } else if (n instanceof Junction) {
-                junctionMapped.put(n.getName(), (Junction)n);
+                junctionMapped.put(n.getName(), (Junction) n);
             } else if (n instanceof Machine) {
-                machineMapped.put(n.getName(), (Machine)n);
+                machineMapped.put(n.getName(), (Machine) n);
             } else if (n instanceof Event) {
-                eventMapped.put(n.getName(), (Event)n);
+                eventMapped.put(n.getName(), (Event) n);
             } else if (n instanceof PossibilityList) {
-                possibilityMapped.put(n.getName(), (PossibilityList)n);
+                possibilityMapped.put(n.getName(), (PossibilityList) n);
             } else if (n instanceof Dynamic) {
-                dynamicMapped.put(n.getName(), (Dynamic)n);
+                dynamicMapped.put(n.getName(), (Dynamic) n);
             } else if (n instanceof BlockChangeSound) {
-                blockChangeMapped.put(n.getName(), (BlockChangeSound)n);
+                blockChangeMapped.put(n.getName(), (BlockChangeSound) n);
             } else {
                 System.err.println("Cannot handle named element: " + n.getName() + " " + n.getClass());
             }
         }
     }
-    
+
     public void addKnowledge(Knowledge other) {
         LinkedList<Named> things = new LinkedList<>();
         things.addAll(other.conditionMapped.values());
         things.addAll(other.junctionMapped.values());
         things.addAll(other.machineMapped.values());
         things.addAll(other.eventMapped.values());
-        for(PossibilityList p : other.possibilityMapped.values()) {
-            things.add((Named)p);
+        for (PossibilityList p : other.possibilityMapped.values()) {
+            things.add((Named) p);
         }
         things.addAll(other.dynamicMapped.values());
-        
+
         addKnowledge(things);
     }
-    
+
     private void createInvertedJunctions() {
         Set<String> junctionsToInvert = new TreeSet<>();
         LinkedList<Named> newStuff = new LinkedList<>();
-        
-        for(String machineName : machineMapped.keySet()) {
+
+        for (String machineName : machineMapped.keySet()) {
             Machine m = machineMapped.get(machineName);
-            for(String dep: m.getDependencies()) {
-                if(dep.startsWith("!")) {
+            for (String dep : m.getDependencies()) {
+                if (dep.startsWith("!")) {
                     junctionsToInvert.add(dep.substring(1));
                 }
             }
         }
-        for(String junctionName : junctionsToInvert) {
+        for (String junctionName : junctionsToInvert) {
             Junction junction = junctionMapped.get(junctionName);
-            if(junction != null) {
+            if (junction != null) {
                 newStuff.add(junction.getInverted());
             } else {
                 Matmos.LOGGER.warn("Missing junction: " + junctionName);
             }
-            
+
         }
         addKnowledge(newStuff);
     }
-    
+
     private void buildBlockList() {
         Set<String> sheetIndexes = new HashSet<String>();
         Set<String> blockSet = new HashSet<String>();
-        
-        for(Condition condition : conditionMapped.values()) {
+
+        for (Condition condition : conditionMapped.values()) {
             sheetIndexes.add(condition.getIndex().getIndex());
         }
-        for(Dynamic dynamic : dynamicMapped.values()) {
-            for(SheetIndex si : dynamic.getIndexes()) {
+        for (Dynamic dynamic : dynamicMapped.values()) {
+            for (SheetIndex si : dynamic.getIndexes()) {
                 sheetIndexes.add(si.getIndex());
             }
         }
-        
-        for(String index : sheetIndexes) {
-            if(index.contains("^")) {
+
+        for (String index : sheetIndexes) {
+            if (index.contains("^")) {
                 index = index.substring(0, index.indexOf('^'));
             }
             blockSet.add(index);
@@ -179,23 +180,23 @@ public class Knowledge implements Evaluated, Simulated {
 
     public void compile() {
         buildBlockList();
-        
+
         createInvertedJunctions();
-        
+
         purge(machineMapped, junctionMapped, "junctions");
         purge(junctionMapped, conditionMapped, "conditions");
     }
 
     /**
-     * This method must return an object that can be modified afterwards by something else.
+     * This method must return an object that can be modified afterwards by
+     * something else.
      */
     public Set<String> calculateRequiredModules() {
-        return BetterStreams.<Dependable>of(conditionMapped, dynamicMapped)
-                            .flatten(a -> a.getDependencies())
-                            .asSet();
+        return BetterStreams.<Dependable>of(conditionMapped, dynamicMapped).flatten(a -> a.getDependencies()).asSet();
     }
 
-    private void purge(Map<String, ? extends Dependable> superior, Map<String, ? extends Dependable> inferior, String inferiorName) {
+    private void purge(Map<String, ? extends Dependable> superior, Map<String, ? extends Dependable> inferior,
+            String inferiorName) {
         Set<String> requirements = new TreeSet<>();
         Set<String> unused = new TreeSet<>();
         Set<String> missing = new TreeSet<>();
@@ -245,21 +246,21 @@ public class Knowledge implements Evaluated, Simulated {
 
         BetterStreams.<Evaluated>of(conditionMapped, junctionMapped, machineMapped).forEach(Evaluated::evaluate);
     }
-    
+
     public void onBlockChanged(BlockChangeEvent event) {
         blockChangeMapped.forEach((k, v) -> v.onBlockChange(event));
     }
-    
+
     public void setOverrideOff(boolean overrideOff) {
         machineMapped.forEach((s, m) -> {
-            if(overrideOff) {
+            if (overrideOff) {
                 m.overrideForceOff();
             } else {
                 m.overrideFinish();
             }
         });
     }
-    
+
     // might be nicer to have this read from a json file
     public static List<Named> getBuiltins(ProviderCollection providers) {
         return Arrays.asList(
@@ -267,12 +268,11 @@ public class Knowledge implements Evaluated, Simulated {
                         new SheetEntry("scan_raycast", ".is_outdoors"), Operator.EQUAL, "1"),
                 new Condition("_FLOOD_SCAN_DEEP_INDOORS", providers.getSheetCommander(),
                         new SheetEntry("scan_air", ".is_near_surface"), Operator.EQUAL, "0"),
-                new Junction("_DEEP_INDOORS", providers.getCondition(),
-                        Arrays.asList("_FLOOD_SCAN_DEEP_INDOORS"), Arrays.asList("_RAYCAST_SCAN_OUTDOORS")),
-                new Junction("_INDOORS", providers.getCondition(),
-                        Arrays.asList(), Arrays.asList("_RAYCAST_SCAN_OUTDOORS", "_FLOOD_SCAN_DEEP_INDOORS")),
-                new Junction("_OUTDOORS", providers.getCondition(),
-                        Arrays.asList("_RAYCAST_SCAN_OUTDOORS"), Arrays.asList())
-                );
+                new Junction("_DEEP_INDOORS", providers.getCondition(), Arrays.asList("_FLOOD_SCAN_DEEP_INDOORS"),
+                        Arrays.asList("_RAYCAST_SCAN_OUTDOORS")),
+                new Junction("_INDOORS", providers.getCondition(), Arrays.asList(),
+                        Arrays.asList("_RAYCAST_SCAN_OUTDOORS", "_FLOOD_SCAN_DEEP_INDOORS")),
+                new Junction("_OUTDOORS", providers.getCondition(), Arrays.asList("_RAYCAST_SCAN_OUTDOORS"),
+                        Arrays.asList()));
     }
 }

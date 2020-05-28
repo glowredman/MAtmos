@@ -14,7 +14,7 @@ import eu.ha3.mc.haddon.implem.HaddonIdentity;
 import eu.ha3.mc.haddon.implem.HaddonVersion;
 
 public class SoundpackIdentity implements UpdatableIdentity {
-    
+
     private final String type;
     private final int engineVersion;
     private final String name;
@@ -23,7 +23,7 @@ public class SoundpackIdentity implements UpdatableIdentity {
     private final String uniqueName;
     private final HaddonVersion version;
     private final String updateJson;
-    
+
     public SoundpackIdentity(JsonObject matPackRoot) {
         SerialMatPack serial = new Gson().fromJson(matPackRoot, SerialMatPack.class);
         type = serial.type;
@@ -35,7 +35,7 @@ public class SoundpackIdentity implements UpdatableIdentity {
         version = serial.version != null ? new HaddonVersion(serial.version) : null;
         updateJson = serial.updatejson;
     }
-    
+
     public static class SerialMatPack {
         String type;
         int engineversion;
@@ -44,7 +44,7 @@ public class SoundpackIdentity implements UpdatableIdentity {
         String version;
         String updatejson;
     }
-    
+
     public static class SerialMatPackMetadata {
         String name;
         String author;
@@ -85,23 +85,19 @@ public class SoundpackIdentity implements UpdatableIdentity {
     public List<String> getUpdateURLs() {
         return new ArrayList<String>(Arrays.asList(updateJson));
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof SoundpackIdentity) {
-            SoundpackIdentity o = (SoundpackIdentity)obj;
-            return  Objects.equals(type, o.type) &&
-                    Objects.equals(engineVersion, o.engineVersion) &&
-                    Objects.equals(name, o.name) &&
-                    Objects.equals(author, o.author) &&
-                    Objects.equals(website, o.website) &&
-                    Objects.equals(uniqueName, o.uniqueName) &&
-                    Objects.equals(version, o.version) &&
-                    Objects.equals(updateJson, o.updateJson);
+        if (obj instanceof SoundpackIdentity) {
+            SoundpackIdentity o = (SoundpackIdentity) obj;
+            return Objects.equals(type, o.type) && Objects.equals(engineVersion, o.engineVersion)
+                    && Objects.equals(name, o.name) && Objects.equals(author, o.author)
+                    && Objects.equals(website, o.website) && Objects.equals(uniqueName, o.uniqueName)
+                    && Objects.equals(version, o.version) && Objects.equals(updateJson, o.updateJson);
         }
         return super.equals(obj);
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(type, engineVersion, name, author, website, uniqueName, version, updateJson);
@@ -111,7 +107,7 @@ public class SoundpackIdentity implements UpdatableIdentity {
     public String getPlatformName() {
         return "MAtmos";
     }
-    
+
     @Override
     public HaddonVersion getPlatformVersion() {
         return new HaddonVersion(Matmos.identity.getHaddonVersion().getMajorVersion());

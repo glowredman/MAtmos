@@ -12,7 +12,8 @@ public final class Tags implements Iterable<NBTTagCompound>, Iterator<NBTTagComp
     private int index = 0;
 
     public static Iterable<NBTTagCompound> of(NBTTagList tags) {
-        if (tags == null || tags.tagCount() == 0) return EMPTY;
+        if (tags == null || tags.tagCount() == 0)
+            return EMPTY;
         return new Tags(tags);
     }
 

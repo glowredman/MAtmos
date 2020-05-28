@@ -31,7 +31,7 @@ public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
 
     private void computeBiomes() {
         for (BiomeGenBase i : BiomeGenBase.getBiomeGenArray()) {
-            if(i != null) {
+            if (i != null) {
                 validBiomes.add(i.biomeID);
             }
         }
@@ -39,7 +39,7 @@ public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
 
     @Override
     public void sliderValueChanged(HGuiSliderControl slider, float value) {
-        int biomeID = (int)(Math.floor(value * validBiomes.size()) - 1);
+        int biomeID = (int) (Math.floor(value * validBiomes.size()) - 1);
 
         definedBiomeID = biomeID >= 0 && biomeID < validBiomes.size() ? validBiomes.get(biomeID) : biomeID;
 
@@ -103,9 +103,9 @@ public class GuiBiomeSlider implements HDisplayStringProvider, HSliderListener {
         int max = 0;
 
         for (BiomeGenBase i : BiomeGenBase.getBiomeGenArray()) {
-            if(i != null) {
+            if (i != null) {
                 int id = i.biomeID;
-    
+
                 if (id > max) {
                     max = id;
                 }

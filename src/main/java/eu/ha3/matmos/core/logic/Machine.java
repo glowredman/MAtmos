@@ -14,7 +14,8 @@ import eu.ha3.matmos.core.Simulated;
 import eu.ha3.matmos.core.StreamInformation;
 import eu.ha3.matmos.core.event.TimedEventInformation;
 
-public class Machine extends MultistateComponent implements Dependable, Simulated, Overrided, VisualizedSpecialDependencies {
+public class Machine extends MultistateComponent
+        implements Dependable, Simulated, Overrided, VisualizedSpecialDependencies {
     private final List<String> allow;
     private final List<String> restrict;
     private final TimedEventInformation timed;
@@ -27,7 +28,8 @@ public class Machine extends MultistateComponent implements Dependable, Simulate
 
     private final Collection<String> dependencies;
 
-    public Machine(String name, Provider<Junction> provider, List<String> allow, List<String> restrict, TimedEventInformation timed, List<StreamInformation> streams) {
+    public Machine(String name, Provider<Junction> provider, List<String> allow, List<String> restrict,
+            TimedEventInformation timed, List<StreamInformation> streams) {
         super(name);
         this.provider = provider;
 
@@ -46,7 +48,7 @@ public class Machine extends MultistateComponent implements Dependable, Simulate
         if (timed != null) {
             timed.simulate();
         }
-        for(StreamInformation stream : streams) {
+        for (StreamInformation stream : streams) {
             stream.simulate();
         }
     }
@@ -61,7 +63,7 @@ public class Machine extends MultistateComponent implements Dependable, Simulate
             if (timed != null) {
                 timed.evaluate();
             }
-            for(StreamInformation stream : streams) {
+            for (StreamInformation stream : streams) {
                 stream.evaluate();
             }
 

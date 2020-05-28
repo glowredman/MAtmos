@@ -9,7 +9,6 @@ public class SerialDynamicSheetIndex {
     @Expose
     public String index = "";
 
-
     public SerialDynamicSheetIndex() {
     }
 

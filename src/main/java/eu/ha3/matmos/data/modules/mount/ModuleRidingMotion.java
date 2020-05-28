@@ -15,13 +15,13 @@ public class ModuleRidingMotion extends ModuleProcessor implements Module {
         Entity ride = getPlayer().ridingEntity;
 
         if (ride != null) {
-            int mxx = (int)Math.round(ride.motionX * 1000);
-            int mzz = (int)Math.round(ride.motionZ * 1000);
+            int mxx = (int) Math.round(ride.motionX * 1000);
+            int mzz = (int) Math.round(ride.motionZ * 1000);
 
             setValue("x_1k", mxx);
-            setValue("y_1k", (int)Math.round(ride.motionY * 1000));
+            setValue("y_1k", (int) Math.round(ride.motionY * 1000));
             setValue("z_1k", mzz);
-            setValue("sqrt_xx_zz", (int)Math.floor(Math.sqrt(mxx * mxx + mzz * mzz)));
+            setValue("sqrt_xx_zz", (int) Math.floor(Math.sqrt(mxx * mxx + mzz * mzz)));
         } else {
             setValue("x_1k", 0);
             setValue("y_1k", 0);

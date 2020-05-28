@@ -10,8 +10,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 
 /**
- * Processing module for the total entities a player has leashed and withing range. (default 20
- * blocks)
+ * Processing module for the total entities a player has leashed and withing
+ * range. (default 20 blocks)
  */
 public class ModuleLeashing extends ModuleProcessor implements Module {
     private static final int RADIUS = 20;
@@ -24,10 +24,9 @@ public class ModuleLeashing extends ModuleProcessor implements Module {
     protected void doProcess() {
         EntityPlayer player = getPlayer();
 
-        List<EntityLiving> entities = player.getEntityWorld().getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox(
-                player.posX - RADIUS, player.posY - RADIUS,
-                player.posZ - RADIUS, player.posX + RADIUS,
-                player.posY + RADIUS, player.posZ + RADIUS));
+        List<EntityLiving> entities = player.getEntityWorld().getEntitiesWithinAABB(EntityLiving.class,
+                AxisAlignedBB.getBoundingBox(player.posX - RADIUS, player.posY - RADIUS, player.posZ - RADIUS,
+                        player.posX + RADIUS, player.posY + RADIUS, player.posZ + RADIUS));
 
         setValue("total", entities.stream().filter(entity -> {
             return entity.getLeashed() && entity.getLeashedToEntity() == player;

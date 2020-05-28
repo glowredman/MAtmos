@@ -8,19 +8,13 @@ import eu.ha3.matmos.util.BlockPos;
 import eu.ha3.matmos.util.MAtUtil;
 
 public class ModuleCollission extends BlockCountModule {
-    private final BlockPos[] blocks = {
-            new BlockPos(0, -2, 0), // bottom
-            new BlockPos(0, -1, 0),
-            new BlockPos(0, 0, 0), // body
+    private final BlockPos[] blocks = { new BlockPos(0, -2, 0), // bottom
+            new BlockPos(0, -1, 0), new BlockPos(0, 0, 0), // body
             new BlockPos(0, 1, 0), // column
-            new BlockPos(-1, -1, 0),
-            new BlockPos(1, -1, 0), // x -- 0
-            new BlockPos(0, -1, -1),
-            new BlockPos(0, -1, 1), // z -- 0
-            new BlockPos(-1, 0, 0),
-            new BlockPos(1, 0, 0), // x -- 1
-            new BlockPos(0, 0, -1),
-            new BlockPos(0, 0, 1), // z -- 1
+            new BlockPos(-1, -1, 0), new BlockPos(1, -1, 0), // x -- 0
+            new BlockPos(0, -1, -1), new BlockPos(0, -1, 1), // z -- 0
+            new BlockPos(-1, 0, 0), new BlockPos(1, 0, 0), // x -- 1
+            new BlockPos(0, 0, -1), new BlockPos(0, 0, 1), // z -- 1
     };
 
     public ModuleCollission(DataPackage dataIn) {

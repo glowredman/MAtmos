@@ -13,7 +13,8 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.util.MovingObjectPosition;
 
 /**
- * Processes values for the entity/block that a player focuses over with the cursor.
+ * Processes values for the entity/block that a player focuses over with the
+ * cursor.
  */
 public class ModuleHitscan extends ModuleProcessor implements Module {
     private final Map<MovingObjectPosition.MovingObjectType, String> equiv = new HashMap<>();
@@ -40,13 +41,26 @@ public class ModuleHitscan extends ModuleProcessor implements Module {
             return;
         }
 
-        BlockPos mouseOverPos = new BlockPos(mc.objectMouseOver.blockX, mc.objectMouseOver.blockY, mc.objectMouseOver.blockZ); 
-        
+        BlockPos mouseOverPos = new BlockPos(mc.objectMouseOver.blockX, mc.objectMouseOver.blockY,
+                mc.objectMouseOver.blockZ);
+
         setValue("mouse_over_something", mc.objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.MISS);
         setValue("mouse_over_what", equiv.get(mc.objectMouseOver.typeOfHit));
-        setValue("block", mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK ? MAtUtil.getNameAt(mouseOverPos, NO_BLOCK_OUT_OF_BOUNDS) : NO_BLOCK_IN_THIS_CONTEXT);
-        setValue("meta", mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK ? MAtUtil.getMetaAsStringAt(mouseOverPos, NO_BLOCK_OUT_OF_BOUNDS) : NO_BLOCK_IN_THIS_CONTEXT);
-        setValue("powermeta", mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK ? MAtUtil.getPowerMetaAt(mouseOverPos, NO_BLOCK_OUT_OF_BOUNDS) : NO_BLOCK_IN_THIS_CONTEXT);
-        setValue("entity_id", mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY ? EntityList.getEntityString(mc.objectMouseOver.entityHit) : NO_ENTITY);
+        setValue("block",
+                mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK
+                        ? MAtUtil.getNameAt(mouseOverPos, NO_BLOCK_OUT_OF_BOUNDS)
+                        : NO_BLOCK_IN_THIS_CONTEXT);
+        setValue("meta",
+                mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK
+                        ? MAtUtil.getMetaAsStringAt(mouseOverPos, NO_BLOCK_OUT_OF_BOUNDS)
+                        : NO_BLOCK_IN_THIS_CONTEXT);
+        setValue("powermeta",
+                mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK
+                        ? MAtUtil.getPowerMetaAt(mouseOverPos, NO_BLOCK_OUT_OF_BOUNDS)
+                        : NO_BLOCK_IN_THIS_CONTEXT);
+        setValue("entity_id",
+                mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY
+                        ? EntityList.getEntityString(mc.objectMouseOver.entityHit)
+                        : NO_ENTITY);
     }
 }

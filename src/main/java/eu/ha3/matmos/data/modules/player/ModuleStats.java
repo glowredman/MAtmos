@@ -18,13 +18,13 @@ public class ModuleStats extends ModuleProcessor implements Module {
     protected void doProcess() {
         EntityPlayer player = getPlayer();
 
-        setValue("health1k", (int)(player.getHealth() * 1000));
+        setValue("health1k", (int) (player.getHealth() * 1000));
         setValue("oxygen", player.getAir());
         setValue("armor", player.getTotalArmorValue());
         setValue("food", player.getFoodStats().getFoodLevel());
-        setValue("saturation1k", (int)(player.getFoodStats().getSaturationLevel() * 1000));
-        setValue("exhaustion1k", (int)(((IFoodStats)player.getFoodStats()).getFoodExhaustionLevel() * 1000));
-        setValue("experience1k", (int)(player.experience * 1000));
+        setValue("saturation1k", (int) (player.getFoodStats().getSaturationLevel() * 1000));
+        setValue("exhaustion1k", (int) (((IFoodStats) player.getFoodStats()).getFoodExhaustionLevel() * 1000));
+        setValue("experience1k", (int) (player.experience * 1000));
         setValue("experience_level", player.experienceLevel);
         setValue("experience_total", player.experienceTotal);
     }

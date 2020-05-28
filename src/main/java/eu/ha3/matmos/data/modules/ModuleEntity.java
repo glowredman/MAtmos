@@ -36,7 +36,8 @@ public class ModuleEntity implements IDataGatherer, PassOnceModule {
     private boolean isRequired;
 
     @SuppressWarnings("unchecked")
-    public ModuleEntity(DataPackage dataIn, IDataCollector collector, String minDistModule, String radiModulePrefix, int max, int... radiis) {
+    public ModuleEntity(DataPackage dataIn, IDataCollector collector, String minDistModule, String radiModulePrefix,
+            int max, int... radiis) {
         this.collector = collector;
         submodules = new LinkedHashSet<>();
 
@@ -50,7 +51,7 @@ public class ModuleEntity implements IDataGatherer, PassOnceModule {
         minimumDistanceReports = new HashMap<>();
 
         radiusSheets = new ModuleProcessor[radiis.length];
-        entityCount = (Map<String, Integer>[])new Map<?, ?>[radiis.length];
+        entityCount = (Map<String, Integer>[]) new Map<?, ?>[radiis.length];
 
         radiusValuesSorted = Arrays.copyOf(radiis, radiis.length);
         Arrays.sort(radiusValuesSorted);
@@ -164,7 +165,7 @@ public class ModuleEntity implements IDataGatherer, PassOnceModule {
 
         if (collector.requires(mindistModel.getName())) {
             for (String entityID : minimumDistanceReports.keySet()) {
-                mindistModel.setValue(entityID, (int)Math.floor(minimumDistanceReports.get(entityID) * 1000));
+                mindistModel.setValue(entityID, (int) Math.floor(minimumDistanceReports.get(entityID) * 1000));
             }
         }
 

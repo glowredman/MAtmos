@@ -52,7 +52,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     private DataPackage data;
 
     private float volume = 1;
-    
+
     List<Integer> dimensionList;
     boolean dimensionListIsWhitelist;
     private Optional<Integer> lastDimension = Optional.empty();
@@ -66,28 +66,28 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
         if (!this.userconfigFolder.exists()) {
             this.userconfigFolder.mkdirs();
         }
-        
+
         dealiasMap = new BlockDealiaser(aliasFile);
-        
-        if(dimensionList == null) {
+
+        if (dimensionList == null) {
             buildDimensionList();
         }
     }
-    
+
     private void buildDimensionList() {
         dimensionList = new ArrayList<Integer>();
         String dimensionListString = ConfigManager.getConfig().getString("dimensions.list");
-        
-        if(!dimensionListString.isEmpty()) {
+
+        if (!dimensionListString.isEmpty()) {
             Arrays.stream(dimensionListString.split(",")).forEach(o -> {
                 try {
                     dimensionList.add(Integer.parseInt(o));
-                } catch(NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     Matmos.LOGGER.warn("Ignoring invalid dimension number: " + o);
                 }
             });
         }
-        
+
         dimensionListIsWhitelist = ConfigManager.getConfig().getString("dimensions.listtype").contentEquals("white");
     }
 
@@ -96,28 +96,28 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
 
         dealer.findResourcePacks().forEach(this::readSoundPack);
     }
-    
+
     private void readSoundPack(IResourcePack pack) {
-        try (   InputStream matPackStream = dealer.openMatPackPointerFile(pack);
-                InputStream expansionsStream = dealer.openExpansionsPointerFile(pack)){
+        try (InputStream matPackStream = dealer.openMatPackPointerFile(pack);
+                InputStream expansionsStream = dealer.openExpansionsPointerFile(pack)) {
             String matPackJSONString = IOUtils.toString(matPackStream, "UTF-8");
             String expansionsJSONString = IOUtils.toString(expansionsStream, "UTF-8");
-            
-            if(readMatPackFile(new JsonParser().parse(matPackJSONString).getAsJsonObject())) {
+
+            if (readMatPackFile(new JsonParser().parse(matPackJSONString).getAsJsonObject())) {
                 readExpansionsFile(new JsonParser().parse(expansionsJSONString).getAsJsonObject(), pack);
             }
         } catch (Exception e) {
             Matmos.LOGGER.warn(pack + " " + "has failed with an error: " + e.getMessage());
         }
     }
-    
-    /*** Returns false if reading the pack should be cancelled */ 
+
+    /*** Returns false if reading the pack should be cancelled */
     private boolean readMatPackFile(JsonObject matPackRoot) {
         soundpackIdentities.add(new SoundpackIdentity(matPackRoot));
-        
+
         return true;
     }
-    
+
     private void readExpansionsFile(JsonObject expansionsRoot, IResourcePack pack) {
         JsonArray expansions = expansionsRoot.get("expansions").getAsJsonArray();
 
@@ -162,11 +162,11 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     public Map<String, Expansion> getExpansions() {
         return expansions;
     }
-    
-    public List<SoundpackIdentity> getSoundpackIdentities(){
+
+    public List<SoundpackIdentity> getSoundpackIdentities() {
         return soundpackIdentities;
     }
-    
+
     public static int dealiasID(int alias) {
         return dealiasMap.dealiasID(alias);
     }
@@ -197,15 +197,15 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     @Override
     public void onTick() {
         Minecraft.getMinecraft().mcProfiler.startSection("expansionmanager");
-        if(!lastDimension.isPresent() || MAtUtil.getPlayer().dimension != lastDimension.get()) {
+        if (!lastDimension.isPresent() || MAtUtil.getPlayer().dimension != lastDimension.get()) {
             expansions.values().forEach(e -> e.setOverrideOff(!isDimensionAllowed(MAtUtil.getPlayer().dimension)));
             lastDimension = Optional.of(MAtUtil.getPlayer().dimension);
         }
-        
+
         expansions.values().forEach(Expansion::evaluate);
         Minecraft.getMinecraft().mcProfiler.endSection();
     }
-    
+
     private boolean isDimensionAllowed(int dimension) {
         boolean inList = dimensionList.contains(dimension);
         return dimensionListIsWhitelist ? inList : !inList;

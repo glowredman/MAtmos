@@ -31,7 +31,7 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
     @Override
     public void playSound(String path, float volume, float pitch, int meta) {
         // XXX 2014-01-12 TEMPORARY: USE MONO-STEREO
-        //playStereo(this.paths.get(path), volume, pitch);
+        // playStereo(this.paths.get(path), volume, pitch);
         Entity e = Minecraft.getMinecraft().thePlayer;
 
         if (meta <= 0) {
@@ -47,13 +47,13 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
     }
 
     @Override
-    public boolean setupStreamingToken(int token, String path, float pitch, boolean isLooping,
-            boolean usesPause, boolean underwater) {
+    public boolean setupStreamingToken(int token, String path, float pitch, boolean isLooping, boolean usesPause,
+            boolean underwater) {
         registerStreaming("" + token, path, 1f, pitch, isLooping, usesPause, underwater, this);
 
         return true;
     }
-    
+
     @Override
     public void setVolume(int token, float newVolume, float fadeDuration) {
         super.setVolume("" + token, newVolume, fadeDuration);
@@ -73,9 +73,9 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
         int token = getNewStreamingToken();
 
         registerStreaming("" + token, path, volume, pitch, isLooping, usesPause, underwater, this);
-        
+
         pathToToken.put(path, token);
-        
+
         return token;
     }
 }

@@ -8,5 +8,5 @@ import com.google.gson.annotations.Expose;
 public class SerialSoundEffects {
     @Expose
     public Map<String, SerialSFXBlockChange> blockchange = new TreeMap<>();
-    
+
 }

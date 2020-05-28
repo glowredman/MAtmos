@@ -26,7 +26,9 @@ public class TimedEventInformation extends MultistateComponent implements Simula
     private long startTime;
     private long stopTime;
 
-    public TimedEventInformation(String machineName, Provider<Machine> provider, ReferenceTime time, List<TimedEvent> events, float delayBeforeFadeIn, float delayBeforeFadeOut, float fadeInTime, float fadeOutTime) {
+    public TimedEventInformation(String machineName, Provider<Machine> provider, ReferenceTime time,
+            List<TimedEvent> events, float delayBeforeFadeIn, float delayBeforeFadeOut, float fadeInTime,
+            float fadeOutTime) {
         super("_TIMED:" + machineName);
 
         this.machineName = machineName;
@@ -43,11 +45,11 @@ public class TimedEventInformation extends MultistateComponent implements Simula
     }
 
     private void signalPlayable() {
-        startTime = time.getMilliseconds() + (long)(delayBeforeFadeIn * 1000);
+        startTime = time.getMilliseconds() + (long) (delayBeforeFadeIn * 1000);
     }
 
     private void signalStoppable() {
-        stopTime = time.getMilliseconds() + (long)(delayBeforeFadeOut * 1000);
+        stopTime = time.getMilliseconds() + (long) (delayBeforeFadeOut * 1000);
     }
 
     @Override
@@ -73,7 +75,7 @@ public class TimedEventInformation extends MultistateComponent implements Simula
         if (isActive && !isPlaying) {
             if (time.getMilliseconds() > startTime) {
                 isPlaying = true;
-                calc.fadeIn((long)(fadeInTime * 1000));
+                calc.fadeIn((long) (fadeInTime * 1000));
                 for (TimedEventInterface t : events) {
                     t.restart(time);
                 }
@@ -81,7 +83,7 @@ public class TimedEventInformation extends MultistateComponent implements Simula
         } else if (!isActive && isPlaying) {
             if (time.getMilliseconds() > stopTime) {
                 isPlaying = false;
-                calc.fadeOut((long)(fadeOutTime * 1000));
+                calc.fadeOut((long) (fadeOutTime * 1000));
             }
         }
 

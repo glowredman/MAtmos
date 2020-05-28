@@ -25,7 +25,7 @@ abstract class MixinSoundManager implements ISoundManager {
     public abstract boolean isLoaded();
 
     private SoundSystem soundSystemAccessor;
-    
+
     @Shadow
     private boolean loaded;
 
@@ -37,7 +37,7 @@ abstract class MixinSoundManager implements ISoundManager {
     private void onConstructed(CallbackInfo ci) {
         Matmos.LOGGER.debug("Running mixin for SoundManager constructor!");
         SoundSystemConfig.setNumberStreamingChannels(11);
-        SoundSystemConfig.setNumberNormalChannels(32-11);
+        SoundSystemConfig.setNumberNormalChannels(32 - 11);
         SoundSystemConfig.setStreamQueueFormatsMatch(true);
     }
 

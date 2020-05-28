@@ -7,9 +7,10 @@ import eu.ha3.matmos.core.sheet.VirtualSheet;
 import eu.ha3.matmos.data.IDataGatherer;
 
 /**
- * A processor that contains a sheet, or a virtual delta sheet if the deltaName is not null. Calling
- * doProcess() will set the values of the sheet, and automatically apply them at the end of the call
- * if the sheet provided by the Data is a virtual sheet, or if the sheet is a delta sheet.
+ * A processor that contains a sheet, or a virtual delta sheet if the deltaName
+ * is not null. Calling doProcess() will set the values of the sheet, and
+ * automatically apply them at the end of the call if the sheet provided by the
+ * Data is a virtual sheet, or if the sheet is a delta sheet.
  *
  * @author Hurry
  */
@@ -41,7 +42,7 @@ public abstract class ProcessorModel implements IDataGatherer {
             doProcess();
 
             if (sheet instanceof VirtualSheet) {
-                ((VirtualSheet)sheet).apply();
+                ((VirtualSheet) sheet).apply();
             }
 
             if (interval != 0) {
@@ -53,8 +54,8 @@ public abstract class ProcessorModel implements IDataGatherer {
     }
 
     /**
-     * Sets the number of calls where nothing happens before the process is executed again. Defaults to
-     * 0 (call every time).
+     * Sets the number of calls where nothing happens before the process is executed
+     * again. Defaults to 0 (call every time).
      *
      * @param value
      */

@@ -26,7 +26,8 @@ public class ModuleColumn extends ModuleProcessor implements Module {
         World w = Minecraft.getMinecraft().theWorld;
 
         BlockPos pos = MAtUtil.getPlayerPos();
-        BlockPos topMostBlock = new BlockPos(pos.getX(), w.getTopSolidOrLiquidBlock(pos.getX(), pos.getZ()), pos.getZ());
+        BlockPos topMostBlock = new BlockPos(pos.getX(), w.getTopSolidOrLiquidBlock(pos.getX(), pos.getZ()),
+                pos.getZ());
 
         setValue("y-1", MAtUtil.getNameAt(pos.down(), NO_BLOCK_OUT_OF_BOUNDS));
         setValue("y-2", MAtUtil.getNameAt(pos.down(2), NO_BLOCK_OUT_OF_BOUNDS));
@@ -35,6 +36,7 @@ public class ModuleColumn extends ModuleProcessor implements Module {
 
         setValue("topmost_block", topMostBlock.getY());
         setValue("thickness_overhead", topMostBlock.getY() - pos.getY());
-        setValue("can_rain_reach", w.canBlockSeeTheSky(pos.getX(), pos.getY(), pos.getZ()) && !(topMostBlock.getY() > pos.getY()));
+        setValue("can_rain_reach",
+                w.canBlockSeeTheSky(pos.getX(), pos.getY(), pos.getZ()) && !(topMostBlock.getY() > pos.getY()));
     }
 }

@@ -7,16 +7,16 @@ public class StreamInformation extends MultistateComponent implements Simulated 
     private String path;
     private float volume;
     private float pitch;
-    
+
     private float delayBeforeFadeIn;
     private float delayBeforeFadeOut;
-    
+
     private float fadeInTime;
     private float fadeOutTime;
     private boolean isLooping;
     private boolean usesPause;
     private boolean normalVolumeUnderwater;
-    
+
     private final String machineName;
     private final Provider<Machine> provider;
     private final ReferenceTime time;
@@ -27,7 +27,9 @@ public class StreamInformation extends MultistateComponent implements Simulated 
     private long startTime;
     private long stopTime;
 
-    public StreamInformation(String machineName, Provider<Machine> provider, ReferenceTime time, SoundRelay relay, String path, float volume, float pitch, float delayBeforeFadeIn, float delayBeforeFadeOut, float fadeInTime, float fadeOutTime, boolean isLooping, boolean usesPause, boolean underwater) {
+    public StreamInformation(String machineName, Provider<Machine> provider, ReferenceTime time, SoundRelay relay,
+            String path, float volume, float pitch, float delayBeforeFadeIn, float delayBeforeFadeOut, float fadeInTime,
+            float fadeOutTime, boolean isLooping, boolean usesPause, boolean underwater) {
         super("_STREAM:" + machineName);
 
         this.machineName = machineName;
@@ -68,11 +70,11 @@ public class StreamInformation extends MultistateComponent implements Simulated 
     }
 
     private void signalPlayable() {
-        startTime = time.getMilliseconds() + (long)(delayBeforeFadeIn * 1000);
+        startTime = time.getMilliseconds() + (long) (delayBeforeFadeIn * 1000);
     }
 
     private void signalStoppable() {
-        stopTime = time.getMilliseconds() + (long)(delayBeforeFadeOut * 1000);
+        stopTime = time.getMilliseconds() + (long) (delayBeforeFadeOut * 1000);
     }
 
     @Override

@@ -25,7 +25,7 @@ public class ThousandStringCountModule extends ExternalStringCountModule {
     @Override
     public void apply() {
         for (Entry<String, Integer> entry : things.entrySet()) {
-            entry.setValue((int)Math.ceil((float)entry.getValue() / total * 1000f));
+            entry.setValue((int) Math.ceil((float) entry.getValue() / total * 1000f));
         }
         super.apply();
         total = 0;

@@ -35,7 +35,7 @@ public class ModuleBiome extends ModuleProcessor implements Module {
         Minecraft mc = Minecraft.getMinecraft();
         BlockPos playerPos = MAtUtil.getPlayerPos();
 
-        return mc.theWorld.getChunkFromBlockCoords(playerPos.getX(), playerPos.getZ())
-                .getBiomeGenForWorldCoords(playerPos.getX() & 15, playerPos.getZ() & 15, mc.theWorld.getWorldChunkManager());
+        return mc.theWorld.getChunkFromBlockCoords(playerPos.getX(), playerPos.getZ()).getBiomeGenForWorldCoords(
+                playerPos.getX() & 15, playerPos.getZ() & 15, mc.theWorld.getWorldChunkManager());
     }
 }

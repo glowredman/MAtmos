@@ -7,12 +7,12 @@ public class Numbers {
         }
 
         if (o instanceof Long) {
-            return (Long)o;
+            return (Long) o;
         }
 
         if (o instanceof String) {
             try {
-                return Long.parseLong((String)o);
+                return Long.parseLong((String) o);
             } catch (NumberFormatException e) {
                 return null;
             }
@@ -27,12 +27,12 @@ public class Numbers {
         }
 
         if (o instanceof Float) {
-            return (Float)o;
+            return (Float) o;
         }
 
         if (o instanceof String) {
             try {
-                return Float.parseFloat((String)o);
+                return Float.parseFloat((String) o);
             } catch (NumberFormatException e) {
                 return null;
             }

@@ -19,7 +19,7 @@ public class Junction extends MultistateComponent implements Dependable, Visuali
     private final Provider<Condition> provider;
 
     private final Collection<String> dependencies;
-    
+
     private final boolean inverted;
 
     public Junction(String name, Provider<Condition> provider, List<String> yes, List<String> no, boolean inverted) {
@@ -34,17 +34,17 @@ public class Junction extends MultistateComponent implements Dependable, Visuali
         dependencies.addAll(yes);
         dependencies.addAll(no);
     }
-    
+
     public Junction(String name, Provider<Condition> provider, List<String> yes, List<String> no) {
         this(name, provider, yes, no, false);
     }
-    
+
     @Override
     public void evaluate() {
         boolean pre = isActive;
         isActive = testIfTrue();
-        
-        if(inverted) {
+
+        if (inverted) {
             isActive = !isActive;
         }
 

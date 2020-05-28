@@ -23,7 +23,8 @@ public class Event extends Component implements EventInterface {
 
     private final SoundRelay relay;
 
-    public Event(String name, SoundRelay relay, List<String> paths, float volMin, float volMax, float pitchMin, float pitchMax, int distance) {
+    public Event(String name, SoundRelay relay, List<String> paths, float volMin, float volMax, float pitchMin,
+            float pitchMax, int distance) {
         super(name);
         this.relay = relay;
 
@@ -44,7 +45,8 @@ public class Event extends Component implements EventInterface {
             if (resourcePack.resourceExists(location) || def.resourceExists(location)) {
                 relay.cacheSound(path);
             } else {
-                Matmos.LOGGER.warn("File: " + path + " appears to be missing from: " + resourcePack.getPackName() + " [This sound will not be cached or played in-game]");
+                Matmos.LOGGER.warn("File: " + path + " appears to be missing from: " + resourcePack.getPackName()
+                        + " [This sound will not be cached or played in-game]");
                 toRemove.add(path);
             }
         }

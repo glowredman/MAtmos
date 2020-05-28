@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  * Same as PositionedSoundRecord, just exposes the private constructor
+ * 
  * @author makamys
  *
  */

@@ -188,11 +188,12 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
     }
 
     private float getClampedPitch(StreamingSound sound) {
-        return (float)MathHelper.clamp_double(sound.asTickable().getPitch(), 0.5F, 2.0F);
+        return (float) MathHelper.clamp_double(sound.asTickable().getPitch(), 0.5F, 2.0F);
     }
 
     private float getClampedVolume(StreamingSound sound) {
-        return (float)MathHelper.clamp_double(sound.asTickable().getVolume() * this.getCategoryVolume(sound.getCategory()), 0.0F, 1.0F);
+        return (float) MathHelper
+                .clamp_double(sound.asTickable().getVolume() * this.getCategoryVolume(sound.getCategory()), 0.0F, 1.0F);
     }
 
     private float getCategoryVolume(SoundCategory category) {

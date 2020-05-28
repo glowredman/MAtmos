@@ -41,7 +41,7 @@ public class ModuleContainer extends ModuleProcessor implements Module {
         setValue("is_npc_trade", gui instanceof GuiMerchant);
         setValue("is_anvil", gui instanceof GuiRepair);
         setValue("is_horse", gui instanceof GuiScreenHorseInventory);
-        /*setValue("is_shulker", gui instanceof GuiShulkerBox);*/ // 1.12.2
+        /* setValue("is_shulker", gui instanceof GuiShulkerBox); */ // 1.12.2
 
         setValue("is_commandblock", gui instanceof GuiCommandBlock);
         setValue("is_container", gui instanceof GuiContainer);

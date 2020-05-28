@@ -74,7 +74,7 @@ public class LegacyXMLExpansions_Engine1 {
     private static final String DELAYMAX = "delaymax";
 
     private static final String STREAM = "stream";
-    //PATH already covered
+    // PATH already covered
     private static final String VOLUME = "volume";
     private static final String PITCH = "pitch";
     private static final String FADEINTIME = "fadeintime";
@@ -87,7 +87,6 @@ public class LegacyXMLExpansions_Engine1 {
     private Map<String, String> scanDicts = new HashMap<>();
 
     private SerialRoot root;
-
 
     private Map<String, DynamicElementSerialiser> serialisers = new HashMap<>();
 
@@ -142,7 +141,7 @@ public class LegacyXMLExpansions_Engine1 {
             return null;
         }
 
-        return asBlock((int)(long)l);
+        return asBlock((int) (long) l);
     }
 
     private String asItem(int il) {
@@ -164,7 +163,7 @@ public class LegacyXMLExpansions_Engine1 {
             return null;
         }
 
-        return asItem((int)(long)l);
+        return asItem((int) (long) l);
     }
 
     private String eltString(String tagName, Element ele) {
@@ -265,7 +264,7 @@ public class LegacyXMLExpansions_Engine1 {
 
             Long l = Numbers.toLong(textOf(eelt));
             if (l != null) {
-                int il = (int)(long)l;
+                int il = (int) (long) l;
                 if (asBlock(il) != null) {
                     asBlock.entries.add(asBlock(il));
                 }
@@ -303,17 +302,20 @@ public class LegacyXMLExpansions_Engine1 {
             sheetNotComputed = recomputeScanSheetName(sheetNotComputed);
         }
 
-        SheetIndex si = !dynamic ? new LegacySheetIndex_Engine0to1(sheetNotComputed, indexNotComputed) : new SheetEntry(sheetNotComputed, indexNotComputed);
+        SheetIndex si = !dynamic ? new LegacySheetIndex_Engine0to1(sheetNotComputed, indexNotComputed)
+                : new SheetEntry(sheetNotComputed, indexNotComputed);
 
         root.condition.put(name, new SerialCondition(si, Operator.fromSymbol(symbol).getSerializedForm(), value));
 
         if (si instanceof LegacySheetIndex_Engine0to1) {
-            if (((LegacySheetIndex_Engine0to1)si).isBlock() && asBlock(value) != null) {
-                root.condition.put(name + AS_BLOCK, new SerialCondition(si, Operator.fromSymbol(symbol).getSerializedForm(), asBlock(value)));
+            if (((LegacySheetIndex_Engine0to1) si).isBlock() && asBlock(value) != null) {
+                root.condition.put(name + AS_BLOCK,
+                        new SerialCondition(si, Operator.fromSymbol(symbol).getSerializedForm(), asBlock(value)));
             }
 
-            if (((LegacySheetIndex_Engine0to1)si).isItem() && asItem(value) != null) {
-                root.condition.put(name + AS_ITEM, new SerialCondition(si, Operator.fromSymbol(symbol).getSerializedForm(), asItem(value)));
+            if (((LegacySheetIndex_Engine0to1) si).isItem() && asItem(value) != null) {
+                root.condition.put(name + AS_ITEM,
+                        new SerialCondition(si, Operator.fromSymbol(symbol).getSerializedForm(), asItem(value)));
             }
         }
     }
@@ -390,9 +392,9 @@ public class LegacyXMLExpansions_Engine1 {
     private String recomputeBlockName(String index) {
         Long l = Numbers.toLong(index);
         if (l != null && l < 256) {
-            Object o = Block.blockRegistry.getObjectById((int)(long)l);
+            Object o = Block.blockRegistry.getObjectById((int) (long) l);
             if (o != null && o instanceof Block) {
-                index = MAtUtil.nameOf((Block)o);
+                index = MAtUtil.nameOf((Block) o);
             } else {
                 System.err.println("??? Failed to convert block with index " + index);
             }
@@ -425,7 +427,7 @@ public class LegacyXMLExpansions_Engine1 {
         try {
             return Integer.parseInt(source);
         } catch (NumberFormatException e) {
-            return (int)Float.parseFloat(source);
+            return (int) Float.parseFloat(source);
         }
     }
 }

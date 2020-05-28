@@ -21,7 +21,8 @@ public class ModuleLighting extends ModuleProcessor implements Module {
         BlockPos playerPos = MAtUtil.getPlayerPos();
 
         setValue("sky", w.getSavedLightValue(EnumSkyBlock.Sky, playerPos.getX(), playerPos.getY(), playerPos.getZ()));
-        setValue("lamp", w.getSavedLightValue(EnumSkyBlock.Block, playerPos.getX(), playerPos.getY(), playerPos.getZ()));
+        setValue("lamp",
+                w.getSavedLightValue(EnumSkyBlock.Block, playerPos.getX(), playerPos.getY(), playerPos.getZ()));
         setValue("final", w.getBlockLightValue(playerPos.getX(), playerPos.getY(), playerPos.getZ()));
         setValue("see_sky", w.canBlockSeeTheSky(playerPos.getX(), playerPos.getY(), playerPos.getZ()));
     }

@@ -19,20 +19,22 @@ public interface StreamingSound {
     void stop(float fadeOut);
 
     /**
-     * Instantly applies a volume modulation to this stream, upon the initially set volume.
+     * Instantly applies a volume modulation to this stream, upon the initially set
+     * volume.
      *
      * @param volumeMod
      */
     void applyVolume(float volumeMod);
 
     /**
-     * Dispose of this StreamingSound. The StreamingSound should never be able to be used again.
+     * Dispose of this StreamingSound. The StreamingSound should never be able to be
+     * used again.
      */
     void dispose();
 
     void interrupt();
 
     ITickableSound asTickable();
-    
+
     SoundCategory getCategory();
 }

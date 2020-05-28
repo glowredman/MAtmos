@@ -8,8 +8,8 @@ import java.util.Map;
 /** FML coremod for bootstrapping the SoundSystemReplacer. Used in Forge. */
 
 public class SoundSystemReplacerPlugin implements IFMLLoadingPlugin {
-    
-    public SoundSystemReplacerPlugin(){
+
+    public SoundSystemReplacerPlugin() {
         SoundSystemReplacer.run();
     }
 
@@ -30,7 +30,7 @@ public class SoundSystemReplacerPlugin implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
-        
+
     }
 
     @Override

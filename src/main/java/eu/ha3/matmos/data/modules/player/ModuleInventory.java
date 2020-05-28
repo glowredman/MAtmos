@@ -6,7 +6,8 @@ import eu.ha3.matmos.data.modules.ModuleProcessor;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
- * Inventory processing to discover items the player is holding or has as a helmet.
+ * Inventory processing to discover items the player is holding or has as a
+ * helmet.
  */
 public class ModuleInventory extends ModuleProcessor implements Module {
     public ModuleInventory(DataPackage data) {

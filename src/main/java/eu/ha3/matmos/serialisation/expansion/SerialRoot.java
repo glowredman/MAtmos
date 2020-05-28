@@ -23,7 +23,7 @@ public class SerialRoot {
 
     @Expose
     public Map<String, SerialDynamic> dynamic = new TreeMap<>();
-    
+
     @Expose
     public SerialSoundEffects soundeffects;
 }

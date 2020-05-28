@@ -21,7 +21,7 @@ public class SoundHelper implements SoundCapabilities, Stable {
     private float volumeModulator;
 
     private boolean isInterrupt;
-    
+
     private boolean isActivated;
 
     public SoundHelper(LoopingStreamedSoundManager soundManager) {
@@ -49,20 +49,23 @@ public class SoundHelper implements SoundCapabilities, Stable {
     }
 
     private void playUnattenuatedSound(double xx, double yy, double zz, String loc, float volume, float pitch) {
-        NoAttenuationSound nas = new NoAttenuationSound(new ResourceLocation(loc), volume, pitch, (float)xx, (float)yy, (float)zz);
+        NoAttenuationSound nas = new NoAttenuationSound(new ResourceLocation(loc), volume, pitch, (float) xx,
+                (float) yy, (float) zz);
 
         Minecraft.getMinecraft().getSoundHandler().playSound(nas);
 
     }
 
     @Override
-    public void registerStreaming(String customName, String path, float volume, float pitch, boolean isLooping, boolean usesPause, boolean underwater, SoundHelperRelay relay) {
+    public void registerStreaming(String customName, String path, float volume, float pitch, boolean isLooping,
+            boolean usesPause, boolean underwater, SoundHelperRelay relay) {
         if (isInterrupt) {
             return;
         }
 
         String loc = path.replace(".ogg", "").replace('/', '.').replaceAll("[0-9]", "");
-        NoAttenuationMovingSound nams = new NoAttenuationMovingSound(new ResourceLocation(loc), volume, pitch, isLooping, usesPause, underwater);
+        NoAttenuationMovingSound nams = new NoAttenuationMovingSound(new ResourceLocation(loc), volume, pitch,
+                isLooping, usesPause, underwater);
 
         streaming.put(customName, StreamHandle.of(nams, relay));
     }
@@ -77,7 +80,7 @@ public class SoundHelper implements SoundCapabilities, Stable {
             IDontKnowHowToCode.warnOnce("Tried to play missing stream " + customName);
             return;
         }
-        
+
         setVolume(customName, streaming.get(customName).getSound().getVolume(), fadeIn);
     }
 
@@ -91,23 +94,23 @@ public class SoundHelper implements SoundCapabilities, Stable {
             IDontKnowHowToCode.warnOnce("Tried to stop missing stream " + customName);
             return;
         }
-        
+
         setVolume(customName, 0, fadeOut);
     }
-    
+
     public void routine() {
-        for(StreamHandle<NoAttenuationMovingSound> handle : streaming.values()) {
+        for (StreamHandle<NoAttenuationMovingSound> handle : streaming.values()) {
             float newVolume = handle.getLargestVolumeCommandThisTick();
-            if(newVolume >= 0) {
+            if (newVolume >= 0) {
                 float fade = handle.getFadeOfLargestVolumeCommandThisTick();
-                
+
                 NoAttenuationMovingSound sound = handle.getSound();
 
                 if (newVolume > 0 && (sound.getTargetVolume() != newVolume)) {
                     boolean reuse = false;
                     boolean previousIsDonePlaying = sound.isDonePlaying();
-                    
-                    if(previousIsDonePlaying) {
+
+                    if (previousIsDonePlaying) {
                         sound = sound.copy();
                         handle.setSound(sound);
                     } else {
@@ -115,7 +118,7 @@ public class SoundHelper implements SoundCapabilities, Stable {
                     }
                     sound.setVolume(newVolume, fade);
                     sound.applyVolume(volumeModulator);
-                    
+
                     boolean notYetPlayed = sound.popNotYetPlayed();
 
                     Matmos.LOGGER.debug("playStreaming " + sound.getSoundLocation() + " (reuse=" + reuse
@@ -125,7 +128,8 @@ public class SoundHelper implements SoundCapabilities, Stable {
                         try {
                             soundManager.playSound(sound);
                         } catch (Exception e) {
-                            Matmos.LOGGER.warn("There was an exception when trying to start stream " + sound.getSoundLocation() + ": " + e.getMessage());
+                            Matmos.LOGGER.warn("There was an exception when trying to start stream "
+                                    + sound.getSoundLocation() + ": " + e.getMessage());
                         }
                     }
                 } else if (newVolume == 0 && sound.getTargetVolume() != newVolume) {
@@ -133,21 +137,21 @@ public class SoundHelper implements SoundCapabilities, Stable {
                     sound.stop(fade);
                 }
             }
-            
+
             handle.resetLargestVolumeCommandThisTick();
         }
     }
-    
+
     public void setVolume(String customName, float newVolume, float fade) {
-        if(isInterrupt) {
+        if (isInterrupt) {
             return;
         }
-        
+
         if (!streaming.containsKey(customName)) {
             IDontKnowHowToCode.warnOnce("Tried to set volume of missing stream " + customName);
             return;
         }
-        
+
         streaming.get(customName).setVolume(newVolume, fade);
     }
 
@@ -165,7 +169,7 @@ public class SoundHelper implements SoundCapabilities, Stable {
     @Override
     public void applyVolume(float volumeMod) {
         volumeModulator = volumeMod;
-        
+
         for (StreamHandle<? extends StreamingSound> handle : streaming.values()) {
             handle.getSound().applyVolume(volumeMod);
         }
@@ -187,7 +191,7 @@ public class SoundHelper implements SoundCapabilities, Stable {
         }
         streaming.clear();
     }
-    
+
     @Override
     public boolean isActivated() {
         return isActivated;
@@ -195,16 +199,20 @@ public class SoundHelper implements SoundCapabilities, Stable {
 
     @Override
     public void activate() {
-        if(isActivated) return;
-        
+        if (isActivated)
+            return;
+
         isActivated = true;
     }
 
     @Override
     public void deactivate() {
-        if(!isActivated) return;
-        
-        streaming.keySet().forEach(s -> {stopStreaming(s, 2);});
+        if (!isActivated)
+            return;
+
+        streaming.keySet().forEach(s -> {
+            stopStreaming(s, 2);
+        });
         isActivated = false;
     }
 
