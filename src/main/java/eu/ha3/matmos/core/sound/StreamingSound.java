@@ -32,6 +32,6 @@ public interface StreamingSound {
     void dispose();
 
     void interrupt();
-    
+
     ITickableSound asTickable();
 }

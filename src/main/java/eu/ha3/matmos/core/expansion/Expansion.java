@@ -57,8 +57,8 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
 
     private Exception loadException;
 
-    public Expansion(ExpansionIdentity identity, DataPackage data, IDataCollector collector, LoopingStreamedSoundManager soundManager,
-            VolumeContainer masterVolume, File configurationSource) {
+    public Expansion(ExpansionIdentity identity, DataPackage data, IDataCollector collector,
+            LoopingStreamedSoundManager soundManager, VolumeContainer masterVolume, File configurationSource) {
         this.identity = identity;
         this.masterVolume = masterVolume;
         this.data = data;

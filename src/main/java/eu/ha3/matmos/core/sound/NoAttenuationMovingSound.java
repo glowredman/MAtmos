@@ -119,10 +119,10 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
         }
         return wasNotYetPlayed;
     }
-    
+
     @Override
     public ITickableSound asTickable() {
-        return (ITickableSound)this;
+        return (ITickableSound) this;
     }
 
 }

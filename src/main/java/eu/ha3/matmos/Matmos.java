@@ -365,7 +365,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     public ISoundHandler getSoundHandler() {
         return ((ISoundHandler) Minecraft.getMinecraft().getSoundHandler());
     }
-    
+
     public LoopingStreamedSoundManager getSoundManager() {
         return soundManager;
     }
@@ -481,8 +481,8 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
         return !badSound;
     }
-    
-    public static List<SoundManagerListener> getSoundManagerListeners(){
+
+    public static List<SoundManagerListener> getSoundManagerListeners() {
         return soundManagerListeners;
     }
 }

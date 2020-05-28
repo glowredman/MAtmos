@@ -12,11 +12,11 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
     protected final Map<String, Integer> pathToToken = new HashMap<>();
 
     private final Map<String, String> paths = new HashMap<>();
-    
+
     public SoundHelperRelay(LoopingStreamedSoundManager soundManager) {
         super(soundManager);
     }
-    
+
     @Override
     public void routine() {
         super.routine();

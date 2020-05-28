@@ -23,7 +23,7 @@ abstract class MixinSoundManager implements ISoundManager {
 
     @Accessor("loaded")
     public abstract boolean isLoaded();
-    
+
     private SoundSystem soundSystemAccessor;
 
     @Shadow
@@ -31,7 +31,7 @@ abstract class MixinSoundManager implements ISoundManager {
 
     @Shadow
     private boolean loaded;
-    
+
     @Invoker("getVolume")
     @Override
     public abstract float invokeGetVolume(SoundCategory category);
@@ -44,7 +44,6 @@ abstract class MixinSoundManager implements ISoundManager {
         SoundSystemConfig.setStreamQueueFormatsMatch(true);
     }
 
-
     @Inject(method = "stopAllSounds", at = @At("RETURN"))
     public void stopAllSounds(CallbackInfo ci) {
         if (this.loaded) {
@@ -52,25 +51,25 @@ abstract class MixinSoundManager implements ISoundManager {
             // using Forge, but should be harmless.
             this.pausedChannels.clear(); // Forge: MC-35856 Fixed paused sounds repeating when switching worlds
         }
-        
+
         Matmos.getSoundManagerListeners().forEach(l -> l.onStopAllSounds());
     }
-    
+
     @Inject(method = "pauseAllSounds", at = @At("RETURN"))
     public void pauseAllSounds(CallbackInfo ci) {
         Matmos.getSoundManagerListeners().forEach(l -> l.onPauseAllSounds(true));
     }
-    
+
     @Inject(method = "resumeAllSounds", at = @At("RETURN"))
     public void resumeAllSounds(CallbackInfo ci) {
         Matmos.getSoundManagerListeners().forEach(l -> l.onPauseAllSounds(false));
     }
-    
+
     @Override
     public SoundSystem getSoundSystem() {
         return soundSystemAccessor;
     }
-    
+
     @Override
     public void setSoundSystemAccessor(SoundSystem sndSystem) {
         this.soundSystemAccessor = sndSystem;

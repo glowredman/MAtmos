@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 public class SoundHelper implements SoundCapabilities, Stable {
 
     private LoopingStreamedSoundManager soundManager;
-    
+
     protected final Map<String, StreamHandle<NoAttenuationMovingSound>> streaming = new LinkedHashMap<>();
 
     private float volumeModulator;
@@ -27,7 +27,7 @@ public class SoundHelper implements SoundCapabilities, Stable {
     public SoundHelper(LoopingStreamedSoundManager soundManager) {
         this.soundManager = soundManager;
     }
-    
+
     @Override
     public void playMono(String event, double xx, double yy, double zz, float volume, float pitch) {
         if (isInterrupt) {
@@ -122,8 +122,7 @@ public class SoundHelper implements SoundCapabilities, Stable {
                     boolean notYetPlayed = sound.popNotYetPlayed();
 
                     Matmos.LOGGER.debug("playStreaming " + sound.getSoundLocation() + " (reuse=" + reuse
-                            + ", notYetPlayed = " + notYetPlayed
-                            + ", donePlaying=" + previousIsDonePlaying + ")");
+                            + ", notYetPlayed = " + notYetPlayed + ", donePlaying=" + previousIsDonePlaying + ")");
 
                     if (notYetPlayed) {
                         try {
