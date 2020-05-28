@@ -211,6 +211,7 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
     public void stopAllSounds() {
         for (StreamingSound sound : playingSounds.values()) {
             sound.interrupt();
+            stopSound(sound);
         }
     }
 
