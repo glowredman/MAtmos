@@ -29,10 +29,10 @@ import paulscode.sound.SoundSystem;
  * A sound manager designed to work well with looping streamed sounds.
  * 
  * <p>
- * Minecraft's sound manager behaves oddly with looping streamed sounds. It is
- * possible for sounds that should be playing to stop playing, and for sounds
- * that should not be playing to keep playing. (For a possible explanation, see
- * below.)
+ * Minecraft's sound manager behaves oddly with streamed sounds, and it's even
+ * more apparent with ones that loop. It is possible for sounds that should be
+ * playing to stop playing, and for sounds that should not be playing to keep
+ * playing. (For a possible explanation, see below.)
  * 
  * <p>
  * This sound manager was created to work correctly with looping streamed
@@ -41,21 +41,23 @@ import paulscode.sound.SoundSystem;
  * <h1>What's the deal with Minecraft's sound manager?</h1>
  * 
  * <p>
- * Since Minecraft does not have any streamed looping sounds, it's not a
- * surprise if they don't work correctly. I have identified the following
- * possible issues. Note that they may not be entirely correct, I haven't been
- * verified these theories extensively.
+ * Streamed sound playback has never been a significant feature of Minecraft's
+ * engine: it's only used for playing (non-looping) music, and it's notorious
+ * for being buggy. I have identified the following possible issues. Note that
+ * they may not be entirely correct, I haven't been verified these theories
+ * extensively.
  * 
  * <li>A polling method is used to check when sounds aren't playing. Since the
  * sound manager is on another thread, this can cause a desync to happen when
  * the game freezes. When this happens, the sound manager (correctly) reports
  * that the sounds aren't being played at the time... which causes Minecraft to
  * remove them from the list of playing sounds. Only, after the freeze ends, the
- * sounds continue playing, and since Minecraft doesn't acknowledge their
+ * sounds may continue playing, and since Minecraft doesn't acknowledge their
  * existence anymore, they never get stopped.
  * 
  * <li>The opposite problem can also happen (sometimes sounds stop playing), but
- * I'm not sure why.
+ * I'm not sure why. This can be observed in vanilla when music stops playing
+ * after the game freezes for a few seconds.
  * 
  * <li>A HashBiMap is used to store the inverse map of playing sounds. According
  * to CreativeMD's research, it doesn't work correctly -- sometimes a desync can
@@ -192,7 +194,8 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
     }
 
     private float getClampedVolume(StreamingSound sound) {
-        return MathHelper.clamp(sound.asTickable().getVolume() * this.getCategoryVolume(sound.asTickable().getCategory()), 0.0F, 1.0F);
+        return MathHelper.clamp(
+                sound.asTickable().getVolume() * this.getCategoryVolume(sound.asTickable().getCategory()), 0.0F, 1.0F);
     }
 
     private float getCategoryVolume(SoundCategory category) {
