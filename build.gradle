@@ -122,7 +122,7 @@ subprojects {
 		manifest {
 			attributes (
 				'FMLCorePluginContainsFMLMod': 'true',
-				'FMLAT': "haddon_core_at.cfg",
+				'FMLAT': "haddon_core_at.cfg MAtmos_at.cfg",
 				
 				'TweakOrder': 0,
 				'ForceLoadAsMod': 'true',

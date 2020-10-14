@@ -1,6 +1,5 @@
 package eu.ha3.matmos.data.modules.world;
 
-import eu.ha3.matmos.core.mixin.IBiomeGenBase;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
@@ -36,7 +35,7 @@ public class ModuleWorld extends ModuleProcessor implements Module {
         setValue("can_rain_on", w.canBlockSeeTheSky(pos.getX(), pos.getY(), pos.getZ()));
         setValue("can_snow_here", w.provider.canSnowAt(pos.getX(), pos.getY(), pos.getZ(), false));
 
-        setValue("biome_can_rain", ((IBiomeGenBase) biome).enableRain());
+        setValue("biome_can_rain", biome.enableRain);
         setValue("biome_is_snowy", biome.getEnableSnow());
         setValue("biome_temperature", Math.round(biome.getFloatTemperature(pos.getX(), pos.getY(), pos.getZ()) * 1000));
         setValue("biome_rainfall", Math.round(biome.getFloatRainfall() * 1000));

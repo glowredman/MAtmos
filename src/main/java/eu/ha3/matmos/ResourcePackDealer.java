@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import eu.ha3.matmos.core.mixin.IMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.ResourcePackRepository;
@@ -18,10 +17,10 @@ public class ResourcePackDealer {
     private static final ResourceLocation expansions = new ResourceLocation("matmos", "expansions.json");
 
     public Stream<IResourcePack> findResourcePacks() {
-        return Stream
+        return ((Stream<IResourcePack>)Stream
                 .concat(((List<ResourcePackRepository.Entry>) (Minecraft.getMinecraft().getResourcePackRepository()
                         .getRepositoryEntries())).stream().map(ResourcePackRepository.Entry::getResourcePack),
-                        ((IMinecraft) Minecraft.getMinecraft()).defaultResourcePacks().stream())
+                        Minecraft.getMinecraft().defaultResourcePacks.stream()))
                 .filter(this::checkCompatible).distinct();
     }
 
