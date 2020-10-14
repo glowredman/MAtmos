@@ -95,7 +95,7 @@ subprojects {
 				srcDirs = ["${rootDir}/lib/MC-Commons/mc-src"]
 			}
 			resources {
-				srcDirs = ["${rootDir}/lib/MC-Commons/mc-src/resources"]
+				srcDirs = []
 			}
 
 			compileClasspath += main.compileClasspath
@@ -106,7 +106,7 @@ subprojects {
 
 			}
 			resources {
-				srcDirs = ["${rootDir}/src/main/resources"]
+				srcDirs = ["${rootDir}/src/main/resources", "${rootDir}/lib/MC-Commons/mc-src/resources"]
 			}
 
 			compileClasspath += commons.output
@@ -116,14 +116,13 @@ subprojects {
 		}
 	}
 	
-	def outRefMapCommons = tasks.compileCommonsJava.temporaryDir.toString() + "/haddon_core.mixin.refmap.json" // 1.7.10 mixin compatibility
 	def outRefMapMain = tasks.compileJava.temporaryDir.toString() + "/haddon.mixin.refmap.json" // 1.7.10 mixin compatibility
 
 	jar {
 		manifest {
 			attributes (
 				'FMLCorePluginContainsFMLMod': 'true',
-
+				'FMLAT': "haddon_core_at.cfg",
 				
 				'TweakOrder': 0,
 				'ForceLoadAsMod': 'true',
@@ -131,7 +130,7 @@ subprojects {
 			)
 			if(project.name == "forge"){
 				attributes (
-					'MixinConfigs': 'haddon.mixin.json,haddon_core.mixin.json',
+					'MixinConfigs': 'haddon.mixin.json',
 					'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
 					'FMLCorePlugin': 'eu.ha3.matmos.core.preinit.forge.SoundSystemReplacerPlugin'
 					// We must set the tweak class as MixinTweaker to be detected correctly
@@ -142,7 +141,6 @@ subprojects {
 
 		from(sourceSets.commons.output);
 
-		from outRefMapCommons; // 1.7.10 mixin
 		from outRefMapMain; // 1.7.10 mixin
 		
 		// embed libraries in jar
@@ -157,7 +155,6 @@ subprojects {
 	def outSrgFile = tasks.compileJava.temporaryDir.toString() + "/outSrg.srg"
 
 	afterEvaluate {
-		tasks.compileCommonsJava.options.compilerArgs += ["-AreobfSrgFile=${tasks.reobf.srg}", "-AoutSrgFile=${outSrgFile}", "-AoutRefMapFile=${outRefMapCommons}"];
 		tasks.compileJava.options.compilerArgs += ["-AreobfSrgFile=${tasks.reobf.srg}", "-AoutSrgFile=${outSrgFile}", "-AoutRefMapFile=${outRefMapMain}"];
 	}
 
