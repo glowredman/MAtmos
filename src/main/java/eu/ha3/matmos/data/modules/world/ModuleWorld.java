@@ -1,5 +1,6 @@
 package eu.ha3.matmos.data.modules.world;
 
+import eu.ha3.matmos.ConfigManager;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
@@ -12,8 +13,11 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.WorldInfo;
 
 public class ModuleWorld extends ModuleProcessor implements Module {
+    float rainStrengthThreshold;
+    
     public ModuleWorld(DataPackage data) {
         super(data, "w_general");
+        rainStrengthThreshold = ConfigManager.getConfig().getFloat("rain.strengthThreshold");
     }
 
     @Override
@@ -25,7 +29,8 @@ public class ModuleWorld extends ModuleProcessor implements Module {
         Biome biome = w.getBiome(pos);
 
         setValue("time_modulo24k", (int) (info.getWorldTime() % 24000L));
-        setValue("rain", w.isRaining());
+        setValue("rain", rainStrengthThreshold == -1 ? w.isRaining() 
+                : w.getRainStrength(0f) > rainStrengthThreshold);
         setValue("thunder", info.isThundering());
         setValue("thunder", w.getThunderStrength(0f) > 0.9f);
         setValue("dimension", player.dimension);
