@@ -260,6 +260,12 @@ public class Knowledge implements Evaluated, Simulated {
             }
         });
     }
+    
+    public boolean hasOverrideRainCondition() {
+        return conditionMapped.values().stream().anyMatch(c -> 
+            c.getIndex().getSheet().equals("meta_option") && 
+            c.getIndex().getIndex().equals("override_rain"));
+    }
 
     // might be nicer to have this read from a json file
     public static List<Named> getBuiltins(ProviderCollection providers) {

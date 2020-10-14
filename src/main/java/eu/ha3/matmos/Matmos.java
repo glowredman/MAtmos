@@ -470,11 +470,20 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public boolean onSound(ISound sound, String name, SoundManager manager) {
-        boolean badSound = config.getBoolean("rain.suppress") && simulacrum.isPresent()
+        boolean badSound = shouldSuppressRain()
+                && simulacrum.isPresent()
                 && !simulacrum.get().getExpansions().isEmpty()
                 && Arrays.asList(config.getString("rain.soundlist").split(",")).contains(name);
 
         return !badSound;
+    }
+    
+    public boolean shouldSuppressRain() {
+        String suppressOption = config.getString("rain.suppress");
+        return suppressOption.equals("true") || 
+                (suppressOption.equals("auto")
+                        && simulacrum.isPresent()
+                        && simulacrum.get().hasRainMuteableExpansions());
     }
 
     public static List<SoundManagerListener> getSoundManagerListeners() {

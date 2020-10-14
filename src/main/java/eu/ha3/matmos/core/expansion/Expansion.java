@@ -383,6 +383,10 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
             return "Error while fetching info.txt";
         }
     }
+    
+    public boolean isRainMuteable() {
+        return knowledge.hasOverrideRainCondition();
+    }
 
     @Override
     public void onBlockChanged(BlockChangeEvent event) {

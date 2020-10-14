@@ -26,6 +26,7 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
 
     private boolean hasResourcePacks;
     private boolean hasDisabledResourcePacks;
+    private boolean hasRainMuteableExpansions;
 
     public Simulacrum(Matmos mod) {
         expansionManager = new ExpansionManager(new File(ConfigManager.getConfigFolder(), "expansions_userconfig/"),
@@ -57,6 +58,8 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
 
         expansionManager.synchronize();
 
+        hasRainMuteableExpansions = expansionManager.getExpansions().values().stream().anyMatch(e -> e.isRainMuteable());
+        
         Matmos.LOGGER.info("Expansions loaded (" + stat.getSecondsAsString(1) + "s).");
     }
 
@@ -90,6 +93,10 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
 
     public boolean hasDisabledResourcePacks() {
         return hasDisabledResourcePacks;
+    }
+    
+    public boolean hasRainMuteableExpansions() {
+        return hasRainMuteableExpansions;
     }
 
     public Map<String, Expansion> getExpansions() {
