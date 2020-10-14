@@ -7,9 +7,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import eu.ha3.matmos.Matmos;
-import eu.ha3.matmos.core.ducks.ISoundHandler;
-import eu.ha3.matmos.core.ducks.ISoundManager;
-import eu.ha3.matmos.core.mixin.ISoundManagerStaticAccessor;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
 import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.client.Minecraft;
@@ -137,11 +134,11 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
                             ResourceLocation resourcelocation1 = sound.getSoundAsOggLocation();
 
                             if (sound.isStreaming()) {
-                                getSoundSystem().newStreamingSource(false, s, getURLForSoundResource(resourcelocation1),
+                                getSoundSystem().newStreamingSource(false, s, SoundManager.getURLForSoundResource(resourcelocation1),
                                         resourcelocation1.toString(), flag, p_sound.getXPosF(), p_sound.getYPosF(),
                                         p_sound.getZPosF(), p_sound.getAttenuationType().getTypeInt(), f);
                             } else {
-                                getSoundSystem().newSource(false, s, getURLForSoundResource(resourcelocation1),
+                                getSoundSystem().newSource(false, s, SoundManager.getURLForSoundResource(resourcelocation1),
                                         resourcelocation1.toString(), flag, p_sound.getXPosF(), p_sound.getYPosF(),
                                         p_sound.getZPosF(), p_sound.getAttenuationType().getTypeInt(), f);
                             }
@@ -174,7 +171,7 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
     }
 
     private SoundManager getSoundManager() {
-        return ((ISoundHandler) getSoundHandler()).getSoundManager();
+        return getSoundHandler().sndManager;
     }
 
     private SoundHandler getSoundHandler() {
@@ -182,11 +179,11 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
     }
 
     private SoundSystem getSoundSystem() {
-        return ((ISoundManager) getSoundManager()).getSoundSystem();
+        return getSoundManager().sndSystem;
     }
 
     private boolean isSoundManagerLoaded() {
-        return ((ISoundManager) getSoundManager()).isLoaded();
+        return getSoundManager().loaded;
     }
 
     private float getClampedPitch(StreamingSound sound) {
@@ -199,11 +196,7 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
     }
 
     private float getCategoryVolume(SoundCategory category) {
-        return ((ISoundManager) getSoundManager()).invokeGetVolume(category);
-    }
-
-    private URL getURLForSoundResource(final ResourceLocation p_148612_0_) {
-        return ISoundManagerStaticAccessor.invokeGetURLForSoundResource(p_148612_0_);
+        return getSoundManager().getVolume(category);
     }
 
     @Override

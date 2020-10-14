@@ -15,7 +15,6 @@ import eu.ha3.matmos.core.ProviderCollection;
 import eu.ha3.matmos.core.ReferenceTime;
 import eu.ha3.matmos.core.Simulated;
 import eu.ha3.matmos.core.SystemClock;
-import eu.ha3.matmos.core.ducks.ISoundHandler;
 import eu.ha3.matmos.core.event.EventInterface;
 import eu.ha3.matmos.core.expansion.agents.LoadingAgent;
 import eu.ha3.matmos.core.expansion.agents.RawJsonLoadingAgent;

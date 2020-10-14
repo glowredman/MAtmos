@@ -11,30 +11,21 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import eu.ha3.matmos.Matmos;
-import eu.ha3.matmos.core.ducks.ISoundManager;
 import eu.ha3.matmos.core.sound.SoundManagerListener;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.SoundCategory;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 
 @Mixin(SoundManager.class)
-abstract class MixinSoundManager implements ISoundManager {
-
-    @Accessor("loaded")
-    public abstract boolean isLoaded();
-
-    private SoundSystem soundSystemAccessor;
-
+abstract class MixinSoundManager {
     @Shadow
     private List<String> pausedChannels;
 
     @Shadow
     private boolean loaded;
-
-    @Invoker("getVolume")
-    @Override
-    public abstract float invokeGetVolume(SoundCategory category);
 
     @Inject(method = "<init>*", at = @At("RETURN"))
     private void onConstructed(CallbackInfo ci) {
@@ -63,15 +54,5 @@ abstract class MixinSoundManager implements ISoundManager {
     @Inject(method = "resumeAllSounds", at = @At("RETURN"))
     public void resumeAllSounds(CallbackInfo ci) {
         Matmos.getSoundManagerListeners().forEach(l -> l.onPauseAllSounds(false));
-    }
-
-    @Override
-    public SoundSystem getSoundSystem() {
-        return soundSystemAccessor;
-    }
-
-    @Override
-    public void setSoundSystemAccessor(SoundSystem sndSystem) {
-        this.soundSystemAccessor = sndSystem;
     }
 }

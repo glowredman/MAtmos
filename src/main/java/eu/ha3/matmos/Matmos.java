@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 
 import eu.ha3.easy.StopWatchStatistic;
 import eu.ha3.easy.TimeStatistic;
-import eu.ha3.matmos.core.ducks.ISoundHandler;
 import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.Stable;
 import eu.ha3.matmos.core.expansion.VolumeUpdatable;
@@ -360,10 +359,6 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
             // Write changes on disk.
             config.save();
         }
-    }
-
-    public ISoundHandler getSoundHandler() {
-        return ((ISoundHandler) Minecraft.getMinecraft().getSoundHandler());
     }
 
     public LoopingStreamedSoundManager getSoundManager() {

@@ -24,7 +24,6 @@ import com.google.gson.JsonParser;
 import eu.ha3.matmos.ConfigManager;
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.ResourcePackDealer;
-import eu.ha3.matmos.core.ducks.ISoundHandler;
 import eu.ha3.matmos.core.expansion.agents.JsonLoadingAgent;
 import eu.ha3.matmos.core.expansion.agents.LegacyXMLLoadingAgent;
 import eu.ha3.matmos.core.sheet.DataPackage;

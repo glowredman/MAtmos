@@ -172,7 +172,7 @@ subprojects {
 		manifest {
 			attributes (
 				'FMLCorePluginContainsFMLMod': 'true',
-
+				'FMLAT': "MAtmos_at.cfg",
 				
 				'TweakOrder': 0,
 				'ForceLoadAsMod': 'true',
@@ -180,7 +180,7 @@ subprojects {
 			)
 			if(project.name.startsWith("forge")){
 				attributes (
-					'MixinConfigs': 'haddon.mixin.json,haddon_core.mixin.json',
+					'MixinConfigs': 'haddon.mixin.json',
 					'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker'
 					// We must set the tweak class as MixinTweaker to be detected correctly
 					// by the mixin environment.

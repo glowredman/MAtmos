@@ -1,6 +1,5 @@
 package eu.ha3.matmos.data.modules.player;
 
-import eu.ha3.matmos.core.mixin.IEntity;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.data.modules.Module;
 import eu.ha3.matmos.data.modules.ModuleProcessor;
@@ -27,7 +26,7 @@ public class ModulePlayerStats extends ModuleProcessor implements Module {
         setValue("on_ground", player.onGround);
         setValue("burning", player.isBurning());
         setValue("jumping", player.movementInput.jump);
-        setValue("in_web", ((IEntity) player).isInWeb());
+        setValue("in_web", player.isInWeb);
         setValue("on_ladder", player.isOnLadder());
 
         ItemStack held = player.getHeldItemMainhand();

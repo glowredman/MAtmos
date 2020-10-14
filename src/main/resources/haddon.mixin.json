@@ -5,12 +5,6 @@
     "refmap": "haddon.mixin.refmap.json",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
-        "IEntity",
-        "IFoodStats",
-        "IMinecraft",
-        "ISoundManagerStaticAccessor",
-        "MixinSoundHandler",
-        "MixinSoundManager",
-        "MixinSoundManager$1"
+        "MixinSoundManager"
     ]
 }

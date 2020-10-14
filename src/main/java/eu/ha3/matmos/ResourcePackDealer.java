@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import eu.ha3.matmos.core.mixin.IMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.ResourcePackRepository;
@@ -21,7 +20,7 @@ public class ResourcePackDealer {
         return Stream
                 .concat(Minecraft.getMinecraft().getResourcePackRepository().getRepositoryEntries().stream()
                         .map(ResourcePackRepository.Entry::getResourcePack),
-                        ((IMinecraft) Minecraft.getMinecraft()).defaultResourcePacks().stream())
+                        Minecraft.getMinecraft().defaultResourcePacks.stream())
                 .filter(this::checkCompatible).distinct();
     }
 
