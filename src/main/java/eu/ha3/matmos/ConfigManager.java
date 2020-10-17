@@ -60,7 +60,7 @@ public class ConfigManager {
                 "True: rain from other sources is muted\n" +
                 "False: rain is muted from MAtmos soundpacks which support this option\n" +
                 "Auto: true if there's at least one soundpack which supports this option present, false otherwise\n");
-        config.setProperty("rain.soundlist", "weather.rain,weather.rain.above,ambient.weather.rain",
+        config.setProperty("rain.soundlist", "weather.rain,weather.rain.above,rain",
                 "Comma-separated list of rain sounds to suppress if rain.suppress is true");
         config.setProperty("rain.strengthThreshold", "-1",
                 "Rain strength threshold above which it's considered to be raining by soundpacks\n" +
