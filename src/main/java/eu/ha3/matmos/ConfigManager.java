@@ -62,7 +62,7 @@ public class ConfigManager {
                 "Auto: true if there's at least one soundpack which supports this option present, false otherwise\n");
         config.setProperty("rain.soundlist", "weather.rain,weather.rain.above,rain",
                 "Comma-separated list of rain sounds to suppress if rain.suppress is true");
-        config.setProperty("rain.strengthThreshold", "-1",
+        config.setProperty("rain.strengththreshold", "-1",
                 "Rain strength threshold above which it's considered to be raining by soundpacks\n" +
                 "Range: 0~1, or -1 to use the default setting, which is 0.2 in vanilla\n" +
                 "Set this to something low like 0 for better compatibility with Weather2\n"

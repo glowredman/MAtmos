@@ -17,7 +17,7 @@ public class ModuleWorld extends ModuleProcessor implements Module {
     
     public ModuleWorld(DataPackage data) {
         super(data, "w_general");
-        rainStrengthThreshold = ConfigManager.getConfig().getFloat("rain.strengthThreshold");
+        rainStrengthThreshold = ConfigManager.getConfig().getFloat("rain.strengththreshold");
     }
 
     @Override
