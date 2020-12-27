@@ -54,10 +54,7 @@ public class GuiExpansionDetails extends GuiScreen {
         buttonList.add(new GuiButton(200, 2, h, 70, 20, I18n.format("mat.options.close")));
         buttonList.add(new GuiButton(201, 4 + 70, h, 70, 20, I18n.format("mat.options.osd")));
         buttonList.add(new GuiButton(202, 6 + 70 * 2, h, 70, 20, I18n.format("mat.options.reload")));
-
-        String editor = I18n.format(mod.isEditorAvailable() ? "mat.options.editor" : "mat.options.editor.disabled");
-
-        buttonList.add(new GuiButton(203, 8 + 70 * 3, h, 110, 20, editor));
+        buttonList.add(new GuiButton(203, 8 + 70 * 3, h, 110, 20, I18n.format("mat.options.editor")));
         buttonList.add(new GuiButton(204, 10 + 70 * 3 + 110, h, 96, 20, I18n.format("mat.options.sounds")));
     }
 
@@ -71,24 +68,8 @@ public class GuiExpansionDetails extends GuiScreen {
             mc.displayGuiScreen(null);
         } else if (button.id == 202) {
             expansion.refreshKnowledge();
-        } else if (button.id == 203 && mod.isEditorAvailable()) {
-            final ExpansionDebugUnit debugUnit = expansion.obtainDebugUnit();
-            if (debugUnit != null) {
-                PluggableIntoMAtmos plug = new PluggableIntoMAtmos(mod, expansion);
-
-                Runnable editor = mod.instantiateRunnableEditor(plug);
-                if (editor != null) {
-                    new Thread(editor, "EditorWindow_for_" + expansion.getName()).start();
-
-                    if (debugUnit instanceof JsonExpansionDebugUnit) {
-                        // XXX Read only mode
-                        mod.getChatter().printChat(TextFormatting.RED, I18n.format("mat.zip.unsupported"));
-                        mod.getChatter().printChatShort(TextFormatting.RED, I18n.format("mat.zip.unzip"));
-                    }
-                } else {
-                    mod.getChatter().printChat(TextFormatting.RED, "Could not start editor for an unknown reason.");
-                }
-            }
+        } else if (button.id == 203) {
+            mc.displayGuiScreen(new GuiExpansionOverrides(this, mod, expansion));
         } else if (button.id == 204) {
             final ExpansionDebugUnit debugUnit = expansion.obtainDebugUnit();
 

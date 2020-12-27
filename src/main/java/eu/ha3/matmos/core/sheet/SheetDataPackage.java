@@ -6,11 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import eu.ha3.matmos.Matmos;
-import eu.ha3.matmos.core.expansion.ExpansionManager;
-import eu.ha3.matmos.data.modules.BlockCountModule;
-import net.minecraft.block.Block;
-
 /**
  * Represents a data package populated by data sheets.
  */
@@ -18,7 +13,7 @@ public class SheetDataPackage implements DataPackage {
     private final Map<String, Sheet> sheets;
     private final Class<? extends Sheet> sheetType;
 
-    private boolean[] isReferenced = new boolean[Matmos.MAX_ID];
+    Set<Integer> referencedIDs = new HashSet<Integer>();
 
     public SheetDataPackage(Class<? extends Sheet> sheetType) {
         sheets = new TreeMap<>();
@@ -56,15 +51,12 @@ public class SheetDataPackage implements DataPackage {
         }
     }
 
-    public int dealiasID(int id) {
-        if (isReferenced[id]) {
-            return id;
-        } else {
-            return ExpansionManager.dealiasID(id);
-        }
+    public void addReferencedIDs(List<Integer> newReferencedIDs) {
+        newReferencedIDs.remove(Integer.valueOf(-1));
+        referencedIDs.addAll(newReferencedIDs);
     }
-
-    public void addReferencedBlocks(List<Block> newReferencedBlocks) {
-        newReferencedBlocks.stream().forEach(b -> isReferenced[Block.getIdFromBlock(b)] = true);
+    
+    public boolean isIDReferenced(int id) {
+        return referencedIDs.contains(id);
     }
 }

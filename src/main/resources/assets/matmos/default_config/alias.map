@@ -1,13 +1,17 @@
 # This file contains comma-separated alias mappings like:
 #
 # torch=SomeCoolMod.cool_torch,SomeOtherMod.other_torch
+# sword=SomeCoolMod.cool_sword,SomeOtherMod.other_sword
 #
-# Block names on the right side of the mapping will be counted as if they were 
-# blocks on the left side, with the exception of blocks that are mentioned in
-# an expansion.
+# Block/item names on the right side of the mapping will be counted as if they
+# were blocks/items on the left side, with the exception of blocks/items that
+# are mentioned in an expansion.
 # (So if an expansion had a different sound for the cool_torch, it wouldn't get
 # dealiased as the torch.)
 #
-# Tip: restart MAtmos to reload the aliases without restarting Minecraft
+# You can also import other alias files like this:
+# :import some_other_file.map
+#
+# Tip: restart MAtmos to reload the aliases without having to restart Minecraft
 
 torch=tconstruct:stone_torch

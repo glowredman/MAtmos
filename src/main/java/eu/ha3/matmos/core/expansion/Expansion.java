@@ -3,7 +3,9 @@ package eu.ha3.matmos.core.expansion;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -105,6 +107,23 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
         knowledge = new Knowledge(capabilities, TIME);
 
         knowledge.setData(data);
+        knowledge.addKnowledge(Knowledge.getBuiltins(knowledge.obtainProviders()));
+        knowledge.setConditionValueOverrides(collectConditionValueOverrides());
+    }
+    
+    private Map<String, String> collectConditionValueOverrides() {
+        String OVERRIDE_CONDITION_PREFIX = "override.condition.";
+        Map<String, String> overrides = new HashMap<>();
+        myConfiguration.getAllProperties().forEach((k, v) -> {
+            if(k.startsWith(OVERRIDE_CONDITION_PREFIX)) {
+                overrides.put(k.substring(OVERRIDE_CONDITION_PREFIX.length()), v);
+            }
+        });
+        return overrides;
+    }
+    
+    public Map<String, String> getConditionValueOverrides(){
+        return knowledge.getConditionValueOverrides();
     }
 
     private void buildKnowledge() {
@@ -113,8 +132,6 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
         }
 
         newKnowledge();
-
-        knowledge.addKnowledge(Knowledge.getBuiltins(knowledge.obtainProviders()));
 
         loadException = null;
 
@@ -159,6 +176,11 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
 
     public void saveConfig() {
         myConfiguration.setProperty("volume", volume);
+        myConfiguration.getAllProperties().entrySet().removeIf(e -> e.getKey().startsWith("override.condition."));
+        
+        knowledge.getConditionValueOverrides().forEach((k, v) -> {
+            myConfiguration.setProperty("override.condition." + k, v);
+        });
         if (myConfiguration.commit()) {
             myConfiguration.save();
         }

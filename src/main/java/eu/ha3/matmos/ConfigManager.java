@@ -67,6 +67,9 @@ public class ConfigManager {
                 "Range: 0~1, or -1 to use the default setting, which is 0.2 in vanilla\n" +
                 "Set this to something low like 0 for better compatibility with Weather2\n"
                 );
+        config.setProperty("dealias.oredict", "true",
+                "Dealias oredicted blocks to the lowest id block of the oredict group."
+                );
         config.commit();
 
         config.setGlobalDescription("Tip: restart MAtmos to reload the configs without restarting Minecraft");

@@ -2,6 +2,7 @@ package eu.ha3.matmos.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,10 +11,14 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.event.Event;
 import eu.ha3.matmos.core.expansion.ExpansionIdentity;
+import eu.ha3.matmos.core.expansion.ExpansionManager;
 import eu.ha3.matmos.core.logic.Condition;
 import eu.ha3.matmos.core.logic.Junction;
 import eu.ha3.matmos.core.logic.Machine;
@@ -21,6 +26,7 @@ import eu.ha3.matmos.core.sfx.BlockChangeSound;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sheet.Sheet;
 import eu.ha3.matmos.core.sheet.SheetCommander;
+import eu.ha3.matmos.core.sheet.SheetDataPackage;
 import eu.ha3.matmos.core.sheet.SheetEntry;
 import eu.ha3.matmos.core.sheet.SheetIndex;
 import eu.ha3.matmos.util.BetterStreams;
@@ -28,6 +34,8 @@ import eu.ha3.mc.haddon.supporting.SupportsBlockChangeEvents;
 import eu.ha3.mc.haddon.supporting.event.BlockChangeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.IResourcePack;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Stores a Knowledge.
@@ -44,6 +52,8 @@ public class Knowledge implements Evaluated, Simulated {
 
     private final Map<String, BlockChangeSound> blockChangeMapped = new TreeMap<>();
 
+    private final Map<String, String> conditionValueOverrides = new HashMap<>();
+    
     private final SheetCommander<String> sheetCommander = new SheetCommander<String>() {
         @Override
         public int version(SheetIndex sheetIndex) {
@@ -157,9 +167,9 @@ public class Knowledge implements Evaluated, Simulated {
         addKnowledge(newStuff);
     }
 
-    private void buildBlockList() {
+    private void buildIDList() {
         Set<String> sheetIndexes = new HashSet<String>();
-        Set<String> blockSet = new HashSet<String>();
+        Set<String> nameSet = new HashSet<String>();
 
         for (Condition condition : conditionMapped.values()) {
             sheetIndexes.add(condition.getIndex().getIndex());
@@ -169,17 +179,31 @@ public class Knowledge implements Evaluated, Simulated {
                 sheetIndexes.add(si.getIndex());
             }
         }
+        for (PossibilityList possibility : possibilityMapped.values()) {
+            for (String entry : possibility.getList()) {
+                sheetIndexes.add(entry);
+            }
+        }
 
         for (String index : sheetIndexes) {
             if (index.contains("^")) {
                 index = index.substring(0, index.indexOf('^'));
             }
-            blockSet.add(index);
+            nameSet.add(index);
+        }
+        if(data instanceof SheetDataPackage) {
+            ((SheetDataPackage)data).addReferencedIDs(nameSet.stream().map(s -> {
+                int id = Block.getIdFromBlock(Block.getBlockFromName(s));
+                if(id == -1) {
+                    id = Item.getIdFromItem((Item)Item.REGISTRY.getObject(new ResourceLocation(s)));
+                }
+                return id;   
+            }).collect(Collectors.toList()));
         }
     }
 
     public void compile() {
-        buildBlockList();
+        buildIDList();
 
         createInvertedJunctions();
 
@@ -207,6 +231,7 @@ public class Knowledge implements Evaluated, Simulated {
 
         unused.addAll(inferior.keySet());
         unused.removeAll(requirements);
+        unused.removeIf(s -> s.startsWith("_"));
 
         missing.addAll(requirements);
         missing.removeAll(inferior.keySet());
@@ -248,6 +273,8 @@ public class Knowledge implements Evaluated, Simulated {
     }
 
     public void onBlockChanged(BlockChangeEvent event) {
+        event.oldBlock = ExpansionManager.dealias(event.oldBlock, data);
+        event.newBlock = ExpansionManager.dealias(event.newBlock, data);
         blockChangeMapped.forEach((k, v) -> v.onBlockChange(event));
     }
 
@@ -265,6 +292,15 @@ public class Knowledge implements Evaluated, Simulated {
         return conditionMapped.values().stream().anyMatch(c -> 
             c.getIndex().getSheet().equals("meta_option") && 
             c.getIndex().getIndex().equals("override_rain"));
+    }
+    
+    public void setConditionValueOverrides(Map<String, String> overrides) {
+        conditionValueOverrides.clear();
+        conditionValueOverrides.putAll(overrides);
+    }
+    
+    public Map<String, String> getConditionValueOverrides() {
+        return conditionValueOverrides;
     }
 
     // might be nicer to have this read from a json file

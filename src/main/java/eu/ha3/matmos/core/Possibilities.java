@@ -15,4 +15,9 @@ public class Possibilities extends Component implements PossibilityList {
     public boolean listHas(String element) {
         return list.contains(element);
     }
+    
+    @Override
+    public List<String> getList(){
+        return list;
+    }
 }
