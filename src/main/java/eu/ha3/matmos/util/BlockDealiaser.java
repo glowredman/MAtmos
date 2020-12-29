@@ -4,12 +4,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.IntStream;
 
 import eu.ha3.matmos.ConfigManager;
 import eu.ha3.matmos.Matmos;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class BlockDealiaser {
 
@@ -50,6 +56,23 @@ public class BlockDealiaser {
     }
 
     private void compile() {
+        if(ConfigManager.getConfig().getBoolean("dealias.oredict")) {
+            for(String oreName : OreDictionary.getOreNames()) {
+                List<Block> blocks = new ArrayList<>();
+                for(ItemStack s : OreDictionary.getOres(oreName)) {
+                    if(s.getItem() instanceof ItemBlock) {
+                        blocks.add(((ItemBlock)s.getItem()).blockInstance);
+                    }
+                }
+                
+                int[] ids = blocks.stream().mapToInt(b -> Block.getIdFromBlock(b)).toArray();
+                int minBlockID = IntStream.of(ids).min().orElse(-1);
+                if(minBlockID != -1) {
+                    IntStream.of(ids).forEach(i -> dealiasMap[i] = minBlockID);
+                }
+            }
+        }
+        
         for (int i = 0; i < dealiasMap.length; i++) {
             if (dealiasMap[i] != i) {
                 int id = dealiasMap[i];
