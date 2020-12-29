@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.event.Event;
@@ -21,6 +22,7 @@ import eu.ha3.matmos.core.sfx.BlockChangeSound;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sheet.Sheet;
 import eu.ha3.matmos.core.sheet.SheetCommander;
+import eu.ha3.matmos.core.sheet.SheetDataPackage;
 import eu.ha3.matmos.core.sheet.SheetEntry;
 import eu.ha3.matmos.core.sheet.SheetIndex;
 import eu.ha3.matmos.util.BetterStreams;
@@ -175,6 +177,9 @@ public class Knowledge implements Evaluated, Simulated {
                 index = index.substring(0, index.indexOf('^'));
             }
             blockSet.add(index);
+        }
+        if(data instanceof SheetDataPackage) {
+            ((SheetDataPackage)data).addReferencedBlocks(blockSet.stream().map(s -> Block.getBlockFromName(s)).collect(Collectors.toList()));
         }
     }
 

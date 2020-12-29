@@ -65,6 +65,6 @@ public class SheetDataPackage implements DataPackage {
     }
 
     public void addReferencedBlocks(List<Block> newReferencedBlocks) {
-        newReferencedBlocks.stream().forEach(b -> isReferenced[Block.getIdFromBlock(b)] = true);
+        newReferencedBlocks.stream().filter(b -> b != null).forEach(b -> isReferenced[Block.getIdFromBlock(b)] = true);
     }
 }
