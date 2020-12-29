@@ -30,7 +30,7 @@ import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sound.LoopingStreamedSoundManager;
 import eu.ha3.matmos.data.IDataCollector;
 import eu.ha3.matmos.data.modules.BlockCountModule;
-import eu.ha3.matmos.util.BlockDealiaser;
+import eu.ha3.matmos.util.IDDealiaser;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
@@ -46,7 +46,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     private final ResourcePackDealer dealer = new ResourcePackDealer();
     private final List<SoundpackIdentity> soundpackIdentities = new ArrayList<SoundpackIdentity>();
     private final Map<String, Expansion> expansions = new HashMap<>();
-    private static BlockDealiaser dealiasMap;
+    private static IDDealiaser dealiasMap;
 
     private DataPackage data;
 
@@ -66,7 +66,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
             this.userconfigFolder.mkdirs();
         }
 
-        dealiasMap = new BlockDealiaser(aliasFile);
+        dealiasMap = new IDDealiaser(aliasFile);
 
         if (dimensionList == null) {
             buildDimensionList();
