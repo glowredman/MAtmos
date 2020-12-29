@@ -27,6 +27,7 @@ import eu.ha3.matmos.ResourcePackDealer;
 import eu.ha3.matmos.core.expansion.agents.JsonLoadingAgent;
 import eu.ha3.matmos.core.expansion.agents.LegacyXMLLoadingAgent;
 import eu.ha3.matmos.core.sheet.DataPackage;
+import eu.ha3.matmos.core.sheet.SheetDataPackage;
 import eu.ha3.matmos.core.sound.LoopingStreamedSoundManager;
 import eu.ha3.matmos.data.IDataCollector;
 import eu.ha3.matmos.data.modules.BlockCountModule;
@@ -37,6 +38,8 @@ import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, SupportsFrameEvents {
@@ -166,8 +169,32 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
         return soundpackIdentities;
     }
 
-    public static int dealiasID(int alias) {
-        return dealiasMap.dealiasID(alias);
+    public static ItemStack dealias(ItemStack is, DataPackage data) {
+        if(is == null) return null;
+        return new ItemStack(Item.getItemById(dealiasToID(is, data)), is.stackSize, is.getMetadata());
+    }
+    
+    public static int dealiasToID(ItemStack is, DataPackage data) {
+        if(is == null) return -1;
+        return dealiasIDIfNotReferenced(Item.getIdFromItem(is.getItem()), data);
+    }
+    
+    public static Block dealias(Block b, DataPackage data) {
+        if(b == null) return null;
+        return Block.getBlockById(dealiasToID(b, data));
+    }
+    
+    public static int dealiasToID(Block b, DataPackage data) {
+        if(b == null) return -1;
+        return dealiasIDIfNotReferenced(Block.getIdFromBlock(b), data);
+    }
+    
+    private static int dealiasIDIfNotReferenced(int id, DataPackage data) {
+        if(data != null && data instanceof SheetDataPackage && ((SheetDataPackage)data).isIDReferenced(id)) {
+            return id;
+        } else {
+            return dealiasMap.dealiasID(id);
+        }
     }
 
     private void synchronizeStable(Expansion expansion) {

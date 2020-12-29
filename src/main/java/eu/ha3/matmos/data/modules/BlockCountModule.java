@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import org.apache.commons.lang3.tuple.Pair;
 
 import eu.ha3.matmos.Matmos;
+import eu.ha3.matmos.core.expansion.ExpansionManager;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import eu.ha3.matmos.core.sheet.SheetDataPackage;
 import eu.ha3.matmos.util.MAtUtil;
@@ -76,7 +77,7 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
         Block block = blockMeta.getLeft();
         int meta = blockMeta.getRight();
 
-        int id = sheetData.dealiasID(Block.getIdFromBlock(block));
+        int id = ExpansionManager.dealiasToID(block, sheetData);
 
         counts[id] += amount;
 

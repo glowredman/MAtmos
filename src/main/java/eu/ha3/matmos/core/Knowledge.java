@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.event.Event;
 import eu.ha3.matmos.core.expansion.ExpansionIdentity;
+import eu.ha3.matmos.core.expansion.ExpansionManager;
 import eu.ha3.matmos.core.logic.Condition;
 import eu.ha3.matmos.core.logic.Junction;
 import eu.ha3.matmos.core.logic.Machine;
@@ -30,6 +31,7 @@ import eu.ha3.mc.haddon.supporting.SupportsBlockChangeEvents;
 import eu.ha3.mc.haddon.supporting.event.BlockChangeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.IResourcePack;
+import net.minecraft.item.Item;
 
 /**
  * Stores a Knowledge.
@@ -159,9 +161,9 @@ public class Knowledge implements Evaluated, Simulated {
         addKnowledge(newStuff);
     }
 
-    private void buildBlockList() {
+    private void buildIDList() {
         Set<String> sheetIndexes = new HashSet<String>();
-        Set<String> blockSet = new HashSet<String>();
+        Set<String> nameSet = new HashSet<String>();
 
         for (Condition condition : conditionMapped.values()) {
             sheetIndexes.add(condition.getIndex().getIndex());
@@ -171,20 +173,31 @@ public class Knowledge implements Evaluated, Simulated {
                 sheetIndexes.add(si.getIndex());
             }
         }
+        for (PossibilityList possibility : possibilityMapped.values()) {
+            for (String entry : possibility.getList()) {
+                sheetIndexes.add(entry);
+            }
+        }
 
         for (String index : sheetIndexes) {
             if (index.contains("^")) {
                 index = index.substring(0, index.indexOf('^'));
             }
-            blockSet.add(index);
+            nameSet.add(index);
         }
         if(data instanceof SheetDataPackage) {
-            ((SheetDataPackage)data).addReferencedBlocks(blockSet.stream().map(s -> Block.getBlockFromName(s)).collect(Collectors.toList()));
+            ((SheetDataPackage)data).addReferencedIDs(nameSet.stream().map(s -> {
+                int id = Block.getIdFromBlock(Block.getBlockFromName(s));
+                if(id == -1) {
+                    id = Item.getIdFromItem((Item)Item.itemRegistry.getObject(s));
+                }
+                return id;   
+            }).collect(Collectors.toList()));
         }
     }
 
     public void compile() {
-        buildBlockList();
+        buildIDList();
 
         createInvertedJunctions();
 
@@ -253,6 +266,8 @@ public class Knowledge implements Evaluated, Simulated {
     }
 
     public void onBlockChanged(BlockChangeEvent event) {
+        event.oldBlock = ExpansionManager.dealias(event.oldBlock, data);
+        event.newBlock = ExpansionManager.dealias(event.newBlock, data);
         blockChangeMapped.forEach((k, v) -> v.onBlockChange(event));
     }
 
