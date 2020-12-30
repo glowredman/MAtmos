@@ -2,6 +2,7 @@ package eu.ha3.matmos.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.event.Event;
@@ -48,6 +51,8 @@ public class Knowledge implements Evaluated, Simulated {
 
     private final Map<String, BlockChangeSound> blockChangeMapped = new TreeMap<>();
 
+    private final Map<String, String> conditionValueOverrides = new HashMap<>();
+    
     private final SheetCommander<String> sheetCommander = new SheetCommander<String>() {
         @Override
         public int version(SheetIndex sheetIndex) {
@@ -285,6 +290,14 @@ public class Knowledge implements Evaluated, Simulated {
         return conditionMapped.values().stream().anyMatch(c -> 
             c.getIndex().getSheet().equals("meta_option") && 
             c.getIndex().getIndex().equals("override_rain"));
+    }
+    
+    public void addConditionValueOverrides(Map<String, String> overrides) {
+        conditionValueOverrides.putAll(overrides);
+    }
+    
+    public String getConditionValueOverride(String key) {
+        return conditionValueOverrides.get(key);
     }
 
     // might be nicer to have this read from a json file

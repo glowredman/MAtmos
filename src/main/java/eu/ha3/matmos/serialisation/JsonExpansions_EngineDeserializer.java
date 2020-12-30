@@ -101,6 +101,11 @@ public class JsonExpansions_EngineDeserializer {
                 if (entry.getValue().sheet.equals(Dynamic.DEDICATED_SHEET)) {
                     indexNotComputed = dynamicSheetHash(indexNotComputed);
                 }
+                
+                String override = knowledge.getConditionValueOverride(entry.getKey());
+                if(override != null) {
+                    entry.getValue().value = override;
+                }
 
                 elements.add(new Condition(entry.getKey(), providers.getSheetCommander(),
                         new SheetEntry(entry.getValue().sheet, indexNotComputed),

@@ -3,7 +3,9 @@ package eu.ha3.matmos.core.expansion;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -105,6 +107,19 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
         knowledge = new Knowledge(capabilities, TIME);
 
         knowledge.setData(data);
+        knowledge.addKnowledge(Knowledge.getBuiltins(knowledge.obtainProviders()));
+        knowledge.addConditionValueOverrides(getConditionValueOverrides());
+    }
+    
+    private Map<String, String> getConditionValueOverrides() {
+        String OVERRIDE_CONDITION_PREFIX = "override.condition.";
+        Map<String, String> overrides = new HashMap<>();
+        myConfiguration.getAllProperties().forEach((k, v) -> {
+            if(k.startsWith(OVERRIDE_CONDITION_PREFIX)) {
+                overrides.put(k.substring(OVERRIDE_CONDITION_PREFIX.length()), v);
+            }
+        });
+        return overrides;
     }
 
     private void buildKnowledge() {
@@ -113,8 +128,6 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
         }
 
         newKnowledge();
-
-        knowledge.addKnowledge(Knowledge.getBuiltins(knowledge.obtainProviders()));
 
         loadException = null;
 
