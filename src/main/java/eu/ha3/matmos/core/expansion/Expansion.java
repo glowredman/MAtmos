@@ -108,10 +108,10 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
 
         knowledge.setData(data);
         knowledge.addKnowledge(Knowledge.getBuiltins(knowledge.obtainProviders()));
-        knowledge.addConditionValueOverrides(getConditionValueOverrides());
+        knowledge.setConditionValueOverrides(collectConditionValueOverrides());
     }
     
-    private Map<String, String> getConditionValueOverrides() {
+    private Map<String, String> collectConditionValueOverrides() {
         String OVERRIDE_CONDITION_PREFIX = "override.condition.";
         Map<String, String> overrides = new HashMap<>();
         myConfiguration.getAllProperties().forEach((k, v) -> {
@@ -120,6 +120,10 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
             }
         });
         return overrides;
+    }
+    
+    public Map<String, String> getConditionValueOverrides(){
+        return knowledge.getConditionValueOverrides();
     }
 
     private void buildKnowledge() {
@@ -172,6 +176,11 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
 
     public void saveConfig() {
         myConfiguration.setProperty("volume", volume);
+        myConfiguration.getAllProperties().entrySet().removeIf(e -> e.getKey().startsWith("override.condition."));
+        
+        knowledge.getConditionValueOverrides().forEach((k, v) -> {
+            myConfiguration.setProperty("override.condition." + k, v);
+        });
         if (myConfiguration.commit()) {
             myConfiguration.save();
         }

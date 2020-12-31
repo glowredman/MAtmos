@@ -102,7 +102,7 @@ public class JsonExpansions_EngineDeserializer {
                     indexNotComputed = dynamicSheetHash(indexNotComputed);
                 }
                 
-                String override = knowledge.getConditionValueOverride(entry.getKey());
+                String override = knowledge.getConditionValueOverrides().get(entry.getKey());
                 if(override != null) {
                     entry.getValue().value = override;
                 }

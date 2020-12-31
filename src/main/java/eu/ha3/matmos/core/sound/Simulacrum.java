@@ -27,9 +27,11 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
     private boolean hasResourcePacks;
     private boolean hasDisabledResourcePacks;
     private boolean hasRainMuteableExpansions;
+    
+    public static final String USERCONFIG_FOLDER = "expansions_userconfig";
 
     public Simulacrum(Matmos mod) {
-        expansionManager = new ExpansionManager(new File(ConfigManager.getConfigFolder(), "expansions_userconfig/"),
+        expansionManager = new ExpansionManager(new File(ConfigManager.getConfigFolder(), USERCONFIG_FOLDER),
                 new File(ConfigManager.getConfigFolder(), "alias.map"), mod.getSoundManager());
         expansionManager.setVolumeAndUpdate(mod.getConfig().getFloat("globalvolume.scale"));
 

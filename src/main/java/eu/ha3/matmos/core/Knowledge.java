@@ -292,12 +292,13 @@ public class Knowledge implements Evaluated, Simulated {
             c.getIndex().getIndex().equals("override_rain"));
     }
     
-    public void addConditionValueOverrides(Map<String, String> overrides) {
+    public void setConditionValueOverrides(Map<String, String> overrides) {
+        conditionValueOverrides.clear();
         conditionValueOverrides.putAll(overrides);
     }
     
-    public String getConditionValueOverride(String key) {
-        return conditionValueOverrides.get(key);
+    public Map<String, String> getConditionValueOverrides() {
+        return conditionValueOverrides;
     }
 
     // might be nicer to have this read from a json file

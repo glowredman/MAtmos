@@ -1,7 +1,13 @@
 package eu.ha3.matmos.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.util.Random;
 
+import org.lwjgl.Sys;
+
+import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.sound.NoAttenuationSound;
 import eu.ha3.matmos.core.sound.PositionedSound;
 import net.minecraft.block.Block;
@@ -14,6 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.world.World;
 
 public class MAtUtil {
@@ -233,5 +240,57 @@ public class MAtUtil {
 
     public static float randomFloatRange(float min, float max) {
         return min + (max - min) * random.nextFloat();
+    }
+    
+    public static void openFolder(File folder) {
+        String s = folder.getAbsolutePath();
+
+        if (Util.getOSType() == Util.EnumOS.OSX)
+        {
+            try
+            {
+                Matmos.LOGGER.info(s);
+                Runtime.getRuntime().exec(new String[] {"/usr/bin/open", s});
+                return;
+            }
+            catch (IOException ioexception1)
+            {
+                Matmos.LOGGER.error("Couldn\'t open file", ioexception1);
+            }
+        }
+        else if (Util.getOSType() == Util.EnumOS.WINDOWS)
+        {
+            String s1 = String.format("cmd.exe /C start \"Open file\" \"%s\"", new Object[] {s});
+
+            try
+            {
+                Runtime.getRuntime().exec(s1);
+                return;
+            }
+            catch (IOException ioexception)
+            {
+                Matmos.LOGGER.error("Couldn\'t open file", ioexception);
+            }
+        }
+
+        boolean flag = false;
+
+        try
+        {
+            Class oclass = Class.forName("java.awt.Desktop");
+            Object object = oclass.getMethod("getDesktop", new Class[0]).invoke((Object)null, new Object[0]);
+            oclass.getMethod("browse", new Class[] {URI.class}).invoke(object, new Object[] {folder.toURI()});
+        }
+        catch (Throwable throwable)
+        {
+            Matmos.LOGGER.error("Couldn\'t open link", throwable);
+            flag = true;
+        }
+
+        if (flag)
+        {
+            Matmos.LOGGER.info("Opening via system class!");
+            Sys.openURL("file://" + s);
+        }
     }
 }
