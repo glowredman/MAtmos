@@ -95,21 +95,49 @@ public class IDDealiaser {
         entries.entrySet().forEach(e -> {
             String k = e.getKey();
             String v = e.getValue();
-            if (Block.blockRegistry.containsKey(k) && Block.blockRegistry.containsKey(v)) {
-                Object keyObj = Block.blockRegistry.getObject(k);
-                Object valueObj = Block.blockRegistry.getObject(v);
-                if (keyObj instanceof Block && valueObj instanceof Block) {
-                    dealiasMap.put(Block.getIdFromBlock((Block) valueObj), Block.getIdFromBlock((Block) keyObj));
+            int ki = getIDFromName(k);
+            if(ki != -1) {
+                if(v.startsWith(":")) {
+                    String oreName = v.substring(1);
+                    List<ItemStack> ores = OreDictionary.getOres(oreName);
+                    if(!ores.isEmpty()) {
+                        for(ItemStack is : ores) {
+                            int id = getItemID(is.getItem());
+                            if(id != -1) {
+                                dealiasMap.put(id, ki);
+                            }
+                        }
+                    } else {
+                        Matmos.LOGGER.warn("Ignoring invalid oredict name in alias map: " + k);
+                    }
+                } else {
+                    int vi = getIDFromName(v);
+                    if(vi != -1) {
+                        dealiasMap.put(vi, ki);
+                    } else {
+                        Matmos.LOGGER.warn("Ignoring name in alias map: " + k);
+                    }
                 }
-            }
-            if (Item.itemRegistry.containsKey(k) && Item.itemRegistry.containsKey(v)) {
-                Object keyObj = Item.itemRegistry.getObject(k);
-                Object valueObj = Item.itemRegistry.getObject(v);
-                if (keyObj instanceof Item && valueObj instanceof Item) {
-                    dealiasMap.put(Item.getIdFromItem((Item) valueObj), Item.getIdFromItem((Item) keyObj));
-                }
+            } else {
+                Matmos.LOGGER.warn("Ignoring invalid name in alias map: " + k);
             }
         });
+    }
+    
+    private int getItemID(Item item) {
+        if(item instanceof ItemBlock) {
+            return Block.getIdFromBlock(((ItemBlock)item).blockInstance);
+        } else {
+            return Item.getIdFromItem(item);
+        }
+    }
+    
+    private int getIDFromName(String name) {
+        if(Block.blockRegistry.containsKey(name)) {
+            return Block.getIdFromBlock(Block.getBlockFromName(name));
+        } else {
+            return Item.getIdFromItem((Item)Item.itemRegistry.getObject(name));
+        }
     }
 
     private void compile() {
@@ -117,15 +145,7 @@ public class IDDealiaser {
             for(String oreName : OreDictionary.getOreNames()) { 
                 List<Integer> ids = new ArrayList<>();
                 for(ItemStack s : OreDictionary.getOres(oreName)) {
-                    int id;
-                    Item item = s.getItem();
-                    if(item instanceof ItemBlock) {
-                        id = Block.getIdFromBlock(((ItemBlock)item).blockInstance);
-                    } else {
-                        id = Item.getIdFromItem(item);
-                    }
-                    
-                    ids.add(id);
+                    ids.add(getItemID(s.getItem()));
                 }
                 
                 int minBlockID = ids.stream().min(Integer::compare).orElse(-1);
