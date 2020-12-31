@@ -230,6 +230,7 @@ public class Knowledge implements Evaluated, Simulated {
 
         unused.addAll(inferior.keySet());
         unused.removeAll(requirements);
+        unused.removeIf(s -> s.startsWith("_"));
 
         missing.addAll(requirements);
         missing.removeAll(inferior.keySet());
