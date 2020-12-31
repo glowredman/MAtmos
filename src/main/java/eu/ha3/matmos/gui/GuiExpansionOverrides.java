@@ -33,7 +33,7 @@ public class GuiExpansionOverrides extends GuiScreen {
         
         int h = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight).getScaledHeight() - 22;
         buttonList.add(new GuiButton(200, 2, h, 70, 20, I18n.format("gui.done")));
-        buttonList.add(new GuiButton(201, 2 + 72, h, 170, 20, I18n.format("Open userconfig folder")));
+        buttonList.add(new GuiButton(201, 2 + 72, h, 170, 20, I18n.format(I18n.format("mat.options.openuserconfig"))));
     }
     
     @Override

@@ -29,6 +29,11 @@ mat.options.reverse=
 mat.options.editor=Overrides...
 mat.options.editor.disabled=§7Editor unavailable
 
+mat.options.overridesection.pos=Conditions referring to player position
+mat.options.overridesection.other=Other conditions
+mat.options.overridesection.nothing=Nothing to see here.
+mat.options.openuserconfig=Open userconfig folder
+
 mat.true=ON
 mat.false=OFF
 
@@ -37,6 +42,7 @@ mat.title.advanced=MAtmos Advanced options
 mat.title.devmode=§eDev mode is enabled. This may cause Minecraft to run slower.
 mat.title.devmode.display=§6Dev mode: On-screen Display
 mat.title.reloadhint=Tip: Sounds broken? Restart MAtmos, or reload resource packs! (F3+T)
+mat.title.conditionoverrides=Condition overrides
 
 mat.zip.unsupported=Expansions inside ZIP files are not supported in this version.
 mat.zip.unzip=Please unzip the resource packs to be able to view them.

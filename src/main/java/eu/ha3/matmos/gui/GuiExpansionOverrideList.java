@@ -20,6 +20,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumChatFormatting;
 
 public class GuiExpansionOverrideList extends GuiListExtended {
@@ -47,18 +48,19 @@ public class GuiExpansionOverrideList extends GuiListExtended {
             Collection<String> otherConditions = Sets.difference(conditions, new HashSet<>(posConditions))
                     .stream().collect(Collectors.toList());
             
-            listEntries.add(new OverrideEntry(EnumChatFormatting.BOLD + "Condition overrides" + EnumChatFormatting.RESET + EnumChatFormatting.GRAY + " (" + expansion.getName() + ".cfg)", true));
+            listEntries.add(new OverrideEntry(EnumChatFormatting.BOLD + I18n.format("mat.title.conditionoverrides") + EnumChatFormatting.RESET +
+                    EnumChatFormatting.GRAY + " (" + expansion.getName() + ".cfg)", true));
             if(!posConditions.isEmpty()) {
-                listEntries.add(new OverrideEntry("Conditions referring to player position", true));
+                listEntries.add(new OverrideEntry(I18n.format("mat.options.overridesection.pos"), true));
                 posConditions.forEach(k -> listEntries.add(new OverrideEntry(k)));
                 listEntries.add(new OverrideEntry("", true));
             }
             if(!otherConditions.isEmpty()) {
-                listEntries.add(new OverrideEntry("Other conditions", true));
+                listEntries.add(new OverrideEntry(I18n.format("mat.options.overridesection.other"), true));
                 otherConditions.forEach(k -> listEntries.add(new OverrideEntry(k)));
             }
         } else {
-            listEntries.add(new OverrideEntry("Nothing to see here.", true));
+            listEntries.add(new OverrideEntry(I18n.format("mat.options.overridesection.nothing"), true));
         }
     }
 
