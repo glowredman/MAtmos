@@ -113,40 +113,45 @@ public class IDDealiaser {
     }
 
     private void compile() {
-        for (Integer i : dealiasMap.keySet()) {
-            if (dealiasMap.containsKey(i)) {
-                int id = i;
-                do {
-                    id = dealiasMap.get(id);
-
-                } while (dealiasMap.containsKey(id) && dealiasMap.get(id) != id);
-
-                if (id == i) {
-                    Matmos.LOGGER.warn("Circular dependency detected in alias file when dealiasing "
-                            + Block.blockRegistry.getNameForObject(Block.getBlockById(i)) + ". Alias will be ignored.");
-                    dealiasMap.remove(i);
-                } else { // OK
-                    dealiasMap.put(i, id);
+        if(ConfigManager.getConfig().getBoolean("dealias.oredict")) {
+            for(String oreName : OreDictionary.getOreNames()) { 
+                List<Integer> ids = new ArrayList<>();
+                for(ItemStack s : OreDictionary.getOres(oreName)) {
+                    int id;
+                    Item item = s.getItem();
+                    if(item instanceof ItemBlock) {
+                        id = Block.getIdFromBlock(((ItemBlock)item).blockInstance);
+                    } else {
+                        id = Item.getIdFromItem(item);
+                    }
+                    
+                    ids.add(id);
+                }
+                
+                int minBlockID = ids.stream().min(Integer::compare).orElse(-1);
+                if(minBlockID != -1) {
+                    ids.forEach(i -> {if(!dealiasMap.containsKey(i)) dealiasMap.put(i, minBlockID);});
                 }
             }
         }
         
-        if(ConfigManager.getConfig().getBoolean("dealias.oredict")) {
-            for(String oreName : OreDictionary.getOreNames()) {
-                List<Block> blocks = new ArrayList<>();
-                for(ItemStack s : OreDictionary.getOres(oreName)) {
-                    if(s.getItem() instanceof ItemBlock) {
-                        blocks.add(((ItemBlock)s.getItem()).blockInstance);
-                    }
-                }
-                
-                int[] ids = blocks.stream().mapToInt(b -> Block.getIdFromBlock(b)).toArray();
-                int minBlockID = IntStream.of(ids).min().orElse(-1);
-                if(minBlockID != -1) {
-                    IntStream.of(ids).forEach(i -> {if(!dealiasMap.containsKey(i)) dealiasMap.put(i, minBlockID);});
-                }
+        dealiasMap.entrySet().removeIf(e -> {
+            Integer i = e.getKey();
+            int id = i;
+            do {
+                id = dealiasMap.get(id);
+
+            } while (dealiasMap.containsKey(id) && dealiasMap.get(id) != id);
+
+            if (id == i) {
+                Matmos.LOGGER.warn("Circular dependency detected when dealiasing "
+                        + Block.blockRegistry.getNameForObject(Block.getBlockById(i)) + ". Alias will be ignored.");
+                return true;
+            } else { // OK
+                e.setValue(id);
+                return false;
             }
-        }
+        });
     }
 
     public int dealiasID(int alias) {
