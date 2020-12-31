@@ -28,6 +28,7 @@ mat.options.ambience.high=High-altitude ambiences
 mat.options.reverse=
 mat.options.editor=Overrides...
 mat.options.editor.disabled=§7Editor unavailable
+mat.options.hint.overrides=If you're using a mod that changes the base world height\n(e.g. TFC), you can make soundpacks compatible this way:\n\n1. Enable §6Dev/Editor mode§r\n2. Click the §6+§r next to the relevant soundpack\n3. Click §oOverrides...§r on the bottom of the screen\n4. Change the values referring to Y position to be higher
 
 mat.options.overridesection.pos=Conditions referring to player position
 mat.options.overridesection.other=Other conditions

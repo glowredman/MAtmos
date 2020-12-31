@@ -32,7 +32,7 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
 
     public Simulacrum(Matmos mod) {
         expansionManager = new ExpansionManager(new File(ConfigManager.getConfigFolder(), USERCONFIG_FOLDER),
-                new File(ConfigManager.getConfigFolder(), "alias.map"), mod.getSoundManager());
+                ConfigManager.getConfigFolder(), mod.getSoundManager());
         expansionManager.setVolumeAndUpdate(mod.getConfig().getFloat("globalvolume.scale"));
 
         TimeStatistic stat = new TimeStatistic(Locale.ENGLISH);
