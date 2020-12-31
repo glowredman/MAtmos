@@ -269,7 +269,8 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
                         config.save();
                     }
                 }
-
+                
+                isDebugMode = config.getInteger("debug.mode") > 0;
                 if (isDebugMode()) {
                     getChatter().printChat(EnumChatFormatting.GOLD,
                             "Developer mode is enabled in the Advanced options.");
