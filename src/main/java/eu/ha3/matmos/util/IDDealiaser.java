@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import java.util.stream.IntStream;
 
 import org.apache.commons.io.IOUtils;
@@ -113,17 +115,52 @@ public class IDDealiaser {
                         Matmos.LOGGER.warn("Ignoring invalid oredict name in alias map: " + k);
                     }
                 } else {
-                    int vi = getIDFromName(v);
-                    if(vi > 0) {
-                        dealiasMap.put(vi, ki);
+                    if(v.contains("*")) {
+                        try {
+                            Pattern pattern = makePattern(v);
+                            boolean matchedName = false;
+                            for(Object ko : Item.itemRegistry.getKeys()){
+                                String name = (String)ko;
+                                if(pattern.matcher(name).matches() ||
+                                        (name.startsWith("minecraft:") && pattern.matcher(name.substring("minecraft:".length())).matches())) {
+                                    matchedName = true;
+                                    int vi = getIDFromName(name);
+                                    if(vi > 0) {
+                                        dealiasMap.put(vi, ki);
+                                    }
+                                }
+                            }
+                            if(!matchedName) {
+                                Matmos.LOGGER.warn("No name matched pattern " + v);
+                            }
+                        } catch (Exception e2) {
+                            Matmos.LOGGER.warn("Invalid pattern: " + v + " (" + e2 + ")");
+                        }
                     } else {
-                        Matmos.LOGGER.warn("Ignoring name in alias map: " + k);
+                        int vi = getIDFromName(v);
+                        if(vi > 0) {
+                            dealiasMap.put(vi, ki);
+                        } else {
+                            Matmos.LOGGER.warn("Ignoring name in alias map: " + k);
+                        }
                     }
                 }
             } else {
                 Matmos.LOGGER.warn("Ignoring invalid name in alias map: " + k);
             }
         });
+    }
+    
+    Pattern makePattern(String str) throws Exception {
+        str = str.replace(".", "\\.").replace("*", ".*");
+        
+        Pattern pattern = null;
+        try {
+            pattern = Pattern.compile(str);
+        } catch (PatternSyntaxException e) {
+            throw e;
+        }
+        return pattern;
     }
     
     private int getItemID(Item item) {
