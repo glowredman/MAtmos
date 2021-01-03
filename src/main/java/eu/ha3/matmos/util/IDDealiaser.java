@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -54,7 +55,7 @@ public class IDDealiaser {
         compile();
     }
     
-    private List<Pair<String, String>> loadEntries(List<Pair<String, String>> entries, Path aliasDir, Path path, Set<Path> visited){
+    private List<AliasEntry> loadEntries(List<AliasEntry> entries, Path aliasDir, Path path, Set<Path> visited, boolean showWarnings){
         try (FileReader reader = new FileReader(aliasDir.resolve(path).toFile())) {
             int lineno = 0;
             for(String line : IOUtils.readLines(reader)) {
@@ -64,17 +65,22 @@ public class IDDealiaser {
                 } else if(line.startsWith(":")) {
                     String[] words = line.split(" ");
                     String directive = words[0].substring(1);
-                    String argument = words[1];
+                    String argument = words.length > 1 ? words[1] : null;
                     
-                    if(directive.equals("import")) {
+                    switch(directive) {
+                    case "import":
                         Path linkedPath = getParentSafe(path).resolve(Paths.get(argument)).normalize();
                         if(!visited.contains(linkedPath)){
-                            loadEntries(entries, aliasDir, linkedPath, visited);
+                            loadEntries(entries, aliasDir, linkedPath, visited, showWarnings);
                         } else {
                             Matmos.LOGGER.warn(String.format("%s:%d: Import cycle detected (%s->...->%s->%s)",
                                     path, lineno, linkedPath, path, linkedPath));
                         }
-                    } else {
+                        break;
+                    case "disableWarnings":
+                        showWarnings = false;
+                        break;
+                    default:
                         Matmos.LOGGER.warn(String.format("%s:%d: Invalid directive: %s", path, lineno, directive));
                     }
                 } else {
@@ -85,7 +91,7 @@ public class IDDealiaser {
                             String[] values = sides[1].split(",");
                             if(values.length > 0) {
                                 for(String value: values) {
-                                    entries.add(Pair.of(key, value));
+                                    entries.add(new AliasEntry(key, value, path.toString(), lineno, showWarnings));
                                 }
                             }
                         } else {
@@ -105,6 +111,8 @@ public class IDDealiaser {
     }
 
     private void loadAliasFile(File aliasFile) {
+        Matmos.LOGGER.info("Loading alias map " + aliasFile + "...");
+        
         ConfigManager.createDefaultConfigFileIfMissing(aliasFile,
                 bytes -> {
                     try {
@@ -116,7 +124,7 @@ public class IDDealiaser {
                 });
         
         Path aliasDir = getParentSafe(aliasFile.toPath());
-        List<Pair<String, String>> entries = loadEntries(new LinkedList<Pair<String, String>>(), aliasDir, aliasDir.relativize(aliasFile.toPath()), new HashSet<Path>());
+        List<AliasEntry> entries = loadEntries(new LinkedList<AliasEntry>(), aliasDir, aliasDir.relativize(aliasFile.toPath()), new HashSet<Path>(), true);
 
         dealiasMap = new HashMap<Integer, Integer>();
 
@@ -136,7 +144,7 @@ public class IDDealiaser {
                             }
                         }
                     } else {
-                        Matmos.LOGGER.warn("Ignoring invalid oredict name in alias map: " + k);
+                        e.warn("Ignoring invalid oredict name in alias map: " + k);
                     }
                 } else {
                     if(v.contains("*")) {
@@ -155,17 +163,17 @@ public class IDDealiaser {
                                 }
                             }
                             if(!matchedName) {
-                                Matmos.LOGGER.warn("No name matched pattern " + v);
+                                e.warn("No name matched pattern " + v);
                             }
                         } catch (Exception e2) {
-                            Matmos.LOGGER.warn("Invalid pattern: " + v + " (" + e2 + ")");
+                            e.warn("Invalid pattern: " + v + " (" + e2 + ")");
                         }
                     } else {
                         int vi = getIDFromName(v);
                         if(vi > 0) {
                             dealiasMap.put(vi, ki);
                         } else {
-                            Matmos.LOGGER.warn("Ignoring name in alias map: " + k);
+                            e.warn("Ignoring invalid name in alias map: " + v);
                         }
                     }
                 }
@@ -241,5 +249,60 @@ public class IDDealiaser {
     public int dealiasID(int alias) {
         return dealiasMap.getOrDefault(alias, alias);
     }
+    
+    class AliasEntry implements Entry<String, String>{
+        private String key;
+        private String value;
+        private String path;
+        private boolean showWarnings;
+        private int lineno;
+        
+        public AliasEntry(String key, String value, String path, int lineno, boolean showWarnings) {
+            this.key = key;
+            this.value = value;
+            this.path = path;
+            this.lineno = lineno;
+            this.showWarnings = showWarnings;
+        }
+        
+        public AliasEntry(String key, String path, int lineno, String value) {
+            this(key, value, path, lineno, true);
+        }
 
+        @Override
+        public String getKey() {
+            return key;
+        }
+
+        @Override
+        public String getValue() {
+            return value;
+        }
+
+        @Override
+        public String setValue(String value) {
+            String oldValue = this.value;
+            this.value = value;
+            return oldValue;
+        }
+        
+        public boolean doesShowWarnings() {
+            return showWarnings;
+        }
+        
+        public void warn(String msg) {
+            if(showWarnings || ConfigManager.getConfig().getBoolean("debug.verbosealiasparsing")) {
+                Matmos.LOGGER.warn(path + ":" + lineno + ": " + msg);
+            }
+        }
+        
+        public String getPath() {
+            return path;
+        }
+        
+        public int getLineNumber() {
+            return lineno;
+        }
+    }
+    
 }

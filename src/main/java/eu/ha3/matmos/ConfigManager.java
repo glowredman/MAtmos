@@ -81,6 +81,9 @@ public class ConfigManager {
         config.setProperty("dealias.oredict", "true",
                 "Dealias oredicted blocks to the lowest id block of the oredict group."
                 );
+        config.setProperty("debug.verbosealiasparsing", "false",
+                "Show alias map warnings unconditionally"
+                );
         config.commit();
 
         config.setGlobalDescription("Tip: restart MAtmos to reload the configs without restarting Minecraft");

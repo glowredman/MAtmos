@@ -1,3 +1,5 @@
+:disableWarnings
+
 :import tconstruct.map
 :import battlegear2.map
 :import thermalfoundation.map
