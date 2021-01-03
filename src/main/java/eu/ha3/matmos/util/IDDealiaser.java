@@ -34,8 +34,14 @@ import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraftforge.oredict.OreDictionary;
 
 import static eu.ha3.matmos.util.MAtUtil.getParentSafe;
@@ -46,12 +52,31 @@ public class IDDealiaser {
     private static final String OLD_ALIAS_MAP_SHA256 = 
             "e2fbd8793250808dc2816ab4aba16a2f150a918cb02670b6dca4ec3be4f63469";
     
-    private Map<Integer, Integer> dealiasMap;
+    private Map<Integer, Integer> dealiasMap = new HashMap<>();
 
     public IDDealiaser(File configFolder) {
         ConfigManager.createDefaultConfigFileIfMissing(new File(configFolder, "builtin_aliases"), true);
+        
+        if(ConfigManager.getConfig().getBoolean("dealias.oredict")) {
+            for(String oreName : OreDictionary.getOreNames()) { 
+                List<Integer> ids = new ArrayList<>();
+                for(ItemStack s : OreDictionary.getOres(oreName)) {
+                    ids.add(getItemID(s.getItem()));
+                }
+                
+                int minBlockID = ids.stream().min(Integer::compare).orElse(-1);
+                if(minBlockID != -1) {
+                    ids.forEach(i -> {if(!dealiasMap.containsKey(i)) dealiasMap.put(i, minBlockID);});
+                }
+            }
+        }
+        
+        if(ConfigManager.getConfig().getBoolean("dealias.guessfromclass")) {
+            guessAliases();
+        }
+        
         loadAliasFile(new File(configFolder, "alias.map"));
-
+        
         compile();
     }
     
@@ -125,8 +150,6 @@ public class IDDealiaser {
         
         Path aliasDir = getParentSafe(aliasFile.toPath());
         List<AliasEntry> entries = loadEntries(new LinkedList<AliasEntry>(), aliasDir, aliasDir.relativize(aliasFile.toPath()), new HashSet<Path>(), true);
-
-        dealiasMap = new HashMap<Integer, Integer>();
 
         entries.forEach(e -> {
             String k = e.getKey();
@@ -210,22 +233,54 @@ public class IDDealiaser {
             return Item.getIdFromItem((Item)Item.itemRegistry.getObject(name));
         }
     }
-
-    private void compile() {
-        if(ConfigManager.getConfig().getBoolean("dealias.oredict")) {
-            for(String oreName : OreDictionary.getOreNames()) { 
-                List<Integer> ids = new ArrayList<>();
-                for(ItemStack s : OreDictionary.getOres(oreName)) {
-                    ids.add(getItemID(s.getItem()));
-                }
-                
-                int minBlockID = ids.stream().min(Integer::compare).orElse(-1);
-                if(minBlockID != -1) {
-                    ids.forEach(i -> {if(!dealiasMap.containsKey(i)) dealiasMap.put(i, minBlockID);});
-                }
+    
+    private void guessAliases() {
+        int swordID = Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject("iron_sword"));
+        int wswordID = Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject("wooden_sword"));
+        int pickID = Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject("iron_pickaxe"));
+        int wpickID = Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject("wooden_pickaxe"));
+        int shovelID = Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject("iron_shovel"));
+        int wshovelID = Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject("wooden_shovel"));
+        int axeID = Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject("iron_axe"));
+        int waxeID = Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject("wooden_axe"));
+        int hoeID = Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject("iron_hoe"));
+        int whoeID = Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject("wooden_hoe"));
+        int bowID = Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject("bow"));
+        
+        for(Object o : Item.itemRegistry) {
+            int id = Item.itemRegistry.getIDForObject(o);
+            String name = Item.itemRegistry.getNameForObject(o);
+            if(name.startsWith("minecraft:")) {
+                continue;
+            }
+            
+            boolean wooden = name.toLowerCase().contains("wood");
+            int target = -1;
+            
+            if(o instanceof ItemSword) {
+                target = wooden ? wswordID : swordID;
+            } else if(o instanceof ItemPickaxe) {
+                target = wooden ? wpickID : pickID;
+            } else if(o instanceof ItemSpade) {
+                target = wooden ? wshovelID : shovelID;
+            } else if(o instanceof ItemAxe) {
+                target = wooden ? waxeID : axeID;
+            } else if(o instanceof ItemHoe) {
+                target = wooden ? whoeID : hoeID;
+            } else if(o instanceof ItemBow) {
+                target = bowID;
+            }
+            
+            if(target != -1) {
+                Matmos.LOGGER.debug("Guessing alias " + 
+                    Item.itemRegistry.getNameForObject(Item.itemRegistry.getObjectById(target)) + 
+                    " for " + name);
+                dealiasMap.put(id, target);
             }
         }
-        
+    }
+
+    private void compile() {
         dealiasMap.entrySet().removeIf(e -> {
             Integer i = e.getKey();
             int id = i;

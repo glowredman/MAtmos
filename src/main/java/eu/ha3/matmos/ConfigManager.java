@@ -81,6 +81,9 @@ public class ConfigManager {
         config.setProperty("dealias.oredict", "true",
                 "Dealias oredicted blocks to the lowest id block of the oredict group."
                 );
+        config.setProperty("dealias.guessfromclass", "true",
+                "Guess the aliases of items from their class and name"
+                );
         config.setProperty("debug.verbosealiasparsing", "false",
                 "Show alias map warnings unconditionally"
                 );
