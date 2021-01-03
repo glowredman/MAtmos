@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,6 +37,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import static eu.ha3.matmos.util.MAtUtil.getParentSafe;
+
 public class IDDealiaser {
     
     // the hash of alias.map in versions before we started bundling builtin alias maps
@@ -50,8 +54,8 @@ public class IDDealiaser {
         compile();
     }
     
-    private List<Pair<String, String>> loadEntries(List<Pair<String, String>> entries, String aliasDir, String path, Set<String> visited){
-        try (FileReader reader = new FileReader(new File(aliasDir, path))) {
+    private List<Pair<String, String>> loadEntries(List<Pair<String, String>> entries, Path aliasDir, Path path, Set<Path> visited){
+        try (FileReader reader = new FileReader(aliasDir.resolve(path).toFile())) {
             int lineno = 0;
             for(String line : IOUtils.readLines(reader)) {
                 line = line.trim();
@@ -63,11 +67,12 @@ public class IDDealiaser {
                     String argument = words[1];
                     
                     if(directive.equals("import")) {
-                        if(!visited.contains(argument)){
-                            loadEntries(entries, aliasDir, argument, visited);
+                        Path linkedPath = getParentSafe(path).resolve(Paths.get(argument)).normalize();
+                        if(!visited.contains(linkedPath)){
+                            loadEntries(entries, aliasDir, linkedPath, visited);
                         } else {
                             Matmos.LOGGER.warn(String.format("%s:%d: Import cycle detected (%s->...->%s->%s)",
-                                    path, lineno, argument, path, argument));
+                                    path, lineno, linkedPath, path, linkedPath));
                         }
                     } else {
                         Matmos.LOGGER.warn(String.format("%s:%d: Invalid directive: %s", path, lineno, directive));
@@ -110,8 +115,8 @@ public class IDDealiaser {
                     }
                 });
         
-        String aliasDir = aliasFile.getParent();
-        List<Pair<String, String>> entries = loadEntries(new LinkedList<Pair<String, String>>(), aliasDir, aliasFile.getName(), new HashSet<String>());
+        Path aliasDir = getParentSafe(aliasFile.toPath());
+        List<Pair<String, String>> entries = loadEntries(new LinkedList<Pair<String, String>>(), aliasDir, aliasDir.relativize(aliasFile.toPath()), new HashSet<Path>());
 
         dealiasMap = new HashMap<Integer, Integer>();
 

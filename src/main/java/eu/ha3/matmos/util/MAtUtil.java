@@ -3,6 +3,8 @@ package eu.ha3.matmos.util;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Random;
 
 import org.lwjgl.Sys;
@@ -291,6 +293,14 @@ public class MAtUtil {
         {
             Matmos.LOGGER.info("Opening via system class!");
             Sys.openURL("file://" + s);
+        }
+    }
+    
+    public static Path getParentSafe(Path p) {
+        if(p == null || p.getParent() == null) {
+            return Paths.get("");
+        } else {
+            return p.getParent();
         }
     }
 }

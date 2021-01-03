@@ -23,6 +23,8 @@ import org.apache.logging.log4j.Logger;
 import eu.ha3.util.property.simple.ConfigProperty;
 import net.minecraft.launchwrapper.Launch;
 
+import static eu.ha3.matmos.util.MAtUtil.getParentSafe;
+
 /**
  * Class for statically initializing and accessing the config. Required to make
  * it possible to access the config from the coremod/tweaker.
@@ -127,7 +129,7 @@ public class ConfigManager {
     }
     
     private static void copyDefaultConfigFile(Path src, Path dest) throws IOException {
-        Files.createDirectories(src.getParent());
+        Files.createDirectories(getParentSafe(src));
         LOGGER.debug("Copying " + src + " -> " + dest);
         Files.copy(src, dest, StandardCopyOption.REPLACE_EXISTING);
     }
