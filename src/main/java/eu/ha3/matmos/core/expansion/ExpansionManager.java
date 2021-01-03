@@ -61,7 +61,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
 
     private IDataCollector collector;
 
-    public ExpansionManager(File userconfigFolder, File aliasFile, LoopingStreamedSoundManager soundManager) {
+    public ExpansionManager(File userconfigFolder, File aliasFolder, LoopingStreamedSoundManager soundManager) {
         this.userconfigFolder = userconfigFolder;
         this.soundManager = soundManager;
 
@@ -69,7 +69,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
             this.userconfigFolder.mkdirs();
         }
 
-        dealiasMap = new IDDealiaser(aliasFile);
+        dealiasMap = new IDDealiaser(aliasFolder);
 
         if (dimensionList == null) {
             buildDimensionList();

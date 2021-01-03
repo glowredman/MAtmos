@@ -1,9 +1,12 @@
 package eu.ha3.matmos.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,8 +20,11 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.IntStream;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
+
+import com.google.common.hash.Hashing;
 
 import eu.ha3.matmos.ConfigManager;
 import eu.ha3.matmos.Matmos;
@@ -30,11 +36,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class IDDealiaser {
-
+    
+    // the hash of alias.map in versions before we started bundling builtin alias maps
+    private static final String OLD_ALIAS_MAP_SHA256 = 
+            "e2fbd8793250808dc2816ab4aba16a2f150a918cb02670b6dca4ec3be4f63469";
+    
     private Map<Integer, Integer> dealiasMap;
 
-    public IDDealiaser(File aliasFile) {
-        loadAliasFile(aliasFile);
+    public IDDealiaser(File configFolder) {
+        ConfigManager.createDefaultConfigFileIfMissing(new File(configFolder, "builtin_aliases"), true);
+        loadAliasFile(new File(configFolder, "alias.map"));
 
         compile();
     }
@@ -89,7 +100,15 @@ public class IDDealiaser {
     }
 
     private void loadAliasFile(File aliasFile) {
-        ConfigManager.createDefaultConfigFileIfMissing(aliasFile);
+        ConfigManager.createDefaultConfigFileIfMissing(aliasFile,
+                bytes -> {
+                    try {
+                        return DigestUtils.sha256Hex(String.join("\n", IOUtils.readLines(new ByteArrayInputStream(bytes), StandardCharsets.UTF_8))).equals(OLD_ALIAS_MAP_SHA256);
+                    } catch (IOException e) {
+                        // the file is corrupt, whatever
+                        return false;
+                    }
+                });
         
         String aliasDir = aliasFile.getParent();
         List<Pair<String, String>> entries = loadEntries(new LinkedList<Pair<String, String>>(), aliasDir, aliasFile.getName(), new HashSet<String>());
