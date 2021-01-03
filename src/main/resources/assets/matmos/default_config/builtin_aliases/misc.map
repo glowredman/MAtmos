@@ -1,0 +1,26 @@
+# Adventure Backpack
+iron_sword=adventurebackpack:machete
+
+# AE2
+iron_pickaxe=appliedenergistics2:item.ToolCertusQuartzPickaxe,appliedenergistics2:item.ToolNetherQuartzPickaxe
+iron_shovel=appliedenergistics2:item.ToolCertusQuartzSpade,appliedenergistics2:item.ToolNetherQuartzSpade
+iron_axe=appliedenergistics2:item.ToolCertusQuartzAxe,appliedenergistics2:item.ToolNetherQuartzAxe
+iron_sword=appliedenergistics2:item.ToolCertusQuartzSword,appliedenergistics2:item.ToolNetherQuartzSword
+iron_hoe=appliedenergistics2:item.ToolCertusQuartzHoe,appliedenergistics2:item.ToolNetherQuartzHoe
+
+# Blood Magic
+iron_sword=AWWayofTime:energySword,AWWayofTime:daggerOfSacrifice
+iron_pickaxe=AWWayofTime:boundPickaxe
+iron_axe=AWWayofTime:boundAxe
+iron_shovel=AWWayofTime:boundShovel
+
+# IC2
+iron_pickaxe=IC2:itemToolBronzePickaxe
+iron_shovel=IC2:itemToolBronzeSpade
+iron_axe=IC2:itemToolBronzeAxe,IC2:itemToolWrench,IC2:itemToolCutter
+iron_sword=IC2:itemToolBronzeSword
+iron_hoe=IC2:itemToolBronzeHoe
+
+# Witchery
+iron_sword=witchery:arthana,witchery:silversword,witchery:canesword
+iron_axe=witchery:huntsmanspear

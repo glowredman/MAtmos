@@ -1,0 +1,16 @@
+wooden_axe=battlegear2:waraxe.wood,battlegear2:mace.wood,battlegear2:spear.wood,battlegear2:shield.wood,battlegear2:shield.hide
+wooden_sword=battlegear2:dagger.wood
+
+stone_axe=battlegear2:waraxe.stone,battlegear2:mace.stone,battlegear2:spear.stone
+stone_sword=battlegear2:dagger.stone
+
+iron_axe=battlegear2:waraxe.iron,battlegear2:mace.iron,battlegear2:spear.iron,battlegear2:shield.iron,battlegear2:chain
+iron_sword=battlegear2:dagger.iron
+
+diamond_axe=battlegear2:waraxe.diamond,battlegear2:mace.diamond,battlegear2:spear.diamond,battlegear2:shield.diamond
+diamond_sword=battlegear2:dagger.diamond
+
+golden_axe=battlegear2:waraxe.gold,battlegear2:mace.gold,battlegear2:spear.gold,battlegear2:shield.gold
+golden_sword=battlegear2:dagger.gold
+
+bow=battlegear2:bow.iron,battlegear2:bow.diamond

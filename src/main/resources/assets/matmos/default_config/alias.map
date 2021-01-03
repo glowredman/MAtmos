@@ -14,4 +14,4 @@
 #
 # Tip: restart MAtmos to reload the aliases without having to restart Minecraft
 
-torch=TConstruct:decoration.stonetorch
+:import builtin_aliases/builtins.map
