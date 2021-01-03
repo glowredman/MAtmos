@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -15,6 +16,7 @@ import java.util.Set;
 import java.util.stream.IntStream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import eu.ha3.matmos.ConfigManager;
 import eu.ha3.matmos.Matmos;
@@ -35,7 +37,7 @@ public class IDDealiaser {
         compile();
     }
     
-    private Map<String, String> loadEntries(Map<String, String> entries, String aliasDir, String path, Set<String> visited){
+    private List<Pair<String, String>> loadEntries(List<Pair<String, String>> entries, String aliasDir, String path, Set<String> visited){
         try (FileReader reader = new FileReader(new File(aliasDir, path))) {
             int lineno = 0;
             for(String line : IOUtils.readLines(reader)) {
@@ -65,7 +67,7 @@ public class IDDealiaser {
                             String[] values = sides[1].split(",");
                             if(values.length > 0) {
                                 for(String value: values) {
-                                    entries.put(key, value);
+                                    entries.add(Pair.of(key, value));
                                 }
                             }
                         } else {
@@ -88,11 +90,11 @@ public class IDDealiaser {
         ConfigManager.createDefaultConfigFileIfMissing(aliasFile);
         
         String aliasDir = aliasFile.getParent();
-        Map<String, String> entries = loadEntries(new HashMap<String, String>(), aliasDir, aliasFile.getName(), new HashSet<String>());
+        List<Pair<String, String>> entries = loadEntries(new LinkedList<Pair<String, String>>(), aliasDir, aliasFile.getName(), new HashSet<String>());
 
         dealiasMap = new HashMap<Integer, Integer>();
 
-        entries.entrySet().forEach(e -> {
+        entries.forEach(e -> {
             String k = e.getKey();
             String v = e.getValue();
             int ki = getIDFromName(k);
