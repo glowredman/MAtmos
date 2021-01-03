@@ -57,7 +57,7 @@ public class IDDealiaser {
                                     path, lineno, argument, path, argument));
                         }
                     } else {
-                        Matmos.LOGGER.warn(String.format("%s:%d: Invalid directive: %s", path, lineno, argument));
+                        Matmos.LOGGER.warn(String.format("%s:%d: Invalid directive: %s", path, lineno, directive));
                     }
                 } else {
                     String[] sides = line.split("=");
@@ -98,14 +98,14 @@ public class IDDealiaser {
             String k = e.getKey();
             String v = e.getValue();
             int ki = getIDFromName(k);
-            if(ki != -1) {
+            if(ki > 0) {
                 if(v.startsWith(":")) {
                     String oreName = v.substring(1);
                     List<ItemStack> ores = OreDictionary.getOres(oreName);
                     if(!ores.isEmpty()) {
                         for(ItemStack is : ores) {
                             int id = getItemID(is.getItem());
-                            if(id != -1) {
+                            if(id > 0) {
                                 dealiasMap.put(id, ki);
                             }
                         }
@@ -114,7 +114,7 @@ public class IDDealiaser {
                     }
                 } else {
                     int vi = getIDFromName(v);
-                    if(vi != -1) {
+                    if(vi > 0) {
                         dealiasMap.put(vi, ki);
                     } else {
                         Matmos.LOGGER.warn("Ignoring name in alias map: " + k);
