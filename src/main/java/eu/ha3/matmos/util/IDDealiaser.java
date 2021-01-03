@@ -158,12 +158,13 @@ public class IDDealiaser {
         dealiasMap.entrySet().removeIf(e -> {
             Integer i = e.getKey();
             int id = i;
+            int hops = 0;
             do {
                 id = dealiasMap.get(id);
-
+                hops++;
             } while (dealiasMap.containsKey(id) && dealiasMap.get(id) != id);
 
-            if (id == i) {
+            if (id == i && hops > 1) {
                 Matmos.LOGGER.warn("Circular dependency detected when dealiasing "
                         + Block.blockRegistry.getNameForObject(Block.getBlockById(i)) + ". Alias will be ignored.");
                 return true;
