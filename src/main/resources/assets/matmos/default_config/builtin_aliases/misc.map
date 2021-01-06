@@ -24,3 +24,6 @@ iron_hoe=IC2:itemToolBronzeHoe
 # Witchery
 iron_sword=witchery:arthana,witchery:silversword,witchery:canesword
 iron_axe=witchery:huntsmanspear
+
+# Railcraft
+iron_axe=Railcraft:tool.crowbar,Railcraft:tool.crowbar.reinforced
