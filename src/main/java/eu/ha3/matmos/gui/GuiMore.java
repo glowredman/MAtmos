@@ -1,6 +1,7 @@
 package eu.ha3.matmos.gui;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import eu.ha3.matmos.Matmos;
 import eu.ha3.mc.gui.HGuiSliderControl;
@@ -20,6 +21,8 @@ public class GuiMore extends GuiScreen {
     private Matmos mod;
 
     private int buttonId = -1;
+    
+    GuiButton overrideHintButton;
 
     public GuiMore(GuiScreen parent, Matmos matmos) {
         parentScreen = parent;
@@ -35,6 +38,7 @@ public class GuiMore extends GuiScreen {
         final int _MIX = _GAP + _UNIT;
 
         final int _LEFT = width / 2 - _WIDTH / 2;
+        final int _RIGHT = width / 2 + _WIDTH / 2;
 
         final int _SEPARATOR = 10;
         final int _TURNOFFWIDTH = _WIDTH / 5;
@@ -47,6 +51,9 @@ public class GuiMore extends GuiScreen {
                 formatOpt("mat.options.ambience.low", mod.getConfig().getBoolean("useroptions.altitudes.low"))));
         buttonList.add(new GuiButton(213, _LEFT + _MIX, _MIX * (2 + 1), _WIDTH - _MIX * 2, _UNIT,
                 formatOpt("mat.options.ambience.high", mod.getConfig().getBoolean("useroptions.altitudes.high"))));
+        
+        overrideHintButton = new GuiButton(214, _RIGHT - _UNIT, _MIX * (2 + 1), _UNIT, _UNIT, EnumChatFormatting.GOLD + "?");
+        buttonList.add(overrideHintButton);
 
         GuiBiomeSlider biomeSlider = new GuiBiomeSlider(mod, mod.getConfig().getInteger("useroptions.biome.override"));
         HGuiSliderControl biomeControl = new HGuiSliderControl(214, _LEFT, _MIX * (3 + 1), _WIDTH, _UNIT, "",
@@ -157,7 +164,10 @@ public class GuiMore extends GuiScreen {
                 0, 0, true);
 
         super.drawScreen(par1, par2, par3);
-
+        
+        if(overrideHintButton.isMouseOver()) {
+            drawHoveringText(Arrays.asList(I18n.format("mat.options.hint.overrides").split("\\\\n")), par1, par2, fontRendererObj);
+        }
     }
 
     @Override
