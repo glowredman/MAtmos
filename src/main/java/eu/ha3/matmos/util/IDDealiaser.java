@@ -169,7 +169,7 @@ public class IDDealiaser {
                             }
                         }
                     } else {
-                        e.warn("Ignoring invalid oredict name in alias map: " + k);
+                        e.warn("Ignoring invalid oredict name in alias map: " + v);
                     }
                 } else {
                     if(v.contains("*")) {
