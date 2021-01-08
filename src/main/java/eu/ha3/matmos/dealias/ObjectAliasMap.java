@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import eu.ha3.matmos.ConfigManager;
 import eu.ha3.matmos.Matmos;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -65,15 +66,20 @@ public abstract class ObjectAliasMap {
                         int vi = getIDFromName(v);
                         if(vi > 0) {
                             dealiasMap.put(vi, ki);
-                        } else {
+                        } else if(!isValidName(v)){
                             e.warn("Ignoring invalid name in alias map: " + v);
                         }
                     }
                 }
-            } else {
-                Matmos.LOGGER.warn("Ignoring invalid name in alias map: " + k);
+            } else if(!isValidName(k)) {
+                e.warn("Ignoring invalid name in alias map: " + k);
             }
         });
+    }
+    
+    public boolean isValidName(String name) {
+        ResourceLocation nameLoc = new ResourceLocation(name);
+        return Item.REGISTRY.containsKey(nameLoc) || Block.REGISTRY.containsKey(nameLoc);
     }
     
     public void dealiasItemGroupToMinID(Collection<String> names) {
