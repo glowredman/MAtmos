@@ -33,10 +33,12 @@ import eu.ha3.matmos.ConfigManager;
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.sheet.DataPackage;
 import net.minecraft.block.Block;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemSpade;
@@ -246,6 +248,7 @@ public class IDDealiaser {
         int hoeID = Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject("iron_hoe"));
         int whoeID = Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject("wooden_hoe"));
         int bowID = Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject("bow"));
+        int appleID = Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject("apple"));
         
         for(Object o : Item.itemRegistry) {
             int id = Item.itemRegistry.getIDForObject(o);
@@ -269,6 +272,8 @@ public class IDDealiaser {
                 target = wooden ? whoeID : hoeID;
             } else if(o instanceof ItemBow) {
                 target = bowID;
+            } else if(o instanceof Item && ((Item)o).getItemUseAction(new ItemStack((Item)o)) == EnumAction.eat) {
+                target = appleID;
             }
             
             if(target != -1) {
