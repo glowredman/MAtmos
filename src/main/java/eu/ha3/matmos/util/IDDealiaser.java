@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.IntStream;
@@ -44,6 +45,7 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 import net.minecraftforge.oredict.OreDictionary;
 
 import static eu.ha3.matmos.util.MAtUtil.getParentSafe;
@@ -260,17 +262,19 @@ public class IDDealiaser {
             boolean wooden = name.toLowerCase().contains("wood");
             int target = -1;
             
-            if(o instanceof ItemSword) {
+            Set<String> toolClasses = o instanceof ItemTool ? ((ItemTool)o).getToolClasses(new ItemStack((Item)o)) : new TreeSet<String>();
+            
+            if(o instanceof ItemSword || toolClasses.contains("sword")) {
                 target = wooden ? wswordID : swordID;
-            } else if(o instanceof ItemPickaxe) {
+            } else if(o instanceof ItemPickaxe || toolClasses.contains("pickaxe")) {
                 target = wooden ? wpickID : pickID;
-            } else if(o instanceof ItemSpade) {
+            } else if(o instanceof ItemSpade || toolClasses.contains("shovel")) {
                 target = wooden ? wshovelID : shovelID;
-            } else if(o instanceof ItemAxe) {
+            } else if(o instanceof ItemAxe || toolClasses.contains("axe")) {
                 target = wooden ? waxeID : axeID;
-            } else if(o instanceof ItemHoe) {
+            } else if(o instanceof ItemHoe || toolClasses.contains("hoe")) {
                 target = wooden ? whoeID : hoeID;
-            } else if(o instanceof ItemBow) {
+            } else if(o instanceof ItemBow || toolClasses.contains("bow")) {
                 target = bowID;
             } else if(o instanceof Item && ((Item)o).getItemUseAction(new ItemStack((Item)o)) == EnumAction.eat) {
                 target = appleID;
