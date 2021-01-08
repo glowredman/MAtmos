@@ -179,8 +179,8 @@ public class IDDealiaser {
                         try {
                             Pattern pattern = makePattern(v);
                             boolean matchedName = false;
-                            for(Object ko : Item.REGISTRY.getKeys()){
-                                String name = (String)ko;
+                            for(ResourceLocation rl : Item.REGISTRY.getKeys()){
+                                String name = rl.toString();
                                 if(pattern.matcher(name).matches() ||
                                         (name.startsWith("minecraft:") && pattern.matcher(name.substring("minecraft:".length())).matches())) {
                                     matchedName = true;
