@@ -46,7 +46,7 @@ public class ItemAliasMap extends ObjectAliasMap {
             boolean wooden = name.toLowerCase().contains("wood");
             int target = -1;
             
-            Set<String> toolClasses = o instanceof ItemTool ? ((ItemTool)o).getToolClasses(new ItemStack((Item)o)) : new TreeSet<String>();
+            Set<String> toolClasses = ((Item)o).getToolClasses(new ItemStack((Item)o));
             if(ConfigManager.getConfig().getInteger("debug.mode") == 1) {
                 Matmos.LOGGER.debug("Tool classes for " + name + " (" + id + "): " + Arrays.toString(toolClasses.toArray()));
             }
