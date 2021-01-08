@@ -13,7 +13,8 @@ public class SheetDataPackage implements DataPackage {
     private final Map<String, Sheet> sheets;
     private final Class<? extends Sheet> sheetType;
 
-    Set<Integer> referencedIDs = new HashSet<Integer>();
+    Set<Integer> referencedBlockIDs = new HashSet<Integer>();
+    Set<Integer> referencedItemIDs = new HashSet<Integer>();
 
     public SheetDataPackage(Class<? extends Sheet> sheetType) {
         sheets = new TreeMap<>();
@@ -51,12 +52,12 @@ public class SheetDataPackage implements DataPackage {
         }
     }
 
-    public void addReferencedIDs(List<Integer> newReferencedIDs) {
-        newReferencedIDs.remove(Integer.valueOf(-1));
-        referencedIDs.addAll(newReferencedIDs);
+    public void addReferencedIDs(List<Integer> newReferencedBlockIDs, List<Integer> newReferencedItemIDs) {
+        referencedBlockIDs.addAll(newReferencedBlockIDs);
+        referencedItemIDs.addAll(newReferencedItemIDs);
     }
     
-    public boolean isIDReferenced(int id) {
-        return referencedIDs.contains(id);
+    public boolean isIDReferenced(int id, boolean isItem) {
+        return (isItem ? referencedItemIDs : referencedBlockIDs).contains(id);
     }
 }

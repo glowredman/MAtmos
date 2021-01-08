@@ -191,13 +191,19 @@ public class Knowledge implements Evaluated, Simulated {
             nameSet.add(index);
         }
         if(data instanceof SheetDataPackage) {
-            ((SheetDataPackage)data).addReferencedIDs(nameSet.stream().map(s -> {
-                int id = Block.getIdFromBlock(Block.getBlockFromName(s));
-                if(id == -1) {
-                    id = Item.getIdFromItem((Item)Item.itemRegistry.getObject(s));
+            List<Integer> referencedBlockIDs = new ArrayList<Integer>();
+            List<Integer> referencedItemIDs = new ArrayList<Integer>();
+            nameSet.stream().forEach(s -> {
+                int blockID = Block.getIdFromBlock(Block.getBlockFromName(s));
+                if(blockID != -1) {
+                    referencedBlockIDs.add(blockID);
                 }
-                return id;   
-            }).collect(Collectors.toList()));
+                int itemID = Item.getIdFromItem((Item)Item.itemRegistry.getObject(s));
+                if(itemID != -1) {
+                    referencedItemIDs.add(itemID);
+                }
+            });
+            ((SheetDataPackage)data).addReferencedIDs(referencedBlockIDs, referencedItemIDs);
         }
     }
 

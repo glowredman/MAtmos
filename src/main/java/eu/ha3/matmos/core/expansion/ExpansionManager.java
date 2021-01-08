@@ -31,7 +31,7 @@ import eu.ha3.matmos.core.sheet.SheetDataPackage;
 import eu.ha3.matmos.core.sound.LoopingStreamedSoundManager;
 import eu.ha3.matmos.data.IDataCollector;
 import eu.ha3.matmos.data.modules.BlockCountModule;
-import eu.ha3.matmos.util.IDDealiaser;
+import eu.ha3.matmos.dealias.IDDealiaser;
 import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
@@ -176,7 +176,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     
     public static int dealiasToID(ItemStack is, DataPackage data) {
         if(is == null) return -1;
-        return dealiasIDIfNotReferenced(Item.getIdFromItem(is.getItem()), data);
+        return dealiasIDIfNotReferenced(Item.getIdFromItem(is.getItem()), data, true);
     }
     
     public static Block dealias(Block b, DataPackage data) {
@@ -186,14 +186,14 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
     
     public static int dealiasToID(Block b, DataPackage data) {
         if(b == null) return -1;
-        return dealiasIDIfNotReferenced(Block.getIdFromBlock(b), data);
+        return dealiasIDIfNotReferenced(Block.getIdFromBlock(b), data, false);
     }
     
-    private static int dealiasIDIfNotReferenced(int id, DataPackage data) {
-        if(data != null && data instanceof SheetDataPackage && ((SheetDataPackage)data).isIDReferenced(id)) {
+    private static int dealiasIDIfNotReferenced(int id, DataPackage data, boolean isItem) {
+        if(data != null && data instanceof SheetDataPackage && ((SheetDataPackage)data).isIDReferenced(id, isItem)) {
             return id;
         } else {
-            return dealiasMap.dealiasID(id);
+            return dealiasMap.dealiasID(id, isItem);
         }
     }
 
