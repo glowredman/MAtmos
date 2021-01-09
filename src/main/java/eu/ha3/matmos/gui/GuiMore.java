@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import eu.ha3.matmos.Matmos;
+import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
 import net.minecraft.client.gui.GuiButton;
@@ -105,6 +106,8 @@ public class GuiMore extends GuiScreen {
             toggleOption("useroptions.altitudes.low", "mat.options.ambience.low", button);
         } else if (button.id == 213) {
             toggleOption("useroptions.altitudes.high", "mat.options.ambience.high", button);
+        } else if (button.id == 214) {
+            MAtUtil.playSound("entity.villager.ambient", 1f, 1f);
         } else if (button.id == 215) {
             mod.getConfig().setProperty("debug.mode", mod.getConfig().getInteger("debug.mode") == 0 ? 1 : 0);
             button.displayString = mod.getConfig().getInteger("debug.mode") == 1
