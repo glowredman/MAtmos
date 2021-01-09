@@ -1,6 +1,0 @@
-iron_pickaxe=TwilightForest:item.ironwoodPick,TwilightForest:item.fieryPick,TwilightForest:item.steeleafPick,TwilightForest:item.mazebreakerPick,TwilightForest:item.knightlyPick,TwilightForest:item.giantPick
-iron_shovel=TwilightForest:item.ironwoodShovel,TwilightForest:item.steeleafShovel
-iron_axe=TwilightForest:item.ironwoodAxe,TwilightForest:item.steeleafAxe,TwilightForest:item.minotaurAxe,TwilightForest:item.knightlyAxe,TwilightForest:item.chainBlock
-iron_sword=TwilightForest:item.ironwoodSword,TwilightForest:item.fierySword,TwilightForest:item.steeleafSword,TwilightForest:item.knightlySword,TwilightForest:item.giantSword,TwilightForest:item.iceSword,TwilightForest:item.glassSword
-iron_hoe=TwilightForest:item.ironwoodHoe,TwilightForest:item.steeleafHoe
-bow=TwilightForest:item.tripleBow,TwilightForest:item.seekerBow,TwilightForest:item.iceBow,TwilightForest:item.enderBow

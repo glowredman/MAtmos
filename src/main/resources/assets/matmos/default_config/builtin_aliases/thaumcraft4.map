@@ -1,37 +1,9 @@
 # Forbidden Magic
-iron_pickaxe=ForbiddenMagic:TaintPickaxe,ForbiddenMagic:MorphPickaxe
-iron_shovel=ForbiddenMagic:TaintShovel,ForbiddenMagic:MorphShovel
-iron_axe=ForbiddenMagic:SkullAxe,ForbiddenMagic:MorphAxe,ForbiddenMagic:DiabolistFork
-iron_sword=ForbiddenMagic:MorphSword,ForbiddenMagic:BloodRapier
+iron_axe=ForbiddenMagic:SkullAxe,ForbiddenMagic:DiabolistFork
 
 # Tainted Magic
-iron_axe=TaintedMagic:ItemThaumicDisassembler,TaintedMagic:ItemShadowmetalAxe
-iron_sword=TaintedMagic:ItemCrystalDagger,TaintedMagic:ItemShadowmetalSword,TaintedMagic:ItemPrimordialEdge,TaintedMagic:ItemKatana
-iron_hoe=TaintedMagic:ItemShadowmetalHoe
-iron_pickaxe=TaintedMagic:ItemShadowmetalPick
-iron_shovel=TaintedMagic:ItemShadowmetalSpade
-
-# Thaumcraft
-iron_pickaxe=Thaumcraft:ItemPickThaumium,Thaumcraft:ItemPickaxeElemental,Thaumcraft:ItemPickVoid
-iron_shovel=Thaumcraft:ItemShovelThaumium,Thaumcraft:ItemShovelElemental,Thaumcraft:ItemShovelVoid
-iron_axe=Thaumcraft:ItemAxeThaumium,Thaumcraft:ItemAxeElemental,Thaumcraft:ItemAxeVoid,Thaumcraft:ItemPrimalCrusher
-iron_sword=Thaumcraft:ItemSwordThaumium,Thaumcraft:ItemSwordElemental,Thaumcraft:ItemSwordVoid,Thaumcraft:ItemSwordCrimson
-iron_hoe=Thaumcraft:ItemHoeThaumium,Thaumcraft:ItemHoeElemental,Thaumcraft:ItemHoeVoid
-bow=Thaumcraft:ItemBowBone
-
-# Thaumic Tinkerer
-iron_pickaxe=ThaumicTinkerer:ichorPick,ThaumicTinkerer:ichorPickGem,ThaumicTinkerer:ichorPick
-iron_shovel=ThaumicTinkerer:ichorShovel,ThaumicTinkerer:ichorShovelGem
-iron_axe=ThaumicTinkerer:ichorAxe,ThaumicTinkerer:ichorAxeGem
-iron_sword=ThaumicTinkerer:ichorSword,ThaumicTinkerer:ichorSwordGem,ThaumicTinkerer:bloodSword
+iron_axe=TaintedMagic:ItemThaumicDisassembler
+iron_sword=TaintedMagic:ItemKatana
 
 # Witching Gadgets
-iron_axe=WitchingGadgets:item.WG_PrimordialGlove,WitchingGadgets:item.WG_PrimordialHammer,WitchingGadgets:item.WG_PrimordialAxe
-iron_sword=WitchingGadgets:item.WG_PrimordialSword
-
-# Thaumic Bases
-iron_axe=thaumicbases:thauminiteAxe
-iron_hoe=thaumicbases:thauminiteHoe
-iron_pickaxe=thaumicbases:thauminitePickaxe
-iron_shovel=thaumicbases:thauminiteShovel
-iron_sword=thaumicbases:thauminiteSword
+iron_axe=WitchingGadgets:item.WG_PrimordialGlove
