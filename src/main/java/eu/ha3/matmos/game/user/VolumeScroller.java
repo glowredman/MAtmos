@@ -100,9 +100,7 @@ public class VolumeScroller extends Ha3Scroller {
             // Calculate pitch
             float res = (float) Math.pow(2, -Math.floor(getPitch() / caps) / 12);
 
-            EntityPlayer ply = Minecraft.getMinecraft().thePlayer;
-
-            MAtUtil.playSound("random.click", (float) ply.posX, (float) ply.posY, (float) ply.posZ, hgn, res);
+            MAtUtil.playSound("random.click", hgn, res);
 
         }
 

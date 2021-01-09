@@ -144,6 +144,14 @@ public class MAtUtil {
     public static void playSound(String name, float nx, float ny, float nz, float volume, float pitch) {
         playSound(nx, ny, nz, name, volume, pitch);
     }
+    
+    public static void playSound(String name, float volume, float pitch) {
+        EntityPlayer ply = Minecraft.getMinecraft().thePlayer;
+        float sx = ply != null ? (float)ply.posX : 0f;
+        float sy = ply != null ? (float)ply.posY : 0f;
+        float sz = ply != null ? (float)ply.posZ : 0f;
+        playSound(name, sx, sy, sz, volume, pitch);
+    }
 
     private static void playSound(float x, float y, float z, String soundName, float volume, float pitch) {
         PositionedSound positionedsoundrecord = new PositionedSound(new ResourceLocation(soundName), volume, pitch,
