@@ -27,7 +27,7 @@ public class BlockAliasMap extends ObjectAliasMap {
 
     @Override
     public String getNameFromID(int i) {
-        return Block.blockRegistry.getNameForObject(Block.getBlockById(i)).toString();
+        return String.valueOf(Block.blockRegistry.getNameForObject(Block.getBlockById(i)));
     }
 
 }

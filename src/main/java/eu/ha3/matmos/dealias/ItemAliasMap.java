@@ -90,7 +90,7 @@ public class ItemAliasMap extends ObjectAliasMap {
 
     @Override
     public String getNameFromID(int i) {
-        return Item.itemRegistry.getNameForObject(Item.itemRegistry.getObjectById(i)).toString();
+        return String.valueOf(Item.itemRegistry.getNameForObject(Item.itemRegistry.getObjectById(i)));
     }
 
 }
