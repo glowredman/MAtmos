@@ -171,7 +171,7 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
 
     public static ItemStack dealias(ItemStack is, DataPackage data) {
         if(is == null) return null;
-        return new ItemStack(Item.getItemById(dealiasToID(is, data)), is.stackSize, is.getMetadata());
+        return new ItemStack(Item.getItemById(dealiasToID(is, data)), is.stackSize, 0);
     }
     
     public static int dealiasToID(ItemStack is, DataPackage data) {
