@@ -82,8 +82,6 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     private static List<SupportsBlockChangeEvents> blockChangeListeners = new LinkedList<>();
     private static List<SoundManagerListener> soundManagerListeners = new LinkedList<>();
 
-    public static final int MAX_ID;
-
     // Components
     private UserControl userControl;
 
@@ -97,10 +95,6 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     private Object queueLock = new Object();
     private List<Runnable> queue = new ArrayList<>();
     private boolean hasResourcePacks_FixMe;
-
-    static {
-        MAX_ID = ConfigManager.getConfig().getInteger("world.maxblockid");
-    }
 
     @Override
     public void onLoad() {

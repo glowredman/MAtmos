@@ -43,8 +43,6 @@ public class ConfigManager {
         // Create default configuration
 
         config.setProperty("world.height", 256);
-        config.setProperty("world.maxblockid", 4096,
-                "The max block ID. This is 4096 normally, but there are mods that raise it. Getting an ArrayIndexOutOfBoundsException is indication that it needs to be raised.");
         config.setProperty("dump.sheets.enabled", false);
         config.setProperty("start.enabled", true, "If false, MAtmos won't start until the MAtmos key is pressed.");
         config.setProperty("reversed.controls", false);
@@ -86,6 +84,9 @@ public class ConfigManager {
                 );
         config.setProperty("debug.verbosealiasparsing", "false",
                 "Show alias map warnings unconditionally"
+                );
+        config.setProperty("log.printcrashestochat", "true",
+                "Display message in chat when MAtmos crashes"
                 );
         config.commit();
 

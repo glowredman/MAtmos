@@ -143,11 +143,18 @@ public class IDDealiaser {
     }
     
     private String getItemName(Item item) {
-        if(item instanceof ItemBlock) {
-            return Block.REGISTRY.getNameForObject(((ItemBlock)item).getBlock()).toString();
-        } else {
-            return Item.REGISTRY.getNameForObject(item).toString();
+        Object name = Item.REGISTRY.getNameForObject(item);
+        if(name == null) {
+        	// Diagnostics for issue #14
+        	String msg = "A NullPointerExcception occured in getItemName. item=" + item;
+        	if(item instanceof ItemBlock) {
+        		Block block = ((ItemBlock)item).getBlock();
+            	Object blockName = Block.REGISTRY.getNameForObject(block);
+            	msg += ", block=" + block + ", blockName=" + blockName;
+        	}
+        	throw new NullPointerException(msg);
         }
+        return name.toString();
     }
     
     public int dealiasID(int alias, boolean isItem) {

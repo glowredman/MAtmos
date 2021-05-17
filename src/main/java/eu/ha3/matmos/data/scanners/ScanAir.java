@@ -2,6 +2,7 @@ package eu.ha3.matmos.data.scanners;
 
 import eu.ha3.matmos.core.sheet.Sheet;
 import eu.ha3.matmos.util.ByteQueue;
+import eu.ha3.matmos.util.IDontKnowHowToCode;
 import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
@@ -285,10 +286,15 @@ public class ScanAir extends Scan {
      */
     public static boolean isTransparentToSound(IBlockState bs, IBlockAccess blockAccess, BlockPos pos,
             boolean hitIfLiquid) {
-        boolean result = !bs.getBlock().canCollideCheck(bs, hitIfLiquid) || ((!hitIfLiquid
-                || !(bs.getBlock() instanceof BlockLiquid))
-                && (bs.getCollisionBoundingBox(blockAccess, pos) == null || bs.getBlock() instanceof BlockLeaves));
-        return result;
+		try {
+	        boolean result = !bs.getBlock().canCollideCheck(bs, hitIfLiquid) || ((!hitIfLiquid
+	                || !(bs.getBlock() instanceof BlockLiquid))
+	                && (bs.getCollisionBoundingBox(blockAccess, pos) == null || bs.getBlock() instanceof BlockLeaves));
+	        return result;
+		} catch(Exception e) {
+            IDontKnowHowToCode.warnOnce("Exception in isTransparentToSound, checking block of class " + bs.getBlock().getClass() + ": " + e.getMessage());
+            return false;
+        }
     }
 
     private boolean isThinBlock(Block block) {

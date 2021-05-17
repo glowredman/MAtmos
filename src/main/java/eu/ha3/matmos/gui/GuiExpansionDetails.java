@@ -90,7 +90,6 @@ public class GuiExpansionDetails extends GuiScreen {
                             mod.getChatter().printChat(I18n.format("mat.generator.done", jsonFile.getAbsolutePath()));
                             mod.getChatter().printChatShort(I18n.format("mat.generator.plswait"));
                         } catch (Exception e) {
-                            e.printStackTrace(System.out);
                             IDontKnowHowToCode.whoops__printExceptionToChat(mod.getChatter(), e, this);
                         }
                     } else {

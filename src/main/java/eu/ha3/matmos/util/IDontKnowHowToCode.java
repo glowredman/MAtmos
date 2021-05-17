@@ -3,12 +3,14 @@ package eu.ha3.matmos.util;
 import java.util.HashSet;
 import java.util.Set;
 
+import eu.ha3.matmos.ConfigManager;
 import eu.ha3.matmos.Matmos;
 import eu.ha3.mc.quick.chat.Chatter;
 import net.minecraft.util.text.TextFormatting;
 
 public class IDontKnowHowToCode {
     private static Set<Integer> crash = new HashSet<>();
+    private static Set<Integer> exceptionClass = new HashSet<>();
     private static Set<Integer> warning = new HashSet<>();
 
     public static void warnOnce(String message) {
@@ -33,22 +35,37 @@ public class IDontKnowHowToCode {
      * @param crashToken
      */
     public static void whoops__printExceptionToChat(Chatter chatter, Exception e, int crashToken) {
+    	boolean printToChat = ConfigManager.getConfig().getBoolean("log.printcrashestochat");
+    	
+    	int traceToken = e.getClass().getName().hashCode();
+    	if(exceptionClass.contains(traceToken)) {
+    		printToChat = false;
+    	}
+    	exceptionClass.add(traceToken);
+    	
         if (crash.contains(crashToken)) {
             return;
         }
         crash.add(crashToken);
 
-        chatter.printChat(TextFormatting.RED, "MAtmos is crashing: ", TextFormatting.WHITE, e.getClass().getName(),
-                ": ", e.getCause());
-
-        int i = 0;
-        for (StackTraceElement x : e.getStackTrace()) {
-            if (i <= 5 || x.toString().contains("MAt") || x.toString().contains("eu.ha3.matmos.")) {
-                chatter.printChat(TextFormatting.WHITE, x.toString());
-            }
-            i++;
+        e.printStackTrace(System.out);
+        
+        if(printToChat) {
+	        chatter.printChat(TextFormatting.RED, "MAtmos is crashing: ", TextFormatting.WHITE,
+	                e.getClass().getName(), ": ", e.getCause());
+        } else {
+        	Matmos.LOGGER.error("MAtmos is crashing: " + e.getClass().getName() + ": " + e.getCause());
+        }
+        
+        if (printToChat && e.getStackTrace().length > 0) {
+    		chatter.printChat(TextFormatting.WHITE, e.getStackTrace()[0]);
         }
 
-        chatter.printChat(TextFormatting.RED, "Please report this issue :(");
+        if(printToChat) {
+        	chatter.printChat(TextFormatting.RED, "See the log for full information.");
+        	chatter.printChat(TextFormatting.RED, "Please report this issue :(");
+        } else {
+        	Matmos.LOGGER.error("Please report this issue :(");
+        }
     }
 }
