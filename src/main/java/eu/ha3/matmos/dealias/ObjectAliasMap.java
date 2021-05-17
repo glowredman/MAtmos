@@ -83,7 +83,7 @@ public abstract class ObjectAliasMap {
     public void dealiasItemGroupToMinID(Collection<String> names) {
         List<Integer> ids = names.stream()
                 .filter(s -> !s.startsWith("minecraft:"))
-                .mapToInt(s -> getIDFromName(s)).boxed().collect(Collectors.toList());
+                .mapToInt(s -> getIDFromName(s)).filter(i -> i != -1).boxed().collect(Collectors.toList());
         
         int minBlockID = ids.stream().min(Integer::compare).orElse(-1);
         

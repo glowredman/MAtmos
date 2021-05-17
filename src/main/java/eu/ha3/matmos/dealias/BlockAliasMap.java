@@ -13,7 +13,7 @@ public class BlockAliasMap extends ObjectAliasMap {
 
     @Override
     public int getIDFromName(String s) {
-        return Block.getIdFromBlock(Block.getBlockFromName(s));
+        return Block.blockRegistry.getIDForObject(Block.blockRegistry.getObject(s));
     }
 
     @Override
