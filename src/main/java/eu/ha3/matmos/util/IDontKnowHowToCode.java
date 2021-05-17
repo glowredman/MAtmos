@@ -38,6 +38,8 @@ public class IDontKnowHowToCode {
         }
         crash.add(crashToken);
 
+        e.printStackTrace(System.out);
+        
         chatter.printChat(EnumChatFormatting.RED, "MAtmos is crashing: ", EnumChatFormatting.WHITE,
                 e.getClass().getName(), ": ", e.getCause());
 
