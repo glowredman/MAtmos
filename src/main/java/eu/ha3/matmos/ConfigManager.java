@@ -43,8 +43,8 @@ public class ConfigManager {
         // Create default configuration
 
         config.setProperty("world.height", 256);
-        config.setProperty("world.maxblockid", 4096,
-                "The max block ID. This is 4096 normally, but there are mods that raise it. Getting an ArrayIndexOutOfBoundsException is indication that it needs to be raised.");
+        config.setProperty("world.maxblockid", -1,
+                "The max block ID. This is 4096 normally, but there are mods that raise it. Setting this to -1 will make it detected automatically. Getting an ArrayIndexOutOfBoundsException is indication that it needs to be raised.");
         config.setProperty("dump.sheets.enabled", false);
         config.setProperty("start.enabled", true, "If false, MAtmos won't start until the MAtmos key is pressed.");
         config.setProperty("reversed.controls", false);

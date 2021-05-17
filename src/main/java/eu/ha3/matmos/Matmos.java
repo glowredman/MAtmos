@@ -12,6 +12,7 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import eu.ha3.easy.StopWatchStatistic;
 import eu.ha3.easy.TimeStatistic;
 import eu.ha3.matmos.core.expansion.Expansion;
@@ -99,7 +100,23 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     private boolean hasResourcePacks_FixMe;
 
     static {
-        MAX_ID = ConfigManager.getConfig().getInteger("world.maxblockid");
+        MAX_ID = getMaxBlockID();
+    }
+    
+    public static int getMaxBlockID() {
+        int configMax = ConfigManager.getConfig().getInteger("world.maxblockid");
+        if(configMax != -1) {
+            return configMax;
+        } else {
+            try {
+                int maxId = (int)FMLControlledNamespacedRegistry.class.getDeclaredField("maxId").get(Block.blockRegistry);
+                return maxId;
+            } catch(Exception e) {
+                System.out.println("Failed to get max ID from block registry, falling back to 4096");
+                e.printStackTrace();
+                return 4096;
+            }
+        }
     }
 
     @Override
