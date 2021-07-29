@@ -56,18 +56,13 @@ public class IDontKnowHowToCode {
         } else {
         	Matmos.LOGGER.error("MAtmos is crashing: " + e.getClass().getName() + ": " + e.getCause());
         }
-
-        int i = 0;
-        for (StackTraceElement x : e.getStackTrace()) {
-            if (i <= 5 || x.toString().contains("MAt") || x.toString().contains("eu.ha3.matmos.")) {
-            	if(printToChat) {
-            		chatter.printChat(EnumChatFormatting.WHITE, x.toString());
-            	}
-            }
-            i++;
+        
+        if (printToChat && e.getStackTrace().length > 0) {
+    		chatter.printChat(EnumChatFormatting.WHITE, e.getStackTrace()[0]);
         }
 
         if(printToChat) {
+        	chatter.printChat(EnumChatFormatting.RED, "See the log for full information.");
         	chatter.printChat(EnumChatFormatting.RED, "Please report this issue :(");
         } else {
         	Matmos.LOGGER.error("Please report this issue :(");
