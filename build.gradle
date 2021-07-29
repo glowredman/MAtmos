@@ -113,7 +113,7 @@ subprojects {
 		replace '@MODID@', project.modid
 		replace '@NAME@', project.modname
 		replace '@AUTHOR@', project.author
-		replace '@VERSION@', ver
+		replace '@VERSION@', project.buildVersion
 		replace '@DESCRIPTION@', project.description
 	}
 	
