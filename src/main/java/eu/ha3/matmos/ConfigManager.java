@@ -85,6 +85,9 @@ public class ConfigManager {
         config.setProperty("debug.verbosealiasparsing", "false",
                 "Show alias map warnings unconditionally"
                 );
+        config.setProperty("log.printcrashestochat", "true",
+                "Display message in chat when MAtmos crashes"
+                );
         config.commit();
 
         config.setGlobalDescription("Tip: restart MAtmos to reload the configs without restarting Minecraft");
