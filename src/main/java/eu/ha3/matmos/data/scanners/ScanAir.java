@@ -290,7 +290,7 @@ public class ScanAir extends Scan {
                             || block instanceof BlockLeaves));
             return result;
         } catch(Exception e) {
-            IDontKnowHowToCode.warnOnce("Exception in isTransparentToSound, checking block " + block + " at " + pos + ": " + e.getMessage());
+            IDontKnowHowToCode.warnOnce("Exception in isTransparentToSound, checking block of class " + block.getClass().getName() + ": " + e.getMessage());
             return false;
         }
     }
