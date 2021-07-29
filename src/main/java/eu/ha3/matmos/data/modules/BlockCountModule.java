@@ -28,17 +28,20 @@ import net.minecraft.client.Minecraft;
  * @author Hurry
  */
 public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integer>> {
-    private boolean[] wasZero = new boolean[Matmos.MAX_ID];
-    private int[] counts = new int[Matmos.MAX_ID];
-    private int[] BLANK_COUNTS = new int[Matmos.MAX_ID];
+    
+	private static final int INITIAL_SIZE = 4096;
+	
+	private boolean[] wasZero = new boolean[INITIAL_SIZE];
+    private int[] counts = new int[INITIAL_SIZE];
+    private int[] zeroMetadataCounts = new int[INITIAL_SIZE];
+    private TreeMap<Integer, Integer>[] metadatas = new TreeMap[INITIAL_SIZE];
 
-    private int[] zeroMetadataCounts = new int[Matmos.MAX_ID];
-    private TreeMap<Integer, Integer>[] metadatas = new TreeMap[Matmos.MAX_ID];
-
+    int size;
+    
     VirtualCountModule<Pair<Block, Integer>> thousand;
 
     SheetDataPackage sheetData;
-
+    
     public BlockCountModule(DataPackage data, String name) {
         this(data, name, false);
     }
@@ -78,7 +81,11 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
         int meta = blockMeta.getRight();
 
         int id = ExpansionManager.dealiasToID(block, sheetData);
-
+        
+        if(id >= size) {
+        	resize(id + 1);
+        }
+        
         counts[id] += amount;
 
         if (meta != -1 && meta != 0) {
@@ -100,7 +107,9 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
         int meta = blockMeta.getRight();
 
         int id = Block.getIdFromBlock(block);
-        if (meta == -1) {
+        if(id >= size) {
+        	return 0;
+        } else if (meta == -1) {
             return counts[id];
         } else {
             return metadatas[id].get(meta);
@@ -157,13 +166,22 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
 
         blocksCounted = 0;
 
-        System.arraycopy(BLANK_COUNTS, 0, counts, 0, counts.length);
-        System.arraycopy(BLANK_COUNTS, 0, zeroMetadataCounts, 0, counts.length);
+        Arrays.fill(counts, 0);
+        Arrays.fill(zeroMetadataCounts, 0);
         Arrays.stream(metadatas).forEach(m -> {
             if (m != null)
                 m.replaceAll((k, v) -> 0);
         });
 
+    }
+    
+    private void resize(int newSize) {
+    	int stepSize = 1024;
+    	newSize = ((int)Math.ceil(newSize / (double)stepSize)) * stepSize;
+    	wasZero = Arrays.copyOf(wasZero, newSize);
+    	counts = Arrays.copyOf(counts, newSize);
+    	zeroMetadataCounts = Arrays.copyOf(zeroMetadataCounts, newSize);
+    	metadatas = Arrays.copyOf(metadatas, newSize);
     }
 
 }

@@ -83,8 +83,6 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     private static List<SupportsBlockChangeEvents> blockChangeListeners = new LinkedList<>();
     private static List<SoundManagerListener> soundManagerListeners = new LinkedList<>();
 
-    public static final int MAX_ID;
-
     // Components
     private UserControl userControl;
 
@@ -98,26 +96,6 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     private Object queueLock = new Object();
     private List<Runnable> queue = new ArrayList<>();
     private boolean hasResourcePacks_FixMe;
-
-    static {
-        MAX_ID = getMaxBlockID();
-    }
-    
-    public static int getMaxBlockID() {
-        int configMax = ConfigManager.getConfig().getInteger("world.maxblockid");
-        if(configMax != -1) {
-            return configMax;
-        } else {
-            try {
-                int maxId = (int)FMLControlledNamespacedRegistry.class.getDeclaredField("maxId").get(Block.blockRegistry);
-                return maxId;
-            } catch(Exception e) {
-                System.out.println("Failed to get max ID from block registry, falling back to 4096");
-                e.printStackTrace();
-                return 4096;
-            }
-        }
-    }
 
     @Override
     public void onLoad() {
