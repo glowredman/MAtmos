@@ -15,6 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -143,11 +145,18 @@ public class IDDealiaser {
     }
     
     private String getItemName(Item item) {
-        if(item instanceof ItemBlock) {
-            return Block.blockRegistry.getNameForObject(((ItemBlock)item).blockInstance).toString();
-        } else {
-            return Item.itemRegistry.getNameForObject(item).toString();
+        Object name = Item.itemRegistry.getNameForObject(item);
+        if(name == null) {
+        	// Diagnostics for issue #14
+        	String msg = "A NullPointerExcception occured in getItemName. item=" + item;
+        	if(item instanceof ItemBlock) {
+        		Block block = ((ItemBlock)item).blockInstance;
+            	Object blockName = Block.blockRegistry.getNameForObject(block);
+            	msg += ", block=" + block + ", blockName=" + blockName;
+        	}
+        	throw new NullPointerException(msg);
         }
+        return name.toString();
     }
     
     public int dealiasID(int alias, boolean isItem) {
