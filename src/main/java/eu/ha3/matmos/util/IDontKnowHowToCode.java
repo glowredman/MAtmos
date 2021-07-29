@@ -10,6 +10,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class IDontKnowHowToCode {
     private static Set<Integer> crash = new HashSet<>();
+    private static Set<Integer> exceptionClass = new HashSet<>();
     private static Set<Integer> warning = new HashSet<>();
 
     public static void warnOnce(String message) {
@@ -34,14 +35,20 @@ public class IDontKnowHowToCode {
      * @param crashToken
      */
     public static void whoops__printExceptionToChat(Chatter chatter, Exception e, int crashToken) {
+    	boolean printToChat = ConfigManager.getConfig().getBoolean("log.printcrashestochat");
+    	
+    	int traceToken = e.getClass().getName().hashCode();
+    	if(exceptionClass.contains(traceToken)) {
+    		printToChat = false;
+    	}
+    	exceptionClass.add(traceToken);
+    	
         if (crash.contains(crashToken)) {
             return;
         }
         crash.add(crashToken);
 
         e.printStackTrace(System.out);
-        
-        boolean printToChat = ConfigManager.getConfig().getBoolean("log.printcrashestochat");
         
         if(printToChat) {
 	        chatter.printChat(EnumChatFormatting.RED, "MAtmos is crashing: ", EnumChatFormatting.WHITE,
