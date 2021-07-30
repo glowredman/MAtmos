@@ -73,6 +73,9 @@ subprojects {
 		replace '@AUTHOR@', project.author
 		replace '@VERSION@', project.buildVersion
 		replace '@DESCRIPTION@', project.description
+		srgExtra "PK: eu/ha3/easy eu/ha3/matmos/lib/eu/ha3/easy"
+		srgExtra "PK: eu/ha3/mc eu/ha3/matmos/lib/eu/ha3/mc"
+		srgExtra "PK: eu/ha3/util eu/ha3/matmos/lib/eu/ha3/util"
 	}
 
 	sourceCompatibility = 1.8
