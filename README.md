@@ -79,9 +79,11 @@ Want even **more soundpacks**, or more info? See Sollace's old wiki: https://git
 ## Contributing
 The project can be built using Gradle.
 
+The project uses a multi-project structure. Don't import the root directory into your IDE -- work with the `projects/forge` directory instead. IntelliJ is not supported at the moment, you'll have to use Eclipse.
+
 To run in an IDE, use the following program arguments:
 
-`--tweakClass org.spongepowered.asm.launch.MixinTweaker --mixin haddon.mixin.json --mixin haddon_core.mixin.json`
+`--tweakClass org.spongepowered.asm.launch.MixinTweaker --mixin haddon.mixin.json`
 
 ## Licenses
 
