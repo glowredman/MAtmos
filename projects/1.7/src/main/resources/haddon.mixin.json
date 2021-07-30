@@ -1,0 +1,10 @@
+{
+    "required": true,
+    "minVersion": "0.7",
+    "package": "eu.ha3.matmos.core.mixin",
+    "refmap": "haddon.mixin.refmap.json",
+    "compatibilityLevel": "JAVA_8",
+    "mixins": [
+        "MixinSoundManager"
+    ]
+}

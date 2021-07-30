@@ -1,7 +1,0 @@
-rootProject.name = 'MAtmos'
-
-include 'forge', /*'liteloader',*/ 'forge-mixin0.7'
-
-project(":forge").projectDir = file("projects/forge")
-//project(":liteloader").projectDir = file("projects/liteloader")
-project(":forge-mixin0.7").projectDir = file("projects/forge-mixin0.7")

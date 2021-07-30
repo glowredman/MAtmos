@@ -10,11 +10,11 @@ run/
 *.iml
 *.launch
 /.nb-gradle/
+projects/
 logs/
+
+out/
 
 /*Audio files*/
 *.ogg
 *.WAV
-
-*.ipr
-*.iws
