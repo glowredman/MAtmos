@@ -1,0 +1,6 @@
+[submodule "projects/1.12/lib/MC-Commons"]
+	path = projects/1.12/lib/MC-Commons
+	url = https://github.com/makamys/MC-Commons
+[submodule "projects/1.7/lib/MC-Commons"]
+	path = projects/1.7/lib/MC-Commons
+	url = https://github.com/makamys/MC-Commons
