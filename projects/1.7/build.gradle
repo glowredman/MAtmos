@@ -112,9 +112,9 @@ sourceSets {
 
 		compileClasspath += commons.output
 	}
-	dev {
+	/*dev {
 		compileClasspath += main.output
-	}
+	}*/
 }
 
 def outRefMapMain = tasks.compileJava.temporaryDir.toString() + "/haddon.mixin.refmap.json" // 1.7.10 mixin compatibility
