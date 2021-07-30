@@ -82,7 +82,7 @@ The project uses Git submodules. Run `git submodule init` followed by `git submo
 
 The project can be built using Gradle.
 
-The project uses a multi-project structure. Don't import the root directory into your IDE -- work with the `projects/forge` directory instead. IntelliJ is not supported at the moment, you'll have to use Eclipse.
+The project uses a multi-project structure. The subproject for each game version can be found in `projects/<version>` folder. Some subprojects can be built with different targets, add `-Ptarget=foo` to your gradle command to target the `foo` target.
 
 To run in an IDE, use the following program arguments:
 
