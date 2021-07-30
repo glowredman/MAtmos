@@ -8,7 +8,8 @@
     "1.12.2-35.1": "* Implemented my own sound manager to use for playing streamed sounds, instead of using Minecraft's buggy one. Streamed sound playback should be a lot more stable now (it had a bug that sometimes made sounds get stuck playing multiple times at once).\n* Reverted F3+S hint to F3+T (F3+S is not a thing in 1.12.2, and it did the same thing as F3+T in 1.7.10)",
     "1.12.2-35.2": "Compatibility fixes:\n* Switched to using access transformers instead of Mixin accessors. Fixes incompatibility with Up And Down And All Around, and possibly other mods as well.\n* Made the threshold above which it's considered to be raining configurable (`rain.strengththreshold`). This can be used to fix a problem where no sound played with Weather2 on 1.12.2 when it was raining.\n* Improved defaults for `rain.soundlist`: now Dynamic Surroundings and Better Rain sounds are in by default, and unnecessary sounds from the other Minecraft version have been removed\n\nTweaks:\n* Added `auto` option to `rain.suppress`, which activates suppression of non-MAtmos rain sounds only when there is at least one soundpack present that's aware of the option. This means rain now works properly with the 2016 Default soundpack with default settings.\n* Made any missing options in the config file get regenerated on launch (previously this only happened once a setting was changed via the GUI).",
     "1.7.10-35.3": "",
-    "1.7.10-35.3.1": ""
+    "1.7.10-35.3.1": "",
+    "1.7.10-35.4.2": ""
   },
   "1.7.10": {
     "1.7.10-34": "Backport of MAtmos 34.1 from 1.1.12 to 1.7.10.",
@@ -21,12 +22,13 @@
     "1.7.10-35.2": "* Implemented my own sound manager to use for playing streamed sounds, instead of using Minecraft's buggy one. Streamed sound playback should be a lot more stable now (it had a bug that sometimes made sounds get stuck playing multiple times at once).\n* Reverted F3+S hint to F3+T (F3+S is not a thing in 1.12.2, and it did the same thing as F3+T in 1.7.10)",
     "1.7.10-35.3": "Compatibility fixes:\n* Switched to using access transformers instead of Mixin accessors. Fixes incompatibility with Up And Down And All Around, and possibly other mods as well.\n* Made the threshold above which it's considered to be raining configurable (`rain.strengththreshold`). This can be used to fix a problem where no sound played with Weather2 on 1.12.2 when it was raining.\n* Improved defaults for `rain.soundlist`: now Dynamic Surroundings and Better Rain sounds are in by default, and unnecessary sounds from the other Minecraft version have been removed\n\nTweaks:\n* Added `auto` option to `rain.suppress`, which activates suppression of non-MAtmos rain sounds only when there is at least one soundpack present that's aware of the option. This means rain now works properly with the 2016 Default soundpack with default settings.\n* Made any missing options in the config file get regenerated on launch (previously this only happened once a setting was changed via the GUI).",
     "1.7.10-35.4": "",
-    "1.7.10-35.4.1": ""
+    "1.7.10-35.4.1": "",
+    "1.7.10-35.4.2": ""
   },
   "promos": {
-    "1.12.2-latest": "1.12.2-35.3.1"
+    "1.12.2-latest": "1.12.2-35.4.2"
   },
   "promos": {
-    "1.7.10-latest": "1.7.10-35.4.1"
+    "1.7.10-latest": "1.7.10-35.4.2"
   }
 }
