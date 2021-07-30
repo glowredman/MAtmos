@@ -77,6 +77,9 @@ For **soundpack** downloads, see the *Featured soundpacks* section above.
 Want even **more soundpacks**, or more info? See Sollace's old wiki: https://github.com/Sollace/MAtmos/wiki
 
 ## Contributing
+
+The project uses Git submodules. Run `git submodule init` followed by `git submodule update` after checking out to fetch them.
+
 The project can be built using Gradle.
 
 The project uses a multi-project structure. Don't import the root directory into your IDE -- work with the `projects/forge` directory instead. IntelliJ is not supported at the moment, you'll have to use Eclipse.
