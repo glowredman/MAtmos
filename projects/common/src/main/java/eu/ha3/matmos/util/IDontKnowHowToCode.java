@@ -5,8 +5,8 @@ import java.util.Set;
 
 import eu.ha3.matmos.ConfigManager;
 import eu.ha3.matmos.Matmos;
+import eu.ha3.mc.abstraction.util.ATextFormatting;
 import eu.ha3.mc.quick.chat.Chatter;
-import net.minecraft.util.text.TextFormatting;
 
 public class IDontKnowHowToCode {
     private static Set<Integer> crash = new HashSet<>();
@@ -51,19 +51,19 @@ public class IDontKnowHowToCode {
         e.printStackTrace(System.out);
         
         if(printToChat) {
-	        chatter.printChat(TextFormatting.RED, "MAtmos is crashing: ", TextFormatting.WHITE,
+	        chatter.printChat(ATextFormatting.RED, "MAtmos is crashing: ", ATextFormatting.WHITE,
 	                e.getClass().getName(), ": ", e.getCause());
         } else {
         	Matmos.LOGGER.error("MAtmos is crashing: " + e.getClass().getName() + ": " + e.getCause());
         }
         
         if (printToChat && e.getStackTrace().length > 0) {
-    		chatter.printChat(TextFormatting.WHITE, e.getStackTrace()[0]);
+    		chatter.printChat(ATextFormatting.WHITE, e.getStackTrace()[0]);
         }
 
         if(printToChat) {
-        	chatter.printChat(TextFormatting.RED, "See the log for full information.");
-        	chatter.printChat(TextFormatting.RED, "Please report this issue :(");
+        	chatter.printChat(ATextFormatting.RED, "See the log for full information.");
+        	chatter.printChat(ATextFormatting.RED, "Please report this issue :(");
         } else {
         	Matmos.LOGGER.error("Please report this issue :(");
         }
