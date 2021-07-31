@@ -13,8 +13,9 @@ run/
 projects/
 logs/
 
-out/
-
 /*Audio files*/
 *.ogg
 *.WAV
+
+.idea/
+out/

@@ -16,3 +16,6 @@ logs/
 /*Audio files*/
 *.ogg
 *.WAV
+
+.idea/
+out/
