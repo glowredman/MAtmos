@@ -1,0 +1,1 @@
+MAtlogo.png was created by scaling MAtlogo_raw.png to be 389 pixels tall, then rotating by 3.9 degrees.
