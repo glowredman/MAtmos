@@ -103,7 +103,7 @@ sourceSets {
 	}
 	main {
 		java {
-			srcDirs = ["${rootDir}/src/main/java", "${rootDir}/../common/src/main/java"]
+			srcDirs = ["${rootDir}/src/main/java", "${rootDir}/../common/src/common/java"]
 
 		}
 		resources {
