@@ -1,0 +1,8 @@
+plugins {
+    id 'java-library'
+}
+
+apply plugin: 'java-library'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
