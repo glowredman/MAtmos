@@ -21,7 +21,7 @@ import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.EnumChatFormatting;
+import eu.ha3.mc.abstraction.util.ATextFormatting;
 
 public class GuiExpansionOverrideList extends GuiListExtended {
     
@@ -48,8 +48,8 @@ public class GuiExpansionOverrideList extends GuiListExtended {
             Collection<String> otherConditions = Sets.difference(conditions, new HashSet<>(posConditions))
                     .stream().collect(Collectors.toList());
             
-            listEntries.add(new OverrideEntry(EnumChatFormatting.BOLD + I18n.format("mat.title.conditionoverrides") + EnumChatFormatting.RESET +
-                    EnumChatFormatting.GRAY + " (" + expansion.getName() + ".cfg)", true));
+            listEntries.add(new OverrideEntry(ATextFormatting.BOLD + I18n.format("mat.title.conditionoverrides") + ATextFormatting.RESET +
+                    ATextFormatting.GRAY + " (" + expansion.getName() + ".cfg)", true));
             if(!posConditions.isEmpty()) {
                 listEntries.add(new OverrideEntry(I18n.format("mat.options.overridesection.pos"), true));
                 posConditions.forEach(k -> listEntries.add(new OverrideEntry(k)));
@@ -142,7 +142,7 @@ public class GuiExpansionOverrideList extends GuiListExtended {
                 }
                 Condition cond = conditionProvider.get(s);
                 boolean overridden = !tf.getText().isEmpty();
-                mc.fontRendererObj.drawString((overridden ? (EnumChatFormatting.GOLD + "" + EnumChatFormatting.BOLD) : EnumChatFormatting.WHITE) + cond.getName() + "  " + EnumChatFormatting.GRAY + cond.getFeed(), (x + padding) * fac, y * fac, 0xFFFFFF);
+                mc.fontRendererObj.drawString((overridden ? (ATextFormatting.GOLD + "" + ATextFormatting.BOLD) : ATextFormatting.WHITE) + cond.getName() + "  " + ATextFormatting.GRAY + cond.getFeed(), (x + padding) * fac, y * fac, 0xFFFFFF);
                 tf.xPosition = (width - padding - 4 - padding - 50) * fac;
                 tf.yPosition = y * fac;
                 tf.drawTextBox();

@@ -11,7 +11,7 @@ import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.EnumChatFormatting;
+import eu.ha3.mc.abstraction.util.ATextFormatting;
 
 public class GuiMore extends GuiScreen {
     private final int IDS_PER_PAGE = 5;
@@ -52,7 +52,7 @@ public class GuiMore extends GuiScreen {
         buttonList.add(new GuiButton(213, _LEFT + _MIX, _MIX * (2 + 1), _WIDTH - _MIX * 2, _UNIT,
                 formatOpt("mat.options.ambience.high", mod.getConfig().getBoolean("useroptions.altitudes.high"))));
         
-        overrideHintButton = new GuiButton(214, _RIGHT - _UNIT, _MIX * (2 + 1), _UNIT, _UNIT, EnumChatFormatting.GOLD + "?");
+        overrideHintButton = new GuiButton(214, _RIGHT - _UNIT, _MIX * (2 + 1), _UNIT, _UNIT, ATextFormatting.GOLD + "?");
         buttonList.add(overrideHintButton);
 
         GuiBiomeSlider biomeSlider = new GuiBiomeSlider(mod, mod.getConfig().getInteger("useroptions.biome.override"));
@@ -111,7 +111,7 @@ public class GuiMore extends GuiScreen {
         } else if (button.id == 215) {
             mod.getConfig().setProperty("debug.mode", mod.getConfig().getInteger("debug.mode") == 0 ? 1 : 0);
             button.displayString = mod.getConfig().getInteger("debug.mode") == 1
-                    ? EnumChatFormatting.GOLD + "Dev/Editor mode: ON"
+                    ? ATextFormatting.GOLD + "Dev/Editor mode: ON"
                     : "Dev/Editor mode: OFF";
             mod.changedDebugMode();
             mod.saveConfig();

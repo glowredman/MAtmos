@@ -15,7 +15,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextFormatting;
+import eu.ha3.mc.abstraction.util.ATextFormatting;
 
 public class GuiExpansionDetails extends GuiScreen {
     private final GuiMatMenu parentScreen;
@@ -93,10 +93,10 @@ public class GuiExpansionDetails extends GuiScreen {
                             IDontKnowHowToCode.whoops__printExceptionToChat(mod.getChatter(), e, this);
                         }
                     } else {
-                        mod.getChatter().printChat(TextFormatting.RED, I18n.format("mat.folders.sounds"));
+                        mod.getChatter().printChat(ATextFormatting.RED, I18n.format("mat.folders.sounds"));
                     }
                 } else {
-                    mod.getChatter().printChat(TextFormatting.RED, I18n.format("mat.folders.mc"));
+                    mod.getChatter().printChat(ATextFormatting.RED, I18n.format("mat.folders.mc"));
                 }
             }
         }

@@ -16,7 +16,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiScreenResourcePacks;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.EnumChatFormatting;
+import eu.ha3.mc.abstraction.util.ATextFormatting;
 
 public class GuiMatMenu extends GuiScreen {
     private GuiScreen parentScreen;
@@ -127,7 +127,7 @@ public class GuiMatMenu extends GuiScreen {
                     display = display + (int) Math.floor(expansion.getVolume() * 100) + "%";
                 }
 
-                return EnumChatFormatting.ITALIC + display;
+                return ATextFormatting.ITALIC + display;
             });
             sliderControl.updateDisplayString();
 
@@ -148,7 +148,7 @@ public class GuiMatMenu extends GuiScreen {
             } else {
                 buttonList.add(new GuiButton(Make.make(() -> {
                     mc.displayGuiScreen(new GuiExpansionDetails(this, mod, expansion));
-                }), _RIGHT - _UNIT, _MIX * (id + 1), _UNIT, _UNIT, EnumChatFormatting.GOLD + "+"));
+                }), _RIGHT - _UNIT, _MIX * (id + 1), _UNIT, _UNIT, ATextFormatting.GOLD + "+"));
             }
 
             id++;
@@ -160,7 +160,7 @@ public class GuiMatMenu extends GuiScreen {
                     isAutopreviewEnabled() ? "^o^" : "^_^"));
         } else {
             buttonList.add(new GuiButton(230, _RIGHT - _UNIT, _MIX * (IDS_PER_PAGE + 2), 40, _UNIT,
-                    EnumChatFormatting.GOLD + "OSD"));
+                    ATextFormatting.GOLD + "OSD"));
         }
 
         if (pageFromZero != 0) {
@@ -175,7 +175,7 @@ public class GuiMatMenu extends GuiScreen {
         buttonList.add(new GuiButton(210, _LEFT, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3), _AWID, _UNIT,
                 I18n.format("mat.options.start." + mod.getConfig().getBoolean("start.enabled"))));
         buttonList.add(new GuiButton(211, _LEFT + _AWID + _GAP, _SEPARATOR + _MIX * (IDS_PER_PAGE + 3), _AWID, _UNIT,
-                (mod.isDebugMode() ? EnumChatFormatting.GOLD : "") + I18n.format("mat.options.advanced")));
+                (mod.isDebugMode() ? ATextFormatting.GOLD : "") + I18n.format("mat.options.advanced")));
 
         final int _TURNOFFWIDTH = _ELEMENT_WIDTH / 5;
 
@@ -260,7 +260,7 @@ public class GuiMatMenu extends GuiScreen {
         } else {
             drawGradientRect(0, 0, width, height, 0xC0C06000, 0x60C06000);
             drawCenteredString(fontRendererObj,
-                    I18n.format("mat.title.expansions") + EnumChatFormatting.GOLD + "(Dev mode)", width / 2, 8,
+                    I18n.format("mat.title.expansions") + ATextFormatting.GOLD + "(Dev mode)", width / 2, 8,
                     0xffffff);
             drawCenteredString(fontRendererObj, I18n.format("mat.title.devmode"), width / 2,
                     _SEPARATOR + _MIX * (IDS_PER_PAGE + 3) - 9, 0xffffff);

@@ -15,7 +15,7 @@ import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.text.TextFormatting;
+import eu.ha3.mc.abstraction.util.ATextFormatting;
 
 public class UserControl implements Ha3HoldActions, SupportsTickEvents, SupportsFrameEvents {
     private final Matmos mod;
@@ -79,14 +79,14 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 
     private void printUnusualMessages() {
         if (!mod.isInitialized()) {
-            mod.getChatter().printChat(TextFormatting.RED, "Unknown error: MAtmos isn't initialized");
+            mod.getChatter().printChat(ATextFormatting.RED, "Unknown error: MAtmos isn't initialized");
         } else {
             if (!MAtUtil.isSoundMasterEnabled()) {
-                mod.getChatter().printChat(TextFormatting.RED, "Warning: ", TextFormatting.WHITE,
+                mod.getChatter().printChat(ATextFormatting.RED, "Warning: ", ATextFormatting.WHITE,
                         "Sounds are turned off in your game settings!");
             }
             if (!MAtUtil.isSoundAmbientEnabled()) {
-                mod.getChatter().printChat(TextFormatting.RED, "Warning: ", TextFormatting.WHITE,
+                mod.getChatter().printChat(ATextFormatting.RED, "Warning: ", ATextFormatting.WHITE,
                         "Ambient sounds are at 0%% volume in the Minecraft options menu!");
             }
         }
@@ -126,15 +126,15 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
     private void whenWantsToggle() {
         if (mod.isActivated()) {
             mod.deactivate();
-            mod.getChatter().printChat(TextFormatting.YELLOW, "Stopped. Press ", TextFormatting.WHITE,
-                    getKeyBindingMainFriendlyName(), TextFormatting.YELLOW, " to re-enable.");
+            mod.getChatter().printChat(ATextFormatting.YELLOW, "Stopped. Press ", ATextFormatting.WHITE,
+                    getKeyBindingMainFriendlyName(), ATextFormatting.YELLOW, " to re-enable.");
 
         } else if (mod.isInitialized()) {
             if (loadingCount != 0) {
-                mod.getChatter().printChat(TextFormatting.GREEN, "Loading...");
+                mod.getChatter().printChat(ATextFormatting.GREEN, "Loading...");
             } else {
-                mod.getChatter().printChat(TextFormatting.GREEN, "Loading...", TextFormatting.YELLOW, " (Hold ",
-                        TextFormatting.WHITE, getKeyBindingMainFriendlyName() + " down", TextFormatting.YELLOW,
+                mod.getChatter().printChat(ATextFormatting.GREEN, "Loading...", ATextFormatting.YELLOW, " (Hold ",
+                        ATextFormatting.WHITE, getKeyBindingMainFriendlyName() + " down", ATextFormatting.YELLOW,
                         " to tweak the volume)");
             }
 
@@ -154,7 +154,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
 
         TimeStatistic stat = new TimeStatistic();
         mod.start();
-        mod.getChatter().printChat(TextFormatting.GREEN,
+        mod.getChatter().printChat(ATextFormatting.GREEN,
                 "Loading for the first time (" + stat.getSecondsAsString(2) + "s)");
     }
 
@@ -163,7 +163,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
             TimeStatistic stat = new TimeStatistic();
             mod.refresh();
             mod.activate();
-            mod.getChatter().printChat(TextFormatting.GREEN,
+            mod.getChatter().printChat(ATextFormatting.GREEN,
                     "Reloading expansions (" + stat.getSecondsAsString(2) + "s)");
         } else if (!mod.isInitialized()) {
             whenUninitializedAction();

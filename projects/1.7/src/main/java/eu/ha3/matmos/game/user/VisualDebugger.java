@@ -18,7 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.EnumChatFormatting;
+import eu.ha3.mc.abstraction.util.ATextFormatting;
 
 public class VisualDebugger implements SupportsFrameEvents {
     private final Matmos mod;
@@ -58,7 +58,7 @@ public class VisualDebugger implements SupportsFrameEvents {
     public void onFrame(float semi) {
         if (mod.isDebugMode()) {
             mod.util().prepareDrawString();
-            mod.util().drawString(EnumChatFormatting.GRAY.toString() + mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0,
+            mod.util().drawString(ATextFormatting.GRAY.toString() + mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0,
                     0, '3', 0, 0, 0, 0, true);
         }
 
@@ -173,8 +173,8 @@ public class VisualDebugger implements SupportsFrameEvents {
                     if (index.startsWith(".")) {
                         fontRenderer
                                 .drawStringWithShadow(
-                                        EnumChatFormatting.AQUA + index + ": " + EnumChatFormatting.YELLOW
-                                                + sheet.get(index) + EnumChatFormatting.RESET,
+                                        ATextFormatting.AQUA + index + ": " + ATextFormatting.YELLOW
+                                                + sheet.get(index) + ATextFormatting.RESET,
                                         leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
                         lineNumber += 1;
                     } else {
@@ -203,10 +203,10 @@ public class VisualDebugger implements SupportsFrameEvents {
 
                                 String bars = "";
                                 if (superFill > 0) {
-                                    bars += EnumChatFormatting.YELLOW + StringUtils.repeat("|", superFill);
+                                    bars += ATextFormatting.YELLOW + StringUtils.repeat("|", superFill);
                                 }
 
-                                bars += EnumChatFormatting.RESET + StringUtils.repeat("|", fill - superFill * 2);
+                                bars += ATextFormatting.RESET + StringUtils.repeat("|", fill - superFill * 2);
 
                                 if (index.startsWith("minecraft:")) {
                                     index = index.substring(10);
@@ -214,7 +214,7 @@ public class VisualDebugger implements SupportsFrameEvents {
 
                                 fontRenderer.drawStringWithShadow(
                                         bars + (fill == ALL * 2
-                                                ? EnumChatFormatting.YELLOW + "++" + EnumChatFormatting.RESET
+                                                ? ATextFormatting.YELLOW + "++" + ATextFormatting.RESET
                                                 : "") + " (" + count + ", " + percentage + "%) " + index,
                                         leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
                                 lineNumber = lineNumber + 1;

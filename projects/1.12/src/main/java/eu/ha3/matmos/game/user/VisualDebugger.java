@@ -18,7 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.text.TextFormatting;
+import eu.ha3.mc.abstraction.util.ATextFormatting;
 
 public class VisualDebugger implements SupportsFrameEvents {
     private final Matmos mod;
@@ -58,7 +58,7 @@ public class VisualDebugger implements SupportsFrameEvents {
     public void onFrame(float semi) {
         if (mod.isDebugMode()) {
             mod.util().prepareDrawString();
-            mod.util().drawString(TextFormatting.GRAY.toString() + mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0, 0,
+            mod.util().drawString(ATextFormatting.GRAY.toString() + mod.getLag().getMilliseconds() + "ms", 1f, 1f, 0, 0,
                     '3', 0, 0, 0, 0, true);
         }
 
@@ -171,8 +171,8 @@ public class VisualDebugger implements SupportsFrameEvents {
             if (lineNumber <= 100 && !index.contains("^")) {
                 if (scanDebug.startsWith("scan_") || scanDebug.equals("block_contact")) {
                     if (index.startsWith(".")) {
-                        fontRenderer.drawStringWithShadow(TextFormatting.AQUA + index + ": " + TextFormatting.YELLOW
-                                + sheet.get(index) + TextFormatting.RESET, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
+                        fontRenderer.drawStringWithShadow(ATextFormatting.AQUA + index + ": " + ATextFormatting.YELLOW
+                                + sheet.get(index) + ATextFormatting.RESET, leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
                         lineNumber += 1;
                     } else {
                         Long count = Numbers.toLong(sheet.get(index));
@@ -200,17 +200,17 @@ public class VisualDebugger implements SupportsFrameEvents {
 
                                 String bars = "";
                                 if (superFill > 0) {
-                                    bars += TextFormatting.YELLOW + StringUtils.repeat("|", superFill);
+                                    bars += ATextFormatting.YELLOW + StringUtils.repeat("|", superFill);
                                 }
 
-                                bars += TextFormatting.RESET + StringUtils.repeat("|", fill - superFill * 2);
+                                bars += ATextFormatting.RESET + StringUtils.repeat("|", fill - superFill * 2);
 
                                 if (index.startsWith("minecraft:")) {
                                     index = index.substring(10);
                                 }
 
                                 fontRenderer.drawStringWithShadow(
-                                        bars + (fill == ALL * 2 ? TextFormatting.YELLOW + "++" + TextFormatting.RESET
+                                        bars + (fill == ALL * 2 ? ATextFormatting.YELLOW + "++" + ATextFormatting.RESET
                                                 : "") + " (" + count + ", " + percentage + "%) " + index,
                                         leftAlign, 2 + 9 * lineNumber, 0xFFFFFF);
                                 lineNumber = lineNumber + 1;

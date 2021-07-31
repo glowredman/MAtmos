@@ -19,7 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.util.text.TextFormatting;
+import eu.ha3.mc.abstraction.util.ATextFormatting;
 import net.minecraft.client.resources.I18n;
 
 public class GuiExpansionOverrideList extends GuiListExtended {
@@ -47,8 +47,8 @@ public class GuiExpansionOverrideList extends GuiListExtended {
             Collection<String> otherConditions = Sets.difference(conditions, new HashSet<>(posConditions))
                     .stream().collect(Collectors.toList());
             
-            listEntries.add(new OverrideEntry(TextFormatting.BOLD + I18n.format("mat.title.conditionoverrides") + TextFormatting.RESET +
-                    TextFormatting.GRAY + " (" + expansion.getName() + ".cfg)", true));
+            listEntries.add(new OverrideEntry(ATextFormatting.BOLD + I18n.format("mat.title.conditionoverrides") + ATextFormatting.RESET +
+                    ATextFormatting.GRAY + " (" + expansion.getName() + ".cfg)", true));
             if(!posConditions.isEmpty()) {
                 listEntries.add(new OverrideEntry(I18n.format("mat.options.overridesection.pos"), true));
                 posConditions.forEach(k -> listEntries.add(new OverrideEntry(k, listEntries.size())));
@@ -146,7 +146,7 @@ public class GuiExpansionOverrideList extends GuiListExtended {
                 }
                 Condition cond = conditionProvider.get(s);
                 boolean overridden = !tf.getText().isEmpty();
-                mc.fontRenderer.drawString((overridden ? (TextFormatting.GOLD + "" + TextFormatting.BOLD) : TextFormatting.WHITE) + cond.getName() + "  " + TextFormatting.GRAY + cond.getFeed(), (x + padding) * fac, y * fac, 0xFFFFFF);
+                mc.fontRenderer.drawString((overridden ? (ATextFormatting.GOLD + "" + ATextFormatting.BOLD) : ATextFormatting.WHITE) + cond.getName() + "  " + ATextFormatting.GRAY + cond.getFeed(), (x + padding) * fac, y * fac, 0xFFFFFF);
                 tf.x = (width - padding - 4 - padding - 50) * fac;
                 tf.y = y * fac;
                 tf.drawTextBox();

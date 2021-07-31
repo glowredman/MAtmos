@@ -6,7 +6,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextFormatting;
+import eu.ha3.mc.abstraction.util.ATextFormatting;
 
 public class GuiExpansionInfo extends GuiScreen {
     private final GuiMatMenu parentScreen;
@@ -27,8 +27,8 @@ public class GuiExpansionInfo extends GuiScreen {
     public void drawScreen(int par1, int par2, float par3) {
         drawGradientRect(0, 0, width, height, 0xF0000000, 0x90000000);
 
-        drawCenteredString(fontRenderer, "About " + TextFormatting.YELLOW + TextFormatting.ITALIC
-                + expansion.getFriendlyName() + TextFormatting.RESET + "...", width / 2, 4, 0xffffff);
+        drawCenteredString(fontRenderer, "About " + ATextFormatting.YELLOW + ATextFormatting.ITALIC
+                + expansion.getFriendlyName() + ATextFormatting.RESET + "...", width / 2, 4, 0xffffff);
 
         int lc = 0;
         for (String line : info) {

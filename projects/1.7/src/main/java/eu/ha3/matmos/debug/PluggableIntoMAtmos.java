@@ -6,7 +6,7 @@ import java.util.Optional;
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.FolderExpansionDebugUnit;
-import net.minecraft.util.EnumChatFormatting;
+import eu.ha3.mc.abstraction.util.ATextFormatting;
 
 public class PluggableIntoMAtmos implements Pluggable {
     private Matmos mod;
@@ -38,7 +38,7 @@ public class PluggableIntoMAtmos implements Pluggable {
             if (opt.isPresent()) {
                 Expansion expansion = opt.get();
 
-                mod.getChatter().printChat(EnumChatFormatting.AQUA,
+                mod.getChatter().printChat(ATextFormatting.AQUA,
                         "Reloading from editor state: " + expansion.getName() + " " + getTimestamp());
                 expansion.pushDebugJsonAndRefreshKnowledge(json);
             }
@@ -49,7 +49,7 @@ public class PluggableIntoMAtmos implements Pluggable {
     public void reloadFromDisk() {
         mod.queueForNextTick(() -> {
             mod.getExpansionEffort(expansionName).ifPresent(expansion -> {
-                mod.getChatter().printChat(EnumChatFormatting.BLUE, "Reloading from disk: ",
+                mod.getChatter().printChat(ATextFormatting.BLUE, "Reloading from disk: ",
                         expansion.getName() + " " + getTimestamp());
                 expansion.refreshKnowledge();
             });
@@ -57,7 +57,7 @@ public class PluggableIntoMAtmos implements Pluggable {
     }
 
     protected String getTimestamp() {
-        return EnumChatFormatting.BLACK + "(" + System.currentTimeMillis() + ")";
+        return ATextFormatting.BLACK + "(" + System.currentTimeMillis() + ")";
     }
 
     @Override
