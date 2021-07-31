@@ -154,7 +154,7 @@ sourceSets {
 	}
 	main {
 		java {
-			srcDirs = ["${rootDir}/src/main/java"]
+			srcDirs = ["${rootDir}/src/main/java", "${rootDir}/../common/src/main/java"]
 
 		}
 		resources {
