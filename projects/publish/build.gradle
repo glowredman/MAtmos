@@ -1,7 +1,10 @@
 plugins {
 	id "com.github.breadmoirai.github-release" version "2.2.12"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
+	id "com.modrinth.minotaur" version "1.2.1"
 }
+
+import com.modrinth.minotaur.TaskModrinthUpload
 
 def buildVersion = new File("${projectDir}/../version.txt").getText('UTF-8')
 def changeLog = new File("${projectDir}/changelog.md").getText('UTF-8')
@@ -9,6 +12,10 @@ ext.gameVersions = file("gameVersions.txt").getText('UTF-8').split(" ")
 
 def githubOK = project.hasProperty("githubToken")
 def curseOK = project.hasProperty("curseToken") && project.hasProperty("gameVersion")
+def modrinthOK = project.hasProperty("modrinthToken") && project.hasProperty("gameVersion")
+
+task build {}
+task assemble {}
 
 if(githubOK){
 	githubRelease {
@@ -33,7 +40,7 @@ if(githubOK){
 	println("Not configuring GitHub publish because project arguments are missing.")
 }
 
-if(curseOK) {
+if(project.hasProperty("gameVersion")){
 	def gameVersion = project.gameVersion
 	def baseVersion = toBaseVersion(gameVersion)
 	def files = getFiles(baseVersion)
@@ -45,30 +52,49 @@ if(curseOK) {
 	}
 	def additionalFiles = files - shortest	
 
-	curseforge {
-		apiKey = project.curseToken
-		project {
-			id = project.curseID
-			changelogType = 'markdown'
-			changelog = changeLog
-			releaseType = 'release'
-			addGameVersion gameVersion
-			addGameVersion "Forge"
+	if(curseOK) {
+		curseforge {
+			apiKey = project.curseToken
+			project {
+				id = project.curseID
+				changelogType = 'markdown'
+				changelog = changeLog
+				releaseType = 'release'
+				addGameVersion gameVersion
+				addGameVersion "Forge"
 
-			mainArtifact(file(shortest)) {
-				displayName = "${releaseName} ${buildVersion} for Minecraft ${gameVersion}"
+				mainArtifact(file(shortest)) {
+					displayName = "${releaseName} ${buildVersion} for Minecraft ${gameVersion}"
+				}
+				additionalFiles.each { addArtifact(it) }
 			}
-			additionalFiles.each { addArtifact(it) }
+			options {
+				debug = false
+				javaIntegration = false
+				forgeGradleIntegration = false
+				javaVersionAutoDetect = false
+			}
 		}
-		options {
-			debug = false
-			javaIntegration = false
-			forgeGradleIntegration = false
-			javaVersionAutoDetect = false
-		}
+	} else {
+		println("Not configuring CurseForge publish because project arguments are missing.")
 	}
-} else {
-	println("Not configuring CurseForge publish because project arguments are missing.")
+	
+	if(modrinthOK) {
+		task publishModrinth (type: TaskModrinthUpload) {
+			token = project.modrinthToken
+			projectId = project.modrinthID
+			versionNumber = "$gameVersion-$buildVersion"
+			versionName = "$gameVersion-$buildVersion" // the doc says this defaults to the versionNumber, but it defaulted to the string "undefined" for me so i'm setting it
+			uploadFile = shortest
+			addGameVersion(gameVersion)
+			additionalFiles.each { addFile(it) }
+			addLoader('forge')
+			changelog = changeLog
+			detectLoaders = false
+		}
+	} else {
+		println("Not configuring Modrinth publish because project arguments are missing.")
+	}
 }
 
 def toBaseVersion(ver){
@@ -99,6 +125,3 @@ task listFiles {
 		println(getFiles());
 	}
 }
-
-task build {}
-task assemble {}
