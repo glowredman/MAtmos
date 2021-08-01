@@ -36,7 +36,7 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
     private int[] zeroMetadataCounts = new int[INITIAL_SIZE];
     private TreeMap<Integer, Integer>[] metadatas = new TreeMap[INITIAL_SIZE];
 
-    int size;
+    int size = INITIAL_SIZE;
     
     VirtualCountModule<Pair<Block, Integer>> thousand;
 
@@ -182,6 +182,7 @@ public class BlockCountModule extends AbstractThingCountModule<Pair<Block, Integ
     	counts = Arrays.copyOf(counts, newSize);
     	zeroMetadataCounts = Arrays.copyOf(zeroMetadataCounts, newSize);
     	metadatas = Arrays.copyOf(metadatas, newSize);
+    	size = newSize;
     }
 
 }
