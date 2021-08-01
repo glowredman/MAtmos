@@ -1,0 +1,44 @@
+plugins {
+	id "com.github.breadmoirai.github-release" version "2.2.12"
+}
+
+def buildVersion = new File("${projectDir}/../version.txt").getText('UTF-8')
+def changeLog = new File("${projectDir}/changelog.md").getText('UTF-8')
+
+githubRelease {
+    token project.githubToken // This is your personal access token with Repo permissions
+                         // You get this from your user settings > developer settings > Personal Access Tokens
+    owner project.githubOwner // default is the last part of your group. Eg group: "com.github.breadmoirai" => owner: "breadmoirai"
+    repo project.githubRepo // by default this is set to your project name
+    tagName "v${buildVersion}" // by default this is set to "v${project.version}"
+    targetCommitish "master" // by default this is set to "master"
+	//releaseName "${buildVersion}"
+    body changeLog // by default this is empty
+    draft true // by default this is false
+    prerelease false // by default this is false
+    releaseAssets getFiles() // this points to which files you want to upload as assets with your release
+
+    overwrite false // by default false; if set to true, will delete an existing release with the same tag and name
+    dryRun true // by default false; you can use this to see what actions would be taken without making a release
+    apiEndpoint "https://api.github.com" // should only change for github enterprise users
+    client // This is the okhttp client used for http requests
+}
+
+def getFiles() {
+	def files = []
+	["1.7", "1.12"].each {
+		new File("${projectDir}/../${it}/build/libs").eachFile(groovy.io.FileType.FILES, {
+			if(!it.name.endsWith("-sources.jar")){
+				files << it
+			}
+		})
+	}
+	return files
+}
+
+// for debug
+task listFiles {
+	doLast {
+		println(getFiles());
+	}
+}
