@@ -10,16 +10,16 @@ githubRelease {
                          // You get this from your user settings > developer settings > Personal Access Tokens
     owner project.githubOwner // default is the last part of your group. Eg group: "com.github.breadmoirai" => owner: "breadmoirai"
     repo project.githubRepo // by default this is set to your project name
-    tagName "v${buildVersion}" // by default this is set to "v${project.version}"
+    tagName "${buildVersion}" // by default this is set to "v${project.version}"
     targetCommitish "master" // by default this is set to "master"
-	//releaseName "${buildVersion}"
+	releaseName "${project.releaseName} ${buildVersion}"
     body changeLog // by default this is empty
     draft true // by default this is false
     prerelease false // by default this is false
     releaseAssets getFiles() // this points to which files you want to upload as assets with your release
 
     overwrite false // by default false; if set to true, will delete an existing release with the same tag and name
-    dryRun true // by default false; you can use this to see what actions would be taken without making a release
+    dryRun false // by default false; you can use this to see what actions would be taken without making a release
     apiEndpoint "https://api.github.com" // should only change for github enterprise users
     client // This is the okhttp client used for http requests
 }
