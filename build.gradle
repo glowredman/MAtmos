@@ -1,0 +1,3 @@
+task buildAll(dependsOn: ['projects:1.7:build', 'projects:1.12:build', 'projects:1.12:buildForgeMixin07']) {
+
+}

@@ -288,3 +288,9 @@ if(target.contains("liteloader")) {
 		defaultObfuscationEnv notch
 	}
 }
+
+task buildForgeMixin07(type: GradleBuild) {
+	buildFile = "build.gradle"
+	tasks = ["build"]
+	startParameter.projectProperties = ["target": "forge-mixin0.7"]
+}
