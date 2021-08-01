@@ -55,7 +55,8 @@ dependencies {
 	embed 'com.paulscode:soundsystem:+'
 }
 
-def ver = "${project.mcVersion}-${project.buildVersion}"
+def buildVersion = new File("${projectDir}/../version.txt").getText('UTF-8')
+def ver = "${project.mcVersion}-${buildVersion}"
 
 version = ver
 group = project.group
@@ -69,7 +70,7 @@ minecraft {
 	replace '@MODID@', project.modid
 	replace '@NAME@', project.modname
 	replace '@AUTHOR@', project.author
-	replace '@VERSION@', project.buildVersion
+	replace '@VERSION@', buildVersion
 	replace '@DESCRIPTION@', project.description
 	srgExtra "PK: eu/ha3/easy eu/ha3/matmos/lib/eu/ha3/easy"
 	srgExtra "PK: eu/ha3/mc eu/ha3/matmos/lib/eu/ha3/mc"
