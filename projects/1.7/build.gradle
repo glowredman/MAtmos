@@ -89,12 +89,12 @@ def expensionPacks = [
 sourceSets {
 	soundpacks {
 		resources {
-			srcDirs = ["${rootDir}/src/soundpacks/resources"]
+			srcDirs = ["${projectDir}/src/soundpacks/resources"]
 		}
 	}
 	commons {
 		java {
-			srcDirs = ["${rootDir}/lib/MC-Commons/mc-src"]
+			srcDirs = ["${projectDir}/lib/MC-Commons/mc-src"]
 		}
 		resources {
 			srcDirs = []
@@ -104,11 +104,11 @@ sourceSets {
 	}
 	main {
 		java {
-			srcDirs = ["${rootDir}/src/main/java", "${rootDir}/../common/src/common/java"]
+			srcDirs = ["${projectDir}/src/main/java", "${projectDir}/../common/src/common/java"]
 
 		}
 		resources {
-			srcDirs = ["${rootDir}/src/main/resources", "${rootDir}/lib/MC-Commons/mc-src/resources"]
+			srcDirs = ["${projectDir}/src/main/resources", "${projectDir}/lib/MC-Commons/mc-src/resources"]
 		}
 
 		compileClasspath += commons.output
