@@ -66,9 +66,9 @@ If adding MAtmos on 1.12.2 causes the game to **crash upon startup**, it's proba
 
 a) Update the other mods of the modpack
 
-b) Use the versions of MAtmos ending in *-mixin0.7.jar* which are provided for compatibility.
+b) Add the [Mixin Compatibility](https://www.curseforge.com/minecraft/mc-mods/mixin-0-7-0-8-compatibility) mod to your instance.
 
-c) Add the [Mixin Compatibility](https://www.curseforge.com/minecraft/mc-mods/mixin-0-7-0-8-compatibility) mod to your instance.
+c) Use the versions of MAtmos ending in *-mixin0.7.jar* which are provided for compatibility.
 
 ## Downloads
 
