@@ -90,6 +90,8 @@ To run in an IDE, use the following program arguments:
 
 `--tweakClass org.spongepowered.asm.launch.MixinTweaker --mixin haddon.mixin.json`
 
+The project has a "roadmap" [here](https://github.com/makamys/MAtmos/wiki/Roadmap).
+
 ## Licenses
 
 MAtmos itself is under WTFPLv2. Redistribute/Modify at will.
