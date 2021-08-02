@@ -62,11 +62,13 @@ Pressing F7 opens the MAtmos settings menu which can be used to adjust the volum
 
 ## Troubleshooting
 
-If adding MAtmos on 1.12.2 causes the game to **crash upon startup**, it's probably because you're using other, outdated mods that use version 0.7 of the Mixin library, while this mod uses version 0.8. This problem commonly occurs with old modpacks. There are 2 ways to resolve this:
+If adding MAtmos on 1.12.2 causes the game to **crash upon startup**, it's probably because you're using other, outdated mods that use version 0.7 of the Mixin library, while this mod uses version 0.8. This problem commonly occurs with old modpacks. There are 3 ways to resolve this:
 
 a) Update the other mods of the modpack
 
 b) Use the versions of MAtmos ending in *-mixin0.7.jar* which are provided for compatibility.
+
+c) Add the [Mixin Compatibility](https://www.curseforge.com/minecraft/mc-mods/mixin-0-7-0-8-compatibility) mod to your instance.
 
 ## Downloads
 
