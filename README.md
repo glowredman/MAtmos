@@ -18,7 +18,7 @@ Whenever you join a multiplayer server or single-player world, MAtmos will searc
 * Many bug fixes and performance improvements
 ```
 
-## Featured soundpacks
+## Soundpacks
 MAtmos lets you create your own soundscapes using special resource packs called **soundpacks**. Some of the ones that have been created are:
 
 
@@ -31,16 +31,6 @@ The flagship soundpack, featuring seamless loops and indoors/outdoors variations
 
 *(by makamys)*
 
-### Minecraft Sound Improvement
-
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/OnUeix34Qc4/0.jpg)](https://www.youtube.com/watch?v=OnUeix34Qc4)
-
-The MSI expansion features a large variety of new sounds for every biome, striving to create a very unique atmosphere for each of them.
-
-**Download: [GitHub](https://github.com/makamys/MSI-Conversion)**
-
-*(by [Colonel_Oneill](http://www.minecraftforum.net/members/Colonel_Oneill))*
-
 ### Default soundpack (+introduction)
 
 [![](http://img.youtube.com/vi/Z4Zu4kvyDHU/0.jpg)](http://www.youtube.com/watch?v=Z4Zu4kvyDHU "")
@@ -50,6 +40,20 @@ The original MAtmos soundpack from 2012, updated to work on the latest version.
 **Download: [GitHub](https://github.com/makamys/MAtmos-2016-Default) / [CurseForge](https://www.curseforge.com/minecraft/texture-packs/matmos-2016-default)**
 
 *(by Hurricaaane)*
+
+### Rhapsodia
+
+[![](http://img.youtube.com/vi/4_6xS86hcaI/0.jpg)](https://www.youtube.com/watch?v=4_6xS86hcaI)
+
+Rhapsodia's goal is to enhance the audio experience in Minecraft. 
+So, now the rain looks like rain, thunder is thundering hard, or you can drink your potion without sounding like your grand-ma while she eats her soup.
+
+**Download: [GitHub](https://github.com/makamys/rhapsodia)**
+
+*(by [Sarys](https://lnk.bio/sarys))*
+
+### More soundpacks
+https://github.com/makamys/MAtmos/wiki/Soundpacks
 
 ## Usage
 By default, MAtmos does not include any sounds. To get started, move the soundpacks you want to your resource packs folder an enable them.
@@ -79,8 +83,6 @@ c) Use the versions of MAtmos ending in *-mixin0.7.jar* which are provided for c
 Releases for **MAtmos** are available on [the releases tab](https://github.com/makamys/MAtmos/releases).
 
 For **soundpack** downloads, see the *Featured soundpacks* section above.
-
-Want even **more soundpacks**, or more info? See Sollace's old wiki: https://github.com/Sollace/MAtmos/wiki
 
 ## Contributing
 
