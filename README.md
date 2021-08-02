@@ -23,7 +23,7 @@ MAtmos lets you create your own soundscapes using special resource packs called 
 
 The flagship soundpack, featuring seamless loops and indoors/outdoors variations for ambiences. It aims to add high quality sounds that enhance the atmosphere without feeling out of place. (MAtmos 34 or higher required.)
 
-**[(Website with downloads)](https://github.com/makamys/MAtmos-2020-Zen)**
+**Download: [GitHub](https://github.com/makamys/MAtmos-2020-Zen) / [CurseForge](https://www.curseforge.com/minecraft/texture-packs/matmos-2020-zen)**
 
 *(by makamys)*
 
@@ -33,7 +33,7 @@ The flagship soundpack, featuring seamless loops and indoors/outdoors variations
 
 The MSI expansion features a large variety of new sounds for every biome, striving to create a very unique atmosphere for each of them.
 
-**[(Website with downloads)](https://github.com/makamys/MSI-Conversion)**
+**Download: [GitHub](https://github.com/makamys/MSI-Conversion)**
 
 *(by [Colonel_Oneill](http://www.minecraftforum.net/members/Colonel_Oneill))*
 
@@ -43,7 +43,7 @@ The MSI expansion features a large variety of new sounds for every biome, strivi
 
 The original MAtmos soundpack from 2012, updated to work on the latest version.
 
-**[(Website with downloads)](https://github.com/makamys/MAtmos-2016-Default)**
+**Download: [GitHub](https://github.com/makamys/MAtmos-2016-Default) / [CurseForge](https://www.curseforge.com/minecraft/texture-packs/matmos-2016-default)**
 
 *(by Hurricaaane)*
 
