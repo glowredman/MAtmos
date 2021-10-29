@@ -5,7 +5,7 @@
 MAtmos
 ======
 
-MAtmos is a sound atmosphere generator for Minecraft 1.12 and [1.7.10](https://github.com/makamys/MAtmos/tree/1_7_10). Originally created by Hurricaaane, it is now maintained by the community.
+MAtmos is a sound atmosphere generator for Minecraft 1.12 and 1.7.10. Originally created by Hurricaaane, it is now maintained by the community.
 
 Whenever you join a multiplayer server or single-player world, MAtmos will search your surroundings and generates a soundscape of natural noises to match, filling out that perpetual silence of Minecraft.
 
