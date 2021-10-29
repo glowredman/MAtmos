@@ -14,7 +14,7 @@ class ItemProcessorHelper {
             model.setValue(prefix + "_powermeta", Module.NO_POWERMETA);
         } else {
             model.setValue(prefix + "_item", MAtUtil.nameOf(item));
-            model.setValue(prefix + "_damage", item.getMetadata());
+            model.setValue(prefix + "_damage", MAtUtil.metaOf(item));
             model.setValue(prefix + "_name_display", item.getDisplayName());
             model.setValue(prefix + "_powermeta", MAtUtil.asPowerMeta(item));
         }

@@ -150,7 +150,7 @@ public class VisualDebugger implements SupportsFrameEvents {
             }
         }
 
-        FontRenderer fontRenderer = mc.fontRendererObj;
+        FontRenderer fontRenderer = mc.fontRenderer;
 
         int lineNumber = 0;
 

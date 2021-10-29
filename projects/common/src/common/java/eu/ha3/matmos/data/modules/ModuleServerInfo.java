@@ -12,6 +12,7 @@ import javax.naming.directory.InitialDirContext;
 
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.core.sheet.DataPackage;
+import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
 
@@ -28,7 +29,7 @@ public class ModuleServerInfo extends ModuleProcessor implements Module {
 
     @Override
     protected void doProcess() {
-        ServerData serverData = Minecraft.getMinecraft().getCurrentServerData();
+        ServerData serverData = MAtUtil.getCurrentServerData();
 
         if (serverData != null && serverData.serverIP != null) {
             String playerDefinedAddress = serverData.serverIP;

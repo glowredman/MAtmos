@@ -16,7 +16,7 @@ public class PositionedSound extends PositionedSoundRecord {
             ISound.AttenuationType attenuationType, float x, float y, float z) {
         super(loc, volume, pitch, x, y, z);
         this.repeat = repeat;
-        this.repeatDelay = repeatDelay;
-        this.attenuationType = attenuationType;
+        this.field_147665_h = repeatDelay; // repeatDelay
+        this.field_147666_i = attenuationType; // attenuationType
     }
 }

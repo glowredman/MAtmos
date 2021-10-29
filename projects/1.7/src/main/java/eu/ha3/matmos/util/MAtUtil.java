@@ -18,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundCategory;
+import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -182,7 +183,7 @@ public class MAtUtil {
      * of a certain block.
      */
     public static String asPowerMeta(ItemStack item) {
-        return asPowerMeta(nameOf(item.getItem()), item.getMetadata());
+        return asPowerMeta(nameOf(item.getItem()), item.getItemDamage());
     }
 
     /**
@@ -310,5 +311,13 @@ public class MAtUtil {
         } else {
             return p.getParent();
         }
+    }
+
+    public static ServerData getCurrentServerData() {
+        return Minecraft.getMinecraft().func_147104_D(); // getCurrentServerData
+    }
+
+    public static int metaOf(ItemStack item) {
+        return item.getItemDamage();
     }
 }

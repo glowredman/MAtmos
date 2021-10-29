@@ -285,7 +285,7 @@ public class ScanAir extends Scan {
      */
     public static boolean isTransparentToSound(Block block, int meta, World world, BlockPos pos, boolean hitIfLiquid) {
         try {
-            boolean result = !block.canStopRayTrace(meta, hitIfLiquid) || ((!hitIfLiquid || !(block instanceof BlockLiquid))
+            boolean result = !block.canCollideCheck(meta, hitIfLiquid) || ((!hitIfLiquid || !(block instanceof BlockLiquid))
                     && (block.getCollisionBoundingBoxFromPool(world, pos.getX(), pos.getY(), pos.getZ()) == null
                             || block instanceof BlockLeaves));
             return result;

@@ -148,7 +148,7 @@ public class IDDealiaser {
         	// Diagnostics for issue #14
         	String msg = "A NullPointerExcception occured in getItemName. item=" + item;
         	if(item instanceof ItemBlock) {
-        		Block block = ((ItemBlock)item).blockInstance;
+        		Block block = ((ItemBlock)item).field_150939_a;
             	Object blockName = Block.blockRegistry.getNameForObject(block);
             	msg += ", block=" + block + ", blockName=" + blockName;
         	}

@@ -119,7 +119,7 @@ public class GuiExpansionOverrideList extends GuiListExtended {
             this.s = s;
             
             if(!sectionHeader) {
-                tf = new GuiTextField(mc.fontRendererObj, 100, 0, 50 * 2, 10);
+                tf = new GuiTextField(mc.fontRenderer, 100, 0, 50 * 2, 10);
                 tf.setText(expansion.getConditionValueOverrides().getOrDefault(s, ""));    
             }
         }
@@ -142,12 +142,12 @@ public class GuiExpansionOverrideList extends GuiListExtended {
                 }
                 Condition cond = conditionProvider.get(s);
                 boolean overridden = !tf.getText().isEmpty();
-                mc.fontRendererObj.drawString((overridden ? (ATextFormatting.GOLD + "" + ATextFormatting.BOLD) : ATextFormatting.WHITE) + cond.getName() + "  " + ATextFormatting.GRAY + cond.getFeed(), (x + padding) * fac, y * fac, 0xFFFFFF);
+                mc.fontRenderer.drawString((overridden ? (ATextFormatting.GOLD + "" + ATextFormatting.BOLD) : ATextFormatting.WHITE) + cond.getName() + "  " + ATextFormatting.GRAY + cond.getFeed(), (x + padding) * fac, y * fac, 0xFFFFFF);
                 tf.xPosition = (width - padding - 4 - padding - 50) * fac;
                 tf.yPosition = y * fac;
                 tf.drawTextBox();
             } else {
-                mc.fontRendererObj.drawString(s, (width / 2 - mc.fontRendererObj.getStringWidth(s) / 4) * fac, y * fac, 0xFFFFFF);
+                mc.fontRenderer.drawString(s, (width / 2 - mc.fontRenderer.getStringWidth(s) / 4) * fac, y * fac, 0xFFFFFF);
             }
             GL11.glPopMatrix();
         }

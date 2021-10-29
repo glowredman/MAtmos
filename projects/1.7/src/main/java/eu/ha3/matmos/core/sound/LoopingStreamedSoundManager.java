@@ -94,8 +94,8 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
 
             ITickableSound p_sound = streamingSound.asTickable();
 
-            SoundEventAccessorComposite soundeventaccessor = getSoundHandler().getSound(p_sound.getSoundLocation());
-            ResourceLocation resourcelocation = p_sound.getSoundLocation();
+            SoundEventAccessorComposite soundeventaccessor = getSoundHandler().getSound(p_sound.getPositionedSoundLocation());
+            ResourceLocation resourcelocation = p_sound.getPositionedSoundLocation();
 
             if (soundeventaccessor == null) {
                 if (UNABLE_TO_PLAY.add(resourcelocation)) {
@@ -133,7 +133,7 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
                             String s = UUID.randomUUID().toString();
                             ResourceLocation resourcelocation1 = resourcelocation2;
 
-                            if (sound.isStreamingSound()) {
+                            if (sound.func_148648_d()) { // isStreamingSound
                                 getSoundSystem().newStreamingSource(false, s, SoundManager.getURLForSoundResource(resourcelocation1),
                                         resourcelocation1.toString(), flag, p_sound.getXPosF(), p_sound.getYPosF(),
                                         p_sound.getZPosF(), p_sound.getAttenuationType().getTypeInt(), f);

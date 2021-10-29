@@ -167,7 +167,7 @@ public class GuiMore extends GuiScreen {
 
         super.drawScreen(par1, par2, par3);
         
-        if(overrideHintButton.isMouseOver()) {
+        if(overrideHintButton.func_146115_a()) { // isMouseOver
             drawHoveringText(Arrays.asList(I18n.format("mat.options.hint.overrides").split("\\\\n")), par1, par2, fontRendererObj);
         }
     }

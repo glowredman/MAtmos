@@ -19,7 +19,7 @@ public class BlockAliasMap extends ObjectAliasMap {
     @Override
     public int getItemID(Item i) {
         if(i instanceof ItemBlock) {
-            return Block.getIdFromBlock(((ItemBlock)i).blockInstance);
+            return Block.getIdFromBlock(((ItemBlock)i).field_150939_a);
         } else {
             return -1;
         }

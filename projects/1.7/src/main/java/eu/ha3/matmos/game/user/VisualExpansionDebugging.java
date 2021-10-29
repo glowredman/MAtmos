@@ -59,8 +59,8 @@ public class VisualExpansionDebugging implements SupportsFrameEvents {
                 // link(condition, 0, 0, junction, 40, 0);
                 // link(junction, 40, 0, machine, 80, 0);
             } else {
-                mc.fontRendererObj.drawStringWithShadow("There was an error loading the file:", 10, 30, 0xFFFF00);
-                mc.fontRendererObj.drawStringWithShadow(loadException.getMessage(), 10, 40, 0xFFFF00);
+                mc.fontRenderer.drawStringWithShadow("There was an error loading the file:", 10, 30, 0xFFFF00);
+                mc.fontRenderer.drawStringWithShadow(loadException.getMessage(), 10, 40, 0xFFFF00);
             }
         } catch (Exception e) {
             IDontKnowHowToCode.whoops__printExceptionToChat(mod.getChatter(), e, this);
@@ -94,7 +94,7 @@ public class VisualExpansionDebugging implements SupportsFrameEvents {
 
         Minecraft mc = Minecraft.getMinecraft();
 
-        mc.fontRendererObj.drawStringWithShadow(name + "(" + feed + ")", x, y, isActive ? 0x0099FF : 0xFF0000);
+        mc.fontRenderer.drawStringWithShadow(name + "(" + feed + ")", x, y, isActive ? 0x0099FF : 0xFF0000);
 
         // PAINT
     }

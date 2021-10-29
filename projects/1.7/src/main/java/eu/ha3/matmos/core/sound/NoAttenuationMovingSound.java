@@ -25,21 +25,21 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
             boolean usesPause, boolean underwater) {
         super(myResource);
 
-        attenuationType = ISound.AttenuationType.NONE;
+        field_147666_i = ISound.AttenuationType.NONE; // attenuationType
         repeat = isLooping;
-        repeatDelay = 0;
+        field_147665_h = 0; // repeatDelay
 
         desiredVolume = volume;
         desiredPitch = pitch;
         this.volume = 0.00001f;
-        this.pitch = pitch;
+        this.field_147663_c = pitch; // pitch
 
         this.usesPause = usesPause;
         this.underwater = underwater;
     }
 
     public NoAttenuationMovingSound copy() {
-        return new NoAttenuationMovingSound(getSoundLocation(), desiredVolume, desiredPitch, repeat, usesPause,
+        return new NoAttenuationMovingSound(getPositionedSoundLocation(), desiredVolume, desiredPitch, repeat, usesPause,
                 underwater);
     }
 
@@ -54,11 +54,11 @@ public class NoAttenuationMovingSound extends MovingSound implements StreamingSo
         volume = helper.calculateFadeFactor() * desiredVolume * volumeMod;
 
         if (volume < 0.01f && usesPause) {
-            pitch = 0f;
+            field_147663_c = 0f;
         }
 
         if (volume > 0.01f && usesPause) {
-            pitch = desiredPitch;
+            field_147663_c = desiredPitch;
         }
 
         if (helper.isDoneFadingOut() && repeat && !isDonePlaying()) {

@@ -152,7 +152,7 @@ public class ScanRaycast extends Scan {
         World w = Minecraft.getMinecraft().theWorld;
 
         // Vec3d is immutable in 1.12.2 but Vec3 is not in 1.7.10
-        MovingObjectPosition result = w.rayTraceBlocks(start.clone(), end.clone(), true, false, true);
+        MovingObjectPosition result = w.func_147447_a(start.clone(), end.clone(), true, false, true); // rayTraceBlocks
 
         Vec3d delta = end.subtract(start);
         double infNorm = Math.max(Math.abs(delta.xCoord), Math.max(Math.abs(delta.yCoord), Math.abs(delta.zCoord)));
@@ -162,7 +162,7 @@ public class ScanRaycast extends Scan {
                 && ScanAir.isTransparentToSound(
                         MAtUtil.getBlockAt(new BlockPos(result.blockX, result.blockY, result.blockZ)),
                         MAtUtil.getMetaAt(new BlockPos(result.hitVec), -1), w, new BlockPos(result.hitVec), true)) {
-            result = w.rayTraceBlocks(delta.add(result.hitVec), end, true, true, true);
+            result = w.func_147447_a(delta.add(result.hitVec), end, true, true, true); // rayTraceBlocks
         }
         return result;
     }

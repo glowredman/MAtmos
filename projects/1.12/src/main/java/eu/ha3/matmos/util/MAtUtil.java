@@ -16,6 +16,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -295,5 +296,13 @@ public class MAtUtil {
         } else {
             return p.getParent();
         }
+    }
+
+    public static ServerData getCurrentServerData() {
+        return Minecraft.getMinecraft().getCurrentServerData();
+    }
+
+    public static int metaOf(ItemStack item) {
+        return item.getMetadata();
     }
 }

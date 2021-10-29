@@ -224,7 +224,7 @@ public class IDDealiaser {
     
     private int getItemID(Item item) {
         if(item instanceof ItemBlock) {
-            return Block.getIdFromBlock(((ItemBlock)item).blockInstance);
+            return Block.getIdFromBlock(((ItemBlock)item).field_150939_a);
         } else {
             return Item.getIdFromItem(item);
         }
