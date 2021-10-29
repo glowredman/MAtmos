@@ -20,6 +20,7 @@ import org.apache.commons.io.IOUtils;
 
 import eu.ha3.matmos.ConfigManager;
 import eu.ha3.matmos.Matmos;
+import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -44,8 +45,12 @@ public class IDDealiaser {
         if(ConfigManager.getConfig().getBoolean("dealias.oredict")) {
             for(String oreName : OreDictionary.getOreNames()) {
                 List<String> names = new ArrayList<>();
+                // note: OreDictionary.getOres returns an OreDictionary$UnmodifiableArrayList, which does not support .stream()
                 for(ItemStack s : OreDictionary.getOres(oreName)) {
-                    names.add(getItemName(s.getItem()));
+                    String name = getItemName(s.getItem());
+                    if(name != null) {
+                        names.add(name);
+                    }
                 }
                 
                 if(ConfigManager.getConfig().getInteger("debug.mode") == 1) {
@@ -143,18 +148,7 @@ public class IDDealiaser {
     }
     
     private String getItemName(Item item) {
-        Object name = Item.REGISTRY.getNameForObject(item);
-        if(name == null) {
-        	// Diagnostics for issue #14
-        	String msg = "A NullPointerExcception occured in getItemName. item=" + item;
-        	if(item instanceof ItemBlock) {
-        		Block block = ((ItemBlock)item).getBlock();
-            	Object blockName = Block.REGISTRY.getNameForObject(block);
-            	msg += ", block=" + block + ", blockName=" + blockName;
-        	}
-        	throw new NullPointerException(msg);
-        }
-        return name.toString();
+        return MAtUtil.getItemName(item);
     }
     
     public int dealiasID(int alias, boolean isItem) {

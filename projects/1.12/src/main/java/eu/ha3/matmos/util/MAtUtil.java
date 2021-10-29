@@ -305,4 +305,9 @@ public class MAtUtil {
     public static int metaOf(ItemStack item) {
         return item.getMetadata();
     }
+
+    public static String getItemName(Item item) {
+        ResourceLocation rl = Item.REGISTRY.getNameForObject(item);
+        return rl == null ? null : rl.toString();
+    }
 }

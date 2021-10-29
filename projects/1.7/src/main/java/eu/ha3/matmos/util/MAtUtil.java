@@ -320,4 +320,8 @@ public class MAtUtil {
     public static int metaOf(ItemStack item) {
         return item.getItemDamage();
     }
+
+    public static String getItemName(Item item) {
+        return (String)Item.itemRegistry.getNameForObject(item);
+    }
 }
