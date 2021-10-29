@@ -42,7 +42,7 @@ if(target.contains("forge")) {
 	}
 
 	dependencies {
-		embed 'org.spongepowered:mixin:0.7+'
+		embed 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
 	}
 
 	sourceSets {
@@ -59,7 +59,7 @@ dependencies {
 	compile "codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev"
 	
 	embed 'net.sf.practicalxml:practicalxml:1.1.19'
-	embed 'com.paulscode:soundsystem:+'
+	embed 'com.paulscode:soundsystem:201809301515'
 }
 
 def buildVersion = new File("${projectDir}/../version.txt").getText('UTF-8')

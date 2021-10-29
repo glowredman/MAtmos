@@ -35,7 +35,7 @@ repositories {
 
 def target = project.hasProperty("target") ? project.target : "forge";
 
-def mixinVersion = target == "forge-mixin0.7" ? "0.7.+" : "0.8.+"
+def mixinVersion = target == "forge-mixin0.7" ? "0.7.11-SNAPSHOT" : "0.8.3"
 
 // Should the SoundSystemReplacer be included in Forge builds?
 // (it's completely unnecessary, this option is only included for testing)
@@ -44,7 +44,7 @@ def forgeIncludeSoundSystemReplacer = false;
 
 if(target.contains("liteloader") || forgeIncludeSoundSystemReplacer){
 	dependencies {
-		embed 'com.paulscode:soundsystem:+'
+		embed 'com.paulscode:soundsystem:201809301515'
 	}
 }
 
