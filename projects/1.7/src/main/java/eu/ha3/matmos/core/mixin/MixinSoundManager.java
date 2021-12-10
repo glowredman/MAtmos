@@ -44,4 +44,14 @@ abstract class MixinSoundManager {
     public void resumeAllSounds(CallbackInfo ci) {
         Matmos.getSoundManagerListeners().forEach(l -> l.onPauseAllSounds(false));
     }
+    
+    @Inject(method = "unloadSoundSystem", at = @At("RETURN"))
+    public void unloadSoundSystem(CallbackInfo ci) {
+        Matmos.getSoundManagerListeners().forEach(l -> l.onLoadSoundSystem(false));
+    }
+    
+    @Inject(method = "loadSoundSystem", at = @At("RETURN"))
+    public void loadSoundSystem(CallbackInfo ci) {
+        Matmos.getSoundManagerListeners().forEach(l -> l.onLoadSoundSystem(true));
+    }
 }

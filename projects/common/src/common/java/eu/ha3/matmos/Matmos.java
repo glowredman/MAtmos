@@ -122,6 +122,16 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         // This registers stuff to Minecraft (key bindings...)
         userControl.load();
         soundManagerListeners.add(soundManager);
+        soundManagerListeners.add(new SoundManagerListener() {
+            @Override
+            public void onLoadSoundSystem(boolean load) {
+                if(!load) {
+                    if(isActivated()) {
+                        refresh();
+                    }
+                }
+            }
+        });
 
         LOGGER.info("Took " + timeMeasure.getSecondsAsString(3) + " seconds to setup MAtmos base.");
     }
@@ -222,86 +232,81 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         }
         
         if (isActivated()) {
-            if(!Minecraft.getMinecraft().getSoundHandler().sndManager.loaded) {
-                deactivate();
-                activate();
-            } else {
-                if (!queue.isEmpty()) {
-                    synchronized (queueLock) {
-                        while (!queue.isEmpty()) {
-                            queue.remove(0).run();
-                        }
+            if (!queue.isEmpty()) {
+                synchronized (queueLock) {
+                    while (!queue.isEmpty()) {
+                        queue.remove(0).run();
                     }
                 }
-    
-                timeStat.reset();
-                simulacrum.get().onTick();
-                timeStat.stop();
-    
-                if (MAtUtil.isUnderwaterAnyGamemode()) {
-                    if (!isUnderwaterMode) {
-                        isUnderwaterMode = true;
-                        overrideAmbientVolume();
-                    }
-                } else if (isUnderwaterMode) {
-                    isUnderwaterMode = false;
-                    resetAmbientVolume();
+            }
+
+            timeStat.reset();
+            simulacrum.get().onTick();
+            timeStat.stop();
+
+            if (MAtUtil.isUnderwaterAnyGamemode()) {
+                if (!isUnderwaterMode) {
+                    isUnderwaterMode = true;
+                    overrideAmbientVolume();
                 }
-    
-                if (!hasFirstTickPassed) {
-                    hasFirstTickPassed = true;
-                    updateNotifier.attempt();
-                    if (_COMPILE_IS_UNSTABLE) {
-                        String lastVersion = config.getString("version.last");
-                        int warns = config.getInteger("version.warnunstable");
-                        if (!lastVersion.equals(VERSION)) {
-                            warns = 3;
-                            config.setProperty("version.last", VERSION);
-                        }
+            } else if (isUnderwaterMode) {
+                isUnderwaterMode = false;
+                resetAmbientVolume();
+            }
+
+            if (!hasFirstTickPassed) {
+                hasFirstTickPassed = true;
+                updateNotifier.attempt();
+                if (_COMPILE_IS_UNSTABLE) {
+                    String lastVersion = config.getString("version.last");
+                    int warns = config.getInteger("version.warnunstable");
+                    if (!lastVersion.equals(VERSION)) {
+                        warns = 3;
+                        config.setProperty("version.last", VERSION);
+                    }
+                    if (warns > 0) {
+                        warns--;
+                        config.setProperty("version.warnunstable", warns);
+                        getChatter().printChat(ATextFormatting.RED, "You are using an ", ATextFormatting.YELLOW,
+                                "Unofficial Beta", ATextFormatting.RED, " version of MAtmos.");
+                        getChatter().printChatShort(
+                                "By using this version, you understand that this mod isn't intended for "
+                                        + "actual game sessions, MAtmos may not work, might crash, the sound ambience is incomplete, etc. Use at your own risk. ");
+                        getChatter().printChatShort("Please check regularly for updates and resource pack updates.");
                         if (warns > 0) {
-                            warns--;
-                            config.setProperty("version.warnunstable", warns);
-                            getChatter().printChat(ATextFormatting.RED, "You are using an ", ATextFormatting.YELLOW,
-                                    "Unofficial Beta", ATextFormatting.RED, " version of MAtmos.");
-                            getChatter().printChatShort(
-                                    "By using this version, you understand that this mod isn't intended for "
-                                            + "actual game sessions, MAtmos may not work, might crash, the sound ambience is incomplete, etc. Use at your own risk. ");
-                            getChatter().printChatShort("Please check regularly for updates and resource pack updates.");
-                            if (warns > 0) {
-                                getChatter().printChatShort("This message will appear ", ATextFormatting.YELLOW, warns,
-                                        " more times.");
-                            }
-                        }
-                        if (config.commit()) {
-                            config.save();
+                            getChatter().printChatShort("This message will appear ", ATextFormatting.YELLOW, warns,
+                                    " more times.");
                         }
                     }
-                    
-                    isDebugMode = config.getInteger("debug.mode") > 0;
-                    if (isDebugMode()) {
-                        getChatter().printChat(ATextFormatting.GOLD,
-                                "Developer mode is enabled in the Advanced options.");
-                        getChatter().printChatShort("This affects performance. Your game may run slower.");
-                    }
-    
-                    if (!simulacrum.get().hasResourcePacks()) {
-                        hasResourcePacks_FixMe = true;
-                        if (simulacrum.get().hasDisabledResourcePacks()) {
-                            chatter.printChat(ATextFormatting.RED, "Resource Pack not enabled yet!");
-                            chatter.printChatShort(ATextFormatting.WHITE,
-                                    "You need to activate \"MAtmos Resource Pack\" in the Minecraft Options menu for it to run.");
-                        } else {
-                            chatter.printChat(ATextFormatting.RED, "Resource Pack missing from resourcepacks/!");
-                            chatter.printChatShort(ATextFormatting.WHITE,
-                                    "You may have forgotten to put the Resource Pack file into your resourcepacks/ folder.");
-                        }
+                    if (config.commit()) {
+                        config.save();
                     }
                 }
-    
-                if (hasResourcePacks_FixMe && simulacrum.get().hasResourcePacks()) {
-                    hasResourcePacks_FixMe = false;
-                    chatter.printChat(ATextFormatting.GREEN, "It should work now!");
+                
+                isDebugMode = config.getInteger("debug.mode") > 0;
+                if (isDebugMode()) {
+                    getChatter().printChat(ATextFormatting.GOLD,
+                            "Developer mode is enabled in the Advanced options.");
+                    getChatter().printChatShort("This affects performance. Your game may run slower.");
                 }
+
+                if (!simulacrum.get().hasResourcePacks()) {
+                    hasResourcePacks_FixMe = true;
+                    if (simulacrum.get().hasDisabledResourcePacks()) {
+                        chatter.printChat(ATextFormatting.RED, "Resource Pack not enabled yet!");
+                        chatter.printChatShort(ATextFormatting.WHITE,
+                                "You need to activate \"MAtmos Resource Pack\" in the Minecraft Options menu for it to run.");
+                    } else {
+                        chatter.printChat(ATextFormatting.RED, "Resource Pack missing from resourcepacks/!");
+                        chatter.printChatShort(ATextFormatting.WHITE,
+                                "You may have forgotten to put the Resource Pack file into your resourcepacks/ folder.");
+                    }
+                }
+            }
+
+            if (hasResourcePacks_FixMe && simulacrum.get().hasResourcePacks()) {
+                hasResourcePacks_FixMe = false;
+                chatter.printChat(ATextFormatting.GREEN, "It should work now!");
             }
         } else if (isUnderwaterMode) {
             isUnderwaterMode = false;
