@@ -21,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 
+import eu.ha3.matmos.util.VersionDependentConstants;
 import eu.ha3.util.property.simple.ConfigProperty;
 import net.minecraft.launchwrapper.Launch;
 
@@ -72,7 +73,7 @@ public class ConfigManager {
                 "True: rain from other sources is muted\n" +
                 "False: rain is muted from MAtmos soundpacks which support this option\n" +
                 "Auto: true if there's at least one soundpack which supports this option present, false otherwise\n");
-        config.setProperty("rain.soundlist", "ambient.weather.rain,ambient.weather.rain_calm,rain",
+        config.setProperty("rain.soundlist", VersionDependentConstants.RAIN_BLACKLIST,
                 "Comma-separated list of rain sounds to suppress if rain.suppress is true");
         config.setProperty("rain.strengththreshold", "-1",
                 "Rain strength threshold above which it's considered to be raining by soundpacks\n" +
