@@ -19,6 +19,7 @@ import java.util.function.Predicate;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.input.Keyboard;
 
 import eu.ha3.util.property.simple.ConfigProperty;
 import net.minecraft.launchwrapper.Launch;
@@ -36,6 +37,8 @@ public class ConfigManager {
 
     private static final ConfigProperty config = new ConfigProperty();
     private static boolean hasInitialized = false;
+    
+    public static final int DEFAULT_KEY = Keyboard.KEY_F4;
 
     private static File configFolder = null;
 
@@ -48,7 +51,7 @@ public class ConfigManager {
         config.setProperty("reversed.controls", false);
         config.setProperty("sound.autopreview", true);
         config.setProperty("globalvolume.scale", 1f);
-        config.setProperty("key.code", 65);
+        config.setProperty("key.code", DEFAULT_KEY);
         config.setProperty("useroptions.altitudes.high", true);
         config.setProperty("useroptions.altitudes.low", true);
         config.setProperty("useroptions.biome.override", -1);

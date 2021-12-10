@@ -4,6 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
 
 import eu.ha3.easy.TimeStatistic;
+import eu.ha3.matmos.ConfigManager;
 import eu.ha3.matmos.Matmos;
 import eu.ha3.matmos.gui.GuiMatMenu;
 import eu.ha3.matmos.util.MAtUtil;
@@ -32,7 +33,7 @@ public class UserControl implements Ha3HoldActions, SupportsTickEvents, Supports
     }
 
     public void load() {
-        keyBindingMain = new KeyBinding("MAtmos", 65, "key.categories.misc");
+        keyBindingMain = new KeyBinding("MAtmos", ConfigManager.DEFAULT_KEY, "key.categories.misc");
         Minecraft.getMinecraft().gameSettings.keyBindings = ArrayUtils
                 .addAll(Minecraft.getMinecraft().gameSettings.keyBindings, keyBindingMain);
         keyBindingMain.setKeyCode(mod.getConfig().getInteger("key.code"));
