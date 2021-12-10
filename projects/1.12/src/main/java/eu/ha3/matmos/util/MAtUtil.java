@@ -17,9 +17,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.profiler.Profiler;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -309,5 +311,14 @@ public class MAtUtil {
     public static String getItemName(Item item) {
         ResourceLocation rl = Item.REGISTRY.getNameForObject(item);
         return rl == null ? null : rl.toString();
+    }
+
+    public static void setSoundLevel(SoundCategory cat, float level) {
+        GameSettings settings = Minecraft.getMinecraft().gameSettings;
+        settings.setSoundLevel(cat, level);
+    }
+
+    public static Profiler getProfiler() {
+        return Minecraft.getMinecraft().profiler;   
     }
 }

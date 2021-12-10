@@ -19,9 +19,11 @@ import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.profiler.Profiler;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.world.World;
@@ -323,5 +325,9 @@ public class MAtUtil {
 
     public static String getItemName(Item item) {
         return (String)Item.itemRegistry.getNameForObject(item);
+    }
+
+    public static Profiler getProfiler() {
+        return Minecraft.getMinecraft().mcProfiler;   
     }
 }
