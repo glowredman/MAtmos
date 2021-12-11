@@ -1,5 +1,5 @@
 cleanProject () {
-	[ ! -d build/libs ] || rm build/libs/*
+	[ ! -d build/libs ] || rm -f build/libs/*
 }
 
 ( cd projects/1.7 && cleanProject && ./gradlew build )
