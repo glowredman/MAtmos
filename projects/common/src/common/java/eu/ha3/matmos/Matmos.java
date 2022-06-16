@@ -223,7 +223,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void onTick() {
-        TickProfiler.start();
+        TickProfiler.start(true);
 
         userControl.onTick();
         
