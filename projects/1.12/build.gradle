@@ -96,7 +96,7 @@ dependencies {
 	embed 'net.sf.practicalxml:practicalxml:1.1.19'
 }
 
-def buildVersion = new File("${projectDir}/../version.txt").getText('UTF-8')
+def buildVersion = new File("${projectDir}/../version.txt").getText('UTF-8').trim()
 def ver = "${project.mcVersion}-${buildVersion}"
 
 if(target == "forge-mixin0.7"){

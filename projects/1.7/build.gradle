@@ -62,7 +62,7 @@ dependencies {
 	embed 'com.paulscode:soundsystem:201809301515'
 }
 
-def buildVersion = new File("${projectDir}/../version.txt").getText('UTF-8')
+def buildVersion = new File("${projectDir}/../version.txt").getText('UTF-8').trim()
 def ver = "${project.mcVersion}-${buildVersion}"
 
 version = ver
