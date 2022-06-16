@@ -27,6 +27,7 @@ import eu.ha3.matmos.debug.Pluggable;
 import eu.ha3.matmos.game.user.UserControl;
 import eu.ha3.matmos.game.user.VisualDebugger;
 import eu.ha3.matmos.util.MAtUtil;
+import eu.ha3.matmos.util.TickProfiler;
 import eu.ha3.mc.haddon.Identity;
 import eu.ha3.mc.haddon.OperatorCaster;
 import eu.ha3.mc.haddon.UpdatableIdentity;
@@ -222,6 +223,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     @Override
     public void onTick() {
+        TickProfiler.start();
         MAtUtil.getProfiler().startSection("ontick");
 
         userControl.onTick();
@@ -315,6 +317,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         soundManager.onTick();
 
         MAtUtil.getProfiler().endSection();
+        TickProfiler.end();
     }
 
     @Override
