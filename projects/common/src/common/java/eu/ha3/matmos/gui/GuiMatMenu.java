@@ -1,5 +1,7 @@
 package eu.ha3.matmos.gui;
 
+import static eu.ha3.matmos.util.MAtUtil.getFontRenderer;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -241,9 +243,13 @@ public class GuiMatMenu extends GuiScreen {
     }
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (buttonId < 0) {
-            super.mouseClicked(mouseX, mouseY, mouseButton);
+            try { // this method can throw an IOException on 1.12
+                super.mouseClicked(mouseX, mouseY, mouseButton);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -256,16 +262,17 @@ public class GuiMatMenu extends GuiScreen {
 
         if (!mod.isDebugMode()) {
             drawGradientRect(0, 0, width, height, 0xC0000000, 0x60000000);
-            drawCenteredString(fontRenderer, I18n.format("mat.title.expansions"), width / 2, 8, 0xffffff);
+            drawCenteredString(getFontRenderer(), I18n.format("mat.title.expansions"), width / 2, 8, 0xffffff);
         } else {
             drawGradientRect(0, 0, width, height, 0xC0C06000, 0x60C06000);
-            drawCenteredString(fontRenderer, I18n.format("mat.title.expansions") + ATextFormatting.GOLD + "(Dev mode)",
-                    width / 2, 8, 0xffffff);
-            drawCenteredString(fontRenderer, I18n.format("mat.title.devmode"), width / 2,
+            drawCenteredString(getFontRenderer(),
+                    I18n.format("mat.title.expansions") + ATextFormatting.GOLD + "(Dev mode)", width / 2, 8,
+                    0xffffff);
+            drawCenteredString(getFontRenderer(), I18n.format("mat.title.devmode"), width / 2,
                     _SEPARATOR + _MIX * (IDS_PER_PAGE + 3) - 9, 0xffffff);
         }
 
-        drawCenteredString(fontRenderer, I18n.format("mat.title.reloadhint"), width / 2,
+        drawCenteredString(getFontRenderer(), I18n.format("mat.title.reloadhint"), width / 2,
                 _SEPARATOR + _MIX * (IDS_PER_PAGE + 5), 0xffffff);
 
         mod.util().prepareDrawString();
@@ -274,15 +281,15 @@ public class GuiMatMenu extends GuiScreen {
 
         if (!mod.hasResourcePacksLoaded()) {
             if (mod.hasNonethelessResourcePacksInstalled()) {
-                drawCenteredString(fontRenderer, I18n.format("mat.resources.off.1"), width / 2, 10 + 22 * 6 - 40 + 20,
-                        0xff0000);
-                drawCenteredString(fontRenderer, I18n.format("mat.resources.off.2"), width / 2, 10 + 22 * 6 - 40 + 28,
-                        0xff0000);
+                drawCenteredString(getFontRenderer(), I18n.format("mat.resources.off.1"), width / 2,
+                        10 + 22 * 6 - 40 + 20, 0xff0000);
+                drawCenteredString(getFontRenderer(), I18n.format("mat.resources.off.2"), width / 2,
+                        10 + 22 * 6 - 40 + 28, 0xff0000);
             } else {
-                drawCenteredString(fontRenderer, I18n.format("mat.resources.none.1"), width / 2, 10 + 22 * 6 - 40 + 20,
-                        0xff0000);
-                drawCenteredString(fontRenderer, I18n.format("mat.resources.none.2"), width / 2, 10 + 22 * 6 - 40 + 28,
-                        0xff0000);
+                drawCenteredString(getFontRenderer(), I18n.format("mat.resources.none.1"), width / 2,
+                        10 + 22 * 6 - 40 + 20, 0xff0000);
+                drawCenteredString(getFontRenderer(), I18n.format("mat.resources.none.2"), width / 2,
+                        10 + 22 * 6 - 40 + 28, 0xff0000);
             }
         }
 

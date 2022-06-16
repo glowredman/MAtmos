@@ -16,6 +16,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
@@ -320,5 +321,9 @@ public class MAtUtil {
 
     public static Profiler getProfiler() {
         return Minecraft.getMinecraft().profiler;   
+    }
+    
+    public static FontRenderer getFontRenderer() {
+        return Minecraft.getMinecraft().fontRenderer;
     }
 }
