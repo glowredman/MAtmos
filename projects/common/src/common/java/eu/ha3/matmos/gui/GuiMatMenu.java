@@ -14,6 +14,7 @@ import eu.ha3.matmos.core.expansion.Expansion;
 import eu.ha3.matmos.core.expansion.VolumeUpdatable;
 import eu.ha3.mc.gui.HGuiSliderControl;
 import eu.ha3.mc.gui.HSliderListener;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiScreenResourcePacks;
@@ -34,6 +35,8 @@ public class GuiMatMenu extends GuiScreen {
 
     // Keep the active page in memory. Globally... (herpderp)
     private static int in_memory_page = 0;
+    
+    private boolean isBlank;
 
     public GuiMatMenu(GuiScreen par1GuiScreen, Matmos matmos) {
         this(par1GuiScreen, matmos, in_memory_page);
@@ -50,6 +53,11 @@ public class GuiMatMenu extends GuiScreen {
 
     @Override
     public void initGui() {
+        if(!mod.isActivated()) {
+            isBlank = true;
+            return;
+        }
+        
         final int _GAP = 2;
         final int _UNIT = 20;
         final int _ELEMENT_WIDTH = 155 * 2;
@@ -294,7 +302,10 @@ public class GuiMatMenu extends GuiScreen {
         }
 
         super.drawScreen(par1, par2, par3);
-
+        
+        if(isBlank && mod.isActivated()) {
+            Minecraft.getMinecraft().displayGuiScreen(new GuiMatMenu((GuiScreen) mod.util().getCurrentScreen(), mod));
+        }
     }
 
     @Deprecated
