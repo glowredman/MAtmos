@@ -180,14 +180,11 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
 
     @Override
     public void process() {
-        Minecraft.getMinecraft().profiler.startSection("dataGatherer");
         TimeStatistic stat = new TimeStatistic();
         for (String requiredModule : iteratedThroughModules) {
             watch.reset();
             try {
-                Minecraft.getMinecraft().profiler.startSection(requiredModule + "_process");
                 modules.get(requiredModule).process();
-                Minecraft.getMinecraft().profiler.endSection();
             } catch (Exception e) {
                 IDontKnowHowToCode.whoops__printExceptionToChat(mod.getChatter(), e, requiredModule.hashCode());
             }
@@ -197,7 +194,6 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
             }
         }
         ticksPassed = ticksPassed + 1;
-        Minecraft.getMinecraft().profiler.endSection();
     }
 
     @Override

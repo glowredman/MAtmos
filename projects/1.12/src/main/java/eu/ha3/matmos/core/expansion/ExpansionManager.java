@@ -222,14 +222,12 @@ public class ExpansionManager implements VolumeUpdatable, SupportsTickEvents, Su
 
     @Override
     public void onTick() {
-        Minecraft.getMinecraft().profiler.startSection("expansionmanager");
         if (!lastDimension.isPresent() || MAtUtil.getPlayer().dimension != lastDimension.get()) {
             expansions.values().forEach(e -> e.setOverrideOff(!isDimensionAllowed(MAtUtil.getPlayer().dimension)));
             lastDimension = Optional.of(MAtUtil.getPlayer().dimension);
         }
 
         expansions.values().forEach(Expansion::evaluate);
-        Minecraft.getMinecraft().profiler.endSection();
     }
 
     private boolean isDimensionAllowed(int dimension) {

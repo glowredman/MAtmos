@@ -215,16 +215,15 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         if (!isActivated() || util().isGamePaused()) {
             return;
         }
-        MAtUtil.getProfiler().startSection("onframe");
+        TickProfiler.start();
         simulacrum.get().onFrame(semi);
         userControl.onFrame(semi);
-        MAtUtil.getProfiler().endSection();
+        TickProfiler.end();
     }
 
     @Override
     public void onTick() {
         TickProfiler.start();
-        MAtUtil.getProfiler().startSection("ontick");
 
         userControl.onTick();
         
@@ -316,7 +315,6 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         }
         soundManager.onTick();
 
-        MAtUtil.getProfiler().endSection();
         TickProfiler.end();
     }
 

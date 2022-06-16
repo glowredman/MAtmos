@@ -52,7 +52,6 @@ public class ScanVolumetric extends Scan {
     }
 
     protected boolean doRoutine() {
-        Minecraft.getMinecraft().profiler.startSection("scan_do_routine");
         long ops = 0;
         while (ops < this.opspercall && this.progress < this.finalProgress) {
             this.pipeline.input(this.xstart + this.xx, this.ystart + this.yy, this.zstart + this.zz);
@@ -72,7 +71,6 @@ public class ScanVolumetric extends Scan {
             this.progress++;
 
         }
-        Minecraft.getMinecraft().profiler.endSection();
         return true;
     }
 

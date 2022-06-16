@@ -83,10 +83,8 @@ public class Simulacrum implements SupportsTickEvents, SupportsFrameEvents {
 
     @Override
     public void onTick() {
-        Minecraft.getMinecraft().profiler.startSection("simulacrum");
         dataGatherer.process();
         expansionManager.onTick();
-        Minecraft.getMinecraft().profiler.endSection();
     }
 
     public boolean hasResourcePacks() {
