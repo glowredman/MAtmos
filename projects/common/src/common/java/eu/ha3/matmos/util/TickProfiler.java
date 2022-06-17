@@ -28,6 +28,9 @@ public class TickProfiler {
     public static void start(boolean newFrame) {
         if(!ENABLED) return;
         
+        // protip: to dump the frame times to a file for further analysis. insert a breakpoint here, and evaluate the following expression:
+        // org.apache.commons.io.FileUtils.writeStringToFile(new java.io.File("tmp.dat"), sectionTimes.toString())
+        
         if(newFrame) {
             lastTickStart = tickStart;
         }
