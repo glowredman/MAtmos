@@ -6,6 +6,8 @@ public interface SoundRelay {
     void cacheSound(String path);
 
     void playSound(String path, float volume, float pitch, int meta);
+    
+    void playSoundEvent(String name, float x, float y, float z, float volume, float pitch);
 
     int getNewStreamingToken();
 

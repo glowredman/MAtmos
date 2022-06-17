@@ -43,6 +43,11 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
     }
     
     @Override
+    public void playSoundEvent(String path, float x, float y, float z, float volume, float pitch) {
+        playMono(path, x, y, z, volume, pitch);
+    }
+
+    @Override
     public int getNewStreamingToken() {
         return SoundHelperRelay.streamingToken++;
     }

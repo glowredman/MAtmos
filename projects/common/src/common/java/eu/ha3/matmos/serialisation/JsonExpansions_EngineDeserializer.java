@@ -133,7 +133,7 @@ public class JsonExpansions_EngineDeserializer {
         if (root.soundeffects != null) {
             if (root.soundeffects.blockchange != null) {
                 root.soundeffects.blockchange.forEach((k, v) -> {
-                    elements.add(new BlockChangeSound(k, v.when, v.blocks, v.sound, v.vol_min, v.vol_max, v.pitch_min,
+                    elements.add(new BlockChangeSound(k, providers.getSoundRelay(), v.when, v.blocks, v.sound, v.vol_min, v.vol_max, v.pitch_min,
                             v.pitch_max));
                 });
             }
