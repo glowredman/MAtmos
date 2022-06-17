@@ -6,11 +6,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import eu.ha3.matmos.ConfigManager;
 import eu.ha3.matmos.Matmos;
+import eu.ha3.matmos.util.VersionDependentConstants;
 import eu.ha3.util.property.simple.ConfigProperty;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
@@ -27,9 +29,11 @@ public class SoundSystemReplacer {
 
     private static List<String> findModsWithConflicts() {
         List<String> conflicts = new ArrayList<>();
-
-        if (Launch.classLoader.getResource("net/minecraftforge/fml") != null) {
-            conflicts.add("Forge Modloader");
+        
+        for(Pair<String, String> conflict : VersionDependentConstants.SOUND_SYSTEM_REPLACER_CONFLICTS) {
+            if (Launch.classLoader.getResource(conflict.getRight()) != null) {
+                conflicts.add(conflict.getLeft());
+            }
         }
 
         return conflicts;
