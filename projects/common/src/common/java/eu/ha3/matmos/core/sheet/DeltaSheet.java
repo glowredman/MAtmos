@@ -32,12 +32,16 @@ public class DeltaSheet extends GenericSheet implements VirtualSheet {
 
     protected String computeDelta(String previousValue, String newValue) {
         Long newLong = Numbers.toLong(newValue);
+        
+        if(newLong != null) {
+            if(newValue.equals(previousValue)) {
+                return "0";
+            } else {
+                Long previousLong = Numbers.toLong(previousValue);
 
-        if (newLong != null) {
-            Long previousLong = Numbers.toLong(previousValue);
-
-            if (previousLong != null) {
-                return Long.toString(newLong - previousLong);
+                if (previousLong != null) {
+                    return Long.toString(newLong - previousLong);
+                }
             }
         }
 
