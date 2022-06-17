@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import eu.ha3.matmos.core.SoundRelay;
+import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 
@@ -32,7 +33,7 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
     public void playSound(String path, float volume, float pitch, int meta) {
         // XXX 2014-01-12 TEMPORARY: USE MONO-STEREO
         // playStereo(this.paths.get(path), volume, pitch);
-        Entity e = Minecraft.getMinecraft().player;
+        Entity e = MAtUtil.getPlayer();
 
         if (meta <= 0) {
             playStereo(paths.get(path), volume, pitch);
@@ -40,7 +41,7 @@ public class SoundHelperRelay extends SoundHelper implements SoundRelay {
             playMono(paths.get(path), e.posX, e.posY, e.posZ, volume, pitch);
         }
     }
-
+    
     @Override
     public int getNewStreamingToken() {
         return SoundHelperRelay.streamingToken++;
