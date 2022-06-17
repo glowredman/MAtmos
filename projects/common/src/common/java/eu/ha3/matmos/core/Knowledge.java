@@ -30,6 +30,7 @@ import eu.ha3.matmos.core.sheet.SheetDataPackage;
 import eu.ha3.matmos.core.sheet.SheetEntry;
 import eu.ha3.matmos.core.sheet.SheetIndex;
 import eu.ha3.matmos.util.BetterStreams;
+import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.haddon.supporting.SupportsBlockChangeEvents;
 import eu.ha3.mc.haddon.supporting.event.BlockChangeEvent;
 import net.minecraft.block.Block;
@@ -198,7 +199,7 @@ public class Knowledge implements Evaluated, Simulated {
                 if(blockID != -1) {
                     referencedBlockIDs.add(blockID);
                 }
-                int itemID = Item.getIdFromItem((Item)Item.itemRegistry.getObject(s));
+                int itemID = Item.getIdFromItem(MAtUtil.itemRegistryGet(s));
                 if(itemID != -1) {
                     referencedItemIDs.add(itemID);
                 }

@@ -326,4 +326,8 @@ public class MAtUtil {
     public static FontRenderer getFontRenderer() {
         return Minecraft.getMinecraft().fontRenderer;
     }
+
+    public static Item itemRegistryGet(String name) {
+        return (Item)Item.REGISTRY.getObject(new ResourceLocation(name));
+    }
 }
