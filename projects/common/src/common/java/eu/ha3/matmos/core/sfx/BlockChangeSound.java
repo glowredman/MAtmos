@@ -9,7 +9,6 @@ import eu.ha3.matmos.util.MAtUtil;
 import eu.ha3.mc.haddon.supporting.event.BlockChangeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
-import net.minecraft.util.ResourceLocation;
 
 public class BlockChangeSound implements Named {
 
@@ -35,10 +34,9 @@ public class BlockChangeSound implements Named {
         this.volMin = volMin;
         this.volMax = volMax;
 
-        blocks.forEach(bs -> {
-            ResourceLocation b = new ResourceLocation(bs);
-            if (Block.REGISTRY.containsKey(b)) {
-                this.blockIDs.add(Block.getIdFromBlock((Block) (Block.REGISTRY.getObject(b))));
+        blocks.forEach(b -> {
+            if (MAtUtil.blockRegistryContains(b)) {
+                this.blockIDs.add(Block.getIdFromBlock(MAtUtil.blockRegistryGet(b)));
             }
         });
 

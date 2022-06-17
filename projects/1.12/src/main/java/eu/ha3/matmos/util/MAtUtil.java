@@ -332,6 +332,14 @@ public class MAtUtil {
     public static Item itemRegistryGet(String name) {
         return (Item)Item.REGISTRY.getObject(new ResourceLocation(name));
     }
+    
+    public static boolean blockRegistryContains(String name) {
+        return Block.REGISTRY.containsKey(new ResourceLocation(name));
+    }
+
+    public static Block blockRegistryGet(String name) {
+        return (Block) (Block.REGISTRY.getObject(new ResourceLocation(name)));
+    }
 
     public static int getPotionEffectID(PotionEffect effect) {
         return Potion.getIdFromPotion(effect.getPotion());

@@ -341,6 +341,14 @@ public class MAtUtil {
         return (Item)Item.itemRegistry.getObject(name);
     }
     
+    public static boolean blockRegistryContains(String name) {
+        return Block.blockRegistry.containsKey(name);
+    }
+
+    public static Block blockRegistryGet(String name) {
+        return (Block) (Block.blockRegistry.getObject(name));
+    }
+    
     public static int getPotionEffectID(PotionEffect effect) {
         return effect.getPotionID();
     }
