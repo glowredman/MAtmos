@@ -6,7 +6,7 @@ plugins {
 
 import com.modrinth.minotaur.TaskModrinthUpload
 
-def buildVersion = new File("${projectDir}/../version.txt").getText('UTF-8')
+def buildVersion = new File("${projectDir}/../version.txt").getText('UTF-8').trim()
 def changeLog = new File("${projectDir}/changelog.md").getText('UTF-8')
 ext.gameVersions = file("gameVersions.txt").getText('UTF-8').split(" ")
 
