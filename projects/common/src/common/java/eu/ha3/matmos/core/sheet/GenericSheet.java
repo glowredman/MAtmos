@@ -1,8 +1,8 @@
 package eu.ha3.matmos.core.sheet;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 public class GenericSheet implements Sheet {
     protected final Map<String, String> values;
@@ -11,8 +11,8 @@ public class GenericSheet implements Sheet {
     private String def = "_ENTRY_NOT_DEFINED";
 
     public GenericSheet() {
-        values = new TreeMap<>();
-        versions = new TreeMap<>();
+        values = new HashMap<>();
+        versions = new HashMap<>();
     }
 
     @Override

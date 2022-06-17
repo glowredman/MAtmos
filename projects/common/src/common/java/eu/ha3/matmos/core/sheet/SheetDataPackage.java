@@ -1,10 +1,10 @@
 package eu.ha3.matmos.core.sheet;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 /**
  * Represents a data package populated by data sheets.
@@ -17,7 +17,7 @@ public class SheetDataPackage implements DataPackage {
     Set<Integer> referencedItemIDs = new HashSet<Integer>();
 
     public SheetDataPackage(Class<? extends Sheet> sheetType) {
-        sheets = new TreeMap<>();
+        sheets = new HashMap<>();
         this.sheetType = sheetType;
     }
 

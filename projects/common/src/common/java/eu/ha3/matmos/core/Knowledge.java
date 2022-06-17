@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -43,14 +42,14 @@ import net.minecraft.item.Item;
 public class Knowledge implements Evaluated, Simulated {
     private DataPackage data;
 
-    private final Map<String, Dynamic> dynamicMapped = new TreeMap<>();
-    private final Map<String, PossibilityList> possibilityMapped = new TreeMap<>();
-    private final Map<String, Condition> conditionMapped = new TreeMap<>();
-    private final Map<String, Junction> junctionMapped = new TreeMap<>();
-    private final Map<String, Machine> machineMapped = new TreeMap<>();
-    private final Map<String, Event> eventMapped = new TreeMap<>();
+    private final Map<String, Dynamic> dynamicMapped = new HashMap<>();
+    private final Map<String, PossibilityList> possibilityMapped = new HashMap<>();
+    private final Map<String, Condition> conditionMapped = new HashMap<>();
+    private final Map<String, Junction> junctionMapped = new HashMap<>();
+    private final Map<String, Machine> machineMapped = new HashMap<>();
+    private final Map<String, Event> eventMapped = new HashMap<>();
 
-    private final Map<String, BlockChangeSound> blockChangeMapped = new TreeMap<>();
+    private final Map<String, BlockChangeSound> blockChangeMapped = new HashMap<>();
 
     private final Map<String, String> conditionValueOverrides = new HashMap<>();
     
