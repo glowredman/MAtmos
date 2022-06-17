@@ -22,6 +22,8 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -329,5 +331,9 @@ public class MAtUtil {
 
     public static Item itemRegistryGet(String name) {
         return (Item)Item.REGISTRY.getObject(new ResourceLocation(name));
+    }
+
+    public static int getPotionEffectID(PotionEffect effect) {
+        return Potion.getIdFromPotion(effect.getPotion());
     }
 }
