@@ -1,5 +1,7 @@
 package eu.ha3.matmos.util.math;
 
+import com.google.common.primitives.Longs;
+
 public class Numbers {
     public static Long toLong(Object o) {
         if (o == null) {
@@ -11,11 +13,7 @@ public class Numbers {
         }
 
         if (o instanceof String) {
-            try {
-                return Long.parseLong((String) o);
-            } catch (NumberFormatException e) {
-                return null;
-            }
+            return Longs.tryParse((String)o);
         }
 
         return null;
