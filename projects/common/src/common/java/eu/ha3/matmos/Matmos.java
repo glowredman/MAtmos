@@ -513,7 +513,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
             int normalChans = config.getInteger("soundsystem.changechannelcount.normal");
             int streamingChans = config.getInteger("soundsystem.changechannelcount.streaming");
             
-            final int totalChans = 32;
+            final int totalChans = 64;
             
             if(normalChans == -1 && streamingChans == -1) {
                 streamingChans = 11;
