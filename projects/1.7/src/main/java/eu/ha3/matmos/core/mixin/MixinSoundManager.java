@@ -1,20 +1,13 @@
 package eu.ha3.matmos.core.mixin;
 
-import java.util.List;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.gen.Accessor;
-import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import eu.ha3.matmos.Matmos;
-import eu.ha3.matmos.core.sound.SoundManagerListener;
-import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.audio.SoundManager;
-import paulscode.sound.SoundSystem;
 
 @Mixin(SoundManager.class)
 abstract class MixinSoundManager {
