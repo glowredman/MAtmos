@@ -490,9 +490,52 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     
     @Override
     public void onSoundSetup(SoundManager soundManager) {
-        SoundSystemConfig.setNumberStreamingChannels(11);
-        SoundSystemConfig.setNumberNormalChannels(32 - 11);
-        SoundSystemConfig.setStreamQueueFormatsMatch(true);
+        String channelChangeOption = config.getString("soundsystem.changechannelcount");
+        
+        boolean doChange = false;
+        
+        if(channelChangeOption.equals("true")) {
+            LOGGER.trace("Changing sound system channel count unconditionally because option is set to 'true'");
+        } else if(channelChangeOption.equals("auto")) {
+            final int normalChans = SoundSystemConfig.getNumberNormalChannels();
+            final int streamingChans = SoundSystemConfig.getNumberStreamingChannels();
+            if(normalChans == 32 - 4 && streamingChans == 4) {
+                doChange = true;
+                LOGGER.trace("Changing sound system channel count because no one else changed it");
+            } else {
+                LOGGER.trace("Not changing sound system channel count because someone else changed it (to " + normalChans + " normal + " + streamingChans + " streaming)");
+            }
+        } else {
+            LOGGER.trace("Not changing sound system channel count because option is set to false");
+        }
+        
+        if(doChange) {
+            int normalChans = config.getInteger("soundsystem.changechannelcount.normal");
+            int streamingChans = config.getInteger("soundsystem.changechannelcount.streaming");
+            
+            final int totalChans = 32;
+            
+            if(normalChans == -1 && streamingChans == -1) {
+                streamingChans = 11;
+            }
+            
+            if(normalChans == -1) {
+                normalChans = totalChans - streamingChans;
+            }
+            if(streamingChans == -1) {
+                streamingChans = totalChans - normalChans;
+            }
+            
+            SoundSystemConfig.setNumberStreamingChannels(streamingChans);
+            SoundSystemConfig.setNumberNormalChannels(normalChans);
+            
+            LOGGER.info("Changing SoundSystem channel count to " + normalChans + " normal + " + streamingChans + " streaming.");
+        }
+        
+        if(config.getBoolean("soundsystem.changestreamqueueformatsmatch")) {
+            // I forgor why I put this here
+            SoundSystemConfig.setStreamQueueFormatsMatch(true);
+        }
     }
     
     public boolean shouldSuppressRain() {

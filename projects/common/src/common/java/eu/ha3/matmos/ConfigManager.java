@@ -63,6 +63,14 @@ public class ConfigManager {
                         + "Forge provides a fix for this in 1.12.2, but MAtmos has to provide its own fix on 1.7.10, and on LiteLoader versions.\n"
                         + "Use this option to control when the SoundSystem should be overridden.\n\n"
                         + "Allowed values are: always, never, auto (which only overrides if no other mod is present which also overrides it (like DynamicSurroundings on 1.7.10, or Forge itself on 1.12.2))");
+        config.setProperty("soundsystem.changechannelcount", "auto",
+                "Configure sound system to be able to play more sounds at once. Note: Regardless of the setting, this can get overrriden by mods that change it after us (e.g. Dynamic Surroundings)\n" +
+                "True: always do this\n" +
+                "Auto: don't do this if another mod has done it before us\n" +
+                "False: never do this");
+        config.setProperty("soundsystem.changechannelcount.normal", -1, "The number of normal channels (e.g. sound effects). The vanilla value is 28. Set to -1 to decide automatically.");
+        config.setProperty("soundsystem.changechannelcount.streaming", -1, "The number of streaming channels (e.g. music, longer soundpack sounds). The vanilla value is 4. Set to -1 to decide automatically.");
+        config.setProperty("soundsystem.changestreamqueueformatsmatch", true, "I forgot what this does, but it probably makes things faster. It is not known to cause any issues, but can be disabled here just in case.");
         config.setProperty("dimensions.list", "",
                 "Comma-separated list of dimensions. If dimensions.listtype is black, then ambience will NOT be played in these dimensions.\n"
                         + "If it's white, then ambience will ONLY play in these dimensions.\n");
