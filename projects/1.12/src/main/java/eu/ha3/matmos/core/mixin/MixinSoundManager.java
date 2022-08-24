@@ -17,7 +17,6 @@ import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.SoundCategory;
 import paulscode.sound.SoundSystem;
-import paulscode.sound.SoundSystemConfig;
 
 @Mixin(SoundManager.class)
 abstract class MixinSoundManager {
@@ -26,14 +25,6 @@ abstract class MixinSoundManager {
 
     @Shadow
     private boolean loaded;
-
-    @Inject(method = "<init>*", at = @At("RETURN"))
-    private void onConstructed(CallbackInfo ci) {
-        Matmos.LOGGER.debug("Running mixin for SoundManager constructor!");
-        SoundSystemConfig.setNumberStreamingChannels(11);
-        SoundSystemConfig.setNumberNormalChannels(32 - 11);
-        SoundSystemConfig.setStreamQueueFormatsMatch(true);
-    }
 
     @Inject(method = "stopAllSounds", at = @At("RETURN"))
     public void stopAllSounds(CallbackInfo ci) {

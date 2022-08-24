@@ -38,6 +38,7 @@ import eu.ha3.mc.haddon.supporting.SupportsBlockChangeEvents;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsInGameChangeEvents;
 import eu.ha3.mc.haddon.supporting.SupportsSoundEvents;
+import eu.ha3.mc.haddon.supporting.SupportsSoundSetupEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
 import eu.ha3.mc.haddon.supporting.event.BlockChangeEvent;
 import eu.ha3.mc.quick.chat.Chatter;
@@ -50,9 +51,10 @@ import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.settings.GameSettings;
 import eu.ha3.mc.abstraction.util.ATextFormatting;
 import net.minecraftforge.common.MinecraftForge;
+import paulscode.sound.SoundSystemConfig;
 
 public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, SupportsInGameChangeEvents,
-        SupportsBlockChangeEvents, SupportsSoundEvents, NotifiableHaddon, Stable {
+        SupportsBlockChangeEvents, SupportsSoundEvents, SupportsSoundSetupEvents, NotifiableHaddon, Stable {
     private static final boolean _COMPILE_IS_UNSTABLE = false;
 
     public static final Logger LOGGER = LogManager.getLogger("matmos");
@@ -475,7 +477,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     public static void removeBlockChangeListener(SupportsBlockChangeEvents l) {
         blockChangeListeners.remove(l);
     }
-
+    
     @Override
     public boolean onSound(ISound sound, String name, SoundManager manager) {
         boolean badSound = shouldSuppressRain()
@@ -484,6 +486,13 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
                 && Arrays.asList(config.getString("rain.soundlist").split(",")).contains(name);
 
         return !badSound;
+    }
+    
+    @Override
+    public void onSoundSetup(SoundManager soundManager) {
+        SoundSystemConfig.setNumberStreamingChannels(11);
+        SoundSystemConfig.setNumberNormalChannels(32 - 11);
+        SoundSystemConfig.setStreamQueueFormatsMatch(true);
     }
     
     public boolean shouldSuppressRain() {
