@@ -95,6 +95,8 @@ minecraft {
 	srgExtra "PK: eu/ha3/easy eu/ha3/matmos/lib/eu/ha3/easy"
 	srgExtra "PK: eu/ha3/mc eu/ha3/matmos/lib/eu/ha3/mc"
 	srgExtra "PK: eu/ha3/util eu/ha3/matmos/lib/eu/ha3/util"
+	srgExtra "PK: net/sf/practicalxml eu/ha3/matmos/lib/net/sf/practicalxml"
+	srgExtra "PK: net/sf/kdgcommons eu/ha3/matmos/lib/net/sf/kdgcommons"
 }
 
 sourceCompatibility = 1.8
