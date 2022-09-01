@@ -71,7 +71,7 @@ Pressing F7 opens the MAtmos settings menu which can be used to adjust the volum
 
 ## Mixin troubleshooting
 
-MAtmos uses Mixin in order to apply some modifications to the game. The regular versions of the mod jars embed Mixin, so MAtmos can run standalone: the 1.7.10 version embeds Mixin 0.7.11, while the 1.12.2 version embeds Mixin 0.8.2. However, this can cause issues with other mods if they embed or require a different version.
+MAtmos uses Mixin in order to apply some modifications to the game. The regular versions of the mod jars embed Mixin, so MAtmos can run standalone: the 1.7.10 version embeds Mixin 0.7.11, while the 1.12.2 version embeds Mixin 0.8.3. However, this can cause issues with other mods if they embed or require a different version.
 
 If you're getting Mixin errors on launch, try these steps in order:
 
