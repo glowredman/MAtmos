@@ -23,7 +23,7 @@ public class ModuleConfigVars extends ModuleProcessor implements Module {
         this.mod = mod;
 
         defaultsConfig = new File(ConfigManager.getConfigFolder(), "dataconfigvars_defaults.cfg");
-        ConfigManager.createDefaultConfigFileIfMissing(defaultsConfig, false);
+        ConfigManager.getDefaultConfigHelper().createDefaultConfigFileIfMissing(defaultsConfig, false);
         userConfig = new File(ConfigManager.getConfigFolder(), "dataconfigvars.cfg");
 
         config = new ConfigProperty();

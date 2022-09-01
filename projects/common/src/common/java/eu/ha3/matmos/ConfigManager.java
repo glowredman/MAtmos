@@ -21,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 
+import eu.ha3.matmos.util.DefaultConfigHelper;
 import eu.ha3.matmos.util.VersionDependentConstants;
 import eu.ha3.util.property.simple.ConfigProperty;
 import net.minecraft.launchwrapper.Launch;
@@ -40,6 +41,8 @@ public class ConfigManager {
     private static boolean hasInitialized = false;
     
     public static final int DEFAULT_KEY = Keyboard.KEY_F4;
+    
+    private static final DefaultConfigHelper DEFAULT_CONFIG_HELPER = new DefaultConfigHelper("matmos");
 
     private static File configFolder = null;
 
@@ -130,71 +133,7 @@ public class ConfigManager {
         return configFolder;
     }
     
-    public static Path getDefaultConfigFilePath(Path relPath) throws IOException {
-        String resourceRelPath = Paths.get("assets/matmos/default_config/").resolve(relPath).toString().replace('\\', '/');
-        URL resourceURL = ConfigManager.class.getClassLoader().getResource(resourceRelPath);
-        
-        switch(resourceURL.getProtocol()) {
-        case "jar":
-            String urlString = resourceURL.getPath();
-            int lastExclamation = urlString.lastIndexOf('!');
-            String newURLString = urlString.substring(0, lastExclamation);
-            return FileSystems.newFileSystem(new File(URI.create(newURLString)).toPath(), null).getPath(resourceRelPath);
-        case "file":
-            return new File(URI.create(resourceURL.toString())).toPath();
-        default:
-            return null;
-        }
-    }
-    
-    private static void copyDefaultConfigFile(Path src, Path dest) throws IOException {
-        Files.createDirectories(getParentSafe(src));
-        LOGGER.debug("Copying " + src + " -> " + dest);
-        Files.copy(src, dest, StandardCopyOption.REPLACE_EXISTING);
-    }
-
-    public static boolean createDefaultConfigFileIfMissing(File configFile, boolean overwrite) {
-        return createDefaultConfigFileIfMissing(configFile, s -> overwrite);
-    }
-    
-    public static boolean createDefaultConfigFileIfMissing(File configFile, Predicate<? super byte[]> overwrite) {
-        Path configFolderPath = Paths.get(getConfigFolder().getPath());
-        Path configFilePath = Paths.get(configFile.getPath());
-
-        Path relPath = configFolderPath.relativize(configFilePath);
-        
-        if (configFilePath.startsWith(configFolderPath)) {
-            try {
-                Path defaultConfigPath = getDefaultConfigFilePath(relPath);
-                if(Files.isRegularFile(defaultConfigPath)) {
-                    byte[] data = null;
-                    if(configFile.exists()){
-                        try(InputStream is = Files.newInputStream(configFile.toPath())){
-                            data = IOUtils.toByteArray(is);
-                        }
-                    }
-                    if(!configFile.exists() || overwrite.test(data)) {
-                        copyDefaultConfigFile(defaultConfigPath, configFile.toPath());
-                    }
-                } else if(Files.isDirectory(defaultConfigPath)) {
-                    Files.createDirectories(Paths.get(configFile.getPath()));
-                    // create contents of directory as well
-                    for(Object po : Files.walk(defaultConfigPath).toArray()) {
-                        if(Files.isRegularFile((Path)po)) {
-                            copyDefaultConfigFile((Path)po, configFile.toPath().resolve(
-                                    defaultConfigPath.toAbsolutePath().relativize(((Path)po).toAbsolutePath()).toString()));
-                        }
-                    }
-                }
-            } catch (IOException e) {
-                LOGGER.error("Failed to create default config file for " + relPath.toString() + ": " + e.getMessage());
-                return false;
-            }
-        } else {
-            LOGGER.debug("Invalid argument for creating default config file: " + relPath.toString()
-                    + " (file is not in the config directory)");
-            return false;
-        }
-        return true;
+    public static DefaultConfigHelper getDefaultConfigHelper() {
+        return DEFAULT_CONFIG_HELPER;
     }
 }

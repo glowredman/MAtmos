@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ public class IDDealiaser {
     private ItemAliasMap itemAliasMap = new ItemAliasMap();
 
     public IDDealiaser(File configFolder) {
-        ConfigManager.createDefaultConfigFileIfMissing(new File(configFolder, "builtin_aliases"), true);
+        ConfigManager.getDefaultConfigHelper().createDefaultConfigFileIfMissing(new File(configFolder, "builtin_aliases"), true);
         
         if(ConfigManager.getConfig().getBoolean("dealias.oredict")) {
             for(String oreName : OreDictionary.getOreNames()) {
@@ -130,15 +132,17 @@ public class IDDealiaser {
     private void loadAliasFile(File aliasFile) {
         Matmos.LOGGER.info("Loading alias map " + aliasFile + "...");
         
-        ConfigManager.createDefaultConfigFileIfMissing(aliasFile,
-                bytes -> {
-                    try {
-                        return DigestUtils.sha256Hex(String.join("\n", IOUtils.readLines(new ByteArrayInputStream(bytes), StandardCharsets.UTF_8))).equals(OLD_ALIAS_MAP_SHA256);
-                    } catch (IOException e) {
-                        // the file is corrupt, whatever
-                        return false;
-                    }
-                });
+        boolean hashMatch = false;
+        if(Files.isRegularFile(aliasFile.toPath())) {
+            try(InputStream is = Files.newInputStream(aliasFile.toPath())){
+                byte[] data = IOUtils.toByteArray(is);
+                hashMatch = DigestUtils.sha256Hex(String.join("\n", IOUtils.readLines(new ByteArrayInputStream(data), StandardCharsets.UTF_8))).equals(OLD_ALIAS_MAP_SHA256);
+            } catch (IOException e) {
+                // the file is corrupt, whatever
+            }
+        }
+        
+        ConfigManager.getDefaultConfigHelper().createDefaultConfigFileIfMissing(aliasFile, hashMatch);
         
         Path aliasDir = getParentSafe(aliasFile.toPath());
         List<AliasEntry> entries = loadEntries(new LinkedList<AliasEntry>(), aliasDir, aliasDir.relativize(aliasFile.toPath()), new HashSet<Path>(), true);
