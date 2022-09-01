@@ -32,7 +32,13 @@ repositories {
 	}
 }
 
+// forge: Forge + Mixin 0.7
+// forge-nomixin: Forge + No mixin
+
 def target = project.hasProperty("target") ? project.target : "forge";
+
+def mixinVersion = "0.7.11-SNAPSHOT"
+def embedMixin = !target.endsWith("-nomixin")
 
 if(target.contains("forge")) {
 	apply plugin: 'forge'
@@ -42,7 +48,11 @@ if(target.contains("forge")) {
 	}
 
 	dependencies {
-		embed 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
+		if(embedMixin) {
+			embed "org.spongepowered:mixin:${mixinVersion}"
+		} else {
+			compile "org.spongepowered:mixin:${mixinVersion}"
+		}
 	}
 
 	sourceSets {
@@ -64,6 +74,10 @@ dependencies {
 
 def buildVersion = new File("${projectDir}/../version.txt").getText('UTF-8').trim()
 def ver = "${project.mcVersion}-${buildVersion}"
+
+if(target.endsWith("-nomixin")){
+	ver += "+nomixin"
+}
 
 version = ver
 group = project.group

@@ -33,9 +33,15 @@ repositories {
 	}
 }
 
+// forge: Forge + Mixin 0.8
+// forge-mixin0.7: Forge + Mixin 0.7
+// forge-nomixin: Forge + No mixin
+// liteloader: LiteLoader + Mixin 0.8 (not really supported)
+
 def target = project.hasProperty("target") ? project.target : "forge";
 
 def mixinVersion = target == "forge-mixin0.7" ? "0.7.11-SNAPSHOT" : "0.8.3"
+def embedMixin = !target.endsWith("-nomixin")
 
 // Should the SoundSystemReplacer be included in Forge builds?
 // (it's completely unnecessary, this option is only included for testing)
@@ -56,7 +62,11 @@ if(target.startsWith("forge")) {
 	}
 
 	dependencies {
-		embed "org.spongepowered:mixin:${mixinVersion}"
+		if(embedMixin) {
+			embed "org.spongepowered:mixin:${mixinVersion}"
+		} else {
+			compile "org.spongepowered:mixin:${mixinVersion}"
+		}
 	}
 
 	sourceSets {
@@ -99,8 +109,10 @@ dependencies {
 def buildVersion = new File("${projectDir}/../version.txt").getText('UTF-8').trim()
 def ver = "${project.mcVersion}-${buildVersion}"
 
-if(target == "forge-mixin0.7"){
-	ver += "-mixin0.7"
+if(target.endsWith("-mixin0.7")){
+	ver += "+mixin.0.7.11"
+} else if(target.endsWith("-nomixin")){
+	ver += "+nomixin"
 }
 
 version = ver
@@ -288,10 +300,4 @@ if(target.contains("liteloader")) {
 	mixin {
 		defaultObfuscationEnv notch
 	}
-}
-
-task buildForgeMixin07(type: GradleBuild) {
-	buildFile = "build.gradle"
-	tasks = ["build"]
-	startParameter.projectProperties = ["target": "forge-mixin0.7"]
 }
