@@ -56,7 +56,7 @@ public class DefaultConfigHelper {
         
         if (configFilePath.startsWith(configFolderPath)) {
             try {
-                Path defaultConfigPath = getDefaultConfigFilePath(relPath);
+                Path defaultConfigPath = getDefaultConfigFilePath(relPath).toAbsolutePath();
                 if(Files.isRegularFile(defaultConfigPath)) {
                     if(!configFile.exists() || overwrite) {
                         copyDefaultConfigFile(defaultConfigPath, configFile.toPath());
@@ -65,8 +65,7 @@ public class DefaultConfigHelper {
                     Files.createDirectories(Paths.get(configFile.getPath()));
                     // create contents of directory as well
                     for(Path childPath : Files.walk(defaultConfigPath).toArray(Path[]::new)) {
-                        Path destPath = configFile.toPath().resolve(
-                                defaultConfigPath.toAbsolutePath().relativize((childPath).toAbsolutePath()).toString());
+                        Path destPath = configFile.toPath().resolve(defaultConfigPath.relativize(childPath));
                         if(!childPath.equals(defaultConfigPath) && childPath.startsWith(defaultConfigPath)) {
                             if(!createDefaultConfigFileIfMissing(destPath.toFile(), overwrite)) {
                                 return false;
