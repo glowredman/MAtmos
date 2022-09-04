@@ -65,7 +65,7 @@ public class DefaultConfigHelper {
                     Files.createDirectories(Paths.get(destFile.getPath()));
                     // create contents of directory as well
                     for(Path srcChildPath : Files.walk(srcConfigPath).toArray(Path[]::new)) {
-                        Path destPath = destFile.toPath().resolve(srcConfigPath.relativize(srcChildPath));
+                        Path destPath = destFile.toPath().resolve(srcConfigPath.relativize(srcChildPath).toString());
                         if(!srcChildPath.equals(srcConfigPath) && srcChildPath.startsWith(srcConfigPath)) {
                             if(!createDefaultConfigFileIfMissing(destPath.toFile(), overwrite)) {
                                 return false;
