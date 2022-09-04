@@ -64,10 +64,10 @@ public class DefaultConfigHelper {
                 } else if(Files.isDirectory(defaultConfigPath)) {
                     Files.createDirectories(Paths.get(configFile.getPath()));
                     // create contents of directory as well
-                    for(Object po : Files.walk(defaultConfigPath).toArray()) {
+                    for(Path childPath : Files.walk(defaultConfigPath).toArray(Path[]::new)) {
                         Path destPath = configFile.toPath().resolve(
-                                defaultConfigPath.toAbsolutePath().relativize(((Path)po).toAbsolutePath()).toString());
-                        if(destPath != configFile.toPath()) {
+                                defaultConfigPath.toAbsolutePath().relativize((childPath).toAbsolutePath()).toString());
+                        if(!childPath.equals(defaultConfigPath) && childPath.startsWith(defaultConfigPath)) {
                             if(!createDefaultConfigFileIfMissing(destPath.toFile(), overwrite)) {
                                 return false;
                             }
