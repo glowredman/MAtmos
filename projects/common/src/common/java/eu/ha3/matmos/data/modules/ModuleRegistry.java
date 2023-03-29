@@ -218,7 +218,9 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         Set<String> missingModules = new HashSet<>();
         for (String module : requiredModules) {
             if (!modules.containsKey(module) && !passOnceSubmodules.contains(module)) {
-                Matmos.LOGGER.error("Stack " + name + " requires missing module " + module);
+                if(!isDynamicModule(module)) {
+                    Matmos.LOGGER.error("Stack " + name + " requires missing module " + module);
+                }
                 missingModules.add(module);
             }
         }
@@ -230,6 +232,10 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         moduleStack.put(name, requiredModules);
 
         recomputeModuleStack();
+    }
+    
+    private static boolean isDynamicModule(String module) {
+        return module.equals("_DYNAMIC");
     }
 
     @Override
