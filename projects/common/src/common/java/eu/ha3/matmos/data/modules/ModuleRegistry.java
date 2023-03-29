@@ -50,7 +50,6 @@ import eu.ha3.matmos.data.scanners.ScannerModule;
 import eu.ha3.matmos.data.scanners.ScanAir;
 import eu.ha3.matmos.data.scanners.ScanRaycast;
 import eu.ha3.matmos.util.IDontKnowHowToCode;
-import net.minecraft.client.Minecraft;
 
 public class ModuleRegistry implements IDataCollector, IDataGatherer {
     private final Matmos mod;

@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import eu.ha3.matmos.core.sheet.DataPackage;
-import net.minecraft.client.Minecraft;
+import eu.ha3.matmos.util.MAtUtil;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
@@ -60,6 +60,6 @@ public abstract class ModuleProcessor extends ProcessorModel implements EntryBas
     }
 
     protected EntityPlayer getPlayer() {
-        return Minecraft.getMinecraft().thePlayer;
+        return MAtUtil.getPlayer();
     }
 }
