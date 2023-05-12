@@ -1,10 +1,8 @@
 plugins {
 	id "com.github.breadmoirai.github-release" version "2.2.12"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
-	id "com.modrinth.minotaur" version "1.2.1"
+	id "com.modrinth.minotaur" version "2.+"
 }
-
-import com.modrinth.minotaur.TaskModrinthUpload
 
 def buildVersion = new File("${projectDir}/../version.txt").getText('UTF-8').trim()
 def changeLog = new File("${projectDir}/changelog.md").getText('UTF-8')
@@ -50,7 +48,7 @@ if(project.hasProperty("gameVersion")){
 			shortest = it
 		}
 	}
-	def additionalFiles = files - shortest	
+	def extraFiles = files - shortest
 
 	if(curseOK) {
 		curseforge {
@@ -66,7 +64,7 @@ if(project.hasProperty("gameVersion")){
 				mainArtifact(file(shortest)) {
 					displayName = "${releaseName} ${buildVersion} for Minecraft ${gameVersion}"
 				}
-				additionalFiles.each { addArtifact(it) }
+				extraFiles.each { addArtifact(it) }
 			}
 			options {
 				debug = false
@@ -80,15 +78,15 @@ if(project.hasProperty("gameVersion")){
 	}
 	
 	if(modrinthOK) {
-		task publishModrinth (type: TaskModrinthUpload) {
+		modrinth {
 			token = project.modrinthToken
 			projectId = project.modrinthID
 			versionNumber = "$gameVersion-$buildVersion"
 			versionName = "$gameVersion-$buildVersion" // the doc says this defaults to the versionNumber, but it defaulted to the string "undefined" for me so i'm setting it
 			uploadFile = shortest
-			addGameVersion(gameVersion)
-			additionalFiles.each { addFile(it) }
-			addLoader('forge')
+			gameVersions = [gameVersion]
+			additionalFiles = extraFiles
+			loaders = ['forge']
 			changelog = changeLog
 			detectLoaders = false
 		}

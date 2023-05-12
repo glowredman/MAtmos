@@ -1,3 +1,3 @@
 for proj in `cat gameVersions.txt`; do
-	./gradlew publishModrinth -PgameVersion=$proj $*
+	./gradlew modrinth -PgameVersion=$proj $*
 done
