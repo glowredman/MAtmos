@@ -47,9 +47,7 @@ public class ItemAliasMap extends ObjectAliasMap {
             int target = -1;
             
             Set<String> toolClasses = ((Item)o).getToolClasses(new ItemStack((Item)o));
-            if(ConfigManager.getConfig().getInteger("debug.mode") == 1) {
-                Matmos.LOGGER.debug("Tool classes for " + name + " (" + id + "): " + Arrays.toString(toolClasses.toArray()));
-            }
+            Matmos.DEVLOGGER.debug("Tool classes for " + name + " (" + id + "): " + Arrays.toString(toolClasses.toArray()));
             
             if(o instanceof ItemSword || toolClasses.contains("sword")) {
                 target = wooden ? wswordID : swordID;
@@ -68,11 +66,9 @@ public class ItemAliasMap extends ObjectAliasMap {
             }
             
             if(target != -1) {
-                if(ConfigManager.getConfig().getInteger("debug.mode") == 1) {
-                    Matmos.LOGGER.debug("Guessing alias " + 
-                        Item.REGISTRY.getNameForObject(Item.REGISTRY.getObjectById(target)) + 
-                        " for " + name);
-                }
+                Matmos.DEVLOGGER.debug("Guessing alias " + 
+                    Item.REGISTRY.getNameForObject(Item.REGISTRY.getObjectById(target)) + 
+                    " for " + name);
                 dealiasMap.put(id, target);
             }
         }

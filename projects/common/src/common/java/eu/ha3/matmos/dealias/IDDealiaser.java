@@ -55,9 +55,7 @@ public class IDDealiaser {
                     }
                 }
                 
-                if(ConfigManager.getConfig().getInteger("debug.mode") == 1) {
-                    Matmos.LOGGER.debug("Items with oredict name " + oreName + ": " + Arrays.toString(names.toArray()));
-                }
+                Matmos.DEVLOGGER.debug("Items with oredict name " + oreName + ": " + Arrays.toString(names.toArray()));
                 
                 blockAliasMap.dealiasItemGroupToMinID(names);
                 itemAliasMap.dealiasItemGroupToMinID(names);

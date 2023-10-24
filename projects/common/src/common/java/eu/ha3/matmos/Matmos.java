@@ -62,6 +62,8 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     /** Logs messages relevant to users */
     public static final Logger LOGGER = LogManager.getLogger("matmos");
+    /** Logs messages only relevant to soundpack developers */
+    public static Logger DEVLOGGER = NoOpLogger.INSTANCE;
     /** Logs messages only useful when debugging issues with the sound engine */
     public static final Logger DEBUGLOGGER = SUPER_DEBUG ? LOGGER : NoOpLogger.INSTANCE;
 
@@ -198,6 +200,7 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         if (reloadConfigs) {
             config.load();
         }
+        DEVLOGGER = ConfigManager.getConfig().getInteger("debug.mode") == 1 ? LOGGER : NoOpLogger.INSTANCE;
 
         simulacrum = Optional.of(new Simulacrum(this));
 
