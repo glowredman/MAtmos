@@ -27,6 +27,7 @@ import eu.ha3.matmos.debug.Pluggable;
 import eu.ha3.matmos.game.user.UserControl;
 import eu.ha3.matmos.game.user.VisualDebugger;
 import eu.ha3.matmos.util.MAtUtil;
+import eu.ha3.matmos.util.NoOpLogger;
 import eu.ha3.matmos.util.TickProfiler;
 import eu.ha3.mc.haddon.Identity;
 import eu.ha3.mc.haddon.OperatorCaster;
@@ -59,7 +60,10 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
     
     public static final boolean SUPER_DEBUG = Boolean.parseBoolean(System.getProperty("matmos.superDebug", "false"));
 
+    /** Logs messages relevant to users */
     public static final Logger LOGGER = LogManager.getLogger("matmos");
+    /** Logs messages only useful when debugging issues with the sound engine */
+    public static final Logger DEBUGLOGGER = SUPER_DEBUG ? LOGGER : NoOpLogger.INSTANCE;
 
     // Identity
     protected static final String NAME = "MAtmos";
@@ -550,11 +554,5 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     public static List<SoundManagerListener> getSoundManagerListeners() {
         return soundManagerListeners;
-    }
-
-    public static void superDebug(String string) {
-        if(SUPER_DEBUG) {
-            LOGGER.debug(string);
-        }
     }
 }

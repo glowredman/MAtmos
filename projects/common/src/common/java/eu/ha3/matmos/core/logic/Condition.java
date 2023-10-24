@@ -58,7 +58,7 @@ public class Condition extends MultistateComponent implements Dependable, Visual
         if (pre != isActive) {
             incrementVersion();
 
-            Matmos.superDebug("C: " + getName() + " -> " + isActive);
+            Matmos.DEBUGLOGGER.debug("C: " + getName() + " -> " + isActive);
         }
     }
 

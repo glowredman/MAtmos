@@ -121,7 +121,7 @@ public class SoundHelper implements SoundCapabilities, Stable {
 
                     boolean notYetPlayed = sound.popNotYetPlayed();
 
-                    Matmos.superDebug("playStreaming " + sound.getPositionedSoundLocation() + " (reuse=" + reuse
+                    Matmos.DEBUGLOGGER.debug("playStreaming " + sound.getPositionedSoundLocation() + " (reuse=" + reuse
                             + ", notYetPlayed = " + notYetPlayed + ", donePlaying=" + previousIsDonePlaying + ")");
 
                     if (notYetPlayed) {
@@ -133,7 +133,7 @@ public class SoundHelper implements SoundCapabilities, Stable {
                         }
                     }
                 } else if (newVolume == 0 && sound.getTargetVolume() != newVolume) {
-                    Matmos.superDebug("stopStreaming " + sound.getPositionedSoundLocation());
+                    Matmos.DEBUGLOGGER.debug("stopStreaming " + sound.getPositionedSoundLocation());
                     sound.stop(fade);
                 }
             }

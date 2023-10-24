@@ -103,7 +103,8 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
                 }
             } else {
                 if (getSoundSystem().getMasterVolume() <= 0.0F) {
-                    Matmos.superDebug("Skipped playing soundEvent: " + resourcelocation + ", master volume was zero");
+                    Matmos.DEBUGLOGGER.debug("Skipped playing soundEvent: {}, master volume was zero",
+                            (Object) resourcelocation);
                 } else {
                     SoundPoolEntry sound = soundeventaccessor.func_148720_g();
 
@@ -125,7 +126,8 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
                         ResourceLocation resourcelocation2 = sound.getSoundPoolEntryLocation();
 
                         if (f1 == 0.0F) {
-                            Matmos.superDebug("Skipped playing sound " + resourcelocation + ", volume was zero.");
+                            Matmos.DEBUGLOGGER.debug("Skipped playing sound {}, volume was zero.",
+                                    (Object) resourcelocation);
                         } else {
                             boolean flag = p_sound.canRepeat() && p_sound.getRepeatDelay() == 0;
                             String s = UUID.randomUUID().toString();
@@ -141,7 +143,8 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
                                         p_sound.getZPosF(), p_sound.getAttenuationType().getTypeInt(), f);
                             }
 
-                            Matmos.superDebug("Playing sound " + resourcelocation2 + " for event " + resourcelocation + " as channel " + s);
+                            Matmos.DEBUGLOGGER.debug("Playing sound {} for event {} as channel {}", resourcelocation2,
+                                    resourcelocation, s);
                             getSoundSystem().setPitch(s, f2);
                             getSoundSystem().setVolume(s, f1);
                             getSoundSystem().play(s);
