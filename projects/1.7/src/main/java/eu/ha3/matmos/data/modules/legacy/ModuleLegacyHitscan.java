@@ -36,7 +36,7 @@ public class ModuleLegacyHitscan extends ModuleProcessor implements Module {
             return;
         }
 
-        BlockPos hitPos = new BlockPos(mc.blockX, mc.blockX, mc.blockZ);
+        BlockPos hitPos = new BlockPos(mc.blockX, mc.blockY, mc.blockZ);
 
         setValue("mouse_over_something", mc.typeOfHit != MovingObjectPosition.MovingObjectType.MISS);
         setValue("mouse_over_what_remapped", equiv.get(mc.typeOfHit));
