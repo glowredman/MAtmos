@@ -50,7 +50,6 @@ public class ConfigManager {
         // Create default configuration
 
         config.setProperty("world.height", 256);
-        config.setProperty("dump.sheets.enabled", false);
         config.setProperty("start.enabled", true, "If false, MAtmos won't start until the MAtmos key is pressed.");
         config.setProperty("reversed.controls", false);
         config.setProperty("sound.autopreview", true);
@@ -97,8 +96,8 @@ public class ConfigManager {
         config.setProperty("dealias.guessfromclass", "true",
                 "Guess the aliases of items from their class and name"
                 );
-        config.setProperty("debug.verbosealiasparsing", "false",
-                "Show alias map warnings unconditionally"
+        config.setProperty("log.category.aliasmap", "false",
+                "Print log messages about alias map construction"
                 );
         config.setProperty("log.printcrashestochat", "true",
                 "Display message in chat when MAtmos crashes"

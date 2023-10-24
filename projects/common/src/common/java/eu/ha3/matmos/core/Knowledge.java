@@ -159,7 +159,7 @@ public class Knowledge implements Evaluated, Simulated {
             if (junction != null) {
                 newStuff.add(junction.getInverted());
             } else {
-                Matmos.LOGGER.warn("Missing junction: " + junctionName);
+                Matmos.DEVLOGGER.warn("Missing junction: " + junctionName);
             }
 
         }
@@ -242,11 +242,11 @@ public class Knowledge implements Evaluated, Simulated {
         missing.removeAll(inferior.keySet());
 
         if (missing.size() > 0) {
-            Matmos.LOGGER.warn("Missing " + inferiorName + ": " + Arrays.toString(missing.toArray()));
+            Matmos.DEVLOGGER.warn("Missing " + inferiorName + ": " + Arrays.toString(missing.toArray()));
         }
 
         if (unused.size() > 0) {
-            Matmos.LOGGER.warn("Unused " + inferiorName + ": " + Arrays.toString(unused.toArray()));
+            Matmos.DEVLOGGER.warn("Unused " + inferiorName + ": " + Arrays.toString(unused.toArray()));
 
             unused.forEach(inferior::remove);
         }

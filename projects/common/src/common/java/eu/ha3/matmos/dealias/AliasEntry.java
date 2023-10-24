@@ -46,8 +46,8 @@ public class AliasEntry implements Entry<String, String>{
     }
     
     public void warn(String msg) {
-        if(showWarnings || ConfigManager.getConfig().getBoolean("debug.verbosealiasparsing")) {
-            Matmos.LOGGER.warn(path + ":" + lineno + ": " + msg);
+        if(showWarnings || Matmos.VERBOSE_ENGINE_LOGGING) {
+            Matmos.ALIASLOGGER.warn(path + ":" + lineno + ": " + msg);
         }
     }
     

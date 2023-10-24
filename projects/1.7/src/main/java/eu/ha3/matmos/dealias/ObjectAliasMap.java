@@ -87,8 +87,8 @@ public abstract class ObjectAliasMap {
         
         int minBlockID = ids.stream().min(Integer::compare).orElse(-1);
         
-        Matmos.DEVLOGGER.debug(getLogPrefix() + "filtered IDs: " + Arrays.toString(ids.toArray()));
-        Matmos.DEVLOGGER.debug(getLogPrefix() + "min: " + getNameFromID(minBlockID) + " (" + minBlockID + ")");
+        Matmos.ALIASLOGGER.debug(getLogPrefix() + "filtered IDs: " + Arrays.toString(ids.toArray()));
+        Matmos.ALIASLOGGER.debug(getLogPrefix() + "min: " + getNameFromID(minBlockID) + " (" + minBlockID + ")");
         
         if(minBlockID != -1) {
             ids.forEach(i -> {if(!dealiasMap.containsKey(i)) dealiasMap.put(i, minBlockID);});

@@ -196,7 +196,7 @@ public class ScannerModule implements PassOnceModule, ScanOperations, Progress {
     @Override
     public void process() {
         if (tryToReboot()) {
-            Matmos.LOGGER.info("Detected large movement or teleportation. Rebooted module " + getName());
+            Matmos.DEVLOGGER.info("Detected large movement or teleportation. Rebooted module " + getName());
             return;
         }
 

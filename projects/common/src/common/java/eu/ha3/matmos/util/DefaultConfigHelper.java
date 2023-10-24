@@ -42,13 +42,17 @@ public class DefaultConfigHelper {
         }
     }
     
-    private void copyDefaultConfigFile(Path src, Path dest) throws IOException {
+    private void copyDefaultConfigFile(Path src, Path dest, boolean print) throws IOException {
         Files.createDirectories(getParentSafe(dest));
-        LOGGER.debug("Copying " + src + " -> " + dest);
+        if(print) LOGGER.debug("Copying " + src + " -> " + dest);
         Files.copy(src, dest, StandardCopyOption.REPLACE_EXISTING);
     }
     
     public boolean createDefaultConfigFileIfMissing(File destFile, boolean overwrite) {
+        return createDefaultConfigFileIfMissing(destFile, overwrite, true);
+    }
+    
+    public boolean createDefaultConfigFileIfMissing(File destFile, boolean overwrite, boolean print) {
         Path destConfigFolderPath = Paths.get(new File(Launch.minecraftHome, "config").getPath());
         Path destFilePath = Paths.get(destFile.getPath());
 
@@ -59,7 +63,7 @@ public class DefaultConfigHelper {
                 Path srcConfigPath = getDefaultConfigFilePath(destRelPath).toAbsolutePath();
                 if(Files.isRegularFile(srcConfigPath)) {
                     if(!destFile.exists() || overwrite) {
-                        copyDefaultConfigFile(srcConfigPath, destFile.toPath());
+                        copyDefaultConfigFile(srcConfigPath, destFile.toPath(), print);
                     }
                 } else if(Files.isDirectory(srcConfigPath)) {
                     Files.createDirectories(Paths.get(destFile.getPath()));
@@ -67,7 +71,7 @@ public class DefaultConfigHelper {
                     for(Path srcChildPath : Files.walk(srcConfigPath).toArray(Path[]::new)) {
                         Path destPath = destFile.toPath().resolve(srcConfigPath.relativize(srcChildPath).toString());
                         if(!srcChildPath.equals(srcConfigPath) && srcChildPath.startsWith(srcConfigPath)) {
-                            if(!createDefaultConfigFileIfMissing(destPath.toFile(), overwrite)) {
+                            if(!createDefaultConfigFileIfMissing(destPath.toFile(), overwrite, print)) {
                                 return false;
                             }
                         }

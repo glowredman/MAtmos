@@ -58,14 +58,17 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         SupportsBlockChangeEvents, SupportsSoundEvents, SupportsSoundSetupEvents, NotifiableHaddon, Stable {
     private static final boolean _COMPILE_IS_UNSTABLE = false;
     
-    public static final boolean SUPER_DEBUG = Boolean.parseBoolean(System.getProperty("matmos.superDebug", "false"));
+    public static final boolean VERBOSE_ENGINE_LOGGING = Boolean.parseBoolean(System.getProperty("matmos.log.engine", "false"));
+    public static final boolean VERBOSE_SOUNDPACK_LOGGING = Boolean.parseBoolean(System.getProperty("matmos.log.soundpack", "false"));
 
     /** Logs messages relevant to users */
     public static final Logger LOGGER = LogManager.getLogger("matmos");
-    /** Logs messages only relevant to soundpack developers */
+    /** Logs messages only relevant to soundpack developers. Enabled in dev mode or via JVM flag. */
     public static Logger DEVLOGGER = NoOpLogger.INSTANCE;
-    /** Logs messages only useful when debugging issues with the sound engine */
-    public static final Logger DEBUGLOGGER = SUPER_DEBUG ? LOGGER : NoOpLogger.INSTANCE;
+    /** Logs messages about alias map parsing. Enabled via config option. */
+    public static Logger ALIASLOGGER = NoOpLogger.INSTANCE;
+    /** Logs messages only useful when debugging issues with the sound engine. Enabled via JVM flag. */
+    public static final Logger DEBUGLOGGER = VERBOSE_ENGINE_LOGGING ? LOGGER : NoOpLogger.INSTANCE;
 
     // Identity
     protected static final String NAME = "MAtmos";
@@ -200,7 +203,8 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
         if (reloadConfigs) {
             config.load();
         }
-        DEVLOGGER = ConfigManager.getConfig().getInteger("debug.mode") == 1 ? LOGGER : NoOpLogger.INSTANCE;
+        DEVLOGGER = VERBOSE_SOUNDPACK_LOGGING || ConfigManager.getConfig().getInteger("debug.mode") == 1 ? LOGGER : NoOpLogger.INSTANCE;
+        ALIASLOGGER = ConfigManager.getConfig().getBoolean("log.category.aliasmap") ? LOGGER : NoOpLogger.INSTANCE;
 
         simulacrum = Optional.of(new Simulacrum(this));
 

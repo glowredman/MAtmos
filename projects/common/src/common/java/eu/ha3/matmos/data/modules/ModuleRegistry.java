@@ -167,7 +167,7 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
 
         addModule(new ModuleDebug(data));
 
-        Matmos.LOGGER.info("Modules initialized: " + Arrays.toString(new TreeSet<>(modules.keySet()).toArray()));
+        Matmos.DEVLOGGER.info("Modules initialized: " + Arrays.toString(new TreeSet<>(modules.keySet()).toArray()));
     }
 
     public DataPackage getData() {

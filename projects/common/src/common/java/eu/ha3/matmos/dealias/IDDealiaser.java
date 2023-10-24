@@ -42,7 +42,9 @@ public class IDDealiaser {
     private ItemAliasMap itemAliasMap = new ItemAliasMap();
 
     public IDDealiaser(File configFolder) {
-        ConfigManager.getDefaultConfigHelper().createDefaultConfigFileIfMissing(new File(configFolder, "builtin_aliases"), true);
+        File theDir = new File(configFolder, "builtin_aliases");
+        Matmos.LOGGER.debug("Regenerating " + theDir.getPath());
+        ConfigManager.getDefaultConfigHelper().createDefaultConfigFileIfMissing(theDir, true, false);
         
         if(ConfigManager.getConfig().getBoolean("dealias.oredict")) {
             for(String oreName : OreDictionary.getOreNames()) {
@@ -55,7 +57,7 @@ public class IDDealiaser {
                     }
                 }
                 
-                Matmos.DEVLOGGER.debug("Items with oredict name " + oreName + ": " + Arrays.toString(names.toArray()));
+                Matmos.ALIASLOGGER.debug("Items with oredict name " + oreName + ": " + Arrays.toString(names.toArray()));
                 
                 blockAliasMap.dealiasItemGroupToMinID(names);
                 itemAliasMap.dealiasItemGroupToMinID(names);
@@ -128,7 +130,7 @@ public class IDDealiaser {
     }
 
     private void loadAliasFile(File aliasFile) {
-        Matmos.LOGGER.info("Loading alias map " + aliasFile + "...");
+        Matmos.DEVLOGGER.info("Loading alias map " + aliasFile + "...");
         
         boolean hashMatch = false;
         if(Files.isRegularFile(aliasFile.toPath())) {

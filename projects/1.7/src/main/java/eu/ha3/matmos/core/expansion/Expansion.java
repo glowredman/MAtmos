@@ -234,11 +234,11 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
         }
 
         if (!isSuccessfullyBuilt && agent != null) {
-            Matmos.LOGGER.info("Building expansion " + getName() + "...");
+            Matmos.DEVLOGGER.info("Building expansion " + getName() + "...");
             TimeStatistic stat = new TimeStatistic(Locale.ENGLISH);
             buildKnowledge();
             if (isSuccessfullyBuilt) {
-                Matmos.LOGGER.info("Expansion " + getName() + " built (" + stat.getSecondsAsString(3) + "s).");
+                Matmos.DEVLOGGER.info("Expansion " + getName() + " built (" + stat.getSecondsAsString(3) + "s).");
             } else {
                 Matmos.LOGGER
                         .warn("Expansion " + getName() + " failed to build!!! (" + stat.getSecondsAsString(3) + "s).");
@@ -249,14 +249,14 @@ public class Expansion implements VolumeUpdatable, Stable, Simulated, Evaluated,
             Set<String> requiredModules = knowledge.calculateRequiredModules();
             collector.addModuleStack(identity.getUniqueName(), requiredModules);
 
-            Matmos.LOGGER.info("Expansion " + identity.getUniqueName() + " requires " + requiredModules.size()
+            Matmos.DEVLOGGER.info("Expansion " + identity.getUniqueName() + " requires " + requiredModules.size()
                     + " found modules: " + Arrays.toString(requiredModules.toArray()));
 
             String[] legacyModules = requiredModules.stream()
                     .filter(module -> module.startsWith(ModuleRegistry.LEGACY_PREFIX)).sorted().toArray(String[]::new);
 
             if (legacyModules.length > 0) {
-                Matmos.LOGGER.warn("Expansion " + identity.getUniqueName() + " uses LEGACY modules: "
+                Matmos.DEVLOGGER.warn("Expansion " + identity.getUniqueName() + " uses LEGACY modules: "
                         + Arrays.toString(legacyModules));
                 reliesOnLegacyModules = true;
             }
