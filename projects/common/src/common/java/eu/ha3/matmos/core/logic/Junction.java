@@ -49,7 +49,7 @@ public class Junction extends MultistateComponent implements Dependable, Visuali
         }
 
         if (pre != isActive) {
-            Matmos.LOGGER.debug("S: " + getName() + " -> " + isActive);
+            Matmos.superDebug("S: " + getName() + " -> " + isActive);
 
             incrementVersion();
         }

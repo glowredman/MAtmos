@@ -56,6 +56,8 @@ import paulscode.sound.SoundSystemConfig;
 public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, SupportsInGameChangeEvents,
         SupportsBlockChangeEvents, SupportsSoundEvents, SupportsSoundSetupEvents, NotifiableHaddon, Stable {
     private static final boolean _COMPILE_IS_UNSTABLE = false;
+    
+    public static final boolean SUPER_DEBUG = Boolean.parseBoolean(System.getProperty("matmos.superDebug", "false"));
 
     public static final Logger LOGGER = LogManager.getLogger("matmos");
 
@@ -548,5 +550,11 @@ public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsT
 
     public static List<SoundManagerListener> getSoundManagerListeners() {
         return soundManagerListeners;
+    }
+
+    public static void superDebug(String string) {
+        if(SUPER_DEBUG) {
+            LOGGER.debug(string);
+        }
     }
 }

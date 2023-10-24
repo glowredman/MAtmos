@@ -103,8 +103,7 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
                 }
             } else {
                 if (getSoundSystem().getMasterVolume() <= 0.0F) {
-                    Matmos.LOGGER.debug("Skipped playing soundEvent: {}, master volume was zero",
-                            (Object) resourcelocation);
+                    Matmos.superDebug("Skipped playing soundEvent: " + resourcelocation + ", master volume was zero");
                 } else {
                     SoundPoolEntry sound = soundeventaccessor.func_148720_g();
 
@@ -126,8 +125,7 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
                         ResourceLocation resourcelocation2 = sound.getSoundPoolEntryLocation();
 
                         if (f1 == 0.0F) {
-                            Matmos.LOGGER.debug("Skipped playing sound {}, volume was zero.",
-                                    (Object) resourcelocation);
+                            Matmos.superDebug("Skipped playing sound " + resourcelocation + ", volume was zero.");
                         } else {
                             boolean flag = p_sound.canRepeat() && p_sound.getRepeatDelay() == 0;
                             String s = UUID.randomUUID().toString();
@@ -143,8 +141,7 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
                                         p_sound.getZPosF(), p_sound.getAttenuationType().getTypeInt(), f);
                             }
 
-                            Matmos.LOGGER.debug("Playing sound {} for event {} as channel {}", resourcelocation2,
-                                    resourcelocation, s);
+                            Matmos.superDebug("Playing sound " + resourcelocation2 + " for event " + resourcelocation + " as channel " + s);
                             getSoundSystem().setPitch(s, f2);
                             getSoundSystem().setVolume(s, f1);
                             getSoundSystem().play(s);

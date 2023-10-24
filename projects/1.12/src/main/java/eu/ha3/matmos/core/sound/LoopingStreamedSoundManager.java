@@ -104,8 +104,7 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
                 }
             } else {
                 if (getSoundSystem().getMasterVolume() <= 0.0F) {
-                    Matmos.LOGGER.debug("Skipped playing soundEvent: {}, master volume was zero",
-                            (Object) resourcelocation);
+                    Matmos.superDebug("Skipped playing soundEvent: " + resourcelocation + ", master volume was zero");
                 } else {
                     Sound sound = p_sound.getSound();
 
@@ -126,8 +125,7 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
                         float f2 = this.getClampedPitch(streamingSound);
 
                         if (f1 == 0.0F) {
-                            Matmos.LOGGER.debug("Skipped playing sound {}, volume was zero.",
-                                    (Object) sound.getSoundLocation());
+                            Matmos.superDebug("Skipped playing sound " + sound.getSoundLocation() + ", volume was zero.");
                         } else {
                             boolean flag = p_sound.canRepeat() && p_sound.getRepeatDelay() == 0;
                             String s = MathHelper.getRandomUUID(ThreadLocalRandom.current()).toString();
@@ -143,8 +141,7 @@ public class LoopingStreamedSoundManager implements SupportsTickEvents, SoundMan
                                         p_sound.getZPosF(), p_sound.getAttenuationType().getTypeInt(), f);
                             }
 
-                            Matmos.LOGGER.debug("Playing sound {} for event {} as channel {}", sound.getSoundLocation(),
-                                    resourcelocation, s);
+                            Matmos.superDebug("Playing sound " + sound.getSoundLocation() + " for event " + resourcelocation + " as channel " + s);
                             getSoundSystem().setPitch(s, f2);
                             getSoundSystem().setVolume(s, f1);
                             getSoundSystem().play(s);

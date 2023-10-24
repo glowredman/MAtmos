@@ -67,7 +67,7 @@ public class Machine extends MultistateComponent
                 stream.evaluate();
             }
 
-            Matmos.LOGGER.debug("M: " + getName() + " -> " + isActive);
+            Matmos.superDebug("M: " + getName() + " -> " + isActive);
         }
     }
 
