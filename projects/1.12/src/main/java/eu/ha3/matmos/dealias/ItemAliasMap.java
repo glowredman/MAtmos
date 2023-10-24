@@ -68,9 +68,11 @@ public class ItemAliasMap extends ObjectAliasMap {
             }
             
             if(target != -1) {
-                Matmos.LOGGER.debug("Guessing alias " + 
-                    Item.REGISTRY.getNameForObject(Item.REGISTRY.getObjectById(target)) + 
-                    " for " + name);
+                if(ConfigManager.getConfig().getInteger("debug.mode") == 1) {
+                    Matmos.LOGGER.debug("Guessing alias " + 
+                        Item.REGISTRY.getNameForObject(Item.REGISTRY.getObjectById(target)) + 
+                        " for " + name);
+                }
                 dealiasMap.put(id, target);
             }
         }
