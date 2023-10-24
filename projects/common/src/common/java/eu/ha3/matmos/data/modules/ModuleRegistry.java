@@ -18,7 +18,6 @@ import eu.ha3.matmos.data.IDataCollector;
 import eu.ha3.matmos.data.IDataGatherer;
 import eu.ha3.matmos.data.modules.items.ModulePotionDuration;
 import eu.ha3.matmos.data.modules.items.ModulePotionStrength;
-import eu.ha3.matmos.data.modules.legacy.ModuleConfigVars;
 import eu.ha3.matmos.data.modules.legacy.ModuleDice;
 import eu.ha3.matmos.data.modules.legacy.ModuleLegacy;
 import eu.ha3.matmos.data.modules.legacy.ModuleLegacyColumn;
@@ -127,7 +126,6 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
         addModule(new ModuleTimedRandom(data), 20);
         addModule(new ModuleBiome(data, mod), 20);
         addModule(new ModuleWorld(data));
-        addModule(new ModuleConfigVars(data, mod), 10000);
         addModule(new ModuleMetaOptions(data, mod), 200);
         addModule(new ModuleServerInfo(data), 200);
         addModule(new ModuleEntity(data, this, "detect_mindist", "detect_radius", 256, 2, 5, 10, 20, 50));
