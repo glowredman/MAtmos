@@ -105,27 +105,27 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
     public void load() {
         data = new SheetDataPackage(GenericSheet.class);
 
-        addModule(new ModuleLegacyColumn(data));
-        addModule(new ModuleLegacyHitscan(data));
-        addModule(new ModuleDice(data));
-        addModule(new ModuleLegacy(data));
-        addModule(new ModuleModData(data, mod));
-        addModule(new ModuleColumn(data));
-        addModule(new ModuleLighting(data));
-        addModule(new ModulePosition(data));
-        addModule(new ModuleContainer(data));
-        addModule(new ModuleAction(data));
-        addModule(new ModuleArmour(data));
-        addModule(new ModulePlayerStats(data));
-        addModule(new ModuleInventory(data));
-        addModule(new ModuleMotion(data));
-        addModule(new ModuleStats(data));
-        addModule(new ModuleRiding(data));
-        addModule(new ModuleHorse(data));
-        addModule(new ModuleRidingMotion(data));
+        addModule(new ModuleLegacyColumn(data), 0);
+        addModule(new ModuleLegacyHitscan(data), 0);
+        addModule(new ModuleDice(data), 0);
+        addModule(new ModuleLegacy(data), 0);
+        addModule(new ModuleModData(data, mod), 0);
+        addModule(new ModuleColumn(data), 0);
+        addModule(new ModuleLighting(data), 0);
+        addModule(new ModulePosition(data), 0);
+        addModule(new ModuleContainer(data), 0);
+        addModule(new ModuleAction(data), 0);
+        addModule(new ModuleArmour(data), 0);
+        addModule(new ModulePlayerStats(data), 0);
+        addModule(new ModuleInventory(data), 0);
+        addModule(new ModuleMotion(data), 0);
+        addModule(new ModuleStats(data), 0);
+        addModule(new ModuleRiding(data), 0);
+        addModule(new ModuleHorse(data), 0);
+        addModule(new ModuleRidingMotion(data), 0);
         addModule(new ModuleTimedRandom(data), 20);
         addModule(new ModuleBiome(data, mod), 20);
-        addModule(new ModuleWorld(data));
+        addModule(new ModuleWorld(data), 0);
         addModule(new ModuleMetaOptions(data, mod), 200);
         addModule(new ModuleServerInfo(data), 200);
         addModule(new ModuleEntity(data, this, "detect_mindist", "detect_radius", 256, 2, 5, 10, 20, 50));
@@ -134,12 +134,12 @@ public class ModuleRegistry implements IDataCollector, IDataGatherer {
             addModule(new ModuleArmourEnchantment(data, i));
         }
 
-        addModule(new ModuleHeldEnchantment(data));
-        addModule(new ModuleHitscan(data));
-        addModule(new ModuleLeashing(data));
-        addModule(new ModulePotionDuration(data));
-        addModule(new ModulePotionStrength(data));
-        addModule(new ModuleCollission(data));
+        addModule(new ModuleHeldEnchantment(data), 0);
+        addModule(new ModuleHitscan(data), 0);
+        addModule(new ModuleLeashing(data), 0);
+        addModule(new ModulePotionDuration(data), 0);
+        addModule(new ModulePotionStrength(data), 0);
+        addModule(new ModuleCollission(data), 0);
 
         // this.frequent.add(new MAtProcessorEntityDetector(
         // this.mod, this.data, "DetectMinDist", "Detect", "_Deltas", ENTITYIDS_MAX, 2,
