@@ -36,11 +36,11 @@ import eu.ha3.mc.haddon.implem.HaddonIdentity;
 import eu.ha3.mc.haddon.implem.HaddonImpl;
 import eu.ha3.mc.haddon.implem.HaddonVersion;
 import eu.ha3.mc.haddon.supporting.SupportsBlockChangeEvents;
+import eu.ha3.mc.haddon.supporting.SupportsClientTickEvents;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsInGameChangeEvents;
 import eu.ha3.mc.haddon.supporting.SupportsSoundEvents;
 import eu.ha3.mc.haddon.supporting.SupportsSoundSetupEvents;
-import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
 import eu.ha3.mc.haddon.supporting.event.BlockChangeEvent;
 import eu.ha3.mc.quick.chat.Chatter;
 import eu.ha3.mc.quick.update.NotifiableHaddon;
@@ -54,7 +54,7 @@ import eu.ha3.mc.abstraction.util.ATextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import paulscode.sound.SoundSystemConfig;
 
-public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsTickEvents, SupportsInGameChangeEvents,
+public class Matmos extends HaddonImpl implements SupportsFrameEvents, SupportsClientTickEvents, SupportsInGameChangeEvents,
         SupportsBlockChangeEvents, SupportsSoundEvents, SupportsSoundSetupEvents, NotifiableHaddon, Stable {
     private static final boolean _COMPILE_IS_UNSTABLE = false;
     
