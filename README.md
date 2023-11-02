@@ -59,7 +59,7 @@ https://github.com/makamys/MAtmos/wiki/Soundpacks
 ## Usage
 By default, MAtmos does not include any sounds. To get started, move the soundpacks you want to your resource packs folder an enable them.
 
-Pressing F7 opens the MAtmos settings menu which can be used to adjust the volume levels of the individual expansions that make up soundpacks. You can even combine different expansions from different soundpacks! Customize your experience to exactly the way you like it.
+Pressing F4 opens the MAtmos settings menu which can be used to adjust the volume levels of the individual expansions that make up soundpacks. You can even combine different expansions from different soundpacks! Customize your experience to exactly the way you like it.
 
 <img src="docs/matmos_menu.png" width="600">
 
