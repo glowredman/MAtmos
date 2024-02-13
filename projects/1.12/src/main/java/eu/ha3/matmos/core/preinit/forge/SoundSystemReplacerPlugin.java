@@ -7,6 +7,7 @@ import java.util.Map;
 
 /** FML coremod for bootstrapping the SoundSystemReplacer. Used in Forge. */
 
+@IFMLLoadingPlugin.MCVersion("1.12.2")
 public class SoundSystemReplacerPlugin implements IFMLLoadingPlugin {
 
     public SoundSystemReplacerPlugin() {
