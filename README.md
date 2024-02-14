@@ -1,6 +1,6 @@
 [![downloads](https://img.shields.io/badge/-⬇%20releases-brightgreen)](https://github.com/makamys/MAtmos/releases)
 [![builds](https://img.shields.io/badge/-🛈%20builds-blue)](https://makamys.github.io/docs/CI-Downloads/CI-Downloads.html)
-[![CurseForge](https://shields.io/badge/CurseForge-555555?logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/matmos)
+[![CurseForge](https://shields.io/badge/CurseForge-555555?logo=curseforge)](https://legacy.curseforge.com/minecraft/mc-mods/matmos)
 [![modrinth](https://shields.io/badge/modrinth-555555?logo=data:image/svg+xml;base64,PHN2ZyBmaWxsPSJub25lIiBhcmlhLWxhYmVsPSJtb2RyaW50aCIgY2xhc3M9InNtYWxsLWxvZ28iIHZlcnNpb249IjEuMSIgaWQ9InN2ZzkwMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgNTEyIDUxNCI+PHN0eWxlPnBhdGh7ZmlsbDojZmZmO2ZpbGwtb3BhY2l0eToxfTwvc3R5bGU+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik01MDMgMzI0QTI1NiAyNTYgMCAxMDEgMjMxaDQzYTIxMiAyMTIgMCAwMTQwOS01MGwtNDIgMTJjLTE5LTQ3LTU4LTgyLTEwNS05NmwtNyA0NGExMjQgMTI0IDAgMDExMCAyMjhsMTEgNDNjNzAtMjkgMTEyLTEwMiAxMDItMTc3bDQyLTExYzUgMjkgMyA1Ny0zIDg0bDQyIDE2eiIgaWQ9InBhdGg4OTgiLz48cGF0aCBjbGFzcz0ibm9ybWFsIiBkPSJNMzIyIDUwNEEyNTYgMjU2IDAgMDEwIDI3NWg0M2EyMTMgMjEzIDAgMDAyMCA3MmwzOC0yMy04LTI0QTE2OCAxNjggMCAwMTI2MyA4OWwtOCA0NGExMjUgMTI1IDAgMDAtMTE5IDE1Nmw0IDEyIDQ5LTMwLTE1LTM5IDQ3LTQ4IDU5LTEzIDE3IDIxLTI4IDI4LTIzIDctMTcgMTggOCAyMyAxNyAxOCAyNC03IDE3LTE4IDM2LTEyIDExIDI1LTM4IDQ2LTYzIDIxLTI5LTMyLTUwIDMwYzI2IDI5IDY0IDQ1IDEwNCA0MmwxMiA0M2MtNjAgNy0xMTgtMTctMTU0LTYybC0zOCAyM2EyMTIgMjEyIDAgMDAzNTktMzZsNDMgMTZjLTMxIDY2LTkwIDExOS0xNjYgMTM5eiIgaWQ9InBhdGg5MDAiLz48c3R5bGUvPjwvc3ZnPg==)](https://modrinth.com/mod/matmos)
 
 MAtmos
@@ -28,7 +28,7 @@ MAtmos lets you create your own soundscapes using special resource packs called 
 
 The flagship soundpack, featuring seamless loops and indoors/outdoors variations for ambiences. It aims to add high quality sounds that enhance the atmosphere without feeling out of place. (MAtmos 34 or higher required.)
 
-**Download: [GitHub](https://github.com/makamys/MAtmos-2020-Zen) / [CurseForge](https://www.curseforge.com/minecraft/texture-packs/matmos-2020-zen)**
+**Download: [GitHub](https://github.com/makamys/MAtmos-2020-Zen) / [CurseForge](https://legacy.curseforge.com/minecraft/texture-packs/matmos-2020-zen)**
 
 *(by makamys)*
 
@@ -38,7 +38,7 @@ The flagship soundpack, featuring seamless loops and indoors/outdoors variations
 
 The original MAtmos soundpack from 2012, updated to work on the latest version.
 
-**Download: [GitHub](https://github.com/makamys/MAtmos-2016-Default) / [CurseForge](https://www.curseforge.com/minecraft/texture-packs/matmos-2016-default)**
+**Download: [GitHub](https://github.com/makamys/MAtmos-2016-Default) / [CurseForge](https://legacy.curseforge.com/minecraft/texture-packs/matmos-2016-default)**
 
 *(by Hurricaaane)*
 
@@ -65,20 +65,20 @@ Pressing F4 opens the MAtmos settings menu which can be used to adjust the volum
 
 ## Suggested companion mods
 
-[***Dynamic Surroundings***](https://www.curseforge.com/minecraft/mc-mods/dynamic-surroundings) for better footstep sounds. (Yes, it's compatible.) Disable its biome sounds in the config to only get the footsteps.
+[***Dynamic Surroundings***](https://legacy.curseforge.com/minecraft/mc-mods/dynamic-surroundings) for better footstep sounds. (Yes, it's compatible.) Disable its biome sounds in the config to only get the footsteps.
 
-***[Sound Filters](https://www.curseforge.com/minecraft/mc-mods/sound-filters) / [Sound Physics](https://github.com/djpadbit/Sound-Physics) [(1.7.10 build here)](https://github.com/djpadbit/Sound-Physics/issues/74#issuecomment-896336358)*** for reverb and muffling of sounds behind walls.
+***[Sound Filters](https://legacy.curseforge.com/minecraft/mc-mods/sound-filters) / [Sound Physics](https://github.com/mist475/Sound-Physics)*** for reverb and muffling of sounds behind walls.
 
 ## Mixin troubleshooting
 
-MAtmos uses Mixin in order to apply some modifications to the game. The regular versions of the mod jars embed Mixin, so MAtmos can run standalone: the 1.7.10 version embeds Mixin 0.7.11, while the 1.12.2 version embeds Mixin 0.8.3. However, this can cause issues with other mods if they embed or require a different version.
+MAtmos uses Mixin in order to apply some modifications to the game. The regular versions of the mod jars embed Mixin, so MAtmos can run standalone: the 1.7.10 version embeds Mixin 0.7.11, while the 1.12.2 version embeds Mixin 0.8.3. However, this can cause issues with other mods if they provide or require a different version.
 
 If you're getting Mixin errors on launch, try these steps in order:
 
 1. Use the versions of MAtmos ending in `+nomixin`, which do not embed Mixin (but require a different mod to provide the library).
-2. Add a Mixin bootstrap mod, such as [MixinBootstrap](https://www.curseforge.com/minecraft/mc-mods/mixinbootstrap) on 1.12.2 or [SpongeMixins](https://github.com/TimeConqueror/SpongeMixins) on 1.7.10. If one of your other mods requires a certain Mixin bootstrap mod, get that one instead.
+2. Add a Mixin bootstrap mod, such as [MixinBooter](https://legacy.curseforge.com/minecraft/mc-mods/mixin-booter) on 1.12.2 or [UniMixins](https://github.com/LegacyModdingMC/UniMixins) on 1.7.10.
 
-Additionally, there are some mods that use ASM transformers which break when Mixin is present. [Mixingasm](https://github.com/makamys/Mixingasm) (1.7.10 only for now) can be used to fix this.
+Additionally, there are some mods that use ASM transformers which break when Mixin is present. Mixingasm can be used to fix this. UniMixins includes it on 1.7.10, and on 1.12.2 you can add just its Mixingasm module next to MixinBooter.
 
 ## Downloads
 
