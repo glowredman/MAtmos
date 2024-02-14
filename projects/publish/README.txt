@@ -5,5 +5,5 @@
 3. Write a changelog
 4.
 ```
-sh ./build_and_release.sh $GITHUB_TOKEN [$CURSEFORGE_TOKEN] [$MODRINTH_TOKEN]
+JAVA_HOME=/path/to/java8-jdk sh ./build_and_release.sh $GITHUB_TOKEN [$CURSEFORGE_TOKEN] [$MODRINTH_TOKEN]
 ```

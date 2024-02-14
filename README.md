@@ -88,9 +88,9 @@ For **soundpack** downloads, see the *Featured soundpacks* section above.
 
 ## Contributing
 
-The project uses Git submodules. Run `git submodule init` followed by `git submodule update` after checking out to fetch them.
+The project uses Git submodules. Run `git submodule update --init` after checking out to fetch them.
 
-The project can be built using Gradle.
+The project can be built using Gradle. It uses an ancient buildscript so it has to be built using Java 8. For example: `JAVA_HOME=/path/to/java8-jdk ./gradlew build`
 
 The project uses a multi-project structure. The subproject for each game version can be found in `projects/<version>` folder. Some subprojects can be built with different targets, add `-Ptarget=foo` to your gradle command to target the `foo` target.
 
